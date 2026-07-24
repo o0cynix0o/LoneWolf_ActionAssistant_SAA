@@ -1387,6 +1387,8 @@
     const browseMode = pageParams.get('browse') === '1' || pageParams.get('mode') === 'browse';
     const requestedBrowseBook = Number(pageParams.get('book') || 1);
     const requestedBrowseSection = pageParams.has('section') ? Number(pageParams.get('section')) : null;
+    let campaignStartRequested = !browseMode && pageParams.get('campaign') === 'new' && requestedBrowseBook === 1;
+    let campaignEntryFocusPending = campaignStartRequested;
     const playModeKey = 'lonewolf_redux.mode';
     const playModes = ['auto', 'manual', 'cli'];
     let playMode = normalizePlayMode(localStorage.getItem(playModeKey));
@@ -1457,7 +1459,7 @@
     function isCliMode() { return playMode === 'cli'; }
 
     function setModeIndicator() {
-      if (modeIndicator) modeIndicator.textContent = browseMode ? 'Browse Mode' : playModeLabel();
+      if (modeIndicator) modeIndicator.textContent = browseMode ? 'Browse Mode' : (campaignStartRequested ? 'Campaign Setup' : playModeLabel());
     }
 
     function statControlName(stat) {
@@ -2497,6 +2499,17 @@
             receiptDetail('Links', 'Book links navigate the reader only; assistant automation is not applied.')
           ]
         });
+      } else if (campaignStartRequested) {
+        activeView = 'sheet';
+        loadBook(1, null);
+        setReceipt({
+          summary: 'Start New Campaign - Build your Book 1 character.',
+          title: 'Flight from the Dark',
+          details: [
+            receiptDetail('Next Step', 'Choose Quick Start or set up your character step by step.'),
+            receiptDetail('Current Save', hasCampaignProgress() ? 'Your current campaign is safe until you choose Begin at Section 1.' : 'No completed character will be replaced until you begin.')
+          ]
+        });
       } else {
         syncBookToState();
         setReceipt(sectionStatusReceipt());
@@ -2566,7 +2579,7 @@
     function render() {
       setModeIndicator();
       renderStatus();
-      if (isCliMode()) {
+      if (isCliMode() && !campaignStartRequested) {
         renderCliPanel();
         return;
       }
@@ -2595,6 +2608,14 @@
       };
       (renderers[activeView] || renderers.sheet)();
       decorateInterfaceCards(activeView);
+      if (campaignEntryFocusPending && campaignStartRequested && activeView === 'sheet') {
+        window.requestAnimationFrame(() => {
+          const campaignEntry = view.querySelector('[data-campaign-entry="true"]');
+          if (!campaignEntry) return;
+          campaignEntryFocusPending = false;
+          campaignEntry.scrollIntoView({ block: 'start', behavior: 'auto' });
+        });
+      }
     }
 
     function renderStatus() {
@@ -3434,9 +3455,10 @@
         const id = card.dataset.cardId;
         const title = card.dataset.cardTitle || cardTitle(card);
         const defaultSize = options.defaultSize || 'large';
-        const size = getCardSize(scope, id, defaultSize);
-        const collapsed = collapsedCards.has(id);
-        card.hidden = closed.has(id);
+        const campaignEntry = campaignStartRequested && card.dataset.campaignEntry === 'true';
+        const size = campaignEntry ? 'large' : getCardSize(scope, id, defaultSize);
+        const collapsed = campaignEntry ? false : collapsedCards.has(id);
+        card.hidden = campaignEntry ? false : closed.has(id);
         card.classList.add('dashboard-card');
         card.classList.toggle('card-collapsed', collapsed);
         card.classList.remove('card-size-small', 'card-size-medium', 'card-size-large');
@@ -3446,8 +3468,10 @@
         card.querySelector(':scope > .card-menu-button')?.remove();
         card.querySelector(':scope > .card-menu')?.remove();
         card.insertAdjacentHTML('afterbegin', `<div class="card-collapsed-title">${escapeHtml(title)}</div>`);
-        card.insertAdjacentHTML('afterbegin', cardCollapseButtonHtml(scope, id, title, collapsed));
-        card.insertAdjacentHTML('afterbegin', cardMenuHtml(scope, id, title, size, options));
+        if (!campaignEntry) {
+          card.insertAdjacentHTML('afterbegin', cardCollapseButtonHtml(scope, id, title, collapsed));
+          card.insertAdjacentHTML('afterbegin', cardMenuHtml(scope, id, title, size, options));
+        }
         const help = cardHelp(title, scope);
         const helpTarget = card.querySelector(':scope > h2') || card.querySelector(':scope > .quick-title') || card.querySelector('.combat-meter-title-row h2');
         if (help && helpTarget) {
@@ -3828,6 +3852,37 @@
 
     function hasSavedCharacter() {
       return Boolean(text(app?.state?.Settings?.SavePath).trim());
+    }
+
+    function shouldShowBook1Creation() {
+      return campaignStartRequested || !hasSavedCharacter();
+    }
+
+    function hasCampaignProgress() {
+      const character = currentCharacter();
+      const creationRolls = character.CreationRolls || {};
+      return hasSavedCharacter() && (
+        Number(character.BookNumber || 1) !== 1
+        || Number(app?.state?.CurrentSection || 1) > 1
+        || arr(character.KaiDisciplines).length > 0
+        || Object.keys(creationRolls).length > 0
+        || Number(character.CombatSkillBase || 10) !== 10
+        || Number(character.EnduranceBase || 20) !== 20
+      );
+    }
+
+    function confirmCampaignReplacement() {
+      if (!hasCampaignProgress()) return true;
+      return window.confirm('Starting a new campaign will replace your current character when you begin at Section 1. Your existing save is unchanged until then. Continue?');
+    }
+
+    function clearCampaignStartRequest() {
+      campaignStartRequested = false;
+      campaignEntryFocusPending = false;
+      const url = new URL(window.location.href);
+      if (!url.searchParams.has('campaign')) return;
+      url.searchParams.delete('campaign');
+      window.history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
     }
 
     function defaultSheetLayout() {
@@ -4234,6 +4289,9 @@
 
     function book1CreationChoiceBody() {
       const creation = currentBook1Creation();
+      const returnToCampaign = campaignStartRequested && hasSavedCharacter()
+        ? `<div class="creation-later-book"><button type="button" data-campaign-cancel ${creation.busy ? 'disabled' : ''}>Return to Current Campaign</button></div>`
+        : '';
       return `
         <div class="creation-wizard">
           <div class="creation-intro">
@@ -4256,6 +4314,7 @@
           <div class="creation-later-book">
             <button type="button" data-creation-show-legacy ${creation.busy ? 'disabled' : ''}>Start with Book 2-5 Instead</button>
           </div>
+          ${returnToCampaign}
         </div>
       `;
     }
@@ -4566,6 +4625,7 @@
           });
           draft = { ...draft, weaponskillRoll: weaponskillDraft.weaponskillRoll, weaponskillWeapon: weaponskillDraft.weaponskillWeapon };
         }
+        if (!confirmCampaignReplacement()) return;
         await action({
           action: 'new',
           creationMode: 'quick',
@@ -4580,6 +4640,7 @@
           ...(disciplines.includes('Weaponskill') ? { weaponskillRoll: draft.weaponskillRoll } : {})
         });
         book1Creation = null;
+        clearCampaignStartRequest();
       } catch (error) {
         showBook1CreationError(error);
       } finally {
@@ -4605,6 +4666,7 @@
       creation.busy = true;
       render();
       try {
+        if (!confirmCampaignReplacement()) return;
         await action({
           action: 'new',
           creationMode: 'guided',
@@ -4619,6 +4681,7 @@
           ...(creation.disciplines.includes('Weaponskill') ? { weaponskillRoll: creation.rolls.weaponskillRoll } : {})
         });
         book1Creation = null;
+        clearCampaignStartRequest();
       } catch (error) {
         showBook1CreationError(error);
       } finally {
@@ -4664,10 +4727,10 @@
         </div>
         ${renderChoicesPanel()}
         ${renderMapPanel()}
-        ${hasSavedCharacter() ? '' : `<div class="panel">
+        ${shouldShowBook1Creation() ? `<div class="panel" data-campaign-entry="true">
           <h2>New Adventure</h2>
           ${newCharacterBody()}
-        </div>`}
+        </div>` : ''}
       `;
     }
 
@@ -5423,6 +5486,13 @@
         render();
         return;
       }
+      if (button.dataset.campaignCancel !== undefined) {
+        resetBook1Creation();
+        clearCampaignStartRequest();
+        syncBookToState();
+        render();
+        return;
+      }
       if (button.dataset.creationBack !== undefined) {
         const creation = currentBook1Creation();
         creation.step = Math.max(1, Math.min(4, Number(button.dataset.creationBack) || 1));
@@ -5936,6 +6006,7 @@
           });
           return;
         }
+        if (!confirmCampaignReplacement()) return;
         await action({
           action: 'new',
           name: data.name,
@@ -5945,6 +6016,9 @@
           armouryChoices: bookNumber === 2 ? armourySelections : [],
           equipmentChoices: [3, 4, 5].includes(bookNumber) ? armourySelections : []
         });
+        book1Creation = null;
+        clearCampaignStartRequest();
+        render();
       }
       form.reset?.();
     });

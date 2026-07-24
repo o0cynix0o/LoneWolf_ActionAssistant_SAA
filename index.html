@@ -565,6 +565,7 @@
       <div class="reader-body">
         <p class="muted">Read the book on the left while using the web assistant on the right.</p>
         <div class="reader-actions">
+          <a href="assistant.html?campaign=new&amp;book=1" title="Create a new Book 1 character before beginning Flight from the Dark.">Start New Campaign</a>
           <a href="assistant.html">Open Reader</a>
           <button id="currentBtn" type="button">Open Current Section</button>
           <a href="library.html">Simple Book List</a>
@@ -935,6 +936,9 @@
       const actionLink = book.enabled === false
         ? '<button type="button" disabled>Coming</button>'
         : `<a href="assistant.html?browse=1&book=${book.number}" title="Read this book without changing your current save.">Browse Book</a>`;
+      const campaignStartLink = book.number === 1 && book.enabled !== false
+        ? '<a href="assistant.html?campaign=new&book=1" title="Create a new Book 1 character before beginning Flight from the Dark.">Start New Campaign</a>'
+        : '';
       const currentSectionButton = book.enabled === false
         ? ''
         : '<button type="button" data-open-current-section>Open Current Section</button>';
@@ -943,6 +947,7 @@
         <aside class="book-dialog-cover">
           ${book.cover ? `<img src="${escapeHtml(book.cover)}" alt="Cover art for ${escapeHtml(book.title)}">` : `<div class="fallback-cover">Book ${escapeHtml(book.number)}:<br>${escapeHtml(book.title)}</div>`}
           <div class="book-dialog-actions">
+            ${campaignStartLink}
             ${actionLink}
             ${currentSectionButton}
             <button type="button" class="read-toggle" data-book-read-toggle="${book.number}" aria-pressed="${read ? 'true' : 'false'}">${read ? 'Mark as Unread' : 'Mark as Read'}</button>

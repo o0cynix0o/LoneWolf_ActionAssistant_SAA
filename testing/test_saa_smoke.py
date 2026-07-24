@@ -53,6 +53,37 @@ class BookImportTests(unittest.TestCase):
             self.assertTrue((Path(target_temp) / "01fftd" / "sect1.htm").is_file())
 
 
+class CampaignEntryPointTests(unittest.TestCase):
+    @staticmethod
+    def source_text(name: str) -> str:
+        root = Path(saa_main.__file__).resolve().parent
+        return (root / name).read_text(encoding="utf-8")
+
+    def test_home_page_exposes_book_one_campaign_entries(self) -> None:
+        index_html = self.source_text("index.html")
+        self.assertIn('assistant.html?campaign=new&amp;book=1', index_html)
+        self.assertIn('assistant.html?campaign=new&book=1', index_html)
+        self.assertIn('campaignStartLink = book.number === 1', index_html)
+
+    def test_assistant_honors_campaign_start_without_mutating_until_begin(self) -> None:
+        assistant_html = self.source_text("assistant.html")
+        self.assertIn("pageParams.get('campaign') === 'new'", assistant_html)
+        self.assertIn('function shouldShowBook1Creation()', assistant_html)
+        self.assertIn('function confirmCampaignReplacement()', assistant_html)
+        self.assertIn('clearCampaignStartRequest();', assistant_html)
+
+    def test_campaign_entry_keeps_setup_visible_and_protects_existing_campaigns(self) -> None:
+        assistant_html = self.source_text("assistant.html")
+        self.assertIn("if (isCliMode() && !campaignStartRequested)", assistant_html)
+        self.assertIn('data-campaign-cancel', assistant_html)
+        self.assertIn("const campaignEntry = campaignStartRequested && card.dataset.campaignEntry === 'true';", assistant_html)
+        self.assertGreaterEqual(assistant_html.count('if (!confirmCampaignReplacement()) return;'), 3)
+
+        cancel_start = assistant_html.index('if (button.dataset.creationCancel !== undefined)')
+        cancel_end = assistant_html.index('if (button.dataset.campaignCancel !== undefined)', cancel_start)
+        self.assertNotIn('clearCampaignStartRequest', assistant_html[cancel_start:cancel_end])
+
+
 class ServiceTests(unittest.TestCase):
     def test_service_self_test(self) -> None:
         self.assertEqual(saa_main.run_self_test(), 0)
