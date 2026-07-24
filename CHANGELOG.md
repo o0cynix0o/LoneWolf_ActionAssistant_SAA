@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.1.2 — 2026-07-24
+
+- Fixed dashboard card sizing so Small is one-third width, Medium is one-half width, and Large uses the full available width.
+- Preserved those proportions in narrow desktop layouts while falling back to full-width cards on phone-sized windows.
+- Removed nonfunctional Size controls from the tab bar.
+
 ## 3.1.1 — 2026-07-24
 
 - Added clear **Start New Campaign** entry points in the Reader panel and Flight from the Dark book details.

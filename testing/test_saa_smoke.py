@@ -84,6 +84,20 @@ class CampaignEntryPointTests(unittest.TestCase):
         self.assertNotIn('clearCampaignStartRequest', assistant_html[cancel_start:cancel_end])
 
 
+class CardSizingTests(unittest.TestCase):
+    def test_dashboard_card_sizes_have_distinct_widths(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
+
+        self.assertIn("grid-template-columns: repeat(6, minmax(0, 1fr));", assistant_html)
+        self.assertIn("#view.view-card-grid > .dashboard-card.card-size-small", assistant_html)
+        self.assertIn("grid-column: span 2;", assistant_html)
+        self.assertIn("#view.view-card-grid > .dashboard-card.card-size-medium", assistant_html)
+        self.assertIn("grid-column: span 3;", assistant_html)
+        self.assertIn("options.resizable === false", assistant_html)
+        self.assertIn("resizable: false", assistant_html)
+
+
 class ServiceTests(unittest.TestCase):
     def test_service_self_test(self) -> None:
         self.assertEqual(saa_main.run_self_test(), 0)

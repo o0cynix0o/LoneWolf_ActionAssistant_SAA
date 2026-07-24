@@ -278,7 +278,7 @@
     .quick-panel {
       padding: 0.55rem 0.65rem;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      grid-template-columns: repeat(6, minmax(0, 1fr));
       gap: 0.5rem;
       background: #12160f;
       flex-shrink: 0;
@@ -419,7 +419,7 @@
     }
     #view.view-card-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(6, minmax(0, 1fr));
       align-content: start;
       gap: 0.65rem;
     }
@@ -428,6 +428,7 @@
     }
     .dashboard-card {
       position: relative;
+      min-width: 0;
     }
     .dashboard-card[hidden],
     .quick-card[hidden],
@@ -435,17 +436,9 @@
       display: none !important;
     }
     .dashboard-card.card-size-small {
-      grid-column: auto;
       padding: 0.55rem;
     }
-    .dashboard-card.card-size-medium {
-      grid-column: auto;
-    }
     .dashboard-card.card-size-large {
-      grid-column: 1 / -1;
-    }
-    .quick-panel .dashboard-card.card-size-large,
-    .tabs.dashboard-card.card-size-large {
       grid-column: 1 / -1;
     }
     .card-menu-button {
@@ -548,6 +541,18 @@
       margin-bottom: 0;
     }
     .dashboard-card.wide {
+      grid-column: 1 / -1;
+    }
+    #view.view-card-grid > .dashboard-card.card-size-small,
+    .quick-panel > .dashboard-card.card-size-small {
+      grid-column: span 2;
+    }
+    #view.view-card-grid > .dashboard-card.card-size-medium,
+    .quick-panel > .dashboard-card.card-size-medium {
+      grid-column: span 3;
+    }
+    #view.view-card-grid > .dashboard-card.card-size-large,
+    .quick-panel > .dashboard-card.card-size-large {
       grid-column: 1 / -1;
     }
     .sheet-layout .dashboard-card.size-compact {
@@ -1224,13 +1229,19 @@
       .top-dashboard .wide,
       .top-dashboard .extra-wide { grid-column: auto; }
       .status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      #view.view-card-grid { grid-template-columns: 1fr; }
+      #view.view-card-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
       .combat-meter-grid { grid-template-columns: 1fr; }
       .death-options { grid-template-columns: 1fr; }
       .sheet-layout { grid-template-columns: 1fr; }
       .dashboard-card.wide { grid-column: auto; }
-      .quick-panel { grid-template-columns: 1fr; }
+      .quick-panel { grid-template-columns: repeat(6, minmax(0, 1fr)); }
       .reader-title { margin-left: 0; flex-basis: 100%; max-width: 100%; }
+    }
+    @media (max-width: 480px) {
+      #view.view-card-grid,
+      .quick-panel { grid-template-columns: 1fr; }
+      #view.view-card-grid > .dashboard-card,
+      .quick-panel > .dashboard-card { grid-column: 1 / -1; }
     }
   </style>
 </head>
@@ -3408,6 +3419,13 @@
       const movementDisabled = options.movable === false ? 'disabled' : '';
       const closeDisabled = options.closeable === false ? 'disabled' : '';
       const sizeButton = (value, label) => `<button type="button" class="${size === value ? 'active' : ''}" data-card-size="${scope}:${id}:${value}">${label}</button>`;
+      const sizeControls = options.resizable === false ? '' : `
+          <div class="menu-heading">Size</div>
+          <div class="menu-row three">
+            ${sizeButton('small', 'Small')}
+            ${sizeButton('medium', 'Medium')}
+            ${sizeButton('large', 'Large')}
+          </div>`;
       return `
         <button class="card-menu-button" type="button" data-card-menu-toggle="${escapeHtml(scope)}:${escapeHtml(id)}" aria-label="${escapeHtml(title)} menu" title="${escapeHtml(title)} menu"></button>
         <div class="menu-popover card-menu" data-card-menu="${escapeHtml(scope)}:${escapeHtml(id)}" hidden>
@@ -3418,12 +3436,7 @@
             <button type="button" data-card-move="${escapeHtml(scope)}:${escapeHtml(id)}:left" ${movementDisabled}>Left</button>
             <button type="button" data-card-move="${escapeHtml(scope)}:${escapeHtml(id)}:right" ${movementDisabled}>Right</button>
           </div>
-          <div class="menu-heading">Size</div>
-          <div class="menu-row three">
-            ${sizeButton('small', 'Small')}
-            ${sizeButton('medium', 'Medium')}
-            ${sizeButton('large', 'Large')}
-          </div>
+          ${sizeControls}
           <button type="button" class="danger" data-card-close="${escapeHtml(scope)}:${escapeHtml(id)}" ${closeDisabled}>Close Card</button>
         </div>
       `;
@@ -3456,7 +3469,7 @@
         const title = card.dataset.cardTitle || cardTitle(card);
         const defaultSize = options.defaultSize || 'large';
         const campaignEntry = campaignStartRequested && card.dataset.campaignEntry === 'true';
-        const size = campaignEntry ? 'large' : getCardSize(scope, id, defaultSize);
+        const size = campaignEntry || options.resizable === false ? defaultSize : getCardSize(scope, id, defaultSize);
         const collapsed = campaignEntry ? false : collapsedCards.has(id);
         card.hidden = campaignEntry ? false : closed.has(id);
         card.classList.add('dashboard-card');
@@ -3486,7 +3499,7 @@
       view.classList.add('view-card-grid');
       tabs.dataset.cardTitleOverride = 'Tabs';
       decorateCards('quick', Array.from(quickPanel.querySelectorAll(':scope > .quick-card')), { defaultSize: 'medium' });
-      decorateCards('tabs', [tabs], { defaultSize: 'large', movable: false });
+      decorateCards('tabs', [tabs], { defaultSize: 'large', movable: false, resizable: false });
       if (quickTabsDivider) quickTabsDivider.hidden = tabs.hidden;
       decorateCards(viewScope, Array.from(view.querySelectorAll(':scope > .panel')), { defaultSize: 'large' });
     }
