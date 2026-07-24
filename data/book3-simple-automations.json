@@ -1,0 +1,255 @@
+{
+  "3": {
+    "9": {
+      "summary": "Terminal death.",
+      "actions": [{"type": "ending", "ending": "death", "cause": "Section 9 ends the mission."}]
+    },
+    "18": {
+      "summary": "Lose 3 END when the ice cyclone freezes your weapon arm.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -3}]
+    },
+    "21": {
+      "summary": "Lose 3 END from the fall and scant evening meal.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -3}]
+    },
+    "27": {
+      "summary": "Lose 2 END from the cold unless Baknar Oil has been applied.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -2, "condition": {"type": "no_flag", "key": "baknarOilApplied", "value": true}}]
+    },
+    "33": {
+      "summary": "Lose 1 END from the arrow graze.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -1}]
+    },
+    "37": {
+      "summary": "Terminal death.",
+      "actions": [{"type": "ending", "ending": "death", "cause": "Section 37 ends the mission."}]
+    },
+    "43": {
+      "summary": "Lose 1 END from the reduced evening meal.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -1}]
+    },
+    "49": {
+      "summary": "Your Backpack is left behind in the tent.",
+      "actions": [{"type": "backpack_stash", "available": false}]
+    },
+    "53": {
+      "summary": "Terminal death.",
+      "actions": [{"type": "ending", "ending": "death", "cause": "Section 53 ends the mission."}]
+    },
+    "55": {
+      "summary": "Lose 5 END and permanently lose 2 base CS to frostbite.",
+      "actions": [
+        {"type": "stat", "stat": "end", "delta": -5},
+        {"type": "stat", "stat": "cs", "delta": -2, "permanent": true}
+      ]
+    },
+    "61": {
+      "summary": "Mission failed. Lone Wolf survives, but the run cannot continue.",
+      "actions": [{"type": "ending", "ending": "failure", "cause": "Section 61 ends the mission in failure. Lone Wolf lives, but he cannot continue to future adventures from this run."}]
+    },
+    "62": {
+      "summary": "Lose 3 END during the blizzard.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -3}]
+    },
+    "66": {
+      "summary": "Terminal death.",
+      "actions": [{"type": "ending", "ending": "death", "cause": "Section 66 ends the mission."}]
+    },
+    "77": {
+      "summary": "Lose 1 END from graveweed vapour.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -1}]
+    },
+    "79": {
+      "summary": "Use Black Graveweed and restore 6 END from the herbs.",
+      "actions": [
+        {"type": "remove_item", "containers": ["backpack"], "name": "Black Graveweed", "match": "contains"},
+        {"type": "stat", "stat": "end", "delta": 6}
+      ]
+    },
+    "83": {
+      "summary": "Lose 2 END from Mindforce unless Mindshield protects you.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -2, "condition": {"type": "no_power", "name": "Mindshield"}}]
+    },
+    "93": {
+      "summary": "Terminal death.",
+      "actions": [{"type": "ending", "ending": "death", "cause": "Section 93 ends the mission."}]
+    },
+    "95": {
+      "summary": "Terminal death.",
+      "actions": [{"type": "ending", "ending": "death", "cause": "Section 95 ends the mission."}]
+    },
+    "116": {
+      "summary": "Discard the Doomstone and the empty Laumspur vial.",
+      "actions": [
+        {"type": "remove_item", "containers": ["special"], "name": "Glowing Crystal", "match": "contains"},
+        {"type": "remove_item", "containers": ["special"], "name": "Doomstone", "match": "contains"},
+        {"type": "remove_item", "containers": ["backpack"], "name": "Laumspur", "match": "contains"}
+      ]
+    },
+    "121": {
+      "summary": "Lose 1 END from the poor evening meal.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -1}]
+    },
+    "129": {
+      "summary": "Lose 3 END from the cold unless Baknar Oil has been applied.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -3, "condition": {"type": "no_flag", "key": "baknarOilApplied", "value": true}}]
+    },
+    "132": {
+      "summary": "Use a Backpack Meal or lose 3 END from hunger.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": false}]
+    },
+    "136": {
+      "summary": "Terminal death.",
+      "actions": [{"type": "ending", "ending": "death", "cause": "Section 136 ends the mission."}]
+    },
+    "140": {
+      "summary": "Lose 2 END from the hidden knife slash.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -2}]
+    },
+    "143": {
+      "summary": "Terminal death.",
+      "actions": [{"type": "ending", "ending": "death", "cause": "Section 143 ends the mission."}]
+    },
+    "144": {
+      "summary": "Terminal death.",
+      "actions": [{"type": "ending", "ending": "death", "cause": "Section 144 ends the mission."}]
+    },
+    "148": {
+      "summary": "Terminal death.",
+      "actions": [{"type": "ending", "ending": "death", "cause": "Section 148 ends the mission."}]
+    },
+    "150": {
+      "summary": "Lose 2 END from the sudden cold unless Baknar Oil has been applied.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -2, "condition": {"type": "no_flag", "key": "baknarOilApplied", "value": true}}]
+    },
+    "153": {
+      "summary": "Terminal death.",
+      "actions": [{"type": "ending", "ending": "death", "cause": "Section 153 ends the mission."}]
+    },
+    "157": {
+      "summary": "Use Gallowbrush and restore 6 END from the herbs.",
+      "actions": [
+        {"type": "remove_item", "containers": ["backpack"], "name": "Gallowbrush", "match": "contains"},
+        {"type": "stat", "stat": "end", "delta": 6}
+      ]
+    },
+    "170": {
+      "summary": "Lose 6 END from the Helghast's surprise attack.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -6}]
+    },
+    "175": {
+      "summary": "Terminal death.",
+      "actions": [{"type": "ending", "ending": "death", "cause": "Section 175 ends the mission."}]
+    },
+    "193": {
+      "summary": "Lose 2 END from cuts and bruises.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -2}]
+    },
+    "196": {
+      "summary": "Lose your carried Weapons and 2 END in the struggle.",
+      "actions": [
+        {"type": "discard_weapons"},
+        {"type": "stat", "stat": "end", "delta": -2}
+      ]
+    },
+    "198": {
+      "summary": "Terminal death.",
+      "actions": [{"type": "ending", "ending": "death", "cause": "Section 198 ends the mission."}]
+    },
+    "205": {
+      "summary": "Terminal death.",
+      "actions": [{"type": "ending", "ending": "death", "cause": "Section 205 ends the mission."}]
+    },
+    "206": {
+      "summary": "Lose 1 END from the twisted ankle.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -1}]
+    },
+    "209": {
+      "summary": "Lose 2 END during the night on the rock-face.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -2}]
+    },
+    "212": {
+      "summary": "Return to the tent and recover Backpack gear if it was left behind.",
+      "actions": [{"type": "backpack_stash", "available": true}]
+    },
+    "214": {
+      "summary": "Lose 2 END from the Kalkoth's claw.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -2}]
+    },
+    "217": {
+      "summary": "Lose 10 END from the exploding monolith.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -10}]
+    },
+    "226": {
+      "summary": "Lose 1 END from the meagre evening meal.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -1}]
+    },
+    "237": {
+      "summary": "Eat a Backpack Meal or lose 3 END.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": false}]
+    },
+    "239": {
+      "summary": "Terminal death.",
+      "actions": [{"type": "ending", "ending": "death", "cause": "Section 239 ends the mission."}]
+    },
+    "248": {
+      "summary": "Terminal death.",
+      "actions": [{"type": "ending", "ending": "death", "cause": "Section 248 ends the mission."}]
+    },
+    "251": {
+      "summary": "Lose 2 END from snow-blindness.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -2}]
+    },
+    "253": {
+      "summary": "Terminal death.",
+      "actions": [{"type": "ending", "ending": "death", "cause": "Section 253 ends the mission."}]
+    },
+    "267": {
+      "summary": "Cast away the Glowing Crystal/Doomstone.",
+      "actions": [
+        {"type": "remove_item", "containers": ["special"], "name": "Glowing Crystal", "match": "contains"},
+        {"type": "remove_item", "containers": ["special"], "name": "Doomstone", "match": "contains"}
+      ]
+    },
+    "280": {
+      "summary": "Lose 1 END from the corrosive acid on the key.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -1}]
+    },
+    "294": {
+      "summary": "Eat two Backpack Meals or lose 6 END from fatigue.",
+      "actions": [{"type": "meal", "count": 2, "mode": "all_or_loss", "enduranceLoss": 6, "huntingExempt": false}]
+    },
+    "299": {
+      "summary": "Lose 2 END unless Mind Over Matter was used.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -2, "condition": {"type": "no_power", "name": "Mind Over Matter"}}]
+    },
+    "303": {
+      "summary": "Use the Ornate Silver Key to open the chest.",
+      "actions": [{"type": "remove_item", "containers": ["special"], "name": "Ornate Silver Key"}]
+    },
+    "312": {
+      "summary": "Terminal death.",
+      "actions": [{"type": "ending", "ending": "death", "cause": "Section 312 ends the mission."}]
+    },
+    "326": {
+      "summary": "Lose 1 END from the effort of visualizing the lock.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -1}]
+    },
+    "328": {
+      "summary": "Lose 6 END from the Helghast's surprise attack.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -6}]
+    },
+    "339": {
+      "summary": "Terminal death.",
+      "actions": [{"type": "ending", "ending": "death", "cause": "Section 339 ends the mission."}]
+    },
+    "340": {
+      "summary": "Restore 6 END from Loi-Kymar's herbs.",
+      "actions": [{"type": "stat", "stat": "end", "delta": 6}]
+    },
+    "350": {
+      "summary": "Complete Book 3.",
+      "actions": [{"type": "ending", "ending": "success", "completeBook": 3}]
+    }
+  }
+}

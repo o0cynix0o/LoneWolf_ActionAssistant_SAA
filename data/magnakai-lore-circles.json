@@ -1,0 +1,26 @@
+[
+  {
+    "Name": "Circle of Fire",
+    "Disciplines": [ "Weaponmastery", "Huntmastery" ],
+    "CombatSkillBonus": 1,
+    "EnduranceBonus": 2
+  },
+  {
+    "Name": "Circle of Light",
+    "Disciplines": [ "Animal Control", "Curing" ],
+    "CombatSkillBonus": 0,
+    "EnduranceBonus": 3
+  },
+  {
+    "Name": "Circle of Solaris",
+    "Disciplines": [ "Invisibility", "Huntmastery", "Pathsmanship" ],
+    "CombatSkillBonus": 1,
+    "EnduranceBonus": 3
+  },
+  {
+    "Name": "Circle of the Spirit",
+    "Disciplines": [ "Psi-surge", "Psi-screen", "Nexus", "Divination" ],
+    "CombatSkillBonus": 3,
+    "EnduranceBonus": 3
+  }
+]

@@ -1,0 +1,132 @@
+{
+  "4": {
+    "1": {
+      "summary": "Begin Book 4 with Hunting available until the Wildlands text says otherwise.",
+      "actions": [{"type": "flag", "key": "book4WildlandsHuntingSuppressed", "value": false}]
+    },
+    "3": {"summary": "Lose 1 END from the feigned-death attack.", "actions": [{"type": "stat", "stat": "end", "delta": -1}]},
+    "17": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 17 ends the mission."}]},
+    "19": {
+      "summary": "Required Meal at the ruined temple.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": true, "huntingSuppressedFlags": ["book4WildlandsHuntingSuppressed"]}]
+    },
+    "25": {
+      "summary": "Enter the Wildlands south of the Pass of Moytura; Hunting cannot supply food here.",
+      "actions": [{"type": "flag", "key": "book4WildlandsHuntingSuppressed", "value": true}]
+    },
+    "42": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 42 ends the mission."}]},
+    "52": {"summary": "Lose 1 END from the arrow volley.", "actions": [{"type": "stat", "stat": "end", "delta": -1}]},
+    "67": {"summary": "Lose 1 END from the disc ambush.", "actions": [{"type": "stat", "stat": "end", "delta": -1}]},
+    "74": {"summary": "Restore 1 END after a quiet night.", "actions": [{"type": "stat", "stat": "end", "delta": 1}]},
+    "75": {"summary": "Lose 2 END in the tavern melee.", "actions": [{"type": "stat", "stat": "end", "delta": -2}]},
+    "78": {
+      "summary": "Required Meal after meeting the Redeemers.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": true, "huntingSuppressedFlags": ["book4WildlandsHuntingSuppressed"]}]
+    },
+    "85": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 85 ends the mission."}]},
+    "94": {
+      "summary": "Lose the Backpack and everything inside after the waterfall.",
+      "actions": [{"type": "backpack", "available": false}]
+    },
+    "99": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 99 ends the mission."}]},
+    "103": {"summary": "Lose 4 END while crashing through the trapdoor.", "actions": [{"type": "stat", "stat": "end", "delta": -4}]},
+    "120": {
+      "summary": "Leave the Wildlands; Hunting can supply food again unless a later section forbids it.",
+      "actions": [{"type": "flag", "key": "book4WildlandsHuntingSuppressed", "value": false}]
+    },
+    "122": {"summary": "Lose 1 END as Barraka's attack breaks through.", "actions": [{"type": "stat", "stat": "end", "delta": -1}]},
+    "126": {
+      "summary": "Required Meal before breaking camp on Raider's Road.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": true, "huntingSuppressedFlags": ["book4WildlandsHuntingSuppressed"]}]
+    },
+    "129": {
+      "summary": "Required Meal inside the Maaken Mines; Hunting cannot supply food here.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": true, "huntingSuppressed": true}]
+    },
+    "137": {"summary": "Laumspur dressings restore 6 END.", "actions": [{"type": "stat", "stat": "end", "delta": 6}]},
+    "157": {"summary": "Restore 1 END after sleeping in the tunnel.", "actions": [{"type": "stat", "stat": "end", "delta": 1}]},
+    "139": {
+      "summary": "Required Meal while waiting for the scouts.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": true, "huntingSuppressedFlags": ["book4WildlandsHuntingSuppressed"]}]
+    },
+    "141": {
+      "summary": "Required Meal during the night ride.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": true, "huntingSuppressedFlags": ["book4WildlandsHuntingSuppressed"]}]
+    },
+    "144": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 144 ends the mission."}]},
+    "158": {
+      "summary": "Lose 3 END and the Backpack after the waterfall.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -3}, {"type": "backpack", "available": false}]
+    },
+    "159": {"summary": "Lose 2 END to blood-sucking insects.", "actions": [{"type": "stat", "stat": "end", "delta": -2}]},
+    "167": {
+      "summary": "Receive a miner's Backpack with food for 1 Meal.",
+      "actions": [{"type": "backpack", "available": true}, {"type": "add_item", "container": "backpack", "name": "Meal"}]
+    },
+    "171": {
+      "summary": "Enter the Wildlands south of the Pass of Moytura; Hunting cannot supply food here.",
+      "actions": [{"type": "flag", "key": "book4WildlandsHuntingSuppressed", "value": true}]
+    },
+    "176": {"summary": "Lose 3 END after being thrown from the horse.", "actions": [{"type": "stat", "stat": "end", "delta": -3}]},
+    "177": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 177 ends the mission."}]},
+    "181": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 181 ends the mission."}]},
+    "185": {
+      "summary": "Required Meal inside the Maaken Mines; Hunting cannot supply food here.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": true, "huntingSuppressed": true}]
+    },
+    "188": {
+      "summary": "Required Meal at the ruined temple.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": true, "huntingSuppressedFlags": ["book4WildlandsHuntingSuppressed"]}]
+    },
+    "192": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 192 ends the mission."}]},
+    "204": {
+      "summary": "Required Meal near Maaken.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": true, "huntingSuppressedFlags": ["book4WildlandsHuntingSuppressed"]}]
+    },
+    "242": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 242 ends the mission."}]},
+    "236": {"summary": "Lose 4 END from the thrown knife.", "actions": [{"type": "stat", "stat": "end", "delta": -4}]},
+    "246": {"summary": "Lose 8 END after entering the vault without light.", "actions": [{"type": "stat", "stat": "end", "delta": -8}]},
+    "247": {
+      "summary": "Required Meal by the roadside.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": true, "huntingSuppressedFlags": ["book4WildlandsHuntingSuppressed"]}]
+    },
+    "262": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 262 ends the mission."}]},
+    "263": {"summary": "Lose 4 END from the steel disc wound.", "actions": [{"type": "stat", "stat": "end", "delta": -4}]},
+    "267": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 267 ends the mission."}]},
+    "269": {
+      "summary": "Required Meal inside the Maaken Mines; Hunting cannot supply food here.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": true, "huntingSuppressed": true}]
+    },
+    "272": {"summary": "Lose 5 END from the rapids ordeal.", "actions": [{"type": "stat", "stat": "end", "delta": -5}]},
+    "275": {"summary": "Lose 1 END after collapsing the tunnel.", "actions": [{"type": "stat", "stat": "end", "delta": -1}]},
+    "283": {"summary": "Lose 3 END from the Holy Water explosion.", "actions": [{"type": "stat", "stat": "end", "delta": -3}]},
+    "284": {"summary": "Lose 3 END before the mounted fight.", "actions": [{"type": "stat", "stat": "end", "delta": -3}]},
+    "303": {"summary": "Lose 2 END after the bridge impact.", "actions": [{"type": "stat", "stat": "end", "delta": -2}]},
+    "322": {"summary": "Restore 2 END after resting in the mine hut.", "actions": [{"type": "stat", "stat": "end", "delta": 2}]},
+    "327": {"summary": "Return Captain D'Val's Sword.", "actions": [{"type": "remove_item", "containers": ["weapon"], "name": "Captain D'Val's Sword"}]},
+    "324": {
+      "summary": "Required Meal before sleep at the tavern.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": true, "huntingSuppressedFlags": ["book4WildlandsHuntingSuppressed"]}]
+    },
+    "329": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 329 ends the mission."}]},
+    "334": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 334 ends the mission."}]},
+    "339": {
+      "summary": "Required Meal after mounting guard.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": true, "huntingSuppressedFlags": ["book4WildlandsHuntingSuppressed"]}]
+    },
+    "340": {"summary": "Lose 2 END from lack of oxygen.", "actions": [{"type": "stat", "stat": "end", "delta": -2}]},
+    "341": {"summary": "Lose 4 END after the arrow wound is treated.", "actions": [{"type": "stat", "stat": "end", "delta": -4}]},
+    "342": {
+      "summary": "Lose the Backpack and everything inside after falling into the underground river.",
+      "actions": [{"type": "backpack", "available": false}]
+    },
+    "347": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 347 ends the mission."}]},
+    "350": {
+      "summary": "Complete Book 4 and recover the Dagger of Vashna.",
+      "actions": [
+        {"type": "add_item", "container": "special", "name": "Dagger of Vashna"},
+        {"type": "ending", "ending": "success", "completeBook": 4}
+      ]
+    }
+  }
+}

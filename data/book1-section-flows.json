@@ -1,0 +1,7844 @@
+{
+  "1": {
+    "_meta": {
+      "schemaVersion": 1,
+      "bookNumber": 1,
+      "title": "Flight from the Dark",
+      "source": "books/lw/01fftd/sect*.htm",
+      "generatedBy": "testing/lwbook1_section_flow_audit.py",
+      "sectionCount": 350,
+      "expectedSectionCount": 350,
+      "sourceRouteLinkCount": 555,
+      "branchSectionCount": 176,
+      "terminalSectionCount": 17,
+      "reachableFromSection1Count": 350,
+      "invalidSectionLinkCount": 0,
+      "missingSectionCount": 0
+    },
+    "1": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 141
+        },
+        {
+          "Section": 85
+        },
+        {
+          "Section": 275
+        }
+      ],
+      "incomingRouteCount": 0,
+      "routeChecks": [
+        {
+          "id": "1-sixth-sense",
+          "label": "Sixth Sense opening route",
+          "summary": "Checks whether Lone Wolf has Sixth Sense.",
+          "outcomes": [
+            {
+              "label": "Sixth Sense available",
+              "route": 141,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Sixth Sense"
+                }
+              ],
+              "testLabel": "Has Sixth Sense"
+            }
+          ]
+        }
+      ]
+    },
+    "2": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 343
+        },
+        {
+          "Section": 276
+        }
+      ],
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Random route from the falling branch.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 4,
+            "route": 343,
+            "label": "Bad landing"
+          },
+          {
+            "test": "range",
+            "min": 5,
+            "max": 9,
+            "route": 276,
+            "label": "Less severe fall"
+          }
+        ]
+      }
+    },
+    "3": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 196
+        },
+        {
+          "Section": 144
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "4": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 218
+        },
+        {
+          "Section": 75
+        },
+        {
+          "Section": 175
+        }
+      ],
+      "incomingRouteCount": 1,
+      "routeChecks": [
+        {
+          "id": "4-sixth-sense",
+          "label": "Sixth Sense canoe route",
+          "summary": "Checks whether Lone Wolf has Sixth Sense.",
+          "outcomes": [
+            {
+              "label": "Sixth Sense available",
+              "route": 218,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Sixth Sense"
+                }
+              ],
+              "testLabel": "Has Sixth Sense"
+            }
+          ]
+        }
+      ]
+    },
+    "5": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 111
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "6": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 183
+        },
+        {
+          "Section": 200
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "7": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 108
+        },
+        {
+          "Section": 25
+        }
+      ],
+      "incomingRouteCount": 8,
+      "roll": {
+        "summary": "Random route while escaping the shop.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 2,
+            "route": 108,
+            "label": "Caught by the crowd"
+          },
+          {
+            "test": "range",
+            "min": 3,
+            "max": 9,
+            "route": 25,
+            "label": "Escape through the crowd"
+          }
+        ]
+      }
+    },
+    "8": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 70
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "9": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 236
+        },
+        {
+          "Section": 292
+        }
+      ],
+      "incomingRouteCount": 1,
+      "routeChecks": [
+        {
+          "id": "9-vordak-gem",
+          "label": "Vordak Gem possession",
+          "summary": "Checks whether Lone Wolf has Vordak Gem.",
+          "outcomes": [
+            {
+              "label": "Vordak Gem available",
+              "route": 236,
+              "conditions": [
+                {
+                  "type": "item",
+                  "name": "Vordak Gem",
+                  "containers": [
+                    "backpack"
+                  ],
+                  "match": "exact"
+                }
+              ],
+              "testLabel": "Has Vordak Gem"
+            },
+            {
+              "label": "No Vordak Gem",
+              "route": 292,
+              "conditions": [
+                {
+                  "type": "no_item",
+                  "name": "Vordak Gem",
+                  "containers": [
+                    "backpack"
+                  ],
+                  "match": "exact"
+                }
+              ],
+              "testLabel": "No Vordak Gem"
+            }
+          ]
+        }
+      ]
+    },
+    "10": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 115
+        },
+        {
+          "Section": 83
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "11": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 139
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "12": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "gold"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 262,
+          "actions": [
+            {
+              "type": "stat",
+              "stat": "gold",
+              "delta": -10
+            }
+          ],
+          "effectLabel": "Pay 10 Gold Crowns"
+        },
+        {
+          "Section": 247
+        }
+      ],
+      "incomingRouteCount": 1,
+      "routeChecks": [
+        {
+          "id": "12-gold-gte-10",
+          "label": "Caravan fare",
+          "summary": "Checks current Gold Crowns.",
+          "requiresAutomationApplied": false,
+          "formula": {
+            "label": "Gold Crowns",
+            "terms": [
+              {
+                "stat": "gold"
+              }
+            ]
+          },
+          "outcomes": [
+            {
+              "label": "Gold Crowns 10 or more",
+              "test": "gte",
+              "value": 10,
+              "route": 262
+            },
+            {
+              "label": "Gold Crowns less than 10",
+              "test": "lt",
+              "value": 10,
+              "route": 247
+            }
+          ]
+        }
+      ]
+    },
+    "13": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 307
+        },
+        {
+          "Section": 213
+        }
+      ],
+      "incomingRouteCount": 4
+    },
+    "14": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 43
+        },
+        {
+          "Section": 106
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "15": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 207
+        },
+        {
+          "Section": 201
+        },
+        {
+          "Section": 35
+        }
+      ],
+      "incomingRouteCount": 2,
+      "loot": [
+        {
+          "id": "15-sword",
+          "label": "Take Sword",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "weapon",
+              "name": "Sword"
+            }
+          ]
+        }
+      ]
+    },
+    "16": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 192
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "17": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random",
+        "combat",
+        "inventory",
+        "endurance_loss",
+        "combat_skill_modifier"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 53
+        },
+        {
+          "Section": 274
+        },
+        {
+          "Section": 316
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "17-kraan",
+          "label": "Fight the Kraan",
+          "enemy": {
+            "name": "Kraan",
+            "cs": 16,
+            "endurance": 24
+          },
+          "modifier": -1,
+          "victoryChoices": [
+            53,
+            274,
+            316
+          ]
+        }
+      ],
+      "roll": {
+        "summary": "Random route after killing the Kraan.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 0,
+            "route": 53,
+            "label": "Kraan fall"
+          },
+          {
+            "test": "range",
+            "min": 1,
+            "max": 2,
+            "route": 274,
+            "label": "Lose weapons while escaping"
+          },
+          {
+            "test": "range",
+            "min": 3,
+            "max": 9,
+            "route": 316,
+            "label": "Clean escape"
+          }
+        ]
+      }
+    },
+    "18": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 114
+        },
+        {
+          "Section": 239
+        },
+        {
+          "Section": 29
+        }
+      ],
+      "incomingRouteCount": 1,
+      "routeChecks": [
+        {
+          "id": "18-camouflage",
+          "label": "Camouflage Kraan route",
+          "summary": "Checks whether Lone Wolf has Camouflage.",
+          "outcomes": [
+            {
+              "label": "Camouflage available",
+              "route": 114,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Camouflage"
+                }
+              ],
+              "testLabel": "Has Camouflage"
+            }
+          ]
+        }
+      ]
+    },
+    "19": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 69
+        },
+        {
+          "Section": 272
+        },
+        {
+          "Section": 119
+        }
+      ],
+      "incomingRouteCount": 2,
+      "routeChecks": [
+        {
+          "id": "19-tracking",
+          "label": "Tracking Sleeptooth route",
+          "summary": "Checks whether Lone Wolf has Tracking.",
+          "outcomes": [
+            {
+              "label": "Tracking available",
+              "route": 69,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Tracking"
+                }
+              ],
+              "testLabel": "Has Tracking"
+            }
+          ]
+        }
+      ]
+    },
+    "20": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "meal",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 273
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "20-supplies",
+          "label": "Take Backpack, 2 Meals, and Dagger",
+          "actions": [
+            {
+              "type": "backpack",
+              "available": true
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "weapon",
+              "name": "Dagger"
+            }
+          ]
+        }
+      ]
+    },
+    "21": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random",
+        "terminal_death"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 189
+        },
+        {
+          "Section": 312
+        }
+      ],
+      "incomingRouteCount": 1,
+      "stagedRoll": {
+        "id": "21-marsh",
+        "summary": "Staged random check in the marsh.",
+        "stages": [
+          {
+            "id": "first",
+            "label": "First marsh roll",
+            "outcomes": [
+              {
+                "test": "range",
+                "min": 0,
+                "max": 4,
+                "label": "Horse stuck in the mud",
+                "nextStage": "second"
+              },
+              {
+                "test": "range",
+                "min": 5,
+                "max": 9,
+                "label": "Steer clear of the morass",
+                "route": 189
+              }
+            ]
+          },
+          {
+            "id": "second",
+            "label": "Second marsh roll",
+            "outcomes": [
+              {
+                "test": "range",
+                "min": 0,
+                "max": 7,
+                "label": "Mud rises to your armpits",
+                "nextStage": "final"
+              },
+              {
+                "test": "range",
+                "min": 8,
+                "max": 9,
+                "label": "Drag yourself onto firm ground",
+                "route": 189
+              }
+            ]
+          },
+          {
+            "id": "final",
+            "label": "Last chance marsh roll",
+            "outcomes": [
+              {
+                "test": "values",
+                "values": [
+                  9
+                ],
+                "label": "Last-chance escape",
+                "route": 312
+              },
+              {
+                "test": "range",
+                "min": 0,
+                "max": 8,
+                "label": "Bog claims Lone Wolf",
+                "ending": "death",
+                "cause": "Section 21 bog death."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "22": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 181
+        },
+        {
+          "Section": 145
+        }
+      ],
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Random route after evading the bandits.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 4,
+            "route": 181,
+            "label": "Arrow misses"
+          },
+          {
+            "test": "range",
+            "min": 5,
+            "max": 9,
+            "route": 145,
+            "label": "Arrow hits"
+          }
+        ]
+      }
+    },
+    "23": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 326
+        },
+        {
+          "Section": 151
+        },
+        {
+          "Section": 337
+        }
+      ],
+      "incomingRouteCount": 4,
+      "routeChecks": [
+        {
+          "id": "23-golden-key",
+          "label": "Golden Key pin route",
+          "summary": "Checks whether Lone Wolf has Golden Key.",
+          "outcomes": [
+            {
+              "label": "Golden Key available",
+              "route": 326,
+              "conditions": [
+                {
+                  "type": "item",
+                  "name": "Golden Key",
+                  "containers": [
+                    "special"
+                  ],
+                  "match": "exact"
+                }
+              ],
+              "testLabel": "Has Golden Key"
+            }
+          ]
+        },
+        {
+          "id": "23-mind-over-matter",
+          "label": "Mind Over Matter pin route",
+          "summary": "Checks whether Lone Wolf has Mind Over Matter.",
+          "outcomes": [
+            {
+              "label": "Mind Over Matter available",
+              "route": 151,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Mind Over Matter"
+                }
+              ],
+              "testLabel": "Has Mind Over Matter"
+            }
+          ]
+        }
+      ]
+    },
+    "24": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 234
+        },
+        {
+          "Section": 184
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "25": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 139
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "26": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 249
+        },
+        {
+          "Section": 100
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "27": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 250
+        },
+        {
+          "Section": 52
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "28": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 130
+        },
+        {
+          "Section": 147
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "29": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat",
+        "kai_discipline_check",
+        "endurance_loss",
+        "combat_skill_modifier"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 270
+        }
+      ],
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "29-vordak",
+          "label": "Fight the Vordak",
+          "enemy": {
+            "name": "Vordak",
+            "cs": 17,
+            "endurance": 25
+          },
+          "conditionalModifiers": [
+            {
+              "label": "No Mindshield against Mindforce",
+              "modifier": -2,
+              "condition": {
+                "type": "no_power",
+                "name": "Mindshield"
+              }
+            }
+          ],
+          "victoryRoute": 270
+        }
+      ]
+    },
+    "30": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 194
+        },
+        {
+          "Section": 261
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "31": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 264
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "32": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 176
+        },
+        {
+          "Section": 340
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "33": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 248
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "34": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat",
+        "kai_discipline_check",
+        "endurance_loss",
+        "combat_skill_modifier"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 328
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "34-vordak",
+          "label": "Fight the Vordak",
+          "enemy": {
+            "name": "Vordak",
+            "cs": 17,
+            "endurance": 25
+          },
+          "conditionalModifiers": [
+            {
+              "label": "No Mindshield against Mindforce",
+              "modifier": -2,
+              "condition": {
+                "type": "no_power",
+                "name": "Mindshield"
+              }
+            }
+          ],
+          "victoryRoute": 328
+        }
+      ]
+    },
+    "35": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 207
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "36": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 140
+        },
+        {
+          "Section": 323
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Random route on the rotten watchtower ladder.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 4,
+            "route": 140,
+            "label": "Fall from the ladder",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "delta": -2
+              }
+            ]
+          },
+          {
+            "test": "range",
+            "min": 5,
+            "max": 9,
+            "route": 323,
+            "label": "Climb safely"
+          }
+        ]
+      }
+    },
+    "37": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "meal"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 282
+        },
+        {
+          "Section": 289
+        }
+      ],
+      "incomingRouteCount": 3,
+      "routeChecks": [
+        {
+          "id": "37-camouflage",
+          "label": "Camouflage refugee route",
+          "summary": "Checks whether Lone Wolf has Camouflage.",
+          "outcomes": [
+            {
+              "label": "Camouflage available",
+              "route": 282,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Camouflage"
+                }
+              ],
+              "testLabel": "Has Camouflage"
+            }
+          ]
+        }
+      ]
+    },
+    "38": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 128
+        },
+        {
+          "Section": 347
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "39": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 228
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "40": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 105
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "41": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 174
+        },
+        {
+          "Section": 116
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "42": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 4,
+      "sourceRoutes": [
+        {
+          "Section": 86
+        },
+        {
+          "Section": 238
+        },
+        {
+          "Section": 157
+        },
+        {
+          "Section": 147
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "43": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 195
+        },
+        {
+          "Section": 106
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "43-black-bear",
+          "label": "Fight the Black Bear",
+          "enemy": {
+            "name": "Black Bear",
+            "cs": 16,
+            "endurance": 10
+          },
+          "canEvade": true,
+          "evadeAfterRounds": 3,
+          "evadeRoute": 106,
+          "victoryRoute": 195
+        }
+      ]
+    },
+    "44": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 277
+        },
+        {
+          "Section": 338
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Random route after the Kraan attack.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 4,
+            "route": 277,
+            "label": "Weapon broken"
+          },
+          {
+            "test": "range",
+            "min": 5,
+            "max": 9,
+            "route": 338,
+            "label": "Weapon survives"
+          }
+        ]
+      }
+    },
+    "45": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 180
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "46": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "gold"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 296
+        },
+        {
+          "Section": 246,
+          "actions": [
+            {
+              "type": "stat",
+              "stat": "gold",
+              "delta": -2
+            }
+          ],
+          "effectLabel": "Pay 2 Gold Crowns"
+        },
+        {
+          "Section": 90
+        }
+      ],
+      "incomingRouteCount": 1,
+      "routeChecks": [
+        {
+          "id": "46-sixth-sense",
+          "label": "Sixth Sense ferryman warning",
+          "summary": "Checks whether Lone Wolf has Sixth Sense.",
+          "outcomes": [
+            {
+              "label": "Sixth Sense available",
+              "route": 296,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Sixth Sense"
+                }
+              ],
+              "testLabel": "Has Sixth Sense"
+            }
+          ]
+        }
+      ]
+    },
+    "47": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 136
+        },
+        {
+          "Section": 322
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "48": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 243
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "49": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 339
+        },
+        {
+          "Section": 60
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Random route in the shop.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 4,
+            "route": 339,
+            "label": "Robber attacks"
+          },
+          {
+            "test": "range",
+            "min": 5,
+            "max": 9,
+            "route": 60,
+            "label": "Fatal trap"
+          }
+        ]
+      }
+    },
+    "50": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 97
+        },
+        {
+          "Section": 243
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "51": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 288
+        },
+        {
+          "Section": 221
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "52": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 225
+        },
+        {
+          "Section": 250
+        }
+      ],
+      "incomingRouteCount": 1,
+      "routeChecks": [
+        {
+          "id": "52-animal-kinship",
+          "label": "Animal Kinship tree route",
+          "summary": "Checks whether Lone Wolf has Animal Kinship.",
+          "requiresAutomationApplied": false,
+          "outcomes": [
+            {
+              "label": "Animal Kinship available",
+              "route": 225,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Animal Kinship"
+                }
+              ],
+              "testLabel": "Has Animal Kinship"
+            },
+            {
+              "label": "No Animal Kinship",
+              "route": 250,
+              "conditions": [
+                {
+                  "type": "no_power",
+                  "name": "Animal Kinship"
+                }
+              ],
+              "testLabel": "No Animal Kinship"
+            }
+          ]
+        }
+      ]
+    },
+    "53": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "inventory",
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 2
+    },
+    "54": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "55": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat",
+        "inventory",
+        "endurance_loss",
+        "combat_skill_modifier"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 325
+        }
+      ],
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "55-giak",
+          "label": "Fight the surprised Giak",
+          "enemy": {
+            "name": "Giak",
+            "cs": 9,
+            "endurance": 9
+          },
+          "modifier": 4,
+          "victoryRoute": 325
+        }
+      ]
+    },
+    "56": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 222
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "57": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 164
+        },
+        {
+          "Section": 109
+        },
+        {
+          "Section": 308
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "58": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 251
+        },
+        {
+          "Section": 160
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "59": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 124
+        },
+        {
+          "Section": 106
+        },
+        {
+          "Section": 211
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "60": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 2
+    },
+    "61": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 268
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "62": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "meal",
+        "gold",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 288
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "62-gold-meals",
+          "label": "Take 28 Gold Crowns and 3 Meals",
+          "actions": [
+            {
+              "type": "stat",
+              "stat": "gold",
+              "delta": 28
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            }
+          ]
+        },
+        {
+          "id": "62-sword",
+          "label": "Take Sword",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "weapon",
+              "name": "Sword"
+            }
+          ]
+        }
+      ]
+    },
+    "63": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 269
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "63-madman",
+          "label": "Fight the Madman",
+          "enemy": {
+            "name": "Madman",
+            "cs": 11,
+            "endurance": 10
+          },
+          "victoryRoute": 269
+        }
+      ]
+    },
+    "64": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 188
+        },
+        {
+          "Section": 16
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "65": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 104
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "66": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 350
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "67": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 252
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "68": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 130
+        },
+        {
+          "Section": 15
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "69": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 272
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "70": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 8
+        },
+        {
+          "Section": 28
+        },
+        {
+          "Section": 157
+        }
+      ],
+      "incomingRouteCount": 4,
+      "routeChecks": [
+        {
+          "id": "70-sixth-sense",
+          "label": "Sixth Sense forest route",
+          "summary": "Checks whether Lone Wolf has Sixth Sense.",
+          "outcomes": [
+            {
+              "label": "Sixth Sense available",
+              "route": 8,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Sixth Sense"
+                }
+              ],
+              "testLabel": "Has Sixth Sense"
+            }
+          ]
+        }
+      ]
+    },
+    "71": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 65
+        },
+        {
+          "Section": 242
+        },
+        {
+          "Section": 104
+        }
+      ],
+      "incomingRouteCount": 1,
+      "routeChecks": [
+        {
+          "id": "71-sixth-sense",
+          "label": "Sixth Sense sarcophagus route",
+          "summary": "Checks whether Lone Wolf has Sixth Sense.",
+          "outcomes": [
+            {
+              "label": "Sixth Sense available",
+              "route": 65,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Sixth Sense"
+                }
+              ],
+              "testLabel": "Has Sixth Sense"
+            }
+          ]
+        }
+      ]
+    },
+    "72": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 265
+        }
+      ],
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "72-giak-doomwolf",
+          "label": "Fight the Giak and Doomwolf",
+          "enemy": {
+            "name": "Giak and Doomwolf",
+            "cs": 15,
+            "endurance": 24
+          },
+          "victoryRoute": 265
+        }
+      ]
+    },
+    "73": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 243
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "74": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 138
+        },
+        {
+          "Section": 281
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "75": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 260
+        },
+        {
+          "Section": 163
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "76": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 118
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "77": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 19
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "78": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "gold",
+        "inventory"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 132
+        },
+        {
+          "Section": 12
+        },
+        {
+          "Section": 220
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "79": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 204
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "80": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 7
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "81": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 183
+        },
+        {
+          "Section": 200
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "82": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 235
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "83": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "inventory"
+      ],
+      "sourceRouteCount": 4,
+      "sourceRoutes": [
+        {
+          "Section": 45
+        },
+        {
+          "Section": 205
+        },
+        {
+          "Section": 180
+        },
+        {
+          "Section": 232
+        }
+      ],
+      "incomingRouteCount": 4,
+      "routeChecks": [
+        {
+          "id": "83-sixth-sense",
+          "label": "Sixth Sense soldiers route",
+          "summary": "Checks whether Lone Wolf has Sixth Sense.",
+          "outcomes": [
+            {
+              "label": "Sixth Sense available",
+              "route": 45,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Sixth Sense"
+                }
+              ],
+              "testLabel": "Has Sixth Sense"
+            }
+          ]
+        }
+      ]
+    },
+    "84": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 188
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "85": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 229
+        },
+        {
+          "Section": 99
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "86": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 4,
+      "sourceRoutes": [
+        {
+          "Section": 6
+        },
+        {
+          "Section": 35
+        },
+        {
+          "Section": 167
+        },
+        {
+          "Section": 42
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "87": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 61
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "88": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 216
+        },
+        {
+          "Section": 31
+        }
+      ],
+      "incomingRouteCount": 2,
+      "routeChecks": [
+        {
+          "id": "88-healing",
+          "label": "Healing route",
+          "summary": "Checks whether Lone Wolf has Healing.",
+          "requiresAutomationApplied": false,
+          "outcomes": [
+            {
+              "label": "Healing available",
+              "route": 216,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Healing"
+                }
+              ],
+              "testLabel": "Has Healing"
+            },
+            {
+              "label": "No Healing or decline",
+              "route": 31,
+              "conditions": [
+                {
+                  "type": "no_power",
+                  "name": "Healing"
+                }
+              ],
+              "testLabel": "No Healing"
+            }
+          ]
+        }
+      ]
+    },
+    "89": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 53
+        },
+        {
+          "Section": 274
+        },
+        {
+          "Section": 316
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Random route while fleeing the Kraan.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 1,
+            "route": 53,
+            "label": "Fatal fall"
+          },
+          {
+            "test": "range",
+            "min": 2,
+            "max": 4,
+            "route": 274,
+            "label": "Lose weapons while escaping"
+          },
+          {
+            "test": "range",
+            "min": 5,
+            "max": 9,
+            "route": 316,
+            "label": "Clean escape"
+          }
+        ]
+      }
+    },
+    "90": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 18
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "91": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 198
+        },
+        {
+          "Section": 152
+        },
+        {
+          "Section": 7
+        }
+      ],
+      "incomingRouteCount": 1,
+      "routeChecks": [
+        {
+          "id": "91-sixth-sense",
+          "label": "Sixth Sense shopkeeper route",
+          "summary": "Checks whether Lone Wolf has Sixth Sense.",
+          "outcomes": [
+            {
+              "label": "Sixth Sense available",
+              "route": 198,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Sixth Sense"
+                }
+              ],
+              "testLabel": "Has Sixth Sense"
+            }
+          ]
+        }
+      ]
+    },
+    "92": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 13
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "93": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 106
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "94": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 7
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "95": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 240
+        },
+        {
+          "Section": 5
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "96": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 33
+        },
+        {
+          "Section": 248
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "97": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 255
+        },
+        {
+          "Section": 306
+        }
+      ],
+      "incomingRouteCount": 4
+    },
+    "98": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 139
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "99": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 222
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "100": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 161
+        },
+        {
+          "Section": 133
+        },
+        {
+          "Section": 257
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "101": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 281
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "102": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 284
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "103": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 13
+        },
+        {
+          "Section": 287
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "104": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 26
+        },
+        {
+          "Section": 100
+        }
+      ],
+      "incomingRouteCount": 4
+    },
+    "105": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 298
+        },
+        {
+          "Section": 335
+        }
+      ],
+      "incomingRouteCount": 2,
+      "routeChecks": [
+        {
+          "id": "105-animal-kinship",
+          "label": "Animal Kinship bird route",
+          "summary": "Checks whether Lone Wolf has Animal Kinship.",
+          "requiresAutomationApplied": false,
+          "outcomes": [
+            {
+              "label": "Animal Kinship available",
+              "route": 298,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Animal Kinship"
+                }
+              ],
+              "testLabel": "Has Animal Kinship"
+            },
+            {
+              "label": "No Animal Kinship or decline",
+              "route": 335,
+              "conditions": [
+                {
+                  "type": "no_power",
+                  "name": "Animal Kinship"
+                }
+              ],
+              "testLabel": "No Animal Kinship"
+            }
+          ]
+        }
+      ]
+    },
+    "106": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 263
+        },
+        {
+          "Section": 334
+        }
+      ],
+      "incomingRouteCount": 9
+    },
+    "107": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 23
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "108": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "109": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 164
+        },
+        {
+          "Section": 308
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "110": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 55
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "111": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 57
+        },
+        {
+          "Section": 308
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "112": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 33
+        },
+        {
+          "Section": 248
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "112-giaks",
+          "label": "Fight the two Giaks",
+          "enemies": [
+            {
+              "name": "Giak 1",
+              "cs": 13,
+              "endurance": 10
+            },
+            {
+              "name": "Giak 2",
+              "cs": 12,
+              "endurance": 10
+            }
+          ],
+          "victoryChoices": [
+            33,
+            248
+          ]
+        }
+      ]
+    },
+    "113": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "meal",
+        "inventory",
+        "endurance_gain"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 347
+        },
+        {
+          "Section": 295
+        }
+      ],
+      "incomingRouteCount": 2,
+      "loot": [
+        {
+          "id": "113-laumspur",
+          "label": "Take 2 Laumspur Meals",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Laumspur"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Laumspur"
+            }
+          ]
+        }
+      ]
+    },
+    "114": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 239
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "115": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "meal"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 150
+        },
+        {
+          "Section": 177
+        },
+        {
+          "Section": 83
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "116": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 321
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "117": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 330
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "118": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 224
+        }
+      ],
+      "incomingRouteCount": 4
+    },
+    "119": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 226
+        },
+        {
+          "Section": 38
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "120": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 84
+        },
+        {
+          "Section": 171
+        },
+        {
+          "Section": 54
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "121": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 342
+        },
+        {
+          "Section": 309
+        },
+        {
+          "Section": 283
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "122": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 206
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "123": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 304
+        },
+        {
+          "Section": 2
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "124": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "gold",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 211
+        },
+        {
+          "Section": 106
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "124-box",
+          "label": "Take 15 Gold Crowns and Silver Key",
+          "actions": [
+            {
+              "type": "stat",
+              "stat": "gold",
+              "delta": 15
+            },
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Silver Key"
+            }
+          ]
+        }
+      ]
+    },
+    "125": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 301
+        },
+        {
+          "Section": 27
+        },
+        {
+          "Section": 214
+        }
+      ],
+      "incomingRouteCount": 3,
+      "routeChecks": [
+        {
+          "id": "125-tracking",
+          "label": "Tracking path route",
+          "summary": "Checks whether Lone Wolf has Tracking.",
+          "outcomes": [
+            {
+              "label": "Tracking available",
+              "route": 301,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Tracking"
+                }
+              ],
+              "testLabel": "Has Tracking"
+            }
+          ]
+        }
+      ]
+    },
+    "126": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 46
+        },
+        {
+          "Section": 143
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "127": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "128": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 297
+        },
+        {
+          "Section": 336
+        }
+      ],
+      "incomingRouteCount": 1,
+      "routeChecks": [
+        {
+          "id": "128-hunting",
+          "label": "Hunting ambush route",
+          "summary": "Checks whether Lone Wolf has Hunting.",
+          "requiresAutomationApplied": false,
+          "outcomes": [
+            {
+              "label": "Hunting available",
+              "route": 297,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Hunting"
+                }
+              ],
+              "testLabel": "Has Hunting"
+            },
+            {
+              "label": "No Hunting",
+              "route": 336,
+              "conditions": [
+                {
+                  "type": "no_power",
+                  "name": "Hunting"
+                }
+              ],
+              "testLabel": "No Hunting"
+            }
+          ]
+        }
+      ]
+    },
+    "129": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 3
+        },
+        {
+          "Section": 144
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "130": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "meal"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 28
+        },
+        {
+          "Section": 201
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "131": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 4,
+      "sourceRoutes": [
+        {
+          "Section": 241
+        },
+        {
+          "Section": 55
+        },
+        {
+          "Section": 302
+        },
+        {
+          "Section": 101
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "132": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "meal"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 64
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "133": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 266
+        }
+      ],
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "133-winged-serpent",
+          "label": "Fight the Winged Serpent",
+          "enemy": {
+            "name": "Winged Serpent",
+            "cs": 16,
+            "endurance": 18
+          },
+          "enemyImmune": true,
+          "victoryRoute": 266
+        }
+      ]
+    },
+    "134": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 305
+        },
+        {
+          "Section": 40
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "135": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 223
+        },
+        {
+          "Section": 4
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "136": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat",
+        "combat_skill_modifier"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 313
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "136-giaks",
+          "label": "Fight the two Giaks from higher ground",
+          "enemies": [
+            {
+              "name": "Giak 1",
+              "cs": 13,
+              "endurance": 10
+            },
+            {
+              "name": "Giak 2",
+              "cs": 12,
+              "endurance": 10
+            }
+          ],
+          "modifier": 1,
+          "victoryRoute": 313
+        }
+      ]
+    },
+    "137": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 23
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "138": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 291
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "138-giaks",
+          "label": "Fight the two Mountain Giaks",
+          "enemies": [
+            {
+              "name": "Giak 1",
+              "cs": 13,
+              "endurance": 10
+            },
+            {
+              "name": "Giak 2",
+              "cs": 12,
+              "endurance": 10
+            }
+          ],
+          "victoryRoute": 291
+        }
+      ]
+    },
+    "139": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 66
+        }
+      ],
+      "incomingRouteCount": 4
+    },
+    "140": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 4,
+      "sourceRoutes": [
+        {
+          "Section": 14
+        },
+        {
+          "Section": 252
+        },
+        {
+          "Section": 215
+        },
+        {
+          "Section": 36
+        }
+      ],
+      "incomingRouteCount": 5
+    },
+    "141": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 56
+        },
+        {
+          "Section": 333
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "142": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 58
+        },
+        {
+          "Section": 135
+        },
+        {
+          "Section": 102
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "143": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 149
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "144": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 63
+        },
+        {
+          "Section": 217
+        }
+      ],
+      "incomingRouteCount": 3,
+      "lossChoices": [
+        {
+          "id": "144-stolen-item",
+          "label": "Choose stolen item",
+          "summary": "One Backpack Item is stolen; if no Backpack Item is available, lose one Weapon.",
+          "containers": [
+            "backpack"
+          ],
+          "fallbackContainers": [
+            "weapon"
+          ]
+        }
+      ]
+    },
+    "145": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 165
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "146": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 154
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "147": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "meal",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 42
+        },
+        {
+          "Section": 28
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "148": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 81
+        },
+        {
+          "Section": 320
+        },
+        {
+          "Section": 199
+        }
+      ],
+      "incomingRouteCount": 2,
+      "loot": [
+        {
+          "id": "148-warhammer",
+          "label": "Take Warhammer",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "weapon",
+              "name": "Warhammer"
+            }
+          ]
+        }
+      ]
+    },
+    "149": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 256
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "150": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "meal"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 83
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "151": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 87
+        },
+        {
+          "Section": 337
+        }
+      ],
+      "incomingRouteCount": 1,
+      "routeChecks": [
+        {
+          "id": "151-mind-over-matter",
+          "label": "Mind Over Matter lock route",
+          "summary": "Checks whether Lone Wolf has Mind Over Matter.",
+          "outcomes": [
+            {
+              "label": "Mind Over Matter available",
+              "route": 87,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Mind Over Matter"
+                }
+              ],
+              "testLabel": "Has Mind Over Matter"
+            }
+          ]
+        }
+      ]
+    },
+    "152": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 49
+        },
+        {
+          "Section": 231
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "153": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 202
+        },
+        {
+          "Section": 135
+        },
+        {
+          "Section": 329
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "154": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "kai_discipline_check",
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "155": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 70
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "156": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 294
+        },
+        {
+          "Section": 245
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "157": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 30
+        },
+        {
+          "Section": 167
+        }
+      ],
+      "incomingRouteCount": 4
+    },
+    "158": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "random",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 106
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Random check for the second lightning bolt.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 5,
+            "route": 106,
+            "label": "Second bolt misses"
+          },
+          {
+            "test": "range",
+            "min": 6,
+            "max": 9,
+            "route": 106,
+            "label": "Second bolt hits",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "delta": -4
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "159": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 191
+        },
+        {
+          "Section": 234
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "160": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 286
+        },
+        {
+          "Section": 10
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Random route while hiding from Giaks.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 4,
+            "route": 286,
+            "label": "Detected"
+          },
+          {
+            "test": "range",
+            "min": 5,
+            "max": 9,
+            "route": 10,
+            "label": "Not spotted"
+          }
+        ]
+      }
+    },
+    "161": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 209
+        }
+      ],
+      "incomingRouteCount": 2,
+      "loot": [
+        {
+          "id": "161-golden-key",
+          "label": "Take Golden Key",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Golden Key"
+            }
+          ]
+        }
+      ]
+    },
+    "162": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "gold",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 258
+        },
+        {
+          "Section": 127
+        }
+      ],
+      "incomingRouteCount": 1,
+      "routeChecks": [
+        {
+          "id": "162-mind-over-matter",
+          "label": "Mind Over Matter escape route",
+          "summary": "Checks whether Lone Wolf has Mind Over Matter.",
+          "requiresAutomationApplied": true,
+          "outcomes": [
+            {
+              "label": "Mind Over Matter available",
+              "route": 258,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Mind Over Matter"
+                }
+              ],
+              "testLabel": "Has Mind Over Matter"
+            },
+            {
+              "label": "No Mind Over Matter",
+              "route": 127,
+              "conditions": [
+                {
+                  "type": "no_power",
+                  "name": "Mind Over Matter"
+                }
+              ],
+              "testLabel": "No Mind Over Matter"
+            }
+          ]
+        }
+      ]
+    },
+    "163": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 321
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "164": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory",
+        "combat_skill_modifier"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 308
+        }
+      ],
+      "incomingRouteCount": 2,
+      "loot": [
+        {
+          "id": "164-alether",
+          "label": "Take Potion of Alether",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Potion of Alether"
+            }
+          ]
+        }
+      ]
+    },
+    "165": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 212
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "166": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 104
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "167": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 178
+        },
+        {
+          "Section": 88
+        },
+        {
+          "Section": 264
+        }
+      ],
+      "incomingRouteCount": 2,
+      "routeChecks": [
+        {
+          "id": "167-sixth-sense",
+          "label": "Sixth Sense horse route",
+          "summary": "Checks whether Lone Wolf has Sixth Sense.",
+          "outcomes": [
+            {
+              "label": "Sixth Sense available",
+              "route": 178,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Sixth Sense"
+                }
+              ],
+              "testLabel": "Has Sixth Sense"
+            }
+          ]
+        }
+      ]
+    },
+    "168": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "meal"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 64
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "169": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 23
+        },
+        {
+          "Section": 137
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "169-crypt-spawn",
+          "label": "Fight the Crypt Spawn",
+          "enemy": {
+            "name": "Crypt Spawn",
+            "cs": 16,
+            "endurance": 16
+          },
+          "canEvade": true,
+          "evadeAfterRounds": 1,
+          "evadeRoute": 23,
+          "victoryRoute": 137
+        }
+      ]
+    },
+    "170": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat",
+        "kai_discipline_check",
+        "endurance_loss",
+        "combat_skill_modifier"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 319
+        }
+      ],
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "170-burrowcrawler",
+          "label": "Fight the Burrowcrawler",
+          "enemy": {
+            "name": "Burrowcrawler",
+            "cs": 17,
+            "endurance": 7
+          },
+          "enemyImmune": true,
+          "conditionalModifiers": [
+            {
+              "label": "No Torch in Backpack",
+              "modifier": -3,
+              "condition": {
+                "type": "no_item",
+                "name": "Torch",
+                "containers": [
+                  "backpack"
+                ],
+                "match": "exact"
+              }
+            }
+          ],
+          "victoryRoute": 319
+        }
+      ]
+    },
+    "171": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 303
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "172": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 114
+        },
+        {
+          "Section": 239
+        },
+        {
+          "Section": 29
+        }
+      ],
+      "incomingRouteCount": 1,
+      "routeChecks": [
+        {
+          "id": "172-camouflage",
+          "label": "Camouflage Kraan route",
+          "summary": "Checks whether Lone Wolf has Camouflage.",
+          "outcomes": [
+            {
+              "label": "Camouflage available",
+              "route": 114,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Camouflage"
+                }
+              ],
+              "testLabel": "Has Camouflage"
+            }
+          ]
+        }
+      ]
+    },
+    "173": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 158
+        },
+        {
+          "Section": 259
+        }
+      ],
+      "incomingRouteCount": 1,
+      "routeChecks": [
+        {
+          "id": "173-silver-key",
+          "label": "Silver Key door route",
+          "summary": "Checks whether Lone Wolf has Silver Key.",
+          "outcomes": [
+            {
+              "label": "Silver Key available",
+              "route": 158,
+              "conditions": [
+                {
+                  "type": "item",
+                  "name": "Silver Key",
+                  "containers": [
+                    "special"
+                  ],
+                  "match": "exact"
+                }
+              ],
+              "testLabel": "Has Silver Key"
+            },
+            {
+              "label": "No Silver Key",
+              "route": 259,
+              "conditions": [
+                {
+                  "type": "no_item",
+                  "name": "Silver Key",
+                  "containers": [
+                    "special"
+                  ],
+                  "match": "exact"
+                }
+              ],
+              "testLabel": "No Silver Key"
+            }
+          ]
+        }
+      ]
+    },
+    "174": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 190
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "175": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 182
+        },
+        {
+          "Section": 41
+        },
+        {
+          "Section": 116
+        }
+      ],
+      "incomingRouteCount": 2,
+      "routeChecks": [
+        {
+          "id": "175-camouflage",
+          "label": "Camouflage river route",
+          "summary": "Checks whether Lone Wolf has Camouflage.",
+          "outcomes": [
+            {
+              "label": "Camouflage available",
+              "route": 182,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Camouflage"
+                }
+              ],
+              "testLabel": "Has Camouflage"
+            }
+          ]
+        }
+      ]
+    },
+    "176": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 253
+        },
+        {
+          "Section": 126
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "177": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 83
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "178": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 88
+        },
+        {
+          "Section": 264
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "179": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 318
+        },
+        {
+          "Section": 51
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "180": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 62
+        },
+        {
+          "Section": 22
+        }
+      ],
+      "incomingRouteCount": 3,
+      "combat": [
+        {
+          "id": "180-bandits",
+          "label": "Fight the leader and soldiers",
+          "enemies": [
+            {
+              "name": "Leader",
+              "cs": 15,
+              "endurance": 22
+            },
+            {
+              "name": "Soldier 1",
+              "cs": 13,
+              "endurance": 20
+            },
+            {
+              "name": "Soldier 2",
+              "cs": 12,
+              "endurance": 20
+            }
+          ],
+          "victoryRoute": 62
+        }
+      ]
+    },
+    "181": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 288
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "182": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 174
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "183": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 97
+        },
+        {
+          "Section": 200
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "184": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "meal",
+        "gold",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 64
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "184-supplies",
+          "label": "Take 40 Gold Crowns, Sword, and 4 Meals",
+          "actions": [
+            {
+              "type": "stat",
+              "stat": "gold",
+              "delta": 40
+            },
+            {
+              "type": "add_item",
+              "container": "weapon",
+              "name": "Sword"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            }
+          ]
+        }
+      ]
+    },
+    "185": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "186": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 106
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "187": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 186
+        },
+        {
+          "Section": 228
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "188": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "random",
+        "inventory",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 303
+        }
+      ],
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Random effect after the Kraan attack.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 6,
+            "route": 303,
+            "label": "Backpack ripped away",
+            "actions": [
+              {
+                "type": "backpack",
+                "available": false
+              }
+            ]
+          },
+          {
+            "test": "range",
+            "min": 7,
+            "max": 9,
+            "route": 303,
+            "label": "Arm wounds",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "delta": -3
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "189": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 118
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "190": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 20
+        },
+        {
+          "Section": 273
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "191": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 24
+        },
+        {
+          "Section": 234
+        }
+      ],
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "191-bodyguard",
+          "label": "Fight the Bodyguard",
+          "enemy": {
+            "name": "Bodyguard",
+            "cs": 11,
+            "endurance": 21
+          },
+          "canEvade": true,
+          "evadeRoute": 234,
+          "victoryRoute": 24
+        }
+      ]
+    },
+    "192": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 171
+        },
+        {
+          "Section": 120
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "193": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 253
+        },
+        {
+          "Section": 126
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "193-scroll",
+          "label": "Take Scroll",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Scroll"
+            }
+          ]
+        }
+      ]
+    },
+    "194": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 208
+        },
+        {
+          "Section": 148
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "195": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 59
+        },
+        {
+          "Section": 106
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "196": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 332
+        },
+        {
+          "Section": 144
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "197": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 172
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "197-drakkar",
+          "label": "Take Short Sword and 6 Gold Crowns",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "weapon",
+              "name": "Short Sword"
+            },
+            {
+              "type": "stat",
+              "stat": "gold",
+              "delta": 6
+            }
+          ]
+        }
+      ]
+    },
+    "198": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 7
+        },
+        {
+          "Section": 152
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "199": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "meal",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 81
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "199-meal",
+          "label": "Take 1 Meal",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            }
+          ]
+        }
+      ]
+    },
+    "200": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 168
+        },
+        {
+          "Section": 78
+        }
+      ],
+      "incomingRouteCount": 3,
+      "routeChecks": [
+        {
+          "id": "200-camouflage",
+          "label": "Camouflage caravan route",
+          "summary": "Checks whether Lone Wolf has Camouflage.",
+          "outcomes": [
+            {
+              "label": "Camouflage available",
+              "route": 168,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Camouflage"
+                }
+              ],
+              "testLabel": "Has Camouflage"
+            }
+          ]
+        }
+      ]
+    },
+    "201": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 238
+        },
+        {
+          "Section": 15
+        },
+        {
+          "Section": 130
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "202": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 58
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "203": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 80
+        },
+        {
+          "Section": 344
+        }
+      ],
+      "incomingRouteCount": 2,
+      "routeChecks": [
+        {
+          "id": "203-end-gte-10",
+          "label": "END after the explosion",
+          "summary": "Checks current END.",
+          "requiresAutomationApplied": true,
+          "formula": {
+            "label": "END",
+            "terms": [
+              {
+                "stat": "end"
+              }
+            ]
+          },
+          "outcomes": [
+            {
+              "label": "END 10 or more",
+              "test": "gte",
+              "value": 10,
+              "route": 80
+            },
+            {
+              "label": "END less than 10",
+              "test": "lt",
+              "value": 10,
+              "route": 344
+            }
+          ]
+        }
+      ]
+    },
+    "204": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 111
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "205": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 181
+        },
+        {
+          "Section": 145
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Random route while fleeing the disguised Drakkarim.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 4,
+            "route": 181,
+            "label": "Arrow misses"
+          },
+          {
+            "test": "range",
+            "min": 5,
+            "max": 9,
+            "route": 145,
+            "label": "Arrow hits"
+          }
+        ]
+      }
+    },
+    "206": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 224
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "207": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 30
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "208": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 148
+        },
+        {
+          "Section": 320
+        }
+      ],
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "208-giaks",
+          "label": "Fight the Giaks",
+          "enemy": {
+            "name": "Giaks",
+            "cs": 15,
+            "endurance": 13
+          },
+          "victoryChoices": [
+            148,
+            320
+          ]
+        }
+      ]
+    },
+    "209": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 23
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "210": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 332
+        },
+        {
+          "Section": 37
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "211": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 244
+        },
+        {
+          "Section": 173
+        },
+        {
+          "Section": 106
+        }
+      ],
+      "incomingRouteCount": 2,
+      "routeChecks": [
+        {
+          "id": "211-sixth-sense",
+          "label": "Sixth Sense chamber route",
+          "summary": "Checks whether Lone Wolf has Sixth Sense.",
+          "outcomes": [
+            {
+              "label": "Sixth Sense available",
+              "route": 244,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Sixth Sense"
+                }
+              ],
+              "testLabel": "Has Sixth Sense"
+            }
+          ]
+        }
+      ]
+    },
+    "212": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance_loss",
+        "endurance_gain"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 350
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "213": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 331
+        }
+      ],
+      "incomingRouteCount": 6
+    },
+    "214": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 125
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "215": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 346
+        },
+        {
+          "Section": 14
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "216": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 264
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "217": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 91
+        },
+        {
+          "Section": 7
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "218": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 75
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "219": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "220": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 24
+        },
+        {
+          "Section": 234
+        }
+      ],
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "220-bodyguard",
+          "label": "Fight the Bodyguard",
+          "enemy": {
+            "name": "Bodyguard",
+            "cs": 11,
+            "endurance": 20
+          },
+          "canEvade": true,
+          "evadeRoute": 234,
+          "victoryRoute": 24
+        }
+      ]
+    },
+    "221": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 318
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "222": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 67
+        },
+        {
+          "Section": 140
+        },
+        {
+          "Section": 252
+        }
+      ],
+      "incomingRouteCount": 2,
+      "routeChecks": [
+        {
+          "id": "222-tracking",
+          "label": "Tracking fork route",
+          "summary": "Checks whether Lone Wolf has Tracking.",
+          "outcomes": [
+            {
+              "label": "Tracking available",
+              "route": 67,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Tracking"
+                }
+              ],
+              "testLabel": "Has Tracking"
+            }
+          ]
+        }
+      ]
+    },
+    "223": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 75
+        },
+        {
+          "Section": 175
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "224": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 153
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "225": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 187
+        },
+        {
+          "Section": 39
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "226": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 277
+        },
+        {
+          "Section": 338
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Random route after the Kraan attack.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 4,
+            "route": 277,
+            "label": "Weapon broken"
+          },
+          {
+            "test": "range",
+            "min": 5,
+            "max": 9,
+            "route": 338,
+            "label": "Weapon survives"
+          }
+        ]
+      }
+    },
+    "227": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 271
+        },
+        {
+          "Section": 348
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "227-marshviper",
+          "label": "Fight the Marshviper",
+          "enemy": {
+            "name": "Marshviper",
+            "cs": 16,
+            "endurance": 6
+          },
+          "woundedVictoryRoute": 271,
+          "flawlessVictoryRoute": 348
+        }
+      ]
+    },
+    "228": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 140
+        },
+        {
+          "Section": 215
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "229": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat",
+        "endurance_loss",
+        "combat_skill_modifier"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 267
+        },
+        {
+          "Section": 125
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "229-kraan",
+          "label": "Fight the Kraan in the dust",
+          "enemy": {
+            "name": "Kraan",
+            "cs": 16,
+            "endurance": 25
+          },
+          "modifier": -1,
+          "victoryChoices": [
+            267,
+            125
+          ]
+        }
+      ]
+    },
+    "230": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 179
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "231": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 94
+        },
+        {
+          "Section": 203
+        },
+        {
+          "Section": 7
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "231-robber",
+          "label": "Fight the Robber",
+          "enemy": {
+            "name": "Robber",
+            "cs": 13,
+            "endurance": 20
+          },
+          "canEvade": true,
+          "evadeAfterRounds": 2,
+          "evadeRoute": 7,
+          "roundLimit": 4,
+          "roundExceededRoute": 203,
+          "winWithinRounds": 4,
+          "winWithinRoute": 94,
+          "tooLateRoute": 203
+        }
+      ]
+    },
+    "232": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 180
+        },
+        {
+          "Section": 22
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "233": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 206
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "234": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 5
+    },
+    "235": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "meal"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 254
+        },
+        {
+          "Section": 32
+        },
+        {
+          "Section": 146
+        }
+      ],
+      "incomingRouteCount": 1,
+      "routeChecks": [
+        {
+          "id": "235-tracking",
+          "label": "Tracking road route",
+          "summary": "Checks whether Lone Wolf has Tracking.",
+          "outcomes": [
+            {
+              "label": "Tracking available",
+              "route": 254,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Tracking"
+                }
+              ],
+              "testLabel": "Has Tracking"
+            }
+          ]
+        }
+      ]
+    },
+    "236": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat",
+        "inventory",
+        "endurance_loss",
+        "combat_skill_modifier"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 104
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "237": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 265
+        },
+        {
+          "Section": 72
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Random route while sneaking past the Giaks.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 4,
+            "route": 265,
+            "label": "Pass undetected"
+          },
+          {
+            "test": "range",
+            "min": 5,
+            "max": 9,
+            "route": 72,
+            "label": "Detected"
+          }
+        ]
+      }
+    },
+    "238": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 42
+        },
+        {
+          "Section": 68
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "239": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 34
+        },
+        {
+          "Section": 118
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "240": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 79
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "241": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 349
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "242": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 166
+        },
+        {
+          "Section": 9
+        }
+      ],
+      "incomingRouteCount": 1,
+      "routeChecks": [
+        {
+          "id": "242-mindshield",
+          "label": "Mindshield psychic route",
+          "summary": "Checks whether Lone Wolf has Mindshield.",
+          "requiresAutomationApplied": false,
+          "outcomes": [
+            {
+              "label": "Mindshield available",
+              "route": 166,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Mindshield"
+                }
+              ],
+              "testLabel": "Has Mindshield"
+            },
+            {
+              "label": "No Mindshield",
+              "route": 9,
+              "conditions": [
+                {
+                  "type": "no_power",
+                  "name": "Mindshield"
+                }
+              ],
+              "testLabel": "No Mindshield"
+            }
+          ]
+        }
+      ]
+    },
+    "243": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 97
+        }
+      ],
+      "incomingRouteCount": 3,
+      "loot": [
+        {
+          "id": "243-mace",
+          "label": "Take Mace",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "weapon",
+              "name": "Mace"
+            }
+          ]
+        }
+      ]
+    },
+    "244": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 93
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "245": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 190
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "246": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 197
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "246-drakkar",
+          "label": "Fight the Drakkar",
+          "enemy": {
+            "name": "Drakkar",
+            "cs": 15,
+            "endurance": 23
+          },
+          "victoryRoute": 197
+        }
+      ]
+    },
+    "247": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 159
+        },
+        {
+          "Section": 220
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "248": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 44
+        },
+        {
+          "Section": 300
+        }
+      ],
+      "incomingRouteCount": 5
+    },
+    "249": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 169
+        },
+        {
+          "Section": 107
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "250": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 186
+        },
+        {
+          "Section": 228
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "251": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 10
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "252": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 155
+        },
+        {
+          "Section": 70
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "253": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 278
+        }
+      ],
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "253-doomwolves",
+          "label": "Fight the four Doomwolves",
+          "enemies": [
+            {
+              "name": "Doomwolf 1",
+              "cs": 13,
+              "endurance": 24
+            },
+            {
+              "name": "Doomwolf 2",
+              "cs": 14,
+              "endurance": 23
+            },
+            {
+              "name": "Doomwolf 3",
+              "cs": 14,
+              "endurance": 22
+            },
+            {
+              "name": "Doomwolf 4",
+              "cs": 15,
+              "endurance": 21
+            }
+          ],
+          "victoryRoute": 278
+        }
+      ]
+    },
+    "254": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 32
+        },
+        {
+          "Section": 146
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "255": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat",
+        "kai_discipline_check",
+        "meal",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 82
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "255-princes-sword",
+          "label": "Take Prince's Sword",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "weapon",
+              "name": "Prince's Sword"
+            }
+          ]
+        }
+      ],
+      "combat": [
+        {
+          "id": "255-gourgaz",
+          "label": "Fight the Gourgaz",
+          "enemy": {
+            "name": "Gourgaz",
+            "cs": 20,
+            "endurance": 30
+          },
+          "enemyImmune": true,
+          "victoryRoute": 82
+        }
+      ]
+    },
+    "256": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 224
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "257": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 133
+        },
+        {
+          "Section": 161
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "258": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "kai_discipline_check",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 50
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "259": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "260": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat",
+        "endurance_loss",
+        "combat_skill_modifier"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 156
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "260-unarmed-giaks",
+          "label": "Fight the Giaks unarmed",
+          "enemies": [
+            {
+              "name": "Giak 1",
+              "cs": 11,
+              "endurance": 18
+            },
+            {
+              "name": "Giak 2",
+              "cs": 12,
+              "endurance": 17
+            }
+          ],
+          "forceUnarmed": true,
+          "victoryRoute": 156
+        }
+      ]
+    },
+    "261": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 208
+        },
+        {
+          "Section": 264
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "262": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 191
+        },
+        {
+          "Section": 234
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "263": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "gold"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 70
+        },
+        {
+          "Section": 157
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "263-gold",
+          "label": "Take 3 Gold Crowns",
+          "actions": [
+            {
+              "type": "stat",
+              "stat": "gold",
+              "delta": 3
+            }
+          ]
+        }
+      ]
+    },
+    "264": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 97
+        },
+        {
+          "Section": 6
+        }
+      ],
+      "incomingRouteCount": 6
+    },
+    "265": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 142
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "266": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 209
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "267": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 125
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "267-message",
+          "label": "Take Message",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Message"
+            }
+          ]
+        },
+        {
+          "id": "267-dagger",
+          "label": "Take Dagger",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "weapon",
+              "name": "Dagger"
+            }
+          ]
+        }
+      ]
+    },
+    "268": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 288
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "269": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "gold"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 314
+        },
+        {
+          "Section": 7
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "270": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 21
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "271": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "272": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 134
+        },
+        {
+          "Section": 305
+        }
+      ],
+      "incomingRouteCount": 4,
+      "routeChecks": [
+        {
+          "id": "272-tracking",
+          "label": "Tracking hut route",
+          "summary": "Checks whether Lone Wolf has Tracking.",
+          "requiresAutomationApplied": false,
+          "outcomes": [
+            {
+              "label": "Tracking available",
+              "route": 134,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Tracking"
+                }
+              ],
+              "testLabel": "Has Tracking"
+            },
+            {
+              "label": "No Tracking",
+              "route": 305,
+              "conditions": [
+                {
+                  "type": "no_power",
+                  "name": "Tracking"
+                }
+              ],
+              "testLabel": "No Tracking"
+            }
+          ]
+        }
+      ]
+    },
+    "273": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 179
+        },
+        {
+          "Section": 51
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "274": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 331
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "275": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 345
+        },
+        {
+          "Section": 74
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Random route on the left-hand track.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 4,
+            "route": 345,
+            "label": "Lose your footing"
+          },
+          {
+            "test": "range",
+            "min": 5,
+            "max": 9,
+            "route": 74,
+            "label": "Keep moving"
+          }
+        ]
+      }
+    },
+    "276": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 213
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "277": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 113
+        }
+      ],
+      "incomingRouteCount": 2,
+      "lossChoices": [
+        {
+          "id": "277-broken-weapon",
+          "label": "Choose broken Weapon",
+          "summary": "One Weapon is broken; if carrying more than one, choose which Weapon to lose.",
+          "containers": [
+            "weapon"
+          ]
+        }
+      ]
+    },
+    "278": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 149
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "279": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 112
+        },
+        {
+          "Section": 96
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Random route inside the cave.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 6,
+            "route": 112,
+            "label": "Giaks enter the cave"
+          },
+          {
+            "test": "range",
+            "min": 7,
+            "max": 9,
+            "route": 96,
+            "label": "Cave remains quiet"
+          }
+        ]
+      }
+    },
+    "280": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 327
+        },
+        {
+          "Section": 170
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "281": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 311
+        },
+        {
+          "Section": 77
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "282": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 11
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "283": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat",
+        "kai_discipline_check",
+        "endurance_loss",
+        "combat_skill_modifier"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 123
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "283-vordak",
+          "label": "Fight the Vordak",
+          "enemy": {
+            "name": "Vordak",
+            "cs": 17,
+            "endurance": 25
+          },
+          "timedModifiers": [
+            {
+              "label": "Surprise attack",
+              "modifier": 2,
+              "startRound": 1,
+              "endRound": 1
+            },
+            {
+              "label": "No Mindshield against Mindforce",
+              "modifier": -2,
+              "startRound": 2,
+              "endRound": 999,
+              "condition": {
+                "type": "no_power",
+                "name": "Mindshield"
+              }
+            }
+          ],
+          "victoryRoute": 123
+        }
+      ]
+    },
+    "284": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 71
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "285": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 325
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "286": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "287": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 13
+        },
+        {
+          "Section": 330
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "288": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 129
+        }
+      ],
+      "incomingRouteCount": 4
+    },
+    "289": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 139
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "290": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 140
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "290-quarterstaff",
+          "label": "Take Quarterstaff",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "weapon",
+              "name": "Quarterstaff"
+            }
+          ]
+        }
+      ]
+    },
+    "291": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "gold",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 272
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "291-gold",
+          "label": "Take 6 Gold Crowns",
+          "actions": [
+            {
+              "type": "stat",
+              "stat": "gold",
+              "delta": 6
+            }
+          ]
+        },
+        {
+          "id": "291-spear",
+          "label": "Take Spear",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "weapon",
+              "name": "Spear"
+            }
+          ]
+        },
+        {
+          "id": "291-dagger",
+          "label": "Take Dagger",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "weapon",
+              "name": "Dagger"
+            }
+          ]
+        }
+      ]
+    },
+    "292": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "293": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 281
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "294": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random",
+        "inventory"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 230
+        },
+        {
+          "Section": 190
+        },
+        {
+          "Section": 321
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Random route after escaping the river.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 2,
+            "route": 230,
+            "label": "Riverbank route"
+          },
+          {
+            "test": "range",
+            "min": 3,
+            "max": 6,
+            "route": 190,
+            "label": "Forest route"
+          },
+          {
+            "test": "range",
+            "min": 7,
+            "max": 9,
+            "route": 321,
+            "label": "High bank route"
+          }
+        ]
+      }
+    },
+    "295": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 185
+        },
+        {
+          "Section": 92
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "296": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 90
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "297": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "kai_discipline_check",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 117
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "298": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 121
+        },
+        {
+          "Section": 38
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "299": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 227
+        },
+        {
+          "Section": 95
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "300": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "meal"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 13
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "301": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 27
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "302": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 110
+        },
+        {
+          "Section": 285
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Random route in the forest.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 2,
+            "route": 110,
+            "label": "Encounter ahead"
+          },
+          {
+            "test": "range",
+            "min": 3,
+            "max": 9,
+            "route": 285,
+            "label": "Clear path"
+          }
+        ]
+      }
+    },
+    "303": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 237
+        },
+        {
+          "Section": 72
+        }
+      ],
+      "incomingRouteCount": 2,
+      "routeChecks": [
+        {
+          "id": "303-camouflage",
+          "label": "Camouflage patrol route",
+          "summary": "Checks whether Lone Wolf has Camouflage.",
+          "requiresAutomationApplied": false,
+          "outcomes": [
+            {
+              "label": "Camouflage available",
+              "route": 237,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Camouflage"
+                }
+              ],
+              "testLabel": "Has Camouflage"
+            },
+            {
+              "label": "No Camouflage",
+              "route": 72,
+              "conditions": [
+                {
+                  "type": "no_power",
+                  "name": "Camouflage"
+                }
+              ],
+              "testLabel": "No Camouflage"
+            }
+          ]
+        }
+      ]
+    },
+    "304": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 2
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "305": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 105
+        }
+      ],
+      "incomingRouteCount": 2,
+      "loot": [
+        {
+          "id": "305-spear",
+          "label": "Take Giak Spear",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "weapon",
+              "name": "Spear"
+            }
+          ]
+        }
+      ]
+    },
+    "306": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "307": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "meal",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 213
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "307-meal",
+          "label": "Take 1 Meal",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            }
+          ]
+        }
+      ],
+      "lossChoices": [
+        {
+          "id": "307-warhammer-exchange",
+          "label": "Exchange for Warhammer",
+          "summary": "Choose one carried Weapon to exchange for the Warhammer.",
+          "containers": [
+            "weapon"
+          ],
+          "replacement": {
+            "container": "weapon",
+            "name": "Warhammer"
+          }
+        }
+      ]
+    },
+    "308": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 122
+        },
+        {
+          "Section": 233
+        }
+      ],
+      "incomingRouteCount": 4,
+      "routeChecks": [
+        {
+          "id": "308-animal-kinship",
+          "label": "Animal Kinship horse route",
+          "summary": "Checks whether Lone Wolf has Animal Kinship.",
+          "outcomes": [
+            {
+              "label": "Animal Kinship available",
+              "route": 122,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Animal Kinship"
+                }
+              ],
+              "testLabel": "Has Animal Kinship"
+            }
+          ]
+        }
+      ]
+    },
+    "309": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "310": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 37
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "311": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 324
+        },
+        {
+          "Section": 279
+        },
+        {
+          "Section": 47
+        }
+      ],
+      "incomingRouteCount": 1,
+      "routeChecks": [
+        {
+          "id": "311-camouflage",
+          "label": "Camouflage cave route",
+          "summary": "Checks whether Lone Wolf has Camouflage.",
+          "outcomes": [
+            {
+              "label": "Camouflage available",
+              "route": 324,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Camouflage"
+                }
+              ],
+              "testLabel": "Has Camouflage"
+            }
+          ]
+        }
+      ]
+    },
+    "312": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 299
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "313": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 248
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "314": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 341
+        },
+        {
+          "Section": 98
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Random route into Holmgard.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 6,
+            "route": 341,
+            "label": "Reach the guildhall area"
+          },
+          {
+            "test": "range",
+            "min": 7,
+            "max": 9,
+            "route": 98,
+            "label": "Alternative city route"
+          }
+        ]
+      }
+    },
+    "315": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 213
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "315-purse",
+          "label": "Take 6 Gold Crowns and Perfumed Soap",
+          "actions": [
+            {
+              "type": "stat",
+              "stat": "gold",
+              "delta": 6
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Tablet of Perfumed Soap"
+            }
+          ]
+        }
+      ]
+    },
+    "316": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 331
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "317": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 61
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "318": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 129
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "319": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 157
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "319-pouch",
+          "label": "Take Dagger and 20 Gold Crowns",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "weapon",
+              "name": "Dagger"
+            },
+            {
+              "type": "stat",
+              "stat": "gold",
+              "delta": 20
+            }
+          ]
+        }
+      ]
+    },
+    "320": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 264
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "321": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 273
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "322": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 17
+        },
+        {
+          "Section": 89
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "323": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 290
+        },
+        {
+          "Section": 140
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "324": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 33
+        },
+        {
+          "Section": 248
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "325": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 349
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "326": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 61
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "327": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "inventory",
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "328": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 76
+        },
+        {
+          "Section": 118
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "329": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 284
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "330": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 315
+        },
+        {
+          "Section": 213
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "331": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 170
+        },
+        {
+          "Section": 280
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "332": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 350
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "333": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 131
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "334": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 48
+        },
+        {
+          "Section": 73
+        },
+        {
+          "Section": 162
+        }
+      ],
+      "incomingRouteCount": 1,
+      "routeChecks": [
+        {
+          "id": "334-sixth-sense",
+          "label": "Sixth Sense Drakkarim route",
+          "summary": "Checks whether Lone Wolf has Sixth Sense.",
+          "outcomes": [
+            {
+              "label": "Sixth Sense available",
+              "route": 48,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Sixth Sense"
+                }
+              ],
+              "testLabel": "Has Sixth Sense"
+            }
+          ]
+        },
+        {
+          "id": "334-camouflage",
+          "label": "Camouflage Drakkarim route",
+          "summary": "Checks whether Lone Wolf has Camouflage.",
+          "outcomes": [
+            {
+              "label": "Camouflage available",
+              "route": 73,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Camouflage"
+                }
+              ],
+              "testLabel": "Has Camouflage"
+            }
+          ]
+        }
+      ]
+    },
+    "335": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 121
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "336": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 117
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "336-giaks",
+          "label": "Fight the two Giaks",
+          "enemies": [
+            {
+              "name": "Giak 1",
+              "cs": 14,
+              "endurance": 11
+            },
+            {
+              "name": "Giak 2",
+              "cs": 13,
+              "endurance": 11
+            }
+          ],
+          "victoryRoute": 117
+        }
+      ]
+    },
+    "337": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 219
+        },
+        {
+          "Section": 317
+        }
+      ],
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Random route after opening the gate.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 4,
+            "route": 219,
+            "label": "Discovered"
+          },
+          {
+            "test": "range",
+            "min": 5,
+            "max": 9,
+            "route": 317,
+            "label": "Slip through"
+          }
+        ]
+      }
+    },
+    "338": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 113
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "339": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 94
+        },
+        {
+          "Section": 203
+        },
+        {
+          "Section": 7
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "339-robber",
+          "label": "Fight the Robber",
+          "enemy": {
+            "name": "Robber",
+            "cs": 13,
+            "endurance": 20
+          },
+          "canEvade": true,
+          "evadeRoute": 7,
+          "roundLimit": 4,
+          "roundExceededRoute": 203,
+          "winWithinRounds": 4,
+          "winWithinRoute": 94,
+          "tooLateRoute": 203
+        }
+      ]
+    },
+    "340": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 193
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "340-giak-doomwolf",
+          "label": "Fight the Giak and Doomwolf",
+          "enemy": {
+            "name": "Giak and Doomwolf",
+            "cs": 14,
+            "endurance": 24
+          },
+          "victoryRoute": 193
+        }
+      ]
+    },
+    "341": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 310
+        },
+        {
+          "Section": 210
+        },
+        {
+          "Section": 37
+        }
+      ],
+      "incomingRouteCount": 1,
+      "routeChecks": [
+        {
+          "id": "341-tracking",
+          "label": "Tracking city route",
+          "summary": "Checks whether Lone Wolf has Tracking.",
+          "outcomes": [
+            {
+              "label": "Tracking available",
+              "route": 310,
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Tracking"
+                }
+              ],
+              "testLabel": "Has Tracking"
+            }
+          ]
+        }
+      ]
+    },
+    "342": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat",
+        "kai_discipline_check",
+        "endurance_loss",
+        "combat_skill_modifier"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 123
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "342-vordak",
+          "label": "Fight the Vordak",
+          "enemy": {
+            "name": "Vordak",
+            "cs": 18,
+            "endurance": 26
+          },
+          "enemyImmune": true,
+          "conditionalModifiers": [
+            {
+              "label": "No Mindshield against Mindforce",
+              "modifier": -2,
+              "condition": {
+                "type": "no_power",
+                "name": "Mindshield"
+              }
+            }
+          ],
+          "victoryRoute": 123
+        }
+      ]
+    },
+    "343": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 213
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "344": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 60
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "345": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 272
+        },
+        {
+          "Section": 19
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "346": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 14
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "346-spear",
+          "label": "Take Spear",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "weapon",
+              "name": "Spear"
+            }
+          ]
+        }
+      ]
+    },
+    "347": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 103
+        }
+      ],
+      "incomingRouteCount": 2,
+      "loot": [
+        {
+          "id": "347-torch",
+          "label": "Take 1 Torch",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Torch"
+            }
+          ]
+        }
+      ]
+    },
+    "348": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 95
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "349": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 293
+        }
+      ],
+      "incomingRouteCount": 2,
+      "loot": [
+        {
+          "id": "349-crystal-star-pendant",
+          "label": "Keep Crystal Star Pendant",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Crystal Star Pendant"
+            }
+          ]
+        }
+      ]
+    },
+    "350": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_success"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 3
+    }
+  }
+}

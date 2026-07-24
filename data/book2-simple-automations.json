@@ -1,0 +1,204 @@
+{
+  "2": {
+    "8": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 8 ends the mission."}]},
+    "10": {
+      "summary": "Take the ticket to Port Bax.",
+      "actions": [{"type": "add_item", "container": "special", "name": "Ticket to Port Bax"}]
+    },
+    "11": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 11 ends the mission."}]},
+    "17": {
+      "summary": "Lose 5 END after the fall into the hold.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -5}]
+    },
+    "27": {
+      "summary": "Restore 2 END.",
+      "actions": [{"type": "stat", "stat": "end", "delta": 2}]
+    },
+    "29": {
+      "summary": "Lose 2 END from the ship damage.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -2}]
+    },
+    "31": {
+      "summary": "Rhygar's physician restores 6 END.",
+      "actions": [{"type": "stat", "stat": "end", "delta": 6}]
+    },
+    "40": {
+      "summary": "Madin Rendalim restores END and gives a potent Laumspur potion.",
+      "actions": [
+        {"type": "stat", "stat": "end", "mode": "restore_max"},
+        {"type": "add_item", "container": "backpack", "name": "Potent Laumspur Potion (+5 END)"}
+      ]
+    },
+    "44": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 44 ends the mission."}]},
+    "54": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 54 ends the mission."}]},
+    "58": {
+      "summary": "Lose the Samor wager.",
+      "actions": [{"type": "stat", "stat": "gold", "delta": -10}]
+    },
+    "69": {
+      "summary": "Mindforce backlash if Lone Wolf lacks Mindshield.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -2, "condition": {"type": "no_power", "name": "Mindshield"}}]
+    },
+    "78": {
+      "summary": "Lose 1 END and discard Chainmail Waistcoat if worn.",
+      "actions": [
+        {"type": "stat", "stat": "end", "delta": -1},
+        {"type": "remove_chainmail"}
+      ]
+    },
+    "86": {
+      "summary": "Take the Mace and 3 Gold Crowns from the cabin.",
+      "actions": [
+        {"type": "add_item", "container": "weapon", "name": "Mace"},
+        {"type": "stat", "stat": "gold", "delta": 3}
+      ]
+    },
+    "87": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 87 ends the mission."}]},
+    "106": {
+      "summary": "Lose 2 END before fighting the Helghast.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -2}]
+    },
+    "108": {
+      "summary": "Lose 2 END after the coach accident.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -2}]
+    },
+    "126": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 126 ends the mission."}]},
+    "139": {
+      "summary": "Store larnuma fruit as 2 Meals.",
+      "actions": [
+        {"type": "add_item", "container": "backpack", "name": "Meal"},
+        {"type": "add_item", "container": "backpack", "name": "Meal"}
+      ]
+    },
+    "141": {
+      "summary": "Lose 2 END and discard Chainmail Waistcoat if worn.",
+      "actions": [
+        {"type": "stat", "stat": "end", "delta": -2},
+        {"type": "remove_chainmail"}
+      ]
+    },
+    "142": {
+      "summary": "Receive the White Pass.",
+      "actions": [{"type": "add_item", "container": "special", "name": "White Pass"}]
+    },
+    "144": {
+      "summary": "Receive food for 2 Meals, then lose all Gold Crowns.",
+      "actions": [
+        {"type": "add_item", "container": "backpack", "name": "Meal"},
+        {"type": "add_item", "container": "backpack", "name": "Meal"},
+        {"type": "stat", "stat": "gold", "mode": "set", "value": 0}
+      ]
+    },
+    "145": {
+      "summary": "Use Laumspur against the poison and lose 5 END.",
+      "actions": [
+        {"type": "stat", "stat": "end", "delta": -5},
+        {"type": "remove_item", "containers": ["backpack"], "name": "Laumspur", "match": "contains"}
+      ]
+    },
+    "154": {
+      "summary": "Lose 2 END from the poor evening meal.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -2}]
+    },
+    "159": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 159 ends the mission."}]},
+    "189": {
+      "summary": "Lose 2 END from the Captain's sword cut.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -2}]
+    },
+    "190": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 190 ends the mission."}]},
+    "194": {
+      "summary": "Lose Gold, Backpack, Weapons, and Special Items after the fishermen rob you.",
+      "actions": [
+        {"type": "stat", "stat": "gold", "mode": "set", "value": 0},
+        {"type": "discard_gear"},
+        {"type": "discard_special_items"}
+      ]
+    },
+    "196": {
+      "summary": "Return the Seal of Hammerdal and receive the Sommerswerd.",
+      "actions": [
+        {"type": "remove_item", "containers": ["special"], "name": "Seal of Hammerdal"},
+        {"type": "add_item", "container": "special", "name": "Sommerswerd"}
+      ]
+    },
+    "198": {
+      "summary": "Lose 1 END after being thrown to the ground.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -1}]
+    },
+    "212": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 212 ends the mission."}]},
+    "213": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 213 ends the mission."}]},
+    "214": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 214 ends the mission."}]},
+    "219": {
+      "summary": "Lose 3 END after drawing out the snake venom.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -3}]
+    },
+    "228": {
+      "summary": "Store fruit as 2 Meals.",
+      "actions": [
+        {"type": "add_item", "container": "backpack", "name": "Meal"},
+        {"type": "add_item", "container": "backpack", "name": "Meal"}
+      ]
+    },
+    "234": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 234 ends the mission."}]},
+    "238": {
+      "summary": "Check Weapons at the gaming-house door.",
+      "actions": [{"type": "weapons", "available": false}]
+    },
+    "247": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 247 ends the mission."}]},
+    "248": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 248 ends the mission."}]},
+    "258": {
+      "summary": "Lose 1 END from the choking stench.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -1}]
+    },
+    "263": {
+      "summary": "Receive the Red Pass.",
+      "actions": [{"type": "add_item", "container": "special", "name": "Red Pass"}]
+    },
+    "275": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 275 ends the mission."}]},
+    "284": {
+      "summary": "Required Meal during the ride through Tarnalin.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": false}]
+    },
+    "292": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 292 ends the mission."}]},
+    "304": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 304 ends the mission."}]},
+    "305": {
+      "summary": "Win 5 Gold Crowns from the arm-wrestling table.",
+      "actions": [{"type": "stat", "stat": "gold", "delta": 5}]
+    },
+    "313": {
+      "summary": "Lose 4 END and erase the Magic Spear.",
+      "actions": [
+        {"type": "stat", "stat": "end", "delta": -4},
+        {"type": "remove_item", "containers": ["special"], "name": "Magic Spear"}
+      ]
+    },
+    "317": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 317 ends the mission."}]},
+    "321": {
+      "summary": "Use food from the Backpack or lose 2 END after the poor meal.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 2, "huntingExempt": false}]
+    },
+    "329": {
+      "summary": "Win 10 Gold Crowns from Captain Kelman.",
+      "actions": [{"type": "stat", "stat": "gold", "delta": 10}]
+    },
+    "330": {
+      "summary": "Lose 5 END after surviving the poison.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -5}]
+    },
+    "337": {
+      "summary": "Lose all Weapons and Backpack Items in the storm.",
+      "actions": [
+        {"type": "discard_weapons"},
+        {"type": "discard_backpack_items"}
+      ]
+    },
+    "347": {
+      "summary": "Lose 1 END from the thrown axe.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -1}]
+    },
+    "350": {
+      "summary": "Complete Book 2.",
+      "actions": [{"type": "ending", "ending": "success", "completeBook": 2}]
+    }
+  }
+}

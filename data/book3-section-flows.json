@@ -1,0 +1,7804 @@
+{
+  "3": {
+    "_meta": {
+      "schemaVersion": 1,
+      "bookNumber": 3,
+      "title": "The Caverns of Kalte",
+      "source": "books/lw/03tcok/sect*.htm",
+      "generatedBy": "testing/lwbook3_section_flow_audit.py",
+      "sectionCount": 350,
+      "expectedSectionCount": 350,
+      "sourceRouteLinkCount": 603,
+      "branchSectionCount": 209,
+      "terminalSectionCount": 21,
+      "reachableFromSection1Count": 350,
+      "invalidSectionLinkCount": 0,
+      "missingSectionCount": 0,
+      "svgRouteGraphAvailable": true
+    },
+    "1": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "meal"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 160
+        },
+        {
+          "Section": 273
+        }
+      ],
+      "incomingRouteCount": 0
+    },
+    "2": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 290
+        },
+        {
+          "Section": 76
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "3": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 280
+        },
+        {
+          "Section": 344
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "4": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 332
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "bone-sword",
+          "label": "Take Bone Sword",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Bone Sword"
+            }
+          ]
+        },
+        {
+          "id": "blue-stone-disc",
+          "label": "Take Blue Stone Disc",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Blue Stone Disc"
+            }
+          ]
+        }
+      ]
+    },
+    "5": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "meal"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 295
+        },
+        {
+          "Section": 14
+        },
+        {
+          "Section": 132
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "6": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 224
+        },
+        {
+          "Section": 166
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "7": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 145
+        },
+        {
+          "Section": 242
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "8": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "meal",
+        "inventory",
+        "endurance_loss",
+        "endurance_gain"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 325
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "baknar-oil",
+          "label": "Take Baknar Oil",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Baknar Oil"
+            }
+          ]
+        }
+      ]
+    },
+    "9": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "inventory",
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "10": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 5,
+      "sourceRoutes": [
+        {
+          "Section": 90
+        },
+        {
+          "Section": 171
+        },
+        {
+          "Section": 289
+        },
+        {
+          "Section": 225
+        },
+        {
+          "Section": 126
+        }
+      ],
+      "incomingRouteCount": 12
+    },
+    "11": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 141
+        },
+        {
+          "Section": 159
+        },
+        {
+          "Section": 234
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "12": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "meal",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 180
+        },
+        {
+          "Section": 259
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "food",
+          "label": "Take remaining Food for 2 Meals",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            }
+          ]
+        },
+        {
+          "id": "sleeping-furs",
+          "label": "Take Sleeping Furs",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Sleeping Furs (2 spaces)"
+            }
+          ]
+        },
+        {
+          "id": "rope",
+          "label": "Take Rope",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Rope"
+            }
+          ]
+        }
+      ]
+    },
+    "13": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 128
+        },
+        {
+          "Section": 254
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "14": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 309
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "14-ice-barbarian",
+          "label": "Ice Barbarian",
+          "enemy": {
+            "name": "Ice Barbarian",
+            "cs": 15,
+            "endurance": 14
+          },
+          "victoryRoute": 309
+        }
+      ]
+    },
+    "15": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "inventory"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 185
+        },
+        {
+          "Section": 86
+        },
+        {
+          "Section": 323
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "16": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 63
+        }
+      ],
+      "incomingRouteCount": 1,
+      "lossChoices": [
+        {
+          "id": "crushed-pack-item-1",
+          "label": "Discard crushed Backpack Item 1",
+          "summary": "Choose the first Backpack Item crushed by the stone door.",
+          "containers": [
+            "backpack"
+          ]
+        },
+        {
+          "id": "crushed-pack-item-2",
+          "label": "Discard crushed Backpack Item 2",
+          "summary": "Choose the second Backpack Item crushed by the stone door.",
+          "containers": [
+            "backpack"
+          ]
+        }
+      ]
+    },
+    "17": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 62
+        },
+        {
+          "Section": 251
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "18": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 211
+        },
+        {
+          "Section": 95
+        }
+      ],
+      "incomingRouteCount": 1,
+      "lossChoices": [
+        {
+          "id": "cyclone-weapon-loss",
+          "label": "Lose weapon to the cyclone",
+          "summary": "Choose the weapon or weapon-like Special Item lost to the ice cyclone.",
+          "containers": [
+            "weapon"
+          ],
+          "fallbackContainers": [
+            "special"
+          ]
+        }
+      ]
+    },
+    "19": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 327
+        },
+        {
+          "Section": 307
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "20": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 254
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "21": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "meal",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 325
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "22": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 323
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "23": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "meal"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 235
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "24": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 332
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "25": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 284
+        }
+      ],
+      "incomingRouteCount": 3,
+      "loot": [
+        {
+          "id": "blue-stone-triangle",
+          "label": "Take Blue Stone Triangle",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Blue Stone Triangle"
+            }
+          ]
+        }
+      ]
+    },
+    "26": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "inventory"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 231
+        },
+        {
+          "Section": 187
+        },
+        {
+          "Section": 63
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "dagger",
+          "label": "Take Dagger",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "weapon",
+              "name": "Dagger"
+            }
+          ]
+        },
+        {
+          "id": "mace",
+          "label": "Take Mace",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "weapon",
+              "name": "Mace"
+            }
+          ]
+        }
+      ]
+    },
+    "27": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 314
+        },
+        {
+          "Section": 205
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "28": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 210
+        },
+        {
+          "Section": 215
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "29": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 5,
+      "sourceRoutes": [
+        {
+          "Section": 43
+        },
+        {
+          "Section": 121
+        },
+        {
+          "Section": 226
+        },
+        {
+          "Section": 266
+        },
+        {
+          "Section": 312
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Sledge-rope escape roll.",
+        "outcomes": [
+          {
+            "test": "values",
+            "values": [
+              0
+            ],
+            "label": "Dragged into the crevasse",
+            "route": 312
+          },
+          {
+            "test": "range",
+            "min": 1,
+            "max": 4,
+            "label": "Free your foot",
+            "route": 226
+          },
+          {
+            "test": "range",
+            "min": 5,
+            "max": 9,
+            "label": "Leap clear",
+            "route": 266
+          }
+        ]
+      }
+    },
+    "30": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 203
+        },
+        {
+          "Section": 276
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "31": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 150
+        },
+        {
+          "Section": 306
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "32": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 66
+        },
+        {
+          "Section": 25
+        }
+      ],
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "32-kalkoth",
+          "label": "Kalkoth",
+          "enemies": [
+            {
+              "name": "Kalkoth 1",
+              "cs": 11,
+              "endurance": 35
+            },
+            {
+              "name": "Kalkoth 2",
+              "cs": 10,
+              "endurance": 32
+            },
+            {
+              "name": "Kalkoth 3",
+              "cs": 8,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 25,
+          "playerLossRoute": 66
+        }
+      ]
+    },
+    "33": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 348
+        },
+        {
+          "Section": 27
+        },
+        {
+          "Section": 314
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "34": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 350
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "35": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 291
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "36": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 341
+        },
+        {
+          "Section": 124
+        },
+        {
+          "Section": 264
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "37": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "38": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 237
+        }
+      ],
+      "incomingRouteCount": 2,
+      "loot": [
+        {
+          "id": "fur-backpack",
+          "label": "Take fur Backpack if needed",
+          "actions": [
+            {
+              "type": "backpack",
+              "available": true
+            }
+          ]
+        },
+        {
+          "id": "rope",
+          "label": "Take Rope (2 spaces)",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Rope (2 spaces)"
+            }
+          ]
+        }
+      ]
+    },
+    "39": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 173
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "40": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 255
+        },
+        {
+          "Section": 125
+        },
+        {
+          "Section": 184
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "41": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 221
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "42": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 294
+        },
+        {
+          "Section": 145
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "43": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "meal",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 325
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "44": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 79
+        },
+        {
+          "Section": 157
+        },
+        {
+          "Section": 270
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "45": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 303
+        },
+        {
+          "Section": 15
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "46": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 269
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "47": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 323
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "48": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 215
+        },
+        {
+          "Section": 260
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "49": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "gold",
+        "inventory"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 342
+        },
+        {
+          "Section": 284
+        },
+        {
+          "Section": 199
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "50": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 139
+        },
+        {
+          "Section": 189
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "51": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 285
+        },
+        {
+          "Section": 261
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "52": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 169
+        },
+        {
+          "Section": 265
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "53": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "54": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 250
+        },
+        {
+          "Section": 268
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Glass stem handling check.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 4,
+            "label": "Glass stem breaks",
+            "route": 250
+          },
+          {
+            "test": "range",
+            "min": 5,
+            "max": 12,
+            "label": "Glass stem intact",
+            "route": 268
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Mind Over Matter or Mindblast",
+            "value": 3,
+            "condition": {
+              "type": "any",
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Mind Over Matter"
+                },
+                {
+                  "type": "power",
+                  "name": "Mindblast"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "55": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat",
+        "endurance_loss",
+        "combat_skill_modifier"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 182
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "56": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 192
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "57": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 17
+        },
+        {
+          "Section": 251
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "58": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 252
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "59": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 235
+        }
+      ],
+      "incomingRouteCount": 3,
+      "loot": [
+        {
+          "id": "blue-stone-triangle",
+          "label": "Take Blue Stone Triangle",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Blue Stone Triangle"
+            }
+          ]
+        }
+      ]
+    },
+    "60": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 150
+        },
+        {
+          "Section": 31
+        },
+        {
+          "Section": 306
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "61": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "meal",
+        "terminal_failure"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 3
+    },
+    "62": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 167
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "63": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 323
+        },
+        {
+          "Section": 246
+        }
+      ],
+      "incomingRouteCount": 6
+    },
+    "64": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 321
+        },
+        {
+          "Section": 275
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "65": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 306
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "66": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 5
+    },
+    "67": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 328
+        },
+        {
+          "Section": 166
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "68": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 186
+        }
+      ],
+      "incomingRouteCount": 5,
+      "combat": [
+        {
+          "id": "68-ice-barbarian",
+          "label": "Ice Barbarian",
+          "enemy": {
+            "name": "Ice Barbarian",
+            "cs": 18,
+            "endurance": 28
+          },
+          "victoryRoute": 186
+        }
+      ]
+    },
+    "69": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 222
+        },
+        {
+          "Section": 108
+        },
+        {
+          "Section": 198
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "70": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 209
+        },
+        {
+          "Section": 339
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "71": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 320
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "72": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 227
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "73": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 119
+        },
+        {
+          "Section": 136
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Frozen bridge crack check.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 7,
+            "label": "Bridge gives way",
+            "route": 119
+          },
+          {
+            "test": "range",
+            "min": 8,
+            "max": 9,
+            "label": "Reach the far side",
+            "route": 136
+          }
+        ]
+      }
+    },
+    "74": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 48
+        },
+        {
+          "Section": 287
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Hide from the Ice Barbarian.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 4,
+            "label": "Discovered",
+            "route": 48
+          },
+          {
+            "test": "range",
+            "min": 5,
+            "max": 9,
+            "label": "Remain hidden",
+            "route": 287
+          }
+        ]
+      }
+    },
+    "75": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 235
+        },
+        {
+          "Section": 114
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "76": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "meal"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 51
+        },
+        {
+          "Section": 137
+        },
+        {
+          "Section": 261
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "77": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 10
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "78": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 245
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "78-baknar",
+          "label": "Baknar",
+          "enemy": {
+            "name": "Baknar",
+            "cs": 19,
+            "endurance": 30
+          },
+          "victoryRoute": 245
+        }
+      ]
+    },
+    "79": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory",
+        "endurance_gain"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 301
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "80": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 123
+        },
+        {
+          "Section": 59
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Dodge the charging Kalkoth.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 1,
+            "label": "Dive fails",
+            "route": 123
+          },
+          {
+            "test": "range",
+            "min": 2,
+            "max": 9,
+            "label": "Dive clear",
+            "route": 59
+          }
+        ]
+      }
+    },
+    "81": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 198
+        },
+        {
+          "Section": 69
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "82": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "inventory"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 329
+        },
+        {
+          "Section": 138
+        },
+        {
+          "Section": 107
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "83": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "kai_discipline_check",
+        "combat",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 313
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "83-ice-barbarian-mutants",
+          "label": "Ice Barbarian Mutants",
+          "enemy": {
+            "name": "Ice Barbarian Mutants",
+            "cs": 18,
+            "endurance": 24
+          },
+          "enemyImmune": true,
+          "victoryRoute": 313
+        }
+      ]
+    },
+    "84": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 221
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "blue-stone-triangle",
+          "label": "Take Blue Stone Triangle",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Blue Stone Triangle"
+            }
+          ]
+        }
+      ]
+    },
+    "85": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 98
+        },
+        {
+          "Section": 49
+        },
+        {
+          "Section": 212
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "86": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random",
+        "kai_discipline_check",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 47
+        },
+        {
+          "Section": 194
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Pick the lock with a weapon.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 7,
+            "label": "Lock resists",
+            "route": 47
+          },
+          {
+            "test": "range",
+            "min": 8,
+            "max": 12,
+            "label": "Lock opens",
+            "route": 194
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Weaponskill with active weapon",
+            "value": 3,
+            "condition": {
+              "type": "active_weaponskill_weapon"
+            }
+          }
+        ]
+      }
+    },
+    "87": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 323
+        },
+        {
+          "Section": 246
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "88": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "random",
+        "combat",
+        "endurance_loss",
+        "combat_skill_modifier"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 269
+        }
+      ],
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Javek venom check after END loss.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 8,
+            "label": "Bite stopped by padded arm"
+          },
+          {
+            "test": "values",
+            "values": [
+              9
+            ],
+            "label": "Javek venom kills Lone Wolf",
+            "ending": "death",
+            "cause": "Section 88 Javek venom death."
+          }
+        ]
+      },
+      "combat": [
+        {
+          "id": "88-javek",
+          "label": "Javek",
+          "enemy": {
+            "name": "Javek",
+            "cs": 15,
+            "endurance": 15
+          },
+          "enemyImmune": true,
+          "playerLossRandomCheck": {
+            "summary": "Javek venom check after a bite.",
+            "deathValues": [
+              9
+            ],
+            "safeLabel": "Bite stopped by padded arm",
+            "deathCause": "Section 88 Javek venom death."
+          },
+          "victoryRoute": 269
+        }
+      ]
+    },
+    "89": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 161
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "89-doomwolves",
+          "label": "Doomwolves",
+          "enemies": [
+            {
+              "name": "Doomwolf 1",
+              "cs": 15,
+              "endurance": 24
+            },
+            {
+              "name": "Doomwolf 2",
+              "cs": 14,
+              "endurance": 23
+            },
+            {
+              "name": "Doomwolf 3",
+              "cs": 14,
+              "endurance": 20
+            }
+          ],
+          "victoryRoute": 161
+        }
+      ]
+    },
+    "90": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 233
+        },
+        {
+          "Section": 10
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "91": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 134
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "baknar-oil",
+          "label": "Take Baknar Oil",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Baknar Oil"
+            }
+          ]
+        }
+      ]
+    },
+    "92": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 133
+        },
+        {
+          "Section": 297
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "93": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "94": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "random",
+        "combat",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 176
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Escape the icy water.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 6,
+            "label": "Drag yourself free",
+            "route": 176,
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "delta": -3
+              }
+            ]
+          },
+          {
+            "test": "range",
+            "min": 7,
+            "max": 9,
+            "label": "Drown in the icy water",
+            "ending": "death",
+            "cause": "Section 94 icy-water drowning."
+          }
+        ]
+      }
+    },
+    "95": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 2
+    },
+    "96": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 59
+        },
+        {
+          "Section": 214
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Avoid Kalkoth detection.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 8,
+            "label": "Kalkoth pass by",
+            "route": 59
+          },
+          {
+            "test": "range",
+            "min": 9,
+            "max": 11,
+            "label": "Kalkoth detect you",
+            "route": 214
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Baknar Oil applied",
+            "value": 2,
+            "condition": {
+              "type": "flag",
+              "key": "baknarOilApplied",
+              "value": true
+            }
+          }
+        ]
+      }
+    },
+    "97": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "gold"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 24
+        },
+        {
+          "Section": 152
+        },
+        {
+          "Section": 208
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "98": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 49
+        },
+        {
+          "Section": 212
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "99": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "kai_discipline_check",
+        "combat",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 230
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "99-helghast",
+          "label": "Helghast",
+          "enemy": {
+            "name": "Helghast",
+            "cs": 22,
+            "endurance": 30
+          },
+          "enemyImmune": true,
+          "doubleEnemyLossWithSommerswerd": true,
+          "perRoundActions": [
+            {
+              "type": "stat",
+              "stat": "end",
+              "delta": -2,
+              "condition": {
+                "type": "no_power",
+                "name": "Mindshield"
+              }
+            }
+          ],
+          "victoryRoute": 230
+        }
+      ]
+    },
+    "100": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 148
+        },
+        {
+          "Section": 61
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "101": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "meal"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 235
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "102": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 65
+        },
+        {
+          "Section": 306
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "effigy",
+          "label": "Take Effigy",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Effigy"
+            }
+          ]
+        }
+      ]
+    },
+    "103": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 305
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "103-baknar",
+          "label": "Baknar",
+          "enemy": {
+            "name": "Baknar",
+            "cs": 19,
+            "endurance": 30
+          },
+          "victoryRoute": 305
+        }
+      ]
+    },
+    "104": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 135
+        },
+        {
+          "Section": 330
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "105": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 64
+        },
+        {
+          "Section": 321
+        },
+        {
+          "Section": 275
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "106": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 145
+        },
+        {
+          "Section": 338
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "106-ice-barbarians",
+          "label": "Ice Barbarians",
+          "enemy": {
+            "name": "Ice Barbarians",
+            "cs": 19,
+            "endurance": 36
+          },
+          "enemyImmune": true,
+          "canEvade": true,
+          "evadeRoute": 145,
+          "victoryRoute": 338
+        }
+      ]
+    },
+    "107": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 202
+        },
+        {
+          "Section": 284
+        },
+        {
+          "Section": 138
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "108": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 330
+        },
+        {
+          "Section": 198
+        },
+        {
+          "Section": 282
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "108-ice-barbarian",
+          "label": "Ice Barbarian",
+          "enemy": {
+            "name": "Ice Barbarian",
+            "cs": 16,
+            "endurance": 24
+          },
+          "canEvade": true,
+          "evadeAfterRounds": 1,
+          "victoryRoute": 282
+        }
+      ]
+    },
+    "109": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 235
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "110": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 283
+        },
+        {
+          "Section": 256
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "111": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 254
+        },
+        {
+          "Section": 336
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "112": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "meal"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 291
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "113": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 63
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "114": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "meal"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 279
+        },
+        {
+          "Section": 23
+        },
+        {
+          "Section": 101
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "115": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 218
+        },
+        {
+          "Section": 52
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "116": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 97
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "117": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "meal"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 73
+        },
+        {
+          "Section": 162
+        },
+        {
+          "Section": 223
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "118": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 56
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "119": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "meal",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 19
+        },
+        {
+          "Section": 257
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "food-1",
+          "label": "Take Food for 1 Meal",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            }
+          ]
+        },
+        {
+          "id": "food-2",
+          "label": "Take Food for 2 Meals",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            }
+          ]
+        },
+        {
+          "id": "food-3",
+          "label": "Take Food for 3 Meals",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            }
+          ]
+        },
+        {
+          "id": "food-4",
+          "label": "Take Food for 4 Meals",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            }
+          ]
+        },
+        {
+          "id": "food-5",
+          "label": "Take Food for 5 Meals",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            }
+          ]
+        },
+        {
+          "id": "sleeping-furs",
+          "label": "Take Sleeping Furs",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Sleeping Furs (2 spaces)"
+            }
+          ]
+        },
+        {
+          "id": "tent",
+          "label": "Take Tent",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Tent (3 spaces)"
+            }
+          ]
+        },
+        {
+          "id": "rope",
+          "label": "Take Rope",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Rope (2 spaces)"
+            }
+          ]
+        }
+      ]
+    },
+    "120": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 274
+        },
+        {
+          "Section": 306
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "121": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "meal",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 325
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "122": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "kai_discipline_check",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 173
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "123": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 66
+        },
+        {
+          "Section": 174
+        }
+      ],
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "123-kalkoth",
+          "label": "Kalkoth",
+          "enemy": {
+            "name": "Kalkoth",
+            "cs": 11,
+            "endurance": 30
+          },
+          "victoryRoute": 174,
+          "playerLossRoute": 66
+        }
+      ]
+    },
+    "124": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 264
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "125": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 96
+        },
+        {
+          "Section": 322
+        },
+        {
+          "Section": 207
+        }
+      ],
+      "incomingRouteCount": 7
+    },
+    "126": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 246
+        },
+        {
+          "Section": 323
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "127": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 308
+        },
+        {
+          "Section": 323
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "128": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 170
+        },
+        {
+          "Section": 11
+        },
+        {
+          "Section": 254
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "129": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 155
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "130": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 198
+        },
+        {
+          "Section": 69
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "131": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 227
+        },
+        {
+          "Section": 306
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "132": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 229
+        },
+        {
+          "Section": 88
+        }
+      ],
+      "incomingRouteCount": 4
+    },
+    "133": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 201
+        },
+        {
+          "Section": 297
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "134": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 57
+        },
+        {
+          "Section": 188
+        },
+        {
+          "Section": 331
+        }
+      ],
+      "incomingRouteCount": 4,
+      "roll": {
+        "summary": "Syem Island night-weather roll.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 3,
+            "label": "First hazard route",
+            "route": 57
+          },
+          {
+            "test": "range",
+            "min": 4,
+            "max": 6,
+            "label": "Middle route",
+            "route": 188
+          },
+          {
+            "test": "range",
+            "min": 7,
+            "max": 9,
+            "label": "Frostbite route",
+            "route": 331
+          }
+        ]
+      }
+    },
+    "135": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 100
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "136": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "137": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat",
+        "combat_skill_modifier"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 28
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "137-ice-barbarian-and-doomwolf",
+          "label": "Ice Barbarian and Doomwolf",
+          "enemy": {
+            "name": "Ice Barbarian + Doomwolf",
+            "cs": 30,
+            "endurance": 30
+          },
+          "conditionalModifiers": [
+            {
+              "condition": {
+                "type": "power",
+                "name": "Mindblast"
+              },
+              "modifier": -1,
+              "label": "Partial Mindblast immunity"
+            }
+          ],
+          "victoryRoute": 28
+        }
+      ]
+    },
+    "138": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 66
+        },
+        {
+          "Section": 25
+        },
+        {
+          "Section": 277
+        }
+      ],
+      "incomingRouteCount": 3,
+      "combat": [
+        {
+          "id": "138-kalkoth",
+          "label": "Kalkoth",
+          "enemies": [
+            {
+              "name": "Kalkoth 1",
+              "cs": 11,
+              "endurance": 35
+            },
+            {
+              "name": "Kalkoth 2",
+              "cs": 10,
+              "endurance": 32
+            }
+          ],
+          "canEvade": true,
+          "evadeRoute": 277,
+          "victoryRoute": 25,
+          "playerLossRoute": 66
+        }
+      ]
+    },
+    "139": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 116
+        },
+        {
+          "Section": 239
+        }
+      ],
+      "incomingRouteCount": 2,
+      "routeChecks": [
+        {
+          "id": "139-red-laumspur",
+          "label": "Red Laumspur check",
+          "summary": "Checks whether Lone Wolf has Red Laumspur.",
+          "outcomes": [
+            {
+              "label": "Red Laumspur available",
+              "route": 116,
+              "testLabel": "Has Red Laumspur",
+              "conditions": [
+                {
+                  "type": "item",
+                  "name": "Red",
+                  "containers": [
+                    "backpack"
+                  ],
+                  "match": "contains"
+                }
+              ]
+            },
+            {
+              "label": "No Red Laumspur",
+              "route": 239,
+              "testLabel": "No Red Laumspur",
+              "conditions": [
+                {
+                  "type": "no_item",
+                  "name": "Red",
+                  "containers": [
+                    "backpack"
+                  ],
+                  "match": "contains"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "140": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance_loss",
+        "endurance_gain"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 68
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "141": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 170
+        },
+        {
+          "Section": 254
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "142": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 284
+        },
+        {
+          "Section": 32
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Collapse the mineral rock.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 5,
+            "label": "Rock seals the cave",
+            "route": 284
+          },
+          {
+            "test": "range",
+            "min": 6,
+            "max": 9,
+            "label": "Kalkoth fight",
+            "route": 32
+          }
+        ]
+      }
+    },
+    "143": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "144": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "145": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 36
+        },
+        {
+          "Section": 278
+        }
+      ],
+      "incomingRouteCount": 5
+    },
+    "146": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 5,
+      "sourceRoutes": [
+        {
+          "Section": 43
+        },
+        {
+          "Section": 121
+        },
+        {
+          "Section": 226
+        },
+        {
+          "Section": 266
+        },
+        {
+          "Section": 312
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Rear-sledge rope escape roll.",
+        "outcomes": [
+          {
+            "test": "values",
+            "values": [
+              0
+            ],
+            "label": "Dragged into the crevasse",
+            "route": 312
+          },
+          {
+            "test": "range",
+            "min": 1,
+            "max": 4,
+            "label": "Free your foot",
+            "route": 226
+          },
+          {
+            "test": "range",
+            "min": 5,
+            "max": 9,
+            "label": "Leap clear",
+            "route": 266
+          }
+        ]
+      }
+    },
+    "147": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 66
+        },
+        {
+          "Section": 84
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "147-kalkoth",
+          "label": "Kalkoth",
+          "enemy": {
+            "name": "Kalkoth",
+            "cs": 10,
+            "endurance": 28
+          },
+          "victoryRoute": 84,
+          "playerLossRoute": 66
+        }
+      ]
+    },
+    "148": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 2
+    },
+    "149": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random",
+        "kai_discipline_check",
+        "meal"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 286
+        },
+        {
+          "Section": 333
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Avoid the Ice Barbarian scout's blow.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 4,
+            "label": "Scout's blow lands",
+            "route": 286
+          },
+          {
+            "test": "range",
+            "min": 5,
+            "max": 11,
+            "label": "Avoid the blow",
+            "route": 333
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Tracking, Hunting, or Sixth Sense",
+            "value": 2,
+            "condition": {
+              "type": "any",
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Tracking"
+                },
+                {
+                  "type": "power",
+                  "name": "Hunting"
+                },
+                {
+                  "type": "power",
+                  "name": "Sixth Sense"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "150": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 4,
+      "sourceRoutes": [
+        {
+          "Section": 120
+        },
+        {
+          "Section": 310
+        },
+        {
+          "Section": 18
+        },
+        {
+          "Section": 211
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "151": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 209
+        },
+        {
+          "Section": 339
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "152": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random",
+        "gold"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 319
+        },
+        {
+          "Section": 181
+        }
+      ],
+      "incomingRouteCount": 2,
+      "goldDistraction": {
+        "id": "book3-section152-gold-distraction",
+        "label": "Distract the guard with Gold Crowns",
+        "summary": "Choose how many Gold Crowns to throw, then roll 0-9. A 0 counts as 10; if the roll total is equal to or less than the thrown Gold Crowns, the guard is distracted.",
+        "successRoute": 319,
+        "failureRoute": 181,
+        "zeroAsTen": true
+      }
+    },
+    "153": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "154": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 145
+        },
+        {
+          "Section": 242
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "155": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random",
+        "meal",
+        "inventory",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 248
+        },
+        {
+          "Section": 191
+        }
+      ],
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Ice staircase descent.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": -2,
+            "max": 2,
+            "label": "Fall on the ice staircase",
+            "route": 248
+          },
+          {
+            "test": "range",
+            "min": 3,
+            "max": 10,
+            "label": "Descend safely",
+            "route": 191
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "END below 10",
+            "value": -2,
+            "condition": {
+              "type": "end_lt",
+              "value": 10
+            }
+          },
+          {
+            "label": "END above 20",
+            "value": 1,
+            "condition": {
+              "type": "end_gte",
+              "value": 21
+            }
+          }
+        ]
+      }
+    },
+    "156": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 10
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "gallowbrush",
+          "label": "Take Potion of Gallowbrush",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Potion of Gallowbrush"
+            }
+          ]
+        }
+      ]
+    },
+    "157": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "meal",
+        "inventory",
+        "endurance_loss",
+        "endurance_gain"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 301
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "158": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 165
+        },
+        {
+          "Section": 271
+        },
+        {
+          "Section": 337
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "158-ice-barbarian-scout",
+          "label": "Ice Barbarian Scout",
+          "enemy": {
+            "name": "Ice Barbarian Scout",
+            "cs": 20,
+            "endurance": 28
+          },
+          "oneRoundComparisonRoutes": {
+            "playerLossGreater": 165,
+            "enemyLossGreater": 271,
+            "equal": 337
+          }
+        }
+      ]
+    },
+    "159": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 170
+        },
+        {
+          "Section": 254
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "160": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "meal"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 204
+        },
+        {
+          "Section": 318
+        },
+        {
+          "Section": 78
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "161": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 210
+        }
+      ],
+      "incomingRouteCount": 3,
+      "combat": [
+        {
+          "id": "161-ice-barbarian",
+          "label": "Ice Barbarian",
+          "enemy": {
+            "name": "Ice Barbarian",
+            "cs": 17,
+            "endurance": 29
+          },
+          "enemyImmune": true,
+          "victoryRoute": 210
+        }
+      ]
+    },
+    "162": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 19
+        },
+        {
+          "Section": 257
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "163": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 38
+        },
+        {
+          "Section": 237
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "164": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 272
+        },
+        {
+          "Section": 324
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "164-akraa-neonor",
+          "label": "Akraa'Neonor",
+          "enemy": {
+            "name": "Akraa'Neonor",
+            "cs": 23,
+            "endurance": 50
+          },
+          "doubleEnemyLossWithSommerswerd": true,
+          "winWithinRounds": 5,
+          "winWithinRoute": 272,
+          "tooLateRoute": 324
+        }
+      ]
+    },
+    "165": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 68
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "166": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 111
+        },
+        {
+          "Section": 336
+        }
+      ],
+      "incomingRouteCount": 4
+    },
+    "167": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random",
+        "meal"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 85
+        },
+        {
+          "Section": 300
+        }
+      ],
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Natural ice bowl night roll.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 6,
+            "label": "Cold night route",
+            "route": 85
+          },
+          {
+            "test": "range",
+            "min": 7,
+            "max": 9,
+            "label": "Alternative night route",
+            "route": 300
+          }
+        ]
+      }
+    },
+    "168": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 60
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "169": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 41
+        },
+        {
+          "Section": 265
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "170": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 304
+        },
+        {
+          "Section": 175
+        }
+      ],
+      "incomingRouteCount": 4
+    },
+    "171": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 311
+        },
+        {
+          "Section": 10
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "172": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 134
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "173": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 34
+        },
+        {
+          "Section": 164
+        },
+        {
+          "Section": 200
+        }
+      ],
+      "incomingRouteCount": 5
+    },
+    "174": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 322
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "175": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "inventory",
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 2
+    },
+    "176": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 5
+        },
+        {
+          "Section": 132
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "177": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 10
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "black-graveweed",
+          "label": "Take Potion of Black Graveweed",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Potion of Black Graveweed"
+            }
+          ]
+        }
+      ]
+    },
+    "178": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 105
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "179": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 39
+        },
+        {
+          "Section": 296
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Herb smoke infiltration roll.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 4,
+            "label": "Smoke plan falters",
+            "route": 39
+          },
+          {
+            "test": "range",
+            "min": 5,
+            "max": 9,
+            "label": "Smoke plan works",
+            "route": 296
+          }
+        ]
+      }
+    },
+    "180": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat",
+        "endurance_loss",
+        "combat_skill_modifier"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 129
+        },
+        {
+          "Section": 70
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "180-kalkoth",
+          "label": "Kalkoth",
+          "enemy": {
+            "name": "Kalkoth",
+            "cs": 11,
+            "endurance": 35
+          },
+          "victoryRoute": 70,
+          "playerLossRoute": 129,
+          "perRoundActions": [
+            {
+              "type": "combat_enemy_damage",
+              "delta": -3,
+              "label": "Fenor's attack"
+            }
+          ]
+        }
+      ]
+    },
+    "181": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "gold"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 152
+        },
+        {
+          "Section": 208
+        },
+        {
+          "Section": 189
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "182": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 75
+        },
+        {
+          "Section": 114
+        },
+        {
+          "Section": 235
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "183": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random",
+        "kai_discipline_check",
+        "meal"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 89
+        },
+        {
+          "Section": 215
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Sprint with twisted ankle.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 3,
+            "label": "Too slow",
+            "route": 89
+          },
+          {
+            "test": "range",
+            "min": 4,
+            "max": 11,
+            "label": "Reach the corridor",
+            "route": 215
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Hunting",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Hunting"
+            }
+          }
+        ]
+      }
+    },
+    "184": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 298
+        },
+        {
+          "Section": 315
+        },
+        {
+          "Section": 125
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "185": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 22
+        },
+        {
+          "Section": 326
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Visualize the lock mechanism.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 4,
+            "label": "Lock resists",
+            "route": 22
+          },
+          {
+            "test": "range",
+            "min": 5,
+            "max": 11,
+            "label": "Lock opens",
+            "route": 326
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Sixth Sense",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Sixth Sense"
+            }
+          }
+        ]
+      }
+    },
+    "186": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 320
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "187": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 258
+        },
+        {
+          "Section": 93
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "188": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 232
+        },
+        {
+          "Section": 346
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "189": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 292
+        },
+        {
+          "Section": 97
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "190": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 348
+        },
+        {
+          "Section": 27
+        },
+        {
+          "Section": 314
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "191": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 40
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "192": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 267
+        },
+        {
+          "Section": 44
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "193": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 235
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "194": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "inventory"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 127
+        },
+        {
+          "Section": 308
+        },
+        {
+          "Section": 323
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "silver-helm",
+          "label": "Take Silver Helm",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Silver Helm"
+            }
+          ]
+        }
+      ]
+    },
+    "195": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 21
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "196": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 306
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "197": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 125
+        },
+        {
+          "Section": 235
+        },
+        {
+          "Section": 109
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "198": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 4
+    },
+    "199": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 82
+        },
+        {
+          "Section": 284
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "200": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 272
+        },
+        {
+          "Section": 324
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "200-akraa-neonor",
+          "label": "Akraa'Neonor",
+          "enemy": {
+            "name": "Akraa'Neonor",
+            "cs": 22,
+            "endurance": 50
+          },
+          "doubleEnemyLossWithSommerswerd": true,
+          "winWithinRounds": 7,
+          "winWithinRoute": 272,
+          "tooLateRoute": 324
+        }
+      ]
+    },
+    "201": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 110
+        },
+        {
+          "Section": 63
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "202": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 263
+        },
+        {
+          "Section": 277
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "203": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 56
+        },
+        {
+          "Section": 276
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "204": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 134
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "205": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "206": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 74
+        },
+        {
+          "Section": 183
+        },
+        {
+          "Section": 161
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "207": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 80
+        },
+        {
+          "Section": 253
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "208": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 4
+        },
+        {
+          "Section": 81
+        }
+      ],
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "208-ice-barbarian",
+          "label": "Ice Barbarian",
+          "enemy": {
+            "name": "Ice Barbarian",
+            "cs": 17,
+            "endurance": 30
+          },
+          "winWithinRounds": 4,
+          "winWithinRoute": 4,
+          "tooLateRoute": 81
+        }
+      ]
+    },
+    "209": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 155
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "210": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "inventory"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 316
+        },
+        {
+          "Section": 236
+        },
+        {
+          "Section": 215
+        }
+      ],
+      "incomingRouteCount": 3,
+      "loot": [
+        {
+          "id": "bone-sword",
+          "label": "Take Bone Sword",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Bone Sword"
+            }
+          ]
+        },
+        {
+          "id": "gold-bracelet",
+          "label": "Take Gold Bracelet",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Gold Bracelet"
+            }
+          ]
+        }
+      ]
+    },
+    "211": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 95
+        },
+        {
+          "Section": 196
+        }
+      ],
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Cyclone escape roll.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": -3,
+            "max": 3,
+            "label": "Cyclone catches you",
+            "route": 95
+          },
+          {
+            "test": "range",
+            "min": 4,
+            "max": 9,
+            "label": "Escape the vortex",
+            "route": 196
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "END below 10",
+            "value": -3,
+            "condition": {
+              "type": "end_lt",
+              "value": 10
+            }
+          }
+        ]
+      }
+    },
+    "212": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "meal"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 238
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "213": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 252
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "214": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 322
+        },
+        {
+          "Section": 123
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "215": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 13
+        },
+        {
+          "Section": 254
+        }
+      ],
+      "incomingRouteCount": 6
+    },
+    "216": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 158
+        },
+        {
+          "Section": 149
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "217": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 154
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "218": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "gold",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 52
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "diamond",
+          "label": "Take Diamond",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Diamond"
+            }
+          ]
+        }
+      ]
+    },
+    "219": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 349
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "220": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 146
+        },
+        {
+          "Section": 29
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "221": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 38
+        },
+        {
+          "Section": 163
+        },
+        {
+          "Section": 237
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "222": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 330
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "223": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "meal",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 327
+        },
+        {
+          "Section": 307
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "food-1",
+          "label": "Take Food for 1 Meal",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            }
+          ]
+        },
+        {
+          "id": "food-2",
+          "label": "Take Food for 2 Meals",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            }
+          ]
+        },
+        {
+          "id": "food-3",
+          "label": "Take Food for 3 Meals",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            }
+          ]
+        },
+        {
+          "id": "food-4",
+          "label": "Take Food for 4 Meals",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            }
+          ]
+        },
+        {
+          "id": "food-5",
+          "label": "Take Food for 5 Meals",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            }
+          ]
+        },
+        {
+          "id": "tent",
+          "label": "Take Tent",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Tent (3 spaces)"
+            }
+          ]
+        },
+        {
+          "id": "sleeping-furs",
+          "label": "Take Sleeping Furs",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Sleeping Furs (2 spaces)"
+            }
+          ]
+        },
+        {
+          "id": "long-rope",
+          "label": "Take Long Rope",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Long Rope (2 spaces)"
+            }
+          ]
+        }
+      ]
+    },
+    "224": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 67
+        },
+        {
+          "Section": 166
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "225": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 54
+        },
+        {
+          "Section": 10
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "226": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "meal",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 325
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "227": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 102
+        },
+        {
+          "Section": 334
+        },
+        {
+          "Section": 299
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "228": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 173
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "229": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 46
+        },
+        {
+          "Section": 88
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "230": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 166
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "231": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 187
+        },
+        {
+          "Section": 63
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "gold-bracelet",
+          "label": "Take Gold Bracelet",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Gold Bracelet"
+            }
+          ]
+        }
+      ]
+    },
+    "232": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random",
+        "meal"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 85
+        },
+        {
+          "Section": 300
+        }
+      ],
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Glacier-wall camp night roll.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 6,
+            "label": "Cold night route",
+            "route": 85
+          },
+          {
+            "test": "range",
+            "min": 7,
+            "max": 9,
+            "label": "Alternative night route",
+            "route": 300
+          }
+        ]
+      }
+    },
+    "233": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory",
+        "endurance_gain"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 10
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "distilled-laumspur",
+          "label": "Take Distilled Laumspur",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Potion of Laumspur (+5 END)"
+            }
+          ]
+        }
+      ]
+    },
+    "234": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 170
+        },
+        {
+          "Section": 254
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "235": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 52
+        },
+        {
+          "Section": 115
+        }
+      ],
+      "incomingRouteCount": 12
+    },
+    "236": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 345
+        },
+        {
+          "Section": 9
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "237": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat",
+        "meal",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 92
+        },
+        {
+          "Section": 297
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "238": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 117
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "239": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "240": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 284
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "241": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 186
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "241-ice-barbarian",
+          "label": "Ice Barbarian",
+          "enemy": {
+            "name": "Ice Barbarian",
+            "cs": 18,
+            "endurance": 28
+          },
+          "ignorePlayerLossRounds": 2,
+          "victoryRoute": 186
+        }
+      ]
+    },
+    "242": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 42
+        },
+        {
+          "Section": 145
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "243": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 235
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "244": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 150
+        },
+        {
+          "Section": 306
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "245": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 91
+        },
+        {
+          "Section": 172
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "246": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 45
+        },
+        {
+          "Section": 323
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "247": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 118
+        },
+        {
+          "Section": 30
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "248": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "249": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 104
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "250": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 77
+        },
+        {
+          "Section": 10
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "251": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 62
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "252": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 350
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "253": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "254": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 56
+        },
+        {
+          "Section": 276
+        }
+      ],
+      "incomingRouteCount": 8
+    },
+    "255": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 125
+        },
+        {
+          "Section": 184
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "256": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 217
+        },
+        {
+          "Section": 7
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "257": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 327
+        },
+        {
+          "Section": 307
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "258": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "random",
+        "kai_discipline_check",
+        "combat",
+        "meal",
+        "inventory",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 63
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Break Mindshield and discard the Gold Bracelet. 0 counts as 10; lose END equal to the final total before turning to 63.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": -2,
+            "max": 10,
+            "label": "Bracelet discarded",
+            "route": 63,
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "deltaFrom": "roll_total",
+                "multiplier": -1,
+                "maxDelta": 0
+              }
+            ]
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Hunting or Sixth Sense",
+            "value": -2,
+            "condition": {
+              "type": "any",
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Hunting"
+                },
+                {
+                  "type": "power",
+                  "name": "Sixth Sense"
+                }
+              ]
+            }
+          }
+        ],
+        "zeroAsTen": true
+      }
+    },
+    "259": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat",
+        "inventory",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 129
+        },
+        {
+          "Section": 151
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "259-kalkoth",
+          "label": "Kalkoth",
+          "enemy": {
+            "name": "Kalkoth",
+            "cs": 11,
+            "endurance": 35
+          },
+          "victoryRoute": 151,
+          "playerLossRoute": 129
+        }
+      ]
+    },
+    "260": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 210
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "260-ice-barbarian",
+          "label": "Ice Barbarian",
+          "enemy": {
+            "name": "Ice Barbarian",
+            "cs": 17,
+            "endurance": 29
+          },
+          "enemyImmune": true,
+          "ignorePlayerLossRounds": 2,
+          "victoryRoute": 210
+        }
+      ]
+    },
+    "261": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 290
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "262": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 71
+        },
+        {
+          "Section": 320
+        },
+        {
+          "Section": 140
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Hold onto the child.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 6,
+            "label": "Keep hold",
+            "route": 320
+          },
+          {
+            "test": "range",
+            "min": 7,
+            "max": 9,
+            "label": "Lose hold",
+            "route": 140
+          }
+        ]
+      }
+    },
+    "263": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 66
+        },
+        {
+          "Section": 277
+        },
+        {
+          "Section": 25
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "263-kalkoth",
+          "label": "Kalkoth",
+          "enemies": [
+            {
+              "name": "Kalkoth 1",
+              "cs": 11,
+              "endurance": 35
+            },
+            {
+              "name": "Kalkoth 2",
+              "cs": 10,
+              "endurance": 32
+            },
+            {
+              "name": "Kalkoth 3",
+              "cs": 8,
+              "endurance": 30
+            }
+          ],
+          "canEvade": true,
+          "evadeRoute": 277,
+          "victoryRoute": 25,
+          "playerLossRoute": 66
+        }
+      ]
+    },
+    "264": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 60
+        },
+        {
+          "Section": 168
+        },
+        {
+          "Section": 244
+        }
+      ],
+      "incomingRouteCount": 4
+    },
+    "265": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 3
+        }
+      ],
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "265-crystal-frostwyrm",
+          "label": "Crystal Frostwyrm",
+          "enemy": {
+            "name": "Crystal Frostwyrm",
+            "cs": 15,
+            "endurance": 30
+          },
+          "enemyImmune": true,
+          "victoryRoute": 3
+        }
+      ]
+    },
+    "266": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 21
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "267": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 44
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "268": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 177
+        },
+        {
+          "Section": 10
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "269": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 335
+        },
+        {
+          "Section": 182
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "270": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 340
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "270-ice-barbarian",
+          "label": "Ice Barbarian",
+          "enemy": {
+            "name": "Ice Barbarian",
+            "cs": 14,
+            "endurance": 25
+          },
+          "victoryRoute": 340
+        }
+      ]
+    },
+    "271": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 241
+        },
+        {
+          "Section": 262
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "272": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 213
+        },
+        {
+          "Section": 143
+        },
+        {
+          "Section": 58
+        }
+      ],
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Dodge Vonotar's frost blast without the Sommerswerd.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 3,
+            "label": "Frost blast hits",
+            "route": 143
+          },
+          {
+            "test": "range",
+            "min": 4,
+            "max": 9,
+            "label": "Dodge the blast",
+            "route": 58
+          }
+        ]
+      }
+    },
+    "273": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "meal"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 35
+        },
+        {
+          "Section": 112
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "274": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 131
+        },
+        {
+          "Section": 227
+        },
+        {
+          "Section": 306
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "275": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "meal"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 293
+        },
+        {
+          "Section": 197
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "276": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "meal"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 219
+        },
+        {
+          "Section": 349
+        },
+        {
+          "Section": 50
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "277": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 142
+        },
+        {
+          "Section": 32
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "278": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 36
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "279": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 235
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "280": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 344
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "ornate-silver-key",
+          "label": "Take Ornate Silver Key",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Ornate Silver Key"
+            }
+          ]
+        }
+      ]
+    },
+    "281": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "meal"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 325
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "282": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 104
+        },
+        {
+          "Section": 330
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "spear",
+          "label": "Take Spear",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "weapon",
+              "name": "Spear"
+            }
+          ]
+        },
+        {
+          "id": "blue-stone-disc",
+          "label": "Take Blue Stone Disc",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Blue Stone Disc"
+            }
+          ]
+        }
+      ]
+    },
+    "283": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random",
+        "kai_discipline_check",
+        "meal"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 53
+        },
+        {
+          "Section": 16
+        },
+        {
+          "Section": 113
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Escape through the closing door.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 4,
+            "label": "Door catches you",
+            "route": 53
+          },
+          {
+            "test": "range",
+            "min": 5,
+            "max": 7,
+            "label": "Squeeze through",
+            "route": 16
+          },
+          {
+            "test": "range",
+            "min": 8,
+            "max": 12,
+            "label": "Clean escape",
+            "route": 113
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Hunting",
+            "value": 3,
+            "condition": {
+              "type": "power",
+              "name": "Hunting"
+            }
+          }
+        ]
+      }
+    },
+    "284": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random",
+        "kai_discipline_check",
+        "combat",
+        "meal",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 94
+        },
+        {
+          "Section": 176
+        }
+      ],
+      "incomingRouteCount": 8,
+      "roll": {
+        "summary": "Cross the ice-floes.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": -2,
+            "max": 3,
+            "label": "Fall into icy water",
+            "route": 94
+          },
+          {
+            "test": "range",
+            "min": 4,
+            "max": 11,
+            "label": "Cross safely",
+            "route": 176
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Hunting",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Hunting"
+            }
+          },
+          {
+            "label": "END below 8",
+            "value": -2,
+            "condition": {
+              "type": "end_lt",
+              "value": 8
+            }
+          }
+        ]
+      }
+    },
+    "285": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 261
+        },
+        {
+          "Section": 343
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "286": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 68
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "287": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 161
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "288": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 167
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "289": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 156
+        },
+        {
+          "Section": 10
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "290": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 341
+        },
+        {
+          "Section": 124
+        },
+        {
+          "Section": 264
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "291": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 103
+        },
+        {
+          "Section": 220
+        }
+      ],
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Random next-day hazard at The Rock.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 4,
+            "label": "Baknar shelter route",
+            "route": 103
+          },
+          {
+            "test": "range",
+            "min": 5,
+            "max": 9,
+            "label": "Crevasse route",
+            "route": 220
+          }
+        ]
+      }
+    },
+    "292": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 83
+        },
+        {
+          "Section": 130
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "293": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 125
+        },
+        {
+          "Section": 235
+        },
+        {
+          "Section": 109
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "294": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "meal",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 106
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "295": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 132
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "firesphere",
+          "label": "Take Firesphere",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Firesphere"
+            }
+          ]
+        }
+      ]
+    },
+    "296": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 173
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "296-ice-barbarians",
+          "label": "Ice Barbarians",
+          "enemy": {
+            "name": "Ice Barbarians",
+            "cs": 17,
+            "endurance": 30
+          },
+          "roundLimit": 3,
+          "survivalRoute": 173,
+          "victoryRoute": 173
+        }
+      ]
+    },
+    "297": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 317
+        },
+        {
+          "Section": 126
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "298": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 315
+        },
+        {
+          "Section": 125
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "blue-stone-triangle",
+          "label": "Take Blue Stone Triangle",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Blue Stone Triangle"
+            }
+          ]
+        }
+      ]
+    },
+    "299": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 65
+        },
+        {
+          "Section": 306
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "300": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 12
+        },
+        {
+          "Section": 238
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "301": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "meal"
+      ],
+      "sourceRouteCount": 4,
+      "sourceRoutes": [
+        {
+          "Section": 122
+        },
+        {
+          "Section": 228
+        },
+        {
+          "Section": 347
+        },
+        {
+          "Section": 179
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "302": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 37
+        },
+        {
+          "Section": 193
+        },
+        {
+          "Section": 243
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Crevasse-floor stumble check.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 1,
+            "label": "Bad fall",
+            "route": 37
+          },
+          {
+            "test": "range",
+            "min": 2,
+            "max": 7,
+            "label": "Slow progress",
+            "route": 193
+          },
+          {
+            "test": "range",
+            "min": 8,
+            "max": 11,
+            "label": "Find the way",
+            "route": 243
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Sixth Sense",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Sixth Sense"
+            }
+          }
+        ]
+      }
+    },
+    "303": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "inventory"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 127
+        },
+        {
+          "Section": 308
+        },
+        {
+          "Section": 323
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "304": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "kai_discipline_check",
+        "combat",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 20
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "304-helghast",
+          "label": "Helghast",
+          "enemy": {
+            "name": "Helghast",
+            "cs": 22,
+            "endurance": 30
+          },
+          "enemyImmune": true,
+          "doubleEnemyLossWithSommerswerd": true,
+          "perRoundActions": [
+            {
+              "type": "stat",
+              "stat": "end",
+              "delta": -2,
+              "condition": {
+                "type": "no_power",
+                "name": "Mindshield"
+              }
+            }
+          ],
+          "victoryRoute": 20
+        }
+      ]
+    },
+    "305": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "meal"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 8
+        },
+        {
+          "Section": 281
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "306": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 206
+        },
+        {
+          "Section": 6
+        }
+      ],
+      "incomingRouteCount": 12
+    },
+    "307": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 327
+        },
+        {
+          "Section": 178
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "308": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat",
+        "inventory",
+        "combat_skill_modifier"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 323
+        }
+      ],
+      "incomingRouteCount": 4,
+      "loot": [
+        {
+          "id": "silver-helm",
+          "label": "Take Silver Helm",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Silver Helm"
+            }
+          ]
+        }
+      ]
+    },
+    "309": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "meal",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 132
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "blue-stone-triangle",
+          "label": "Take Blue Stone Triangle",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Blue Stone Triangle"
+            }
+          ]
+        },
+        {
+          "id": "firesphere",
+          "label": "Take Firesphere",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Firesphere"
+            }
+          ]
+        }
+      ]
+    },
+    "310": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 306
+        },
+        {
+          "Section": 72
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "311": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat",
+        "inventory",
+        "combat_skill_modifier"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 10
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "distilled-alether",
+          "label": "Take Distilled Alether",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Potion of Alether (+4 CS)"
+            }
+          ]
+        }
+      ]
+    },
+    "312": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 2
+    },
+    "313": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 130
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "314": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 240
+        }
+      ],
+      "incomingRouteCount": 4
+    },
+    "315": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 302
+        },
+        {
+          "Section": 125
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "316": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 236
+        },
+        {
+          "Section": 215
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "gold-bracelet",
+          "label": "Take Gold Bracelet",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Gold Bracelet"
+            }
+          ]
+        }
+      ]
+    },
+    "317": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 10
+        },
+        {
+          "Section": 126
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "318": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "kai_discipline_check",
+        "meal",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 134
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "319": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "gold",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 332
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "320": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 190
+        },
+        {
+          "Section": 33
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "321": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 235
+        }
+      ],
+      "incomingRouteCount": 2,
+      "loot": [
+        {
+          "id": "blue-stone-triangle",
+          "label": "Take Blue Stone Triangle",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Blue Stone Triangle"
+            }
+          ]
+        }
+      ]
+    },
+    "322": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 153
+        },
+        {
+          "Section": 59
+        }
+      ],
+      "incomingRouteCount": 3,
+      "roll": {
+        "summary": "Run across the lake ice.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 2,
+            "label": "Ice gives way",
+            "route": 153
+          },
+          {
+            "test": "range",
+            "min": 3,
+            "max": 9,
+            "label": "Reach safety",
+            "route": 59
+          }
+        ]
+      }
+    },
+    "323": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random",
+        "kai_discipline_check",
+        "meal"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 76
+        },
+        {
+          "Section": 2
+        }
+      ],
+      "incomingRouteCount": 12,
+      "roll": {
+        "summary": "Stone-step landing check.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 4,
+            "label": "Lose footing",
+            "route": 76
+          },
+          {
+            "test": "range",
+            "min": 5,
+            "max": 12,
+            "label": "Keep climbing",
+            "route": 2
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Sixth Sense, Tracking, or Hunting",
+            "value": 3,
+            "condition": {
+              "type": "any",
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Sixth Sense"
+                },
+                {
+                  "type": "power",
+                  "name": "Tracking"
+                },
+                {
+                  "type": "power",
+                  "name": "Hunting"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "324": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 61
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "325": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 216
+        }
+      ],
+      "incomingRouteCount": 6
+    },
+    "326": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 127
+        },
+        {
+          "Section": 308
+        },
+        {
+          "Section": 323
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "327": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 105
+        },
+        {
+          "Section": 144
+        }
+      ],
+      "incomingRouteCount": 4,
+      "roll": {
+        "summary": "Hidden crevasse fall.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 8,
+            "label": "Survive the fall",
+            "route": 105
+          },
+          {
+            "test": "values",
+            "values": [
+              9
+            ],
+            "label": "Fatal fall",
+            "route": 144
+          }
+        ]
+      }
+    },
+    "328": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "combat",
+        "endurance_loss"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 99
+        },
+        {
+          "Section": 175
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "329": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 202
+        },
+        {
+          "Section": 284
+        },
+        {
+          "Section": 138
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "330": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 100
+        },
+        {
+          "Section": 148
+        },
+        {
+          "Section": 61
+        }
+      ],
+      "incomingRouteCount": 4
+    },
+    "331": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random",
+        "kai_discipline_check",
+        "meal",
+        "endurance_loss",
+        "endurance_gain"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 62
+        },
+        {
+          "Section": 288
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Frostbite camp roll.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 4,
+            "label": "Worse route",
+            "route": 62
+          },
+          {
+            "test": "range",
+            "min": 5,
+            "max": 9,
+            "label": "Better route",
+            "route": 288
+          }
+        ]
+      }
+    },
+    "332": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check",
+        "meal"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 249
+        },
+        {
+          "Section": 104
+        },
+        {
+          "Section": 69
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "333": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 68
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "334": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 65
+        },
+        {
+          "Section": 306
+        }
+      ],
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "glowing-crystal",
+          "label": "Take Glowing Crystal",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Glowing Crystal"
+            }
+          ]
+        }
+      ]
+    },
+    "335": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 55
+        },
+        {
+          "Section": 182
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "336": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 247
+        },
+        {
+          "Section": 30
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "337": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 68
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "338": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 87
+        },
+        {
+          "Section": 26
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "339": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_death"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 2
+    },
+    "340": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance_gain"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 301
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "341": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 264
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "342": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 199
+        },
+        {
+          "Section": 284
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "343": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 28
+        }
+      ],
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "343-cell-guards",
+          "label": "Cell Guards",
+          "enemies": [
+            {
+              "name": "Doomwolf 1",
+              "cs": 15,
+              "endurance": 24
+            },
+            {
+              "name": "Doomwolf 2",
+              "cs": 14,
+              "endurance": 23
+            },
+            {
+              "name": "Doomwolf 3",
+              "cs": 14,
+              "endurance": 20
+            },
+            {
+              "name": "Ice Barbarian",
+              "cs": 17,
+              "endurance": 29
+            }
+          ],
+          "victoryRoute": 28
+        }
+      ]
+    },
+    "344": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 41
+        },
+        {
+          "Section": 147
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "345": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 215
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "346": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "random",
+        "kai_discipline_check",
+        "meal"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 195
+        },
+        {
+          "Section": 232
+        }
+      ],
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Crevasse jump.",
+        "outcomes": [
+          {
+            "test": "range",
+            "min": 0,
+            "max": 3,
+            "label": "Jump fails",
+            "route": 195
+          },
+          {
+            "test": "range",
+            "min": 4,
+            "max": 11,
+            "label": "Jump succeeds",
+            "route": 232
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Hunting",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Hunting"
+            }
+          }
+        ]
+      }
+    },
+    "347": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "meal"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 173
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "348": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "kai_discipline_check"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 314
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "349": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "route_choice",
+        "inventory"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 139
+        },
+        {
+          "Section": 97
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "350": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal_success"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 2
+    }
+  }
+}

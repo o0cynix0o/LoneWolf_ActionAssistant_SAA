@@ -1,0 +1,161 @@
+{
+  "1": {
+    "33": {
+      "summary": "Take the 3 Gold Crowns found in the cave lair.",
+      "actions": [{"type": "stat", "stat": "gold", "delta": 3}]
+    },
+    "37": {
+      "summary": "Required Meal stop.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": true}]
+    },
+    "53": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 53 ends the mission."}]},
+    "54": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 54 ends the mission."}]},
+    "60": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 60 ends the mission."}]},
+    "76": {
+      "summary": "Vordak Gem burns your hand.",
+      "actions": [
+        {"type": "stat", "stat": "end", "delta": -2},
+        {"type": "add_item", "container": "backpack", "name": "Vordak Gem"}
+      ]
+    },
+    "94": {
+      "summary": "Take the Gold Crowns found after the fight.",
+      "actions": [{"type": "stat", "stat": "gold", "delta": 16}]
+    },
+    "108": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 108 ends the mission."}]},
+    "119": {
+      "summary": "Deduct 2 END for wounds.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -2}]
+    },
+    "127": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 127 ends the mission."}]},
+    "130": {
+      "summary": "Required Meal in the clearing.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": true}]
+    },
+    "137": {
+      "summary": "Take the Tomb Guardian Gems.",
+      "actions": [{"type": "add_item", "container": "backpack", "name": "20 Tomb Guardian Gems"}]
+    },
+    "144": {
+      "summary": "Deduct 2 END after being knocked into the doorway; stolen item remains manual.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -2}]
+    },
+    "146": {
+      "summary": "Deduct 3 END from the arrow wound.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -3}]
+    },
+    "147": {
+      "summary": "Required Meal at the hut.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": true}]
+    },
+    "154": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 154 ends the mission."}]},
+    "158": {
+      "summary": "Deduct 6 END from the first lightning strike; the random follow-up remains manual.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -6}]
+    },
+    "162": {
+      "summary": "Lose Backpack and Weapons after capture.",
+      "actions": [{"type": "discard_gear"}]
+    },
+    "166": {
+      "summary": "Deduct 4 END after the psychic ordeal.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -4}]
+    },
+    "168": {
+      "summary": "Required Meal on the caravan roof.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": true}]
+    },
+    "174": {
+      "summary": "Lose Backpack and Weapons in the river.",
+      "actions": [{"type": "discard_gear"}]
+    },
+    "184": {
+      "summary": "Required Meal after searching the caravan.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": true}]
+    },
+    "185": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 185 ends the mission."}]},
+    "203": {
+      "summary": "Deduct 10 END from the explosion.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -10}]
+    },
+    "205": {
+      "summary": "Erase all Weapons and Backpack Items; random follow-up remains manual.",
+      "actions": [
+        {"type": "discard_weapons"},
+        {"type": "discard_backpack_items"}
+      ]
+    },
+    "212": {
+      "summary": "Restore END to maximum.",
+      "actions": [{"type": "stat", "stat": "end", "mode": "restore_max"}]
+    },
+    "219": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 219 ends the mission."}]},
+    "234": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 234 ends the mission."}]},
+    "235": {
+      "summary": "Required Meal during the ride.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": true}]
+    },
+    "236": {
+      "summary": "Vordak Gem backlash.",
+      "actions": [
+        {"type": "stat", "stat": "end", "delta": -6},
+        {"type": "stat", "stat": "cs", "delta": -1, "permanent": true},
+        {"type": "remove_item", "containers": ["backpack"], "name": "Vordak Gem", "count": 1}
+      ]
+    },
+    "258": {
+      "summary": "Lose Backpack and Weapons during the escape.",
+      "actions": [{"type": "discard_gear"}]
+    },
+    "259": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 259 ends the mission."}]},
+    "269": {
+      "summary": "Receive 10 Gold Crowns reward.",
+      "actions": [{"type": "stat", "stat": "gold", "delta": 10}]
+    },
+    "271": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 271 ends the mission."}]},
+    "274": {
+      "summary": "Lose all Weapons while running.",
+      "actions": [{"type": "discard_weapons"}]
+    },
+    "276": {
+      "summary": "Deduct 1 END.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -1}]
+    },
+    "286": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 286 ends the mission."}]},
+    "292": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 292 ends the adventure."}]},
+    "294": {
+      "summary": "Lose Backpack and Weapons in the river.",
+      "actions": [{"type": "discard_gear"}]
+    },
+    "300": {
+      "summary": "Required Meal after the long walk.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": true}]
+    },
+    "304": {
+      "summary": "Vordak Gem burns your hand.",
+      "actions": [
+        {"type": "stat", "stat": "end", "delta": -2},
+        {"type": "add_item", "container": "backpack", "name": "Vordak Gem"}
+      ]
+    },
+    "306": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 306 ends the mission."}]},
+    "308": {
+      "summary": "Deduct 1 END after being knocked down.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -1}]
+    },
+    "309": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 309 ends the mission."}]},
+    "313": {
+      "summary": "Deduct 1 END for cuts and bruises.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -1}]
+    },
+    "327": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 327 ends the mission."}]},
+    "343": {
+      "summary": "Deduct 2 END.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -2}]
+    },
+    "350": {
+      "summary": "Complete Book 1.",
+      "actions": [{"type": "ending", "ending": "success", "completeBook": 1}]
+    }
+  }
+}

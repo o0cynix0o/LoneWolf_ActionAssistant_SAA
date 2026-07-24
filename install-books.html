@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Install Lone Wolf Books</title>
+  <script src="assets/js/lw-appearance-early.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--lw-bg, #12150f);
+      color: var(--lw-text, #f0ead8);
+      font-family: Arial, sans-serif;
+      line-height: 1.5;
+    }
+    main {
+      width: min(980px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 46px;
+    }
+    h1, h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--lw-accent, #f2d27a);
+    }
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(2rem, 6vw, 4rem);
+      line-height: 1;
+    }
+    h2 { margin-top: 26px; }
+    a { color: var(--lw-accent, #f2d27a); }
+    .panel {
+      margin-top: 18px;
+      padding: 18px;
+      border: 1px solid var(--lw-border, #5d5130);
+      border-radius: 6px;
+      background: var(--lw-panel, #171a12);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 12px;
+    }
+    .book-link {
+      display: block;
+      min-height: 122px;
+      padding: 14px;
+      border: 1px solid var(--lw-border, #5d5130);
+      border-radius: 6px;
+      background: var(--lw-panel, #1a1d14);
+      color: inherit;
+      text-decoration: none;
+    }
+    .book-link:hover { border-color: var(--lw-accent-2, #d1b865); }
+    .book-link strong {
+      display: block;
+      color: var(--lw-accent, #f2d27a);
+      margin-bottom: 8px;
+    }
+    code, pre {
+      background: var(--lw-bg-soft, #0d100b);
+      color: var(--lw-text, #efe8d0);
+      border: 1px solid var(--lw-border, #4e4528);
+      border-radius: 4px;
+    }
+    code { padding: 0.05rem 0.25rem; }
+    pre {
+      overflow: auto;
+      padding: 12px;
+    }
+    .muted { color: var(--lw-muted-2, #c6bea5); }
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+    .actions a, .actions button {
+      padding: 9px 12px;
+      border: 1px solid var(--lw-border, #5d5130);
+      border-radius: 4px;
+      background: var(--lw-panel-2, #202417);
+      color: var(--lw-text, #f0ead8);
+      text-decoration: none;
+      font: inherit;
+      cursor: pointer;
+    }
+    .status { min-height: 1.5em; margin-bottom: 0; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Install The Books</h1>
+    <p class="muted">Lone Wolf Action Assistant does not include the Project Aon book files. Download the standard multi-page HTML ZIPs from Project Aon for your own personal use, then import them into this app.</p>
+
+    <div class="actions">
+      <a href="index.html">Home</a>
+      <a href="assistant.html">Assistant</a>
+      <a href="https://www.projectaon.org/en/Main/License" target="_blank" rel="noopener">Project Aon License</a>
+    </div>
+
+    <section class="panel">
+      <h2>Import Your Books</h2>
+      <p>Import one or more downloaded ZIPs, or select a folder containing already-extracted books. Files are validated and copied into the app's managed books folder.</p>
+      <div class="actions">
+        <button type="button" id="import-zips">Import ZIP Files</button>
+        <button type="button" id="import-folder">Import Extracted Folder</button>
+        <button type="button" id="open-folder">Open Managed Books Folder</button>
+      </div>
+      <p id="import-status" class="muted status" role="status"></p>
+    </section>
+
+    <section class="panel">
+      <h2>Download Links</h2>
+      <div class="grid">
+        <a class="book-link" href="https://www.projectaon.org/en/Main/FlightFromTheDark" target="_blank" rel="noopener"><strong>1. Flight from the Dark</strong>Open the Project Aon page and choose the standard ZIP.</a>
+        <a class="book-link" href="https://www.projectaon.org/en/Main/FireOnTheWater" target="_blank" rel="noopener"><strong>2. Fire on the Water</strong>Open the Project Aon page and choose the standard ZIP.</a>
+        <a class="book-link" href="https://www.projectaon.org/en/Main/TheCavernsOfKalte" target="_blank" rel="noopener"><strong>3. The Caverns of Kalte</strong>Open the Project Aon page and choose the standard ZIP.</a>
+        <a class="book-link" href="https://www.projectaon.org/en/Main/TheChasmOfDoom" target="_blank" rel="noopener"><strong>4. The Chasm of Doom</strong>Open the Project Aon page and choose the standard ZIP.</a>
+        <a class="book-link" href="https://www.projectaon.org/en/Main/ShadowOnTheSand" target="_blank" rel="noopener"><strong>5. Shadow on the Sand</strong>Open the Project Aon page and choose the standard ZIP.</a>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Folder Layout</h2>
+      <p>The app manages books using this layout:</p>
+      <pre>books\lw\01fftd\title.htm</pre>
+      <pre>books\lw\02fotw\title.htm</pre>
+      <pre>books\lw\03tcok\title.htm</pre>
+      <pre>books\lw\04tcod\title.htm</pre>
+      <pre>books\lw\05sots\title.htm</pre>
+    </section>
+
+  </main>
+  <script src="assets/js/lw-settings.js"></script>
+  <script>
+    const settingsApi = window.LoneWolfReduxSettings;
+    function refreshAppearance() {
+      settingsApi.apply(settingsApi.readLocal());
+    }
+    refreshAppearance();
+    settingsApi.syncFromRemote();
+    window.addEventListener('pageshow', refreshAppearance);
+    window.addEventListener('focus', refreshAppearance);
+    window.addEventListener('storage', (event) => {
+      if (settingsApi.appearanceStorageKeys().includes(event.key)) refreshAppearance();
+    });
+
+    const importStatus = document.getElementById('import-status');
+    async function callNative(action) {
+      importStatus.textContent = 'Working...';
+      let result;
+      try {
+        const response = await fetch('/api/native-books', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action })
+        });
+        result = await response.json();
+      } catch (error) {
+        importStatus.textContent = `Could not complete the request: ${error}`;
+        return;
+      }
+      if (result.cancelled) {
+        importStatus.textContent = 'Import cancelled.';
+      } else if (!result.ok) {
+        importStatus.textContent = `Could not complete the request: ${result.error || 'Unknown error'}`;
+      } else if (result.Count !== undefined) {
+        importStatus.textContent = `Imported ${result.Count} book folder${result.Count === 1 ? '' : 's'} into ${result.Destination}.`;
+      } else {
+        importStatus.textContent = `Opened ${result.path}.`;
+      }
+    }
+    document.getElementById('import-zips').addEventListener('click', () => callNative('zips'));
+    document.getElementById('import-folder').addEventListener('click', () => callNative('folder'));
+    document.getElementById('open-folder').addEventListener('click', () => callNative('open'));
+  </script>
+</body>
+</html>

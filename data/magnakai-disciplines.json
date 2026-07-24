@@ -1,0 +1,42 @@
+[
+  {
+    "Name": "Weaponmastery",
+    "Effect": "+3 Combat Skill with mastered melee weapons; +3 to random-number picks when using Bow."
+  },
+  {
+    "Name": "Animal Control",
+    "Effect": "Narrative discipline for communicating with animals and fighting effectively from the saddle."
+  },
+  {
+    "Name": "Curing",
+    "Effect": "Recover 1 END for each numbered section without combat, up to max; also identifies herbs and cures specific conditions."
+  },
+  {
+    "Name": "Invisibility",
+    "Effect": "Narrative discipline for concealment, blending in, and social disguise."
+  },
+  {
+    "Name": "Huntmastery",
+    "Effect": "No Meal is needed when instructed to eat, including wasteland or desert; also ignores surprise and ambush Combat Skill penalties."
+  },
+  {
+    "Name": "Pathsmanship",
+    "Effect": "Narrative discipline for paths, foreign writing, traps, and orientation."
+  },
+  {
+    "Name": "Psi-surge",
+    "Effect": "+4 Combat Skill and -2 END per combat round; cannot be used at 6 END or lower."
+  },
+  {
+    "Name": "Psi-screen",
+    "Effect": "Prevents END loss from Mindforce attacks and strengthens resistance to illusions and hypnosis."
+  },
+  {
+    "Name": "Nexus",
+    "Effect": "Prevents END loss from extremes of heat and cold and supports certain telekinetic story effects."
+  },
+  {
+    "Name": "Divination",
+    "Effect": "Narrative discipline for sensing hidden danger, true purpose, or psychic presence."
+  }
+]

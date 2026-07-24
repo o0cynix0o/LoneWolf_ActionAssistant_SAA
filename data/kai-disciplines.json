@@ -1,0 +1,42 @@
+[
+  {
+    "Name": "Camouflage",
+    "Effect": "Narrative discipline for hiding, disguise, and stealth choices."
+  },
+  {
+    "Name": "Hunting",
+    "Effect": "No Meal is needed when instructed to eat, except in wasteland or desert."
+  },
+  {
+    "Name": "Sixth Sense",
+    "Effect": "Narrative warning and intuition discipline."
+  },
+  {
+    "Name": "Tracking",
+    "Effect": "Narrative discipline for paths, signs, and pursuit."
+  },
+  {
+    "Name": "Healing",
+    "Effect": "Recover 1 END for each numbered section without combat, up to max."
+  },
+  {
+    "Name": "Weaponskill",
+    "Effect": "+2 Combat Skill when using the chosen weapon type."
+  },
+  {
+    "Name": "Mindshield",
+    "Effect": "Protects against Mindblast attacks and similar mindforce loss."
+  },
+  {
+    "Name": "Mindblast",
+    "Effect": "+2 Combat Skill in combat unless the target is immune."
+  },
+  {
+    "Name": "Animal Kinship",
+    "Effect": "Narrative discipline for dealing with animals."
+  },
+  {
+    "Name": "Mind Over Matter",
+    "Effect": "Narrative discipline for moving small objects."
+  }
+]

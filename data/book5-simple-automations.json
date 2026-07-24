@@ -1,0 +1,120 @@
+{
+  "5": {
+    "1": {
+      "summary": "Begin Book 5 with monastery safekeeping and Vassagonia setup active.",
+      "actions": [
+        {"type": "flag", "key": "book5DesertHuntingSuppressed", "value": false},
+        {"type": "flag", "key": "book5BloodPoisoningActive", "value": false}
+      ]
+    },
+    "2": {
+      "summary": "Oede cures the Limbdeath infection.",
+      "actions": [
+        {"type": "flag", "key": "book5BloodPoisoningActive", "value": false},
+        {"type": "stat", "stat": "cs", "delta": 3, "condition": {"type": "flag", "key": "book5LimbdeathCsPenaltyApplied", "value": true}},
+        {"type": "flag", "key": "book5LimbdeathCsPenaltyApplied", "value": false},
+        {"type": "flag", "key": "book5LostUseOfOneArm", "value": false}
+      ]
+    },
+    "5": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 5 ends the mission."}]},
+    "8": {"summary": "Lose 2 END from the Cloeasian lock insight.", "actions": [{"type": "stat", "stat": "end", "delta": -2}]},
+    "10": {"summary": "The Sharnazim confiscate active gear, Gold, and Special Items.", "actions": [{"type": "gear", "available": false}]},
+    "14": {"summary": "Recover confiscated Backpack Items, Special Items, Weapons, and Gold Crowns.", "actions": [{"type": "gear", "available": true}]},
+    "18": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 18 ends the mission."}]},
+    "22": {"summary": "Lose 8 END.", "actions": [{"type": "stat", "stat": "end", "delta": -8}]},
+    "23": {"summary": "Lose 1 END.", "actions": [{"type": "stat", "stat": "end", "delta": -1}]},
+    "34": {"summary": "Lose 1 END from mental exertion.", "actions": [{"type": "stat", "stat": "end", "delta": -1}]},
+    "38": {"summary": "Lose 1 END on the ledge.", "actions": [{"type": "stat", "stat": "end", "delta": -1}]},
+    "40": {
+      "summary": "Lose 2 END and all carried Gold after climbing over the Kwaraz.",
+      "actions": [
+        {"type": "stat", "stat": "gold", "mode": "set", "value": 0},
+        {"type": "stat", "stat": "end", "delta": -2}
+      ]
+    },
+    "50": {"summary": "Lose 2 END after falling short of the galley.", "actions": [{"type": "stat", "stat": "end", "delta": -2}]},
+    "51": {"summary": "Lose 1 END from the falling grille.", "actions": [{"type": "stat", "stat": "end", "delta": -1}]},
+    "63": {"summary": "Limbdeath blood poisoning begins until Laumspur or Oede cures it.", "actions": [{"type": "book5_limbdeath"}]},
+    "69": {"summary": "Prison entry confirms all active gear, Gold, Backpack contents, and Special Items are confiscated.", "actions": [{"type": "gear", "available": false}]},
+    "72": {"summary": "Lose 1 END.", "actions": [{"type": "stat", "stat": "end", "delta": -1}]},
+    "77": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 77 ends the mission."}]},
+    "86": {"summary": "Lose 1 END from the injury.", "actions": [{"type": "stat", "stat": "end", "delta": -1}]},
+    "93": {"summary": "Restore 1 END.", "actions": [{"type": "stat", "stat": "end", "delta": 1}]},
+    "103": {"summary": "Larnuma oil restores 2 END.", "actions": [{"type": "stat", "stat": "end", "delta": 2}]},
+    "108": {"summary": "Lose 2 END from corrosive gas.", "actions": [{"type": "stat", "stat": "end", "delta": -2}]},
+    "130": {"summary": "Restore 1 END after taking the Herb Pad.", "actions": [{"type": "stat", "stat": "end", "delta": 1}]},
+    "137": {
+      "summary": "Required Meal in the palace gardens; Hunting does not supply food here.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": true, "huntingSuppressed": true}]
+    },
+    "159": {"summary": "Lose 2 END from the fall into the antechamber.", "actions": [{"type": "stat", "stat": "end", "delta": -2}]},
+    "161": {"summary": "Recover half of the combat END loss from the recent fight.", "actions": [{"type": "stat", "stat": "end", "mode": "restore_combat_loss_half_floor"}]},
+    "164": {"summary": "Lose 1 END in the fly-choked sewer air.", "actions": [{"type": "stat", "stat": "end", "delta": -1}]},
+    "166": {
+      "summary": "Limbdeath makes one arm useless and lowers COMBAT SKILL until Oede cures it.",
+      "actions": [
+        {"type": "stat", "stat": "cs", "delta": -3, "condition": {"type": "no_flag", "key": "book5LimbdeathCsPenaltyApplied", "value": true}},
+        {"type": "flag", "key": "book5LimbdeathCsPenaltyApplied", "value": true},
+        {"type": "flag", "key": "book5LostUseOfOneArm", "value": true}
+      ]
+    },
+    "176": {"summary": "Maouk's men confiscate active gear, Gold, and Special Items.", "actions": [{"type": "gear", "available": false}]},
+    "183": {"summary": "Lose 2 END.", "actions": [{"type": "stat", "stat": "end", "delta": -2}]},
+    "192": {"summary": "Lose 2 END from the heat.", "actions": [{"type": "stat", "stat": "end", "delta": -2}]},
+    "211": {"summary": "Kourshah restores 2 END.", "actions": [{"type": "stat", "stat": "end", "delta": 2}]},
+    "230": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 230 ends the mission."}]},
+    "232": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 232 ends the mission."}]},
+    "237": {"summary": "Jala restores 1 END.", "actions": [{"type": "stat", "stat": "end", "delta": 1}]},
+    "238": {"summary": "Lose 1 END from the forearm wound.", "actions": [{"type": "stat", "stat": "end", "delta": -1}]},
+    "251": {"summary": "Lose 6 END.", "actions": [{"type": "stat", "stat": "end", "delta": -6}]},
+    "254": {"summary": "Lose 2 END.", "actions": [{"type": "stat", "stat": "end", "delta": -2}]},
+    "257": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 257 ends the mission."}]},
+    "259": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 259 ends the mission."}]},
+    "261": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 261 ends the mission."}]},
+    "264": {
+      "summary": "Mindblast attack; Mindshield prevents the END loss before the Sommerswerd route check.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -2, "condition": {"type": "no_power", "name": "Mindshield"}}]
+    },
+    "273": {"summary": "Lose 1 END from the Akataz slash.", "actions": [{"type": "stat", "stat": "end", "delta": -1}]},
+    "278": {"summary": "Lose 3 END retrieving the Sommerswerd.", "actions": [{"type": "stat", "stat": "end", "delta": -3}]},
+    "284": {"summary": "Lose 3 END.", "actions": [{"type": "stat", "stat": "end", "delta": -3}]},
+    "285": {"summary": "Lose 2 END from the arm wound.", "actions": [{"type": "stat", "stat": "end", "delta": -2}]},
+    "287": {"summary": "Lose 1 END subduing the Itikar.", "actions": [{"type": "stat", "stat": "end", "delta": -1}]},
+    "293": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 293 ends the mission."}]},
+    "297": {"summary": "Lose 4 END.", "actions": [{"type": "stat", "stat": "end", "delta": -4}]},
+    "302": {"summary": "The Skyrider meal restores 3 END.", "actions": [{"type": "stat", "stat": "end", "delta": 3}]},
+    "304": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 304 ends the mission."}]},
+    "320": {
+      "summary": "Required Meal in the wasteland; Hunting is not available here.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": true, "huntingSuppressed": true}]
+    },
+    "350": {
+      "summary": "Lose 3 END and lose the Sommerswerd in Haakon's attack.",
+      "actions": [
+        {"type": "stat", "stat": "end", "delta": -3},
+        {"type": "remove_item", "name": "Sommerswerd", "containers": ["special"]},
+        {"type": "flag", "key": "book5SommerswerdLost", "value": true}
+      ]
+    },
+    "354": {"summary": "Lose 2 END.", "actions": [{"type": "stat", "stat": "end", "delta": -2}]},
+    "359": {"summary": "Rest restores 2 END.", "actions": [{"type": "stat", "stat": "end", "delta": 2}]},
+    "366": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 366 ends the mission."}]},
+    "368": {"summary": "Lose 3 END.", "actions": [{"type": "stat", "stat": "end", "delta": -3}]},
+    "369": {"summary": "Lose 6 END from Haakon's psychic attack.", "actions": [{"type": "stat", "stat": "end", "delta": -6}]},
+    "371": {"summary": "Lose 4 END.", "actions": [{"type": "stat", "stat": "end", "delta": -4}]},
+    "372": {"summary": "Lose 1 END.", "actions": [{"type": "stat", "stat": "end", "delta": -1}]},
+    "379": {"summary": "Lose 6 END.", "actions": [{"type": "stat", "stat": "end", "delta": -6}]},
+    "380": {"summary": "Lose 2 END from the Bor-brew hangover.", "actions": [{"type": "stat", "stat": "end", "delta": -2}]},
+    "385": {"summary": "Lose 12 END.", "actions": [{"type": "stat", "stat": "end", "delta": -12}]},
+    "390": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 390 ends the mission."}]},
+    "400": {
+      "summary": "Complete Book 5, recover the Sommerswerd if needed, and record the Book of the Magnakai.",
+      "actions": [
+        {"type": "restore_sommerswerd_if_lost"},
+        {"type": "add_item", "container": "special", "name": "Book of the Magnakai"},
+        {"type": "book5_kai_master"},
+        {"type": "ending", "ending": "success", "completeBook": 5}
+      ]
+    }
+  }
+}

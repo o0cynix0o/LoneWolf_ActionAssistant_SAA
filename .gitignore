@@ -1,0 +1,22 @@
+__pycache__/
+*.py[cod]
+*.log
+
+# Licensed/user-supplied content and per-player state
+books/
+saves/
+current-position.json
+data/last-save.txt
+data/ui-preferences.json
+
+# Build and installer output
+build/
+dist/
+installer/output/
+installer/MicrosoftEdgeWebview2Setup.exe
+
+# Local environments and tooling
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/

@@ -1,0 +1,4 @@
+websockets>=12
+pywinpty>=2; platform_system == "Windows"
+pywebview>=5.0
+pyinstaller>=6.0
