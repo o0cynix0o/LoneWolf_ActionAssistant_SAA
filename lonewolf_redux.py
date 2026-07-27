@@ -817,11 +817,12 @@ def normalize_state(state: dict[str, Any]) -> dict[str, Any]:
         state["Character"].setdefault(key, value)
     state["RuleSet"] = migrate_legacy_branding(state.get("RuleSet")) or base["RuleSet"]
     state["Character"]["Name"] = migrate_legacy_branding(state["Character"].get("Name")) or base["Character"]["Name"]
-    state["Character"]["KaiDisciplines"] = [
-        item
-        for item in as_list(state["Character"].get("KaiDisciplines"))
-        if item in KAI_DISCIPLINES
-    ]
+    # Dedupe and validate on load: a hand-edited or legacy save with repeated
+    # or unknown discipline names would otherwise skew rank counts and
+    # discipline-driven combat checks.
+    state["Character"]["KaiDisciplines"] = clean_kai_disciplines(
+        state["Character"].get("KaiDisciplines")
+    )
     if state["Character"].get("WeaponskillWeapon") not in set(WEAPONSKILL_MAP.values()):
         state["Character"]["WeaponskillWeapon"] = ""
     for key, value in base["Inventory"].items():
@@ -2362,8 +2363,18 @@ class LoneWolfReduxAssistant:
             print(f"Combat Results Table not found at {crt_path}.")
             self.crt = None
             return
-        with crt_path.open("r", encoding="utf-8") as handle:
-            self.crt = json.load(handle)
+        try:
+            with crt_path.open("r", encoding="utf-8") as handle:
+                data = json.load(handle)
+        except (OSError, json.JSONDecodeError) as exc:
+            print(f"Combat Results Table could not be read ({exc}).")
+            self.crt = None
+            return
+        if not isinstance(data, dict) or not data:
+            print(f"Combat Results Table at {crt_path} is malformed.")
+            self.crt = None
+            return
+        self.crt = data
 
     def load_book_data_collection(self, pattern: str, label: str) -> dict[str, Any]:
         combined: dict[str, Any] = {}
@@ -7043,7 +7054,12 @@ class LoneWolfReduxAssistant:
     def get_crt_result(self, ratio: int, roll: int) -> tuple[int, Any, Any]:
         if not self.crt:
             raise RuntimeError("Combat Results Table is not loaded.")
-        columns = sorted(int(key) for key in self.crt.keys())
+        try:
+            columns = sorted(int(key) for key in self.crt.keys())
+        except (TypeError, ValueError) as exc:
+            raise RuntimeError("Combat Results Table has invalid column keys.") from exc
+        if not columns:
+            raise RuntimeError("Combat Results Table has no columns.")
         if ratio < columns[0]:
             column = columns[0]
         elif ratio > columns[-1]:
@@ -7052,8 +7068,13 @@ class LoneWolfReduxAssistant:
             column = ratio
         else:
             column = max(value for value in columns if value <= ratio)
-        entry = self.crt[str(column)][str(roll)]
-        return column, entry["EnemyLoss"], entry["PlayerLoss"]
+        try:
+            entry = self.crt[str(column)][str(roll)]
+            return column, entry["EnemyLoss"], entry["PlayerLoss"]
+        except (KeyError, TypeError) as exc:
+            raise RuntimeError(
+                f"Combat Results Table is missing data for column {column}, roll {roll}."
+            ) from exc
 
     def loss_value(self, raw: Any, current: int) -> int:
         if str(raw) == "K":

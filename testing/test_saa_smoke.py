@@ -11,7 +11,9 @@ from unittest import mock
 
 import app_server
 import book_manager
+import lonewolf_redux
 import saa_main
+import ws_server
 
 
 class BookImportTests(unittest.TestCase):
@@ -240,6 +242,53 @@ class RequestGuardTests(unittest.TestCase):
     def test_rebinding_host_is_rejected(self) -> None:
         headers = {"Content-Type": "application/json", "Origin": self.local_origin}
         self.assertEqual(self._post({"action": "save", "path": ""}, headers, host="attacker.example"), 403)
+
+
+class CrtRobustnessTests(unittest.TestCase):
+    def test_malformed_lookup_raises_runtimeerror_not_keyerror(self) -> None:
+        assistant = app_server.ASSISTANT
+        original = assistant.crt
+        try:
+            assistant.crt = {"0": {}}  # column present, requested roll missing
+            with self.assertRaises(RuntimeError):
+                assistant.get_crt_result(0, 5)
+            assistant.crt = {"not-an-int": {"5": {"EnemyLoss": 0, "PlayerLoss": 0}}}
+            with self.assertRaises(RuntimeError):
+                assistant.get_crt_result(0, 5)
+        finally:
+            assistant.crt = original
+
+    def test_corrupt_crt_file_loads_as_none(self) -> None:
+        assistant = app_server.ASSISTANT
+        original_crt = assistant.crt
+        original_dir = assistant.data_dir
+        with tempfile.TemporaryDirectory() as temp:
+            (Path(temp) / "crt.json").write_text("{ broken", encoding="utf-8")
+            assistant.data_dir = Path(temp)
+            try:
+                assistant.load_crt()
+                self.assertIsNone(assistant.crt)
+            finally:
+                assistant.data_dir = original_dir
+                assistant.crt = original_crt
+
+
+class KaiDisciplineLoadTests(unittest.TestCase):
+    def test_normalize_dedupes_and_drops_unknown_disciplines(self) -> None:
+        raw = lonewolf_redux.default_state()
+        raw["Character"]["KaiDisciplines"] = ["Camouflage", "Camouflage", "Bogus", "Healing"]
+        normalized = lonewolf_redux.normalize_state(raw)
+        self.assertEqual(normalized["Character"]["KaiDisciplines"], ["Camouflage", "Healing"])
+
+
+class WebSocketOriginTests(unittest.TestCase):
+    def test_missing_and_local_origins_are_allowed(self) -> None:
+        for origin in (None, "", "http://127.0.0.1:8797", "http://localhost:12345", "http://[::1]:8798"):
+            self.assertTrue(ws_server.origin_is_local(origin), origin)
+
+    def test_foreign_origins_are_blocked(self) -> None:
+        for origin in ("http://evil.example", "https://attacker.example:443", "http://127.0.0.1.evil.example"):
+            self.assertFalse(ws_server.origin_is_local(origin), origin)
 
 
 if __name__ == "__main__":

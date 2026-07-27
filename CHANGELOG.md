@@ -6,6 +6,9 @@
 - Recovered gracefully from an unreadable or corrupt save file instead of failing to load.
 - Confined save and load paths from the web interface to the managed saves folder, rejecting attempts to read or write elsewhere on disk.
 - Restricted the local web API to same-origin requests from the desktop app, closing a path that let other web pages drive the assistant in the background.
+- Restricted the embedded terminal bridge to same-origin connections so other web pages cannot open a session against it.
+- Recovered gracefully from a missing or malformed Combat Results Table instead of crashing a combat round.
+- Removed duplicate and unknown Kai Disciplines when loading a save so rank counts and discipline-based combat checks stay accurate.
 
 ## 3.1.3 — 2026-07-24
 

@@ -16,6 +16,7 @@ import subprocess
 import sys
 import threading
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from websockets.asyncio.server import serve
 from runtime_paths import PATHS
@@ -38,6 +39,22 @@ WS_HOST = "localhost"
 WS_PORT = int(os.environ.get("LONEWOLF_REDUX_WS_PORT", "8798"))
 INIT_COLS = 120
 INIT_ROWS = 30
+
+LOCAL_WS_HOSTNAMES = {"localhost", "127.0.0.1", "::1"}
+
+
+def origin_is_local(origin: str | None) -> bool:
+    """Return True when a handshake Origin is safe to accept.
+
+    A browser always sends Origin on a WebSocket handshake, so a missing Origin
+    means a non-browser client (e.g. the packaged CLI worker) and is allowed. A
+    present Origin must resolve to loopback so a page on another site cannot
+    open the embedded terminal against this bridge.
+    """
+    if not origin:
+        return True
+    parsed = urlsplit(origin if "://" in origin else "//" + origin)
+    return (parsed.hostname or "").lower() in LOCAL_WS_HOSTNAMES
 
 
 def build_command() -> list[str]:
@@ -73,6 +90,10 @@ def build_command() -> list[str]:
 
 
 async def terminal_session(websocket):
+    origin = websocket.request.headers.get("Origin")
+    if not origin_is_local(origin):
+        await websocket.close(code=1008, reason="cross-origin request rejected")
+        return
     command = build_command()
     if os.name == "nt" and winpty is not None:
         await terminal_session_winpty(websocket, command)
