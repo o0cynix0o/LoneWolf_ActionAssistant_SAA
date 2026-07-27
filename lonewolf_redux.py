@@ -630,7 +630,6 @@ def default_inventory() -> dict[str, Any]:
         "HasBackpack": True,
         "HasHerbPouch": False,
         "HerbPouchItems": [],
-        "Nobles": 0,
     }
 
 
@@ -819,11 +818,13 @@ def normalize_state(state: dict[str, Any]) -> dict[str, Any]:
         state["Character"]["WeaponskillWeapon"] = ""
     for key, value in base["Inventory"].items():
         state["Inventory"].setdefault(key, value)
+    # Legacy migration: older saves stored gold under "Nobles". Fold it into
+    # GoldCrowns, then drop the retired alias key.
     legacy_nobles = int(state["Inventory"].get("Nobles") or 0)
     if not int(state["Inventory"].get("GoldCrowns") or 0) and legacy_nobles:
         state["Inventory"]["GoldCrowns"] = legacy_nobles
     state["Inventory"]["GoldCrowns"] = max(0, min(50, int(state["Inventory"].get("GoldCrowns") or 0)))
-    state["Inventory"]["Nobles"] = int(state["Inventory"]["GoldCrowns"])
+    state["Inventory"].pop("Nobles", None)
     state["Inventory"]["HasBackpack"] = bool(state["Inventory"].get("HasBackpack", True))
     for key, value in base["Combat"].items():
         state["Combat"].setdefault(key, value)
@@ -1144,7 +1145,6 @@ def apply_book2_gold_roll(inventory: dict[str, Any], gold_roll: Any | None) -> t
     gain = 10 + roll
     after = min(50, before + gain)
     inventory["GoldCrowns"] = after
-    inventory["Nobles"] = after
     return roll, before, gain, after
 
 
@@ -1154,7 +1154,6 @@ def apply_book3_gold_roll(inventory: dict[str, Any], gold_roll: Any | None) -> t
     gain = 10 + roll
     after = min(50, before + gain)
     inventory["GoldCrowns"] = after
-    inventory["Nobles"] = after
     return roll, before, gain, after
 
 
@@ -1164,7 +1163,6 @@ def apply_book4_gold_roll(inventory: dict[str, Any], gold_roll: Any | None) -> t
     gain = 10 + roll
     after = min(50, before + gain)
     inventory["GoldCrowns"] = after
-    inventory["Nobles"] = after
     return roll, before, gain, after
 
 
@@ -1174,7 +1172,6 @@ def apply_book5_gold_roll(inventory: dict[str, Any], gold_roll: Any | None) -> t
     gain = 10 + roll
     after = min(50, before + gain)
     inventory["GoldCrowns"] = after
-    inventory["Nobles"] = after
     return roll, before, gain, after
 
 
@@ -1609,7 +1606,6 @@ def create_book1_character_state(
     inventory["BackpackItems"] = ["Meal"]
     inventory["SpecialItems"] = ["Map of Sommerlund"]
     inventory["GoldCrowns"] = crowns_roll
-    inventory["Nobles"] = crowns_roll
     inventory["HasBackpack"] = True
     inventory["HasHerbPouch"] = False
     inventory["HerbPouchItems"] = []
@@ -1624,7 +1620,6 @@ def create_book1_character_state(
             inventory["SpecialItems"].append(str(find["Name"]))
     if item_type == "gold":
         inventory["GoldCrowns"] = min(50, int(inventory["GoldCrowns"]) + int(find.get("Gold") or 0))
-        inventory["Nobles"] = inventory["GoldCrowns"]
 
     endurance_bonus = int(find.get("EnduranceBonus") or 0)
     if endurance_bonus:
@@ -1701,7 +1696,6 @@ def create_book2_character_state(
     inventory["BackpackItems"] = []
     inventory["SpecialItems"] = []
     inventory["GoldCrowns"] = 0
-    inventory["Nobles"] = 0
     inventory["HasBackpack"] = True
     inventory["HasHerbPouch"] = False
     inventory["HerbPouchItems"] = []
@@ -1785,7 +1779,6 @@ def create_book3_character_state(
     inventory["BackpackItems"] = []
     inventory["SpecialItems"] = []
     inventory["GoldCrowns"] = 0
-    inventory["Nobles"] = 0
     inventory["HasBackpack"] = True
     inventory["HasHerbPouch"] = False
     inventory["HerbPouchItems"] = []
@@ -1869,7 +1862,6 @@ def create_book4_character_state(
     inventory["BackpackItems"] = []
     inventory["SpecialItems"] = []
     inventory["GoldCrowns"] = 0
-    inventory["Nobles"] = 0
     inventory["HasBackpack"] = True
     inventory["HasHerbPouch"] = False
     inventory["HerbPouchItems"] = []
@@ -1958,7 +1950,6 @@ def create_book5_character_state(
     inventory["BackpackItems"] = []
     inventory["SpecialItems"] = []
     inventory["GoldCrowns"] = 0
-    inventory["Nobles"] = 0
     inventory["HasBackpack"] = True
     inventory["HasHerbPouch"] = False
     inventory["HerbPouchItems"] = []
@@ -3549,8 +3540,8 @@ class LoneWolfReduxAssistant:
             return int(self.character["EnduranceCurrent"])
         if key in {"cs", "combatskill"}:
             return int(self.character["CombatSkillCurrent"])
-        if key in {"gold", "goldcrowns", "crowns", "nobles"}:
-            return int(self.inventory.get("GoldCrowns") or self.inventory.get("Nobles") or 0)
+        if key in {"gold", "goldcrowns", "crowns"}:
+            return int(self.inventory.get("GoldCrowns") or 0)
         return 0
 
     def evaluate_route_check_formula(self, formula: dict[str, Any] | None) -> int | None:
@@ -4171,8 +4162,6 @@ class LoneWolfReduxAssistant:
         outcome = "Guard distracted" if success else "Guard not fooled"
 
         self.inventory["GoldCrowns"] = max(0, gold_before - thrown)
-        self.inventory["Nobles"] = int(self.inventory["GoldCrowns"])
-
         stored = self.automation.get("Stored")
         if not isinstance(stored, dict):
             stored = {}
@@ -4263,8 +4252,6 @@ class LoneWolfReduxAssistant:
             gold_delta = 0
 
         self.inventory["GoldCrowns"] = max(0, min(50, gold_before + gold_delta))
-        self.inventory["Nobles"] = int(self.inventory["GoldCrowns"])
-
         stored = self.automation.get("Stored")
         if not isinstance(stored, dict):
             stored = {}
@@ -4381,7 +4368,6 @@ class LoneWolfReduxAssistant:
             payout = min(requested, remaining)
             before_add = int(self.inventory.get("GoldCrowns") or 0)
             self.inventory["GoldCrowns"] = max(0, min(50, before_add + payout))
-            self.inventory["Nobles"] = int(self.inventory["GoldCrowns"])
             gold_delta = int(self.inventory["GoldCrowns"]) - before_add
             if payout < requested:
                 cap_note = f"Cartwheel table limit capped payout at {payout}."
@@ -4390,7 +4376,6 @@ class LoneWolfReduxAssistant:
         else:
             if gold_staked:
                 self.inventory["GoldCrowns"] = max(0, gold_before - gold_staked)
-                self.inventory["Nobles"] = int(self.inventory["GoldCrowns"])
             gold_delta = int(self.inventory.get("GoldCrowns") or 0) - gold_before
 
         winnings_after = min(win_limit, winnings_before + max(0, gold_delta))
@@ -4783,7 +4768,6 @@ class LoneWolfReduxAssistant:
         self.inventory["BackpackItems"] = []
         self.inventory["SpecialItems"] = []
         self.inventory["GoldCrowns"] = 0
-        self.inventory["Nobles"] = 0
         self.automation_flags["weaponsAvailable"] = False
         self.automation_flags["backpackAvailable"] = False
         self.automation_flags["backpackItemsAvailable"] = False
@@ -4829,8 +4813,6 @@ class LoneWolfReduxAssistant:
 
         before_gold = int(self.inventory.get("GoldCrowns") or 0)
         self.inventory["GoldCrowns"] = max(0, min(50, before_gold + stored_gold))
-        self.inventory["Nobles"] = int(self.inventory["GoldCrowns"])
-
         self.automation_flags["weaponsAvailable"] = True
         self.automation_flags["backpackAvailable"] = True
         self.automation_flags["backpackItemsAvailable"] = True
@@ -5114,11 +5096,7 @@ class LoneWolfReduxAssistant:
     def change_gold_crowns(self, delta: int) -> str:
         before = int(self.inventory.get("GoldCrowns") or 0)
         self.inventory["GoldCrowns"] = max(0, min(50, before + int(delta)))
-        self.inventory["Nobles"] = int(self.inventory["GoldCrowns"])
         return f"Gold Crowns {before}->{self.inventory['GoldCrowns']}"
-
-    def change_nobles(self, delta: int) -> str:
-        return self.change_gold_crowns(delta)
 
     def apply_automation_stat(self, action: dict[str, Any]) -> str:
         stat = str(action.get("stat") or "").lower()
@@ -5158,13 +5136,12 @@ class LoneWolfReduxAssistant:
                     self.character["CombatSkillCurrent"] - before
                 )
             return f"CS {before}->{self.character['CombatSkillCurrent']}"
-        if stat in {"gold", "goldcrowns", "crowns", "nobles"}:
+        if stat in {"gold", "goldcrowns", "crowns"}:
             before = int(self.inventory.get("GoldCrowns") or 0)
             if action.get("storeAs"):
                 self.automation["Stored"][str(action["storeAs"])] = before
             if mode == "set":
                 self.inventory["GoldCrowns"] = max(0, min(50, int(action.get("value") or 0)))
-                self.inventory["Nobles"] = int(self.inventory["GoldCrowns"])
                 return f"Gold Crowns {before}->{self.inventory['GoldCrowns']}"
             return self.change_gold_crowns(int(action.get("delta") or 0))
         return "unknown stat action"
@@ -5261,13 +5238,12 @@ class LoneWolfReduxAssistant:
             key = str(action.get("key") or "")
             self.automation_flags[key] = action.get("value")
             return f"{key}={action.get('value')}"
-        if action_type == "restore_stored_nobles":
+        if action_type == "restore_stored_gold_crowns":
             key = str(action.get("key") or "stolenGoldCrowns")
             stored = int(self.automation["Stored"].pop(key, 0) or 0)
             extra = int(action.get("extra") or 0)
             before = int(self.inventory.get("GoldCrowns") or 0)
             self.inventory["GoldCrowns"] = max(0, min(50, before + stored + extra))
-            self.inventory["Nobles"] = int(self.inventory["GoldCrowns"])
             return f"Gold Crowns {before}->{self.inventory['GoldCrowns']}"
         if action_type == "gear":
             available = bool(action.get("available"))
@@ -5914,7 +5890,7 @@ class LoneWolfReduxAssistant:
                         "BookTitle": book_title(book_number),
                         "Section": int(data.get("CurrentSection", 1)),
                         "Endurance": f"{character.get('EnduranceCurrent', '?')}/{character.get('EnduranceMax', '?')}",
-                        "GoldCrowns": inventory.get("GoldCrowns", inventory.get("Nobles", "?")),
+                        "GoldCrowns": inventory.get("GoldCrowns", "?"),
                     }
                 )
             except Exception:
@@ -6563,7 +6539,7 @@ class LoneWolfReduxAssistant:
         self.autosave()
         print(f"Combat Skill: {self.character['CombatSkillCurrent']}")
 
-    def adjust_nobles(self, tokens: list[str]) -> None:
+    def adjust_gold_crowns(self, tokens: list[str]) -> None:
         change = self.number_change(tokens)
         if not change:
             print("Use: gold +/-n or gold set <n>")
@@ -6573,7 +6549,6 @@ class LoneWolfReduxAssistant:
             self.inventory["GoldCrowns"] = max(0, min(50, value))
         else:
             self.inventory["GoldCrowns"] = max(0, min(50, int(self.inventory.get("GoldCrowns") or 0) + value))
-        self.inventory["Nobles"] = int(self.inventory["GoldCrowns"])
         self.autosave()
         print(f"Gold Crowns: {self.inventory['GoldCrowns']}")
 
@@ -8400,8 +8375,8 @@ class LoneWolfReduxAssistant:
                         print(f"Maximum Endurance: {value}")
             elif command in {"cs", "combatskill"}:
                 self.adjust_combat_skill(tokens)
-            elif command in {"gold", "crowns", "gc", "nobles"}:
-                self.adjust_nobles(tokens)
+            elif command in {"gold", "crowns", "gc"}:
+                self.adjust_gold_crowns(tokens)
             elif command == "meal":
                 self.meal_command(tokens)
             elif command in {"eat"}:

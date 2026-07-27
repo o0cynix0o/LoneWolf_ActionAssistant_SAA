@@ -1513,13 +1513,13 @@
       const key = text(stat).toLowerCase();
       if (['end', 'endurance'].includes(key)) return 'END';
       if (['cs', 'combat_skill', 'combat skill'].includes(key)) return 'CS';
-      if (['gold', 'crowns', 'goldcrowns', 'nobles'].includes(key)) return 'Gold Crowns';
+      if (['gold', 'crowns', 'goldcrowns'].includes(key)) return 'Gold Crowns';
       return text(stat, 'Stat');
     }
 
     function statControlLocation(stat) {
       const key = text(stat).toLowerCase();
-      if (['gold', 'crowns', 'goldcrowns', 'nobles'].includes(key)) return 'Inventory tab > Gold Crowns controls';
+      if (['gold', 'crowns', 'goldcrowns'].includes(key)) return 'Inventory tab > Gold Crowns controls';
       return `Vitals card > ${statControlName(stat)}`;
     }
 
@@ -1626,7 +1626,7 @@
           how: `Choices card > Status Flags: click Set to turn ${label} on, or Clear to turn it off. If the flag is not listed, use Notes to record: ${label} ${value}.`
         };
       }
-      if (kind === 'restore_stored_nobles') {
+      if (kind === 'restore_stored_gold_crowns') {
         const extra = Number(action.extra || 0);
         return {
           summary: `Restore stored Gold Crowns${extra ? ` and add ${extra}` : ''}`,
@@ -2058,7 +2058,7 @@
       if (key === 'END') return asNumber(character.EnduranceCurrent);
       if (key === 'END Max') return asNumber(character.EnduranceMax);
       if (key === 'CS') return asNumber(character.CombatSkillCurrent);
-      if (key === 'Gold') return asNumber(inventory.GoldCrowns ?? inventory.Nobles);
+      if (key === 'Gold') return asNumber(inventory.GoldCrowns);
       return 0;
     }
 
@@ -2425,7 +2425,7 @@
             receiptDetail('Where', locationLabel(afterSnapshot)),
             receiptDetail('Combat Skill', `${text(character.CombatSkillCurrent)} (roll ${text(rolls.CombatSkill, '?')})`),
             receiptDetail('Endurance', `${text(character.EnduranceCurrent)} (roll ${text(rolls.Endurance, '?')})`),
-            receiptDetail('Gold Crowns', `${text(inventory.GoldCrowns ?? inventory.Nobles ?? 0)} (roll ${text(rolls.GoldCrowns, '?')})`),
+            receiptDetail('Gold Crowns', `${text(inventory.GoldCrowns ?? 0)} (roll ${text(rolls.GoldCrowns, '?')})`),
             receiptDetail('Starting Find', `${find} (roll ${text(rolls.StartingFind, '?')})`),
             character.WeaponskillWeapon ? receiptDetail('Weaponskill', `${text(character.WeaponskillWeapon)} (roll ${text(rolls.Weaponskill, '?')})`) : null,
             receiptDetail('Kai Disciplines', disciplines),
@@ -2669,7 +2669,7 @@
         ['Book', `${c.BookNumber}. ${book.title}`, 'status-book'],
         ['Section', app.state.CurrentSection, 'status-section'],
         ['END', `${c.EnduranceCurrent}/${c.EnduranceMax}`, 'status-end'],
-        ['Gold', currentInventory().GoldCrowns ?? currentInventory().Nobles ?? 0, 'status-gold'],
+        ['Gold', currentInventory().GoldCrowns ?? 0, 'status-gold'],
         ['CS', c.CombatSkillCurrent, 'status-cs']
       ].map(([label, value, className]) => `<div class="stat-card ${className}"><span>${label}</span><strong>${escapeHtml(value)}</strong></div>`).join('');
     }
@@ -2893,7 +2893,7 @@
             ${field('Character', escapeHtml(text(summary.CharacterName, currentCharacter().Name)))}
             ${field('Final END', `${escapeHtml(text(summary.EnduranceCurrent, currentCharacter().EnduranceCurrent))}/${escapeHtml(text(summary.EnduranceMax, currentCharacter().EnduranceMax))}`)}
             ${field('Combat Skill', escapeHtml(text(summary.CombatSkill, currentCharacter().CombatSkillCurrent)))}
-            ${field('Gold Crowns', escapeHtml(text(summary.GoldCrowns, currentInventory().GoldCrowns ?? currentInventory().Nobles ?? 0)))}
+            ${field('Gold Crowns', escapeHtml(text(summary.GoldCrowns, currentInventory().GoldCrowns ?? 0)))}
           </div>
         </div>
         <div class="panel">
@@ -3804,7 +3804,7 @@
         'status-book': [`${c.BookNumber}. ${book.title}`, ''],
         'status-section': [app.state.CurrentSection, ''],
         'status-end': [`${c.EnduranceCurrent}/${c.EnduranceMax}`, ''],
-        'status-gold': [currentInventory().GoldCrowns ?? currentInventory().Nobles ?? 0, ''],
+        'status-gold': [currentInventory().GoldCrowns ?? 0, ''],
         'status-cs': [c.CombatSkillCurrent, '']
       };
       const [value, subvalue] = values[id] || ['', ''];
@@ -4256,7 +4256,7 @@
       return `
         <div class="grid">
           ${field('Name', c.Name)}
-          ${field('Gold Crowns', inv.GoldCrowns ?? inv.Nobles ?? 0)}
+          ${field('Gold Crowns', inv.GoldCrowns ?? 0)}
           ${field('Combat Skill', `${c.CombatSkillCurrent} (base ${c.CombatSkillBase})`)}
           ${field('Endurance', `${c.EnduranceCurrent}/${c.EnduranceMax}`)}
           ${field('Meals', arr(inv.BackpackItems).filter((item) => text(item).toLowerCase() === 'meal').length)}
@@ -4762,7 +4762,7 @@
           <h2>Action Chart</h2>
           <div class="grid">
             ${field('Name', c.Name)}
-            ${field('Gold Crowns', inv.GoldCrowns ?? inv.Nobles ?? 0)}
+            ${field('Gold Crowns', inv.GoldCrowns ?? 0)}
             ${field('Combat Skill', `${c.CombatSkillCurrent} (base ${c.CombatSkillBase})`)}
             ${field('Endurance', `${c.EnduranceCurrent}/${c.EnduranceMax}`)}
             ${field('Meals', arr(inv.BackpackItems).filter((item) => text(item).toLowerCase() === 'meal').length)}

@@ -174,7 +174,7 @@ def save_slot_entry(slot: int) -> dict:
                 "BookTitle": lonewolf_redux.book_title(book_number),
                 "Section": int(data.get("CurrentSection", 1)),
                 "Endurance": f"{character.get('EnduranceCurrent', '?')}/{character.get('EnduranceMax', '?')}",
-                "GoldCrowns": inventory.get("GoldCrowns", inventory.get("Nobles", "?")),
+                "GoldCrowns": inventory.get("GoldCrowns", "?"),
             }
         )
     except Exception:
@@ -300,7 +300,7 @@ def state_payload(message: str = "", achievement_unlocks: list[dict] | None = No
         ASSISTANT.save_game(quiet=True)
     state = json.loads(json.dumps(ASSISTANT.state))
     state["Combat"] = ASSISTANT.combat_status_payload()
-    for key in ("HasHerbPouch", "HerbPouchItems", "Nobles"):
+    for key in ("HasHerbPouch", "HerbPouchItems"):
         state.get("Inventory", {}).pop(key, None)
     for checkpoint in lonewolf_redux.as_list(state.get("Automation", {}).get("SectionCheckpoints")):
         if isinstance(checkpoint, dict):
@@ -618,8 +618,8 @@ def handle_action(payload: dict) -> str:
             return capture_output(lambda: ASSISTANT.adjust_endurance(token))
         if stat == "cs":
             return capture_output(lambda: ASSISTANT.adjust_combat_skill(token))
-        if stat in {"gold", "nobles"}:
-            return capture_output(lambda: ASSISTANT.adjust_nobles(token))
+        if stat == "gold":
+            return capture_output(lambda: ASSISTANT.adjust_gold_crowns(token))
     if action == "add_item":
         return capture_output(lambda: ASSISTANT.add_item(["add", str(payload.get("type") or ""), str(payload.get("item") or "")]))
     if action == "drop_item":

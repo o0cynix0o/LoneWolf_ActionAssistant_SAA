@@ -281,6 +281,18 @@ class KaiDisciplineLoadTests(unittest.TestCase):
         self.assertEqual(normalized["Character"]["KaiDisciplines"], ["Camouflage", "Healing"])
 
 
+class NoblesRemovalTests(unittest.TestCase):
+    def test_legacy_nobles_only_save_migrates_to_gold_crowns(self) -> None:
+        migrated = lonewolf_redux.normalize_state({"Inventory": {"Nobles": 33}})
+        self.assertEqual(migrated["Inventory"]["GoldCrowns"], 33)
+        self.assertNotIn("Nobles", migrated["Inventory"])
+
+    def test_gold_crowns_helpers_have_no_nobles_alias(self) -> None:
+        self.assertTrue(hasattr(app_server.ASSISTANT, "adjust_gold_crowns"))
+        self.assertFalse(hasattr(app_server.ASSISTANT, "adjust_nobles"))
+        self.assertFalse(hasattr(app_server.ASSISTANT, "change_nobles"))
+
+
 class WebSocketOriginTests(unittest.TestCase):
     def test_missing_and_local_origins_are_allowed(self) -> None:
         for origin in (None, "", "http://127.0.0.1:8797", "http://localhost:12345", "http://[::1]:8798"):
