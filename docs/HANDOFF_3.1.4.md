@@ -1,23 +1,33 @@
 # Handoff — v3.1.4 hardening + Grey Star residue removal
 
-Prepared for the next agent (Codex) to pick up. Everything below is **done in
-source and committed** on branch `harden-save-and-api-3.1.4`. The package now
-builds and the collapsed terminal has been proven in the frozen app. The
-installed-app smoke test and release/publish steps remain.
+Prepared for the next agent (Codex) to pick up. The hardening work and frozen
+terminal fix through GitHub issue #12 are committed on branch
+`harden-save-and-api-3.1.4`, and that package was proven in the frozen app.
+Approved follow-up fixes for GitHub issues #13 and #14 are now present in
+source and the rebuilt 3.1.4 artifacts, committed as `3cd9a04`. Their source
+and frozen validation are complete. The installed-app smoke test and
+release/publish steps remain.
 
 ## State at handoff
 
 - Branch: `harden-save-and-api-3.1.4` (branched from `main`; pushed to origin).
 - Version bumped to **3.1.4** everywhere (README, docs, installer `.iss`,
   `version_info.txt`, CHANGELOG). `version_info_cli.txt` was deleted (see CLI note).
-- Tests: `python -m unittest testing.test_saa_smoke` → **36/36 pass**.
-- Packaged self-test from source: `python saa_main.py --self-test` → OK.
+- Current source validation: `python -m unittest testing.test_saa_smoke` →
+  **40/40 pass** and `python saa_main.py --self-test` → OK.
 - Git identity for this repo is set `--local` to Daniel Watson <o0cynix0o@gmail.com>.
-- The 3.1.4 application EXE and installer build successfully.
-- The real packaged UI terminal has been validated end-to-end: Index → Open
-  Reader → Assistant menu → CLI, `help`, `sheet`, `quit`, and Reconnect all
-  work. The CLI process is the same main EXE with `--cli`, owns no visible
-  window, and does not start `WindowsTerminal.exe` or `wt.exe`.
+- The canonical 3.1.4 application EXE and installer were rebuilt successfully
+  with the issue #12–#14 fixes.
+- Frozen CLI validation at 51 terminal columns rendered 50-character panels.
+  The `inventory` command completed through the final `LW>` prompt,
+  `scrollOnUserInput` kept the latest output in view, and the CLI worker owned
+  no separate terminal window.
+- Frozen UI validation measured Small cards at exactly 220 pixels with zero
+  horizontal overflow, and Drop Item rows wrapped cleanly within the card.
+- The canonical rebuilt executable is
+  `dist\Lone Wolf Action Assistant\Lone Wolf Action Assistant.exe`. An older
+  pre-fix executable still exists directly under `dist`; do not validate or
+  release that obsolete copy.
 
 ## What changed this session (commit-by-commit)
 
@@ -47,8 +57,24 @@ installed-app smoke test and release/publish steps remain.
    validation. The windowed PyInstaller process now attaches to WinPTY's parent
    console before reopening `CONIN$`/`CONOUT$`; failure exits cleanly instead of
    displaying an unhandled-exception dialog. Added frozen CLI regression tests.
-   GitHub issue #12 tracks the defect and remains open until the fix reaches
-   `main`.
+   GitHub issue #12 records the defect.
+9. `3cd9a04` Changed Small dashboard cards to a readable 220-pixel compact
+   width, wrapped Drop Item rows inside Small cards, followed live terminal
+   input without disrupting deliberate scrollback, and made CLI text panels
+   shrink to the current terminal width. Added regression coverage for GitHub
+   issues #13 and #14.
+
+## Approved follow-ups validated and committed
+
+- **GitHub issue #13:** Small dashboard cards now use a 220-pixel compact width.
+  Drop Item rows can wrap within Small cards instead of overflowing or clipping
+  their controls.
+- **GitHub issue #14:** The embedded terminal returns to the latest output when
+  the player types. CLI text panels derive their width from the current terminal
+  and shrink when space is limited, while retaining the established maximum
+  width on larger terminals.
+- Source smoke tests, the source self-test, the rebuilt artifacts, and the
+  focused frozen UI/CLI checks all pass.
 
 ## Decisions already made — do NOT silently reverse these
 
@@ -73,7 +99,8 @@ installed-app smoke test and release/publish steps remain.
 ## Still open (not done — by design)
 
 These numbers are internal audit item labels from the original review, **not
-current GitHub issue numbers**.
+current GitHub issue numbers** and not the GitHub issues #12–#14 described
+above.
 
 - **#10 God-class / module split** (`lonewolf_redux.py` is ~8.4k lines with a
   ~6k-line class mixing engine/persistence/CLI/data). Deferred to its own
@@ -86,6 +113,6 @@ current GitHub issue numbers**.
 ## Verify quickly
 
 ```powershell
-python -m unittest testing.test_saa_smoke      # 36 pass
+python -m unittest testing.test_saa_smoke      # 40 pass
 python saa_main.py --self-test                 # {"ok": true, ...}
 ```
