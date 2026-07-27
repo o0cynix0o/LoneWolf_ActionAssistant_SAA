@@ -49,8 +49,8 @@ exe = EXE(
     # The desktop executable must use the windowed bootloader. On systems
     # where Windows Terminal is the default console host, a console bootloader
     # opens a visible terminal tab even when PyInstaller asks it to hide early.
-    # The embedded terminal uses its separately packaged console worker,
-    # launched inside WinPTY, so this main desktop process needs no console.
+    # The embedded terminal relaunches this same EXE with --cli inside WinPTY,
+    # so the main desktop process needs no separate or visible console.
     console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,

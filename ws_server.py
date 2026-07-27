@@ -102,10 +102,9 @@ async def terminal_session(websocket):
 async def terminal_session_winpty(websocket, command: list[str]) -> None:
     loop = asyncio.get_running_loop()
     try:
-        # The bundled CLI worker is a console-subsystem executable. ConPTY
-        # closes its output channel immediately for that one-file worker on
-        # some Windows 11 systems, while the WinPTY backend keeps the embedded
-        # xterm stream alive. The desktop process itself remains windowed.
+        # The main EXE remains a windowed application. Its --cli entry point
+        # attaches to WinPTY's hidden console, which keeps the embedded xterm
+        # stream alive without opening a separate console window or terminal.
         backend = winpty.Backend.WinPTY if getattr(sys, "frozen", False) else None
         pty_proc = winpty.PtyProcess.spawn(
             command,

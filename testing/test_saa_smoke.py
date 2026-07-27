@@ -107,6 +107,56 @@ class ServiceTests(unittest.TestCase):
         self.assertEqual(saa_main.run_self_test(), 0)
 
 
+class FrozenCliTests(unittest.TestCase):
+    def test_parent_console_is_attached_when_missing(self) -> None:
+        kernel32 = mock.Mock()
+        kernel32.GetConsoleWindow.return_value = 0
+        kernel32.AttachConsole.return_value = 1
+
+        self.assertTrue(saa_main._attach_parent_console(kernel32))
+        kernel32.AttachConsole.assert_called_once_with(0xFFFFFFFF)
+
+    def test_existing_console_is_reused(self) -> None:
+        kernel32 = mock.Mock()
+        kernel32.GetConsoleWindow.return_value = 123
+
+        self.assertTrue(saa_main._attach_parent_console(kernel32))
+        kernel32.AttachConsole.assert_not_called()
+
+    def test_cli_dispatch_stops_cleanly_when_stdio_is_unavailable(self) -> None:
+        with (
+            mock.patch.object(saa_main.sys, "frozen", True, create=True),
+            mock.patch.object(saa_main.sys, "argv", ["saa_main.py", "--cli"]),
+            mock.patch.object(saa_main.sys, "stdout", mock.Mock()),
+            mock.patch.object(saa_main.sys, "stderr", mock.Mock()),
+            mock.patch.object(saa_main, "_prepare_cli_stdio", return_value=False),
+            mock.patch.object(saa_main.lonewolf_redux, "main") as cli_main,
+        ):
+            self.assertEqual(saa_main.main(), 1)
+
+        cli_main.assert_not_called()
+
+    def test_frozen_terminal_reuses_main_executable(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            paths = mock.Mock(
+                user_data=root / "data",
+                saves=root / "saves",
+                resource_data=root / "resources",
+                books_lw=root / "books" / "lw",
+            )
+            with (
+                mock.patch.object(ws_server.sys, "frozen", True, create=True),
+                mock.patch.object(ws_server.sys, "executable", r"C:\App\Lone Wolf Action Assistant.exe"),
+                mock.patch.object(ws_server, "PATHS", paths),
+            ):
+                command = ws_server.build_command()
+
+        self.assertEqual(command[:2], [r"C:\App\Lone Wolf Action Assistant.exe", "--cli"])
+        self.assertIn("--save-dir", command)
+        self.assertNotIn("CLI.exe", " ".join(command))
+
+
 class CreationDraftTests(unittest.TestCase):
     def test_book1_draft_uses_supplied_rolls_without_mutating_campaign(self) -> None:
         before = json.dumps(app_server.ASSISTANT.state, sort_keys=True)
