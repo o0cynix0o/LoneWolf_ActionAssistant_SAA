@@ -10,6 +10,9 @@
 - Recovered gracefully from a missing or malformed Combat Results Table instead of crashing a combat round.
 - Removed duplicate and unknown Kai Disciplines when loading a save so rank counts and discipline-based combat checks stay accurate.
 - Hardened an internal list helper so it can no longer accidentally edit stored game data in place, removing a class of latent bookkeeping bug.
+- Removed the unused Willpower, Magick, and Magical Staff systems carried over from the Grey Star fork, fixing a crash that could occur when using the Book 2 Karmo Potion.
+- Removed the redundant "Nobles" currency, which only ever mirrored Gold Crowns, while still migrating older saves that stored gold under it.
+- Simplified the desktop package to a single executable: the embedded terminal now runs from the main application instead of a separate command-line program.
 
 ## 3.1.3 — 2026-07-24
 

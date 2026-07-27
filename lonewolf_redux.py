@@ -1139,7 +1139,8 @@ def kai_rank_meets(disciplines: Any, rank_name: str) -> bool:
     return len(clean_kai_disciplines(disciplines)) >= required
 
 
-def apply_book2_gold_roll(inventory: dict[str, Any], gold_roll: Any | None) -> tuple[int, int, int, int]:
+def apply_book_gold_roll(inventory: dict[str, Any], gold_roll: Any | None) -> tuple[int, int, int, int]:
+    """Grant 10 + a random digit Gold Crowns (capped at 50). Shared by Books 2-5."""
     roll = coerce_random_digit(gold_roll)
     before = int(inventory.get("GoldCrowns") or 0)
     gain = 10 + roll
@@ -1148,31 +1149,12 @@ def apply_book2_gold_roll(inventory: dict[str, Any], gold_roll: Any | None) -> t
     return roll, before, gain, after
 
 
-def apply_book3_gold_roll(inventory: dict[str, Any], gold_roll: Any | None) -> tuple[int, int, int, int]:
-    roll = coerce_random_digit(gold_roll)
-    before = int(inventory.get("GoldCrowns") or 0)
-    gain = 10 + roll
-    after = min(50, before + gain)
-    inventory["GoldCrowns"] = after
-    return roll, before, gain, after
-
-
-def apply_book4_gold_roll(inventory: dict[str, Any], gold_roll: Any | None) -> tuple[int, int, int, int]:
-    roll = coerce_random_digit(gold_roll)
-    before = int(inventory.get("GoldCrowns") or 0)
-    gain = 10 + roll
-    after = min(50, before + gain)
-    inventory["GoldCrowns"] = after
-    return roll, before, gain, after
-
-
-def apply_book5_gold_roll(inventory: dict[str, Any], gold_roll: Any | None) -> tuple[int, int, int, int]:
-    roll = coerce_random_digit(gold_roll)
-    before = int(inventory.get("GoldCrowns") or 0)
-    gain = 10 + roll
-    after = min(50, before + gain)
-    inventory["GoldCrowns"] = after
-    return roll, before, gain, after
+# Books 2-5 share identical gold-roll rules; keep the per-book names as aliases
+# so existing call sites stay explicit about which book transition they run.
+apply_book2_gold_roll = apply_book_gold_roll
+apply_book3_gold_roll = apply_book_gold_roll
+apply_book4_gold_roll = apply_book_gold_roll
+apply_book5_gold_roll = apply_book_gold_roll
 
 
 def apply_book2_armoury_to_state(
@@ -7391,6 +7373,11 @@ class LoneWolfReduxAssistant:
         return False
 
     def route_after_combat_round(self) -> bool:
+        # Route resolution order is deliberate and load-bearing: Lone Wolf's own
+        # death is checked first, so a round that drops both combatants to 0
+        # ENDURANCE resolves as a defeat, not a victory. Section presets that
+        # define wounded/comparison routes are expected to be mutually exclusive
+        # with the enemy-defeated branch checked further below.
         self.sync_active_combat_with_section_preset()
         round_count = self.combat_round_count()
         if int(self.character["EnduranceCurrent"]) <= 0:
