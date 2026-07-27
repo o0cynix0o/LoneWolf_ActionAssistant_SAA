@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.1.3 — 2026-07-24
+
+- Changed Small cards from proportional columns into compact 170-by-150-pixel tiles where content permits.
+- Reflowed statistic controls on Small cards into two deliberate rows, with the Set field and button on the second row.
+- Kept long card content visible by allowing compact tiles to grow vertically without horizontal clipping.
+
 ## 3.1.2 — 2026-07-24
 
 - Fixed dashboard card sizing so Small is one-third width, Medium is one-half width, and Large uses the full available width.

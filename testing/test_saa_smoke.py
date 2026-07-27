@@ -89,11 +89,13 @@ class CardSizingTests(unittest.TestCase):
         root = Path(saa_main.__file__).resolve().parent
         assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
 
-        self.assertIn("grid-template-columns: repeat(6, minmax(0, 1fr));", assistant_html)
         self.assertIn("#view.view-card-grid > .dashboard-card.card-size-small", assistant_html)
-        self.assertIn("grid-column: span 2;", assistant_html)
+        self.assertIn("flex: 0 0 170px;", assistant_html)
+        self.assertIn("min-height: 150px;", assistant_html)
         self.assertIn("#view.view-card-grid > .dashboard-card.card-size-medium", assistant_html)
-        self.assertIn("grid-column: span 3;", assistant_html)
+        self.assertIn("flex: 0 0 calc(50% - 0.325rem);", assistant_html)
+        self.assertIn('class="stat-adjust-line"', assistant_html)
+        self.assertIn('class="stat-set-line"', assistant_html)
         self.assertIn("options.resizable === false", assistant_html)
         self.assertIn("resizable: false", assistant_html)
 

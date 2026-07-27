@@ -277,8 +277,9 @@
     }
     .quick-panel {
       padding: 0.55rem 0.65rem;
-      display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
       gap: 0.5rem;
       background: #12160f;
       flex-shrink: 0;
@@ -418,8 +419,8 @@
       padding: 0.65rem;
     }
     #view.view-card-grid {
-      display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
+      display: flex;
+      flex-wrap: wrap;
       align-content: start;
       gap: 0.65rem;
     }
@@ -437,9 +438,7 @@
     }
     .dashboard-card.card-size-small {
       padding: 0.55rem;
-    }
-    .dashboard-card.card-size-large {
-      grid-column: 1 / -1;
+      min-height: 150px;
     }
     .card-menu-button {
       position: absolute;
@@ -545,15 +544,18 @@
     }
     #view.view-card-grid > .dashboard-card.card-size-small,
     .quick-panel > .dashboard-card.card-size-small {
-      grid-column: span 2;
+      flex: 0 0 170px;
+      max-width: 170px;
     }
     #view.view-card-grid > .dashboard-card.card-size-medium,
     .quick-panel > .dashboard-card.card-size-medium {
-      grid-column: span 3;
+      flex: 0 0 calc(50% - 0.325rem);
+      max-width: calc(50% - 0.325rem);
     }
     #view.view-card-grid > .dashboard-card.card-size-large,
     .quick-panel > .dashboard-card.card-size-large {
-      grid-column: 1 / -1;
+      flex: 0 0 100%;
+      max-width: 100%;
     }
     .sheet-layout .dashboard-card.size-compact {
       grid-column: auto;
@@ -873,6 +875,39 @@
       align-items: center;
     }
     .controls input, .controls select { flex: 1; }
+    .stat-controls {
+      flex-wrap: nowrap;
+    }
+    .stat-adjust-line,
+    .stat-set-line {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .stat-set-line {
+      flex: 1;
+    }
+    .stat-set-line input {
+      min-width: 0;
+      flex: 1;
+    }
+    #view.view-card-grid > .dashboard-card.card-size-small .stat-controls,
+    .quick-panel > .dashboard-card.card-size-small .stat-controls {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    #view.view-card-grid > .dashboard-card.card-size-small .stat-adjust-line,
+    #view.view-card-grid > .dashboard-card.card-size-small .stat-set-line,
+    .quick-panel > .dashboard-card.card-size-small .stat-adjust-line,
+    .quick-panel > .dashboard-card.card-size-small .stat-set-line {
+      width: 100%;
+    }
+    #view.view-card-grid > .dashboard-card.card-size-small .stat-adjust-line > span,
+    .quick-panel > .dashboard-card.card-size-small .stat-adjust-line > span {
+      min-width: 0 !important;
+      flex: 1;
+    }
     .item-row {
       display: flex;
       align-items: center;
@@ -1229,19 +1264,20 @@
       .top-dashboard .wide,
       .top-dashboard .extra-wide { grid-column: auto; }
       .status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      #view.view-card-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
       .combat-meter-grid { grid-template-columns: 1fr; }
       .death-options { grid-template-columns: 1fr; }
       .sheet-layout { grid-template-columns: 1fr; }
       .dashboard-card.wide { grid-column: auto; }
-      .quick-panel { grid-template-columns: repeat(6, minmax(0, 1fr)); }
       .reader-title { margin-left: 0; flex-basis: 100%; max-width: 100%; }
     }
     @media (max-width: 480px) {
       #view.view-card-grid,
-      .quick-panel { grid-template-columns: 1fr; }
+      .quick-panel { display: flex; }
       #view.view-card-grid > .dashboard-card,
-      .quick-panel > .dashboard-card { grid-column: 1 / -1; }
+      .quick-panel > .dashboard-card {
+        flex-basis: 100%;
+        max-width: 100%;
+      }
     }
   </style>
 </head>
@@ -5397,7 +5433,7 @@
     function statButtons(stat, label, compact = false) {
       const labelClass = compact ? 'quick-stat-label' : '';
       const labelStyle = compact ? '' : 'style="min-width:94px"';
-      return `<div class="controls" style="margin-bottom:.45rem"><span class="${labelClass}" ${labelStyle}>${label}</span><button data-adjust="${stat}:-1">-1</button><button data-adjust="${stat}:1">+1</button><input data-set="${stat}" type="number" placeholder="Set"><button data-set-button="${stat}">Set</button></div>`;
+      return `<div class="controls stat-controls" style="margin-bottom:.45rem"><div class="stat-adjust-line"><span class="${labelClass}" ${labelStyle}>${label}</span><button data-adjust="${stat}:-1">-1</button><button data-adjust="${stat}:1">+1</button></div><div class="stat-set-line"><input data-set="${stat}" type="number" placeholder="Set"><button data-set-button="${stat}">Set</button></div></div>`;
     }
     function itemList(title, type, items) {
       const rows = arr(items).map((item, index) => `<div class="item-row"><small>${index + 1}</small><span>${escapeHtml(item)}</span>${keyItemNote(item)}${itemActionButtons(type, item)}<button class="danger" data-drop="${type}:${encodeURIComponent(item)}">Drop</button></div>`).join('');
