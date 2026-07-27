@@ -207,8 +207,12 @@ KAI_RANKS = [
     (5, "Initiate"),
 ]
 
-# Legacy constants are kept only so older save/transition code can normalize without
-# raising NameError. Book 1 character creation and UI use KAI_DISCIPLINES instead.
+# Grey Star fork residue: the World of Lone Wolf wizard uses Willpower, Lesser /
+# Higher Magicks, and a Magical Staff, but the Lone Wolf Kai/Magnakai hero never
+# does, and no Lone Wolf book data references these. Kept as empty stubs only so
+# older save/transition code normalizes without raising NameError. Slated for a
+# dedicated removal pass (tracked with combat_uses_magical_staff below). Book 1
+# character creation and UI use KAI_DISCIPLINES instead.
 LESSER_MAGICKS: list[str] = []
 HIGHER_MAGICKS: list[str] = []
 
@@ -775,10 +779,12 @@ def default_state() -> dict[str, Any]:
 
 
 def as_list(value: Any) -> list[Any]:
+    # Always return a fresh list so callers can freely mutate the result without
+    # aliasing (and unintentionally editing) the stored value it came from.
     if value is None:
         return []
     if isinstance(value, list):
-        return value
+        return list(value)
     return [value]
 
 
@@ -5116,6 +5122,11 @@ class LoneWolfReduxAssistant:
         return True
 
     def combat_uses_magical_staff(self) -> bool:
+        # Grey Star fork residue. The Magical Staff / Willpower-spend combat path
+        # (and the WillpowerCurrent reads it guards in combat_round) belongs to
+        # the World of Lone Wolf wizard, not the Lone Wolf hero; no Lone Wolf book
+        # data ever enables it. Hardwired False keeps that dead branch unreachable
+        # until the Willpower/Magick system is removed in a dedicated pass.
         return False
 
     def combat_weapon_modifier_and_notes(self) -> tuple[int, list[str]]:

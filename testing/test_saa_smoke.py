@@ -291,5 +291,18 @@ class WebSocketOriginTests(unittest.TestCase):
             self.assertFalse(ws_server.origin_is_local(origin), origin)
 
 
+class AsListTests(unittest.TestCase):
+    def test_returns_fresh_list_that_does_not_alias_source(self) -> None:
+        source = ["a", "b"]
+        result = lonewolf_redux.as_list(source)
+        result.append("c")
+        self.assertEqual(source, ["a", "b"])  # source untouched by mutation
+        self.assertEqual(result, ["a", "b", "c"])
+
+    def test_wraps_and_normalizes_non_list_inputs(self) -> None:
+        self.assertEqual(lonewolf_redux.as_list(None), [])
+        self.assertEqual(lonewolf_redux.as_list("solo"), ["solo"])
+
+
 if __name__ == "__main__":
     unittest.main()

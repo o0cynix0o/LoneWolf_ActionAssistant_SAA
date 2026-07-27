@@ -9,6 +9,7 @@
 - Restricted the embedded terminal bridge to same-origin connections so other web pages cannot open a session against it.
 - Recovered gracefully from a missing or malformed Combat Results Table instead of crashing a combat round.
 - Removed duplicate and unknown Kai Disciplines when loading a save so rank counts and discipline-based combat checks stay accurate.
+- Hardened an internal list helper so it can no longer accidentally edit stored game data in place, removing a class of latent bookkeeping bug.
 
 ## 3.1.3 — 2026-07-24
 
