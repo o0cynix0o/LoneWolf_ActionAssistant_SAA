@@ -108,6 +108,7 @@ def run_self_test() -> int:
         required = (
             PATHS.resource_root / "index.html",
             PATHS.resource_root / "assistant.html",
+            PATHS.resource_root / "assets" / "images" / "series-sigil-wolf-mask.png",
             PATHS.resource_data / "crt.json",
         )
         missing = [str(path) for path in required if not path.is_file()]
@@ -123,6 +124,14 @@ def run_self_test() -> int:
             payload = json.load(response)
         if "Books" not in payload:
             raise RuntimeError("Book-files API returned an invalid response.")
+        with urllib.request.urlopen(
+            f"{base_url}/assets/images/series-sigil-wolf-mask.png",
+            timeout=3,
+        ) as response:
+            sigil_type = response.headers.get_content_type()
+            sigil_signature = response.read(8)
+        if sigil_type != "image/png" or sigil_signature != b"\x89PNG\r\n\x1a\n":
+            raise RuntimeError("Series sigil asset was not served as a valid PNG.")
         result = {
             "ok": True,
             "httpPort": http_port,

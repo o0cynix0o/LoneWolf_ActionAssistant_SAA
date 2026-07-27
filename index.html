@@ -101,19 +101,14 @@
     .series-divider::after { transform: scaleX(-1); }
     .series-emblem {
       display: block;
-      width: 100%;
-      height: auto;
+      width: 68%;
+      aspect-ratio: 349 / 512;
+      margin-inline: auto;
+      background: currentColor;
+      -webkit-mask: url('assets/images/series-sigil-wolf-mask.png') center / contain no-repeat;
+      mask: url('assets/images/series-sigil-wolf-mask.png') center / contain no-repeat;
       filter: drop-shadow(0 4px 5px rgba(0, 0, 0, 0.38));
     }
-    .series-emblem .series-symbol { display: none; }
-    .series-divider[data-series='kai'] .symbol-kai,
-    .series-divider[data-series='magnakai'] .symbol-magnakai,
-    .series-divider[data-series='grandMaster'] .symbol-grand-master,
-    .series-divider[data-series='newOrder'] .symbol-new-order { display: block; }
-    .series-emblem * { fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: square; stroke-linejoin: miter; }
-    .series-emblem .filled { fill: currentColor; stroke: none; }
-    .series-emblem .cutout { fill: var(--lw-panel, #171b12); stroke: none; }
-    .series-emblem .heavy { stroke-width: 4.6; }
     main {
       width: min(2240px, calc(100% - clamp(24px, 4vw, 96px)));
       margin: 24px auto 72px;
@@ -518,32 +513,8 @@
       <div class="saa-title-lockup">
         <h1><span>Lone Wolf</span><span>Action Assistant</span></h1>
         <p class="subtitle">Stand Alone Application</p>
-        <div class="series-divider" id="seriesDivider" data-series="kai" aria-label="Kai series emblem">
-          <svg class="series-emblem" viewBox="0 0 100 100" aria-hidden="true">
-            <g class="series-symbol symbol-kai">
-              <!-- Kai: a wolf's eye held inside three battle-claw marks. -->
-              <path class="cutout" d="M10 50 28 31 48 25 68 33 80 50 66 67 48 75 28 68Z"></path>
-              <path d="M10 50 28 31 48 25 68 33 80 50 66 67 48 75 28 68Z"></path>
-              <path d="M20 50 36 41 48 45 60 41 70 50 60 59 48 55 36 59Z"></path>
-              <path class="filled" d="M48 42 56 50 48 58 40 50Z"></path>
-              <path class="heavy" d="M63 20 86 37M62 39 91 60M58 58 82 80"></path>
-            </g>
-            <g class="series-symbol symbol-magnakai">
-              <circle cx="50" cy="50" r="37"></circle><circle cx="50" cy="50" r="8"></circle>
-              <path d="M50 13 64 39 89 50 64 61 50 87 36 61 11 50 36 39Z"></path>
-              <path d="M50 22v20M78 50H58M50 78V58M22 50h20"></path>
-            </g>
-            <g class="series-symbol symbol-grand-master">
-              <path d="M28 33 35 21l15 13 15-13 7 12v13H28Z"></path>
-              <path d="M50 13 58 38 84 38 63 53 71 79 50 63 29 79 37 53 16 38 42 38Z"></path>
-              <circle cx="50" cy="50" r="37"></circle>
-            </g>
-            <g class="series-symbol symbol-new-order">
-              <circle cx="50" cy="50" r="36"></circle><circle cx="50" cy="50" r="8"></circle>
-              <path d="M50 7 58 42 93 50 58 58 50 93 42 58 7 50 42 42Z"></path>
-              <path d="M50 21 55 45 79 50 55 55 50 79 45 55 21 50 45 45Z"></path>
-            </g>
-          </svg>
+        <div class="series-divider" id="seriesDivider" data-series="kai" role="img" aria-label="Kai series emblem">
+          <span class="series-emblem" aria-hidden="true"></span>
         </div>
       </div>
       <div class="series-mark" aria-label="Lone Wolf series mark">
