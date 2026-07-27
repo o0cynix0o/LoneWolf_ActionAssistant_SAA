@@ -13,6 +13,9 @@
 - Removed the unused Willpower, Magick, and Magical Staff systems carried over from the Grey Star fork, fixing a crash that could occur when using the Book 2 Karmo Potion.
 - Removed the redundant "Nobles" currency, which only ever mirrored Gold Crowns, while still migrating older saves that stored gold under it.
 - Simplified the desktop package to a single executable: the embedded terminal now runs from the main application instead of a separate command-line program.
+- Fixed the frozen single-executable terminal worker so it attaches to WinPTY's parent console before reopening its input and output streams, allowing the embedded REPL to start without a separate console window (issue #12).
+- Changed Small dashboard cards to a compact 220-pixel width and allowed Drop Item rows to wrap instead of overflowing the card (issue #13).
+- Made the embedded CLI return to the latest output when the player types, and made text panels shrink to fit narrow terminals without growing wider than the established layout (issue #14).
 
 ## 3.1.3 — 2026-07-24
 

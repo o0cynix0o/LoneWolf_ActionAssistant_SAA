@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+import io
 import json
 import tempfile
 import unittest
 import zipfile
+from contextlib import redirect_stdout
 from pathlib import Path
 from unittest import mock
 
@@ -92,8 +94,19 @@ class CardSizingTests(unittest.TestCase):
         assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
 
         self.assertIn("#view.view-card-grid > .dashboard-card.card-size-small", assistant_html)
-        self.assertIn("flex: 0 0 170px;", assistant_html)
+        self.assertIn("flex: 0 1 220px;", assistant_html)
+        self.assertIn("max-width: 220px;", assistant_html)
         self.assertIn("min-height: 150px;", assistant_html)
+        self.assertIn(
+            ".quick-panel > .dashboard-card.card-size-small .quick-drop-list",
+            assistant_html,
+        )
+        self.assertIn("overflow-x: hidden;", assistant_html)
+        self.assertIn(
+            ".quick-panel > .dashboard-card.card-size-small .quick-drop-list .item-row",
+            assistant_html,
+        )
+        self.assertIn("flex-wrap: wrap;", assistant_html)
         self.assertIn("#view.view-card-grid > .dashboard-card.card-size-medium", assistant_html)
         self.assertIn("flex: 0 0 calc(50% - 0.325rem);", assistant_html)
         self.assertIn('class="stat-adjust-line"', assistant_html)
@@ -108,6 +121,12 @@ class ServiceTests(unittest.TestCase):
 
 
 class FrozenCliTests(unittest.TestCase):
+    def test_embedded_terminal_follows_fresh_keyboard_input(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
+
+        self.assertIn("scrollOnUserInput: true", assistant_html)
+
     def test_parent_console_is_attached_when_missing(self) -> None:
         kernel32 = mock.Mock()
         kernel32.GetConsoleWindow.return_value = 0
@@ -155,6 +174,62 @@ class FrozenCliTests(unittest.TestCase):
         self.assertEqual(command[:2], [r"C:\App\Lone Wolf Action Assistant.exe", "--cli"])
         self.assertIn("--save-dir", command)
         self.assertNotIn("CLI.exe", " ".join(command))
+
+
+class CliPanelLayoutTests(unittest.TestCase):
+    def test_default_panel_width_shrinks_with_the_live_terminal(self) -> None:
+        stdout = mock.Mock()
+        stdout.fileno.return_value = 42
+        with (
+            mock.patch.object(lonewolf_redux.sys, "stdout", stdout),
+            mock.patch.object(
+                lonewolf_redux.os,
+                "get_terminal_size",
+                return_value=mock.Mock(columns=49, lines=24),
+            ) as get_terminal_size,
+        ):
+            self.assertEqual(lonewolf_redux.panel_width(), 48)
+
+        get_terminal_size.assert_called_once_with(42)
+
+    def test_default_panel_width_keeps_the_legacy_wide_size(self) -> None:
+        stdout = mock.Mock()
+        stdout.fileno.return_value = 42
+        with (
+            mock.patch.object(lonewolf_redux.sys, "stdout", stdout),
+            mock.patch.object(
+                lonewolf_redux.os,
+                "get_terminal_size",
+                return_value=mock.Mock(columns=100, lines=24),
+            ),
+        ):
+            self.assertEqual(lonewolf_redux.panel_width(), lonewolf_redux.SCREEN_WIDTH)
+
+        self.assertEqual(lonewolf_redux.panel_width(37), 37)
+
+    def test_rendered_panels_fit_a_narrow_terminal(self) -> None:
+        output = io.StringIO()
+        with (
+            mock.patch.object(
+                lonewolf_redux.shutil,
+                "get_terminal_size",
+                return_value=mock.Mock(columns=49, lines=24),
+            ),
+            mock.patch.object(lonewolf_redux, "terminal_supports_ansi", return_value=False),
+            redirect_stdout(output),
+        ):
+            lonewolf_redux.panel_header("Inventory")
+            lonewolf_redux.panel_pair_row(
+                "Gold Crowns",
+                6,
+                "Weapons",
+                "2/2",
+            )
+            lonewolf_redux.panel_footer()
+
+        lines = [line for line in output.getvalue().splitlines() if line]
+        self.assertTrue(lines)
+        self.assertTrue(all(len(line) <= 48 for line in lines))
 
 
 class CreationDraftTests(unittest.TestCase):

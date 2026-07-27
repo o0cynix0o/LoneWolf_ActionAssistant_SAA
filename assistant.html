@@ -544,8 +544,15 @@
     }
     #view.view-card-grid > .dashboard-card.card-size-small,
     .quick-panel > .dashboard-card.card-size-small {
-      flex: 0 0 170px;
-      max-width: 170px;
+      flex: 0 1 220px;
+      max-width: 220px;
+    }
+    .quick-panel > .dashboard-card.card-size-small .quick-drop-list {
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+    .quick-panel > .dashboard-card.card-size-small .quick-drop-list .item-row {
+      flex-wrap: wrap;
     }
     #view.view-card-grid > .dashboard-card.card-size-medium,
     .quick-panel > .dashboard-card.card-size-medium {
@@ -2747,6 +2754,7 @@
       cliTerminal = new Terminal({
         cursorBlink: true,
         convertEol: true,
+        scrollOnUserInput: true,
         fontFamily: 'Consolas, "Cascadia Mono", "Courier New", monospace',
         fontSize: 14,
         theme: cliTheme()

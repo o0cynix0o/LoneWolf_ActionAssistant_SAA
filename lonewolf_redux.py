@@ -14,6 +14,7 @@ import json
 import os
 import random
 import re
+import shutil
 import sys
 import textwrap
 from datetime import datetime
@@ -2096,7 +2097,20 @@ def clip_text(text: Any, width: int) -> str:
     return value[: width - 3] + "..."
 
 
-def panel_header(title: str, width: int = SCREEN_WIDTH, accent: str = "Cyan") -> None:
+def panel_width(width: int | None = None) -> int:
+    if width is not None:
+        return width
+    try:
+        terminal_columns = os.get_terminal_size(sys.stdout.fileno()).columns
+    except (AttributeError, ValueError, OSError):
+        terminal_columns = shutil.get_terminal_size(
+            fallback=(SCREEN_WIDTH + 1, 24)
+        ).columns
+    return max(14, min(SCREEN_WIDTH, terminal_columns - 1))
+
+
+def panel_header(title: str, width: int | None = None, accent: str = "Cyan") -> None:
+    width = panel_width(width)
     usable = max(12, width - 2)
     label = f" {title.upper()} "
     label = clip_text(label, usable)
@@ -2106,11 +2120,18 @@ def panel_header(title: str, width: int = SCREEN_WIDTH, accent: str = "Cyan") ->
     write_line("+" + ("-" * left) + label + ("-" * right) + "+", accent)
 
 
-def panel_footer(width: int = SCREEN_WIDTH) -> None:
+def panel_footer(width: int | None = None) -> None:
+    width = panel_width(width)
     write_line("+" + ("-" * max(12, width - 2)) + "+", "DarkGray")
 
 
-def panel_text(text: str, width: int = SCREEN_WIDTH, indent: int = 2, color: str = "Gray") -> None:
+def panel_text(
+    text: str,
+    width: int | None = None,
+    indent: int = 2,
+    color: str = "Gray",
+) -> None:
+    width = panel_width(width)
     inner = max(12, width - 4)
     available = max(8, inner - indent)
     lines = textwrap.wrap(str(text), width=available) or [""]
@@ -2128,11 +2149,12 @@ def panel_text(text: str, width: int = SCREEN_WIDTH, indent: int = 2, color: str
 def panel_row(
     label: str,
     value: Any,
-    width: int = SCREEN_WIDTH,
+    width: int | None = None,
     label_width: int = 18,
     value_color: str = "Gray",
     label_color: str = "DarkYellow",
 ) -> None:
+    width = panel_width(width)
     inner = max(12, width - 4)
     prefix = f"{label:<{label_width}}: "
     value_width = max(0, inner - len(prefix))
@@ -2151,12 +2173,13 @@ def panel_pair_row(
     left_value: Any,
     right_label: str,
     right_value: Any,
-    width: int = SCREEN_WIDTH,
+    width: int | None = None,
     label_width: int = 13,
     left_color: str = "Gray",
     right_color: str = "Gray",
     label_color: str = "DarkYellow",
 ) -> None:
+    width = panel_width(width)
     inner = max(12, width - 4)
     gap = "  "
     half = (inner - len(gap)) // 2
