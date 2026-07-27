@@ -6,7 +6,8 @@ terminal fix through GitHub issue #12 are committed on branch
 Approved follow-up fixes for GitHub issues #13 through #15 are now present in
 source and the rebuilt 3.1.4 artifacts, committed as `3cd9a04` and `572bb35`.
 Their source and frozen validation are complete. The installed-app smoke test
-and release/publish steps remain.
+is now complete for the current-user path. The remaining platform-matrix checks
+and release/publish steps are listed below.
 
 ## State at handoff
 
@@ -32,9 +33,38 @@ and release/publish steps remain.
   original generated design master and its provenance note remain under
   `design-assets` and are intentionally excluded from the runtime.
 - The canonical rebuilt executable is
-  `dist\Lone Wolf Action Assistant\Lone Wolf Action Assistant.exe`. An older
-  pre-fix executable still exists directly under `dist`; do not validate or
-  release that obsolete copy.
+  `dist\Lone Wolf Action Assistant\Lone Wolf Action Assistant.exe`. The older
+  pre-fix executable that once existed directly under `dist` has been removed;
+  do not recreate, validate, or release a bare EXE because the one-folder build
+  requires its `_internal` directory.
+
+## Installed-app validation — 2026-07-27
+
+The 3.1.4 installer was installed in current-user mode to an isolated temporary
+directory, with player data and managed books redirected to isolated paths.
+The installed executable had the same SHA-256 as the canonical frozen build.
+
+- The installed desktop window opened at `index.html` and its local HTTP
+  service became ready.
+- Both an extracted-folder import and a standard
+  `en/xhtml/lw/<book-folder>` ZIP import completed successfully from synthetic
+  book fixtures.
+- A Book 1 character was created, a real Combat Results Table round defeated a
+  test enemy, and the campaign was explicitly saved under the isolated
+  `%LOCALAPPDATA%\Lone Wolf Action Assistant\saves` tree.
+- After a graceful close and restart, the installed app restored the same
+  character, combat history, save path, and imported-book status.
+- The in-app frozen CLI connected, accepted `inventory`, rendered its Inventory
+  panel, and returned to the `LW>` prompt. No new Windows Terminal process was
+  created.
+- Silent uninstall succeeded, removed its registration and shortcuts, and left
+  the isolated imported books and player save intact. The entire test sandbox
+  was then moved to the Recycle Bin.
+
+This machine is not elevated and already has WebView2 and Python installed, so
+the all-users/elevation path, genuinely missing-WebView2 path, upgrade from an
+installed 3.1.3 package, and clean-Windows-without-Python path still require
+separate environment coverage.
 
 ## What changed this session (commit-by-commit)
 
@@ -105,8 +135,8 @@ and release/publish steps remain.
 
 ## What Codex should do next
 
-1. **Smoke-test** the installed app: window opens, books import, saves persist to
-   `%LOCALAPPDATA%\Lone Wolf Action Assistant`, combat runs, no console tab flashes.
+1. Complete the remaining platform-matrix checks called out under
+   **Installed-app validation** when those environments are available.
 2. **Merge / release:** open a PR from `harden-save-and-api-3.1.4` into `main`,
    or fast-forward `main`; then package and publish.
 3. **Release checklist note:** `docs/PUBLIC_RELEASE_CHECKLIST.md`, referenced
