@@ -1512,7 +1512,6 @@
     function statControlName(stat) {
       const key = text(stat).toLowerCase();
       if (['end', 'endurance'].includes(key)) return 'END';
-      if (['wp', 'willpower'].includes(key)) return 'Unsupported';
       if (['cs', 'combat_skill', 'combat skill'].includes(key)) return 'CS';
       if (['gold', 'crowns', 'goldcrowns', 'nobles'].includes(key)) return 'Gold Crowns';
       return text(stat, 'Stat');
@@ -1538,10 +1537,8 @@
       if (kind === 'item') return `if you have ${text(condition.name, 'the required item')}`;
       if (kind === 'power') return `if you have ${text(condition.name, 'the required Kai Discipline')}`;
       if (kind === 'no_power') return `if you do not have ${text(condition.name, 'the required Kai Discipline')}`;
-      if (kind === 'wp_gt' || kind === 'wp_gte') return '';
       if (kind === 'end_lt') return `if END is less than ${text(condition.value, 'the listed value')}`;
       if (kind === 'end_gte') return `if END is at least ${text(condition.value, 'the listed value')}`;
-      if (kind === 'staff_available') return '';
       return '';
     }
 
@@ -4946,7 +4943,6 @@
           </div>
         `;
       }).join('');
-      const wpPanel = '';
       return `
         <div class="panel">
           <h2>Section Assistant</h2>
@@ -4965,7 +4961,6 @@
         ${healingRows ? `<div class="panel"><h2>Kai Healing</h2>${healingRows}</div>` : ''}
         ${lossRows ? `<div class="panel"><h2>Choose Inventory Change</h2>${lossRows}</div>` : ''}
         ${statusRows ? `<div class="panel"><h2>Status Flags</h2>${statusRows}</div>` : ''}
-        ${wpPanel}
       `;
     }
 
@@ -5746,11 +5741,6 @@
         manualSectionAdvice('section loss', { id });
         return;
       }
-      if (isManualMode() && button.dataset.wpCost) {
-        const [cost, mode] = button.dataset.wpCost.split(':');
-        manualSectionAdvice('section costs', { cost: Number(cost), mode });
-        return;
-      }
       if (isManualMode() && button.dataset.combatAuto !== undefined) {
         manualSectionAdvice('combat auto-resolve');
         return;
@@ -5808,10 +5798,6 @@
       if (button.dataset.statusFlag) {
         const [key, value] = button.dataset.statusFlag.split(':');
         await action({ action: 'status_flag', key, value });
-      }
-      if (button.dataset.wpCost) {
-        const [cost, mode] = button.dataset.wpCost.split(':');
-        await action({ action: 'wp_cost', cost: Number(cost), mode });
       }
       if (button.dataset.adjust) {
         const [stat, delta] = button.dataset.adjust.split(':');

@@ -300,12 +300,8 @@ def state_payload(message: str = "", achievement_unlocks: list[dict] | None = No
         ASSISTANT.save_game(quiet=True)
     state = json.loads(json.dumps(ASSISTANT.state))
     state["Combat"] = ASSISTANT.combat_status_payload()
-    for key in ("LesserMagicks", "HigherMagicks", "WillpowerBase", "WillpowerCurrent"):
-        state.get("Character", {}).pop(key, None)
     for key in ("HasHerbPouch", "HerbPouchItems", "Nobles"):
         state.get("Inventory", {}).pop(key, None)
-    for key in ("UseStaff", "StaffWillpower"):
-        state.get("Combat", {}).pop(key, None)
     for checkpoint in lonewolf_redux.as_list(state.get("Automation", {}).get("SectionCheckpoints")):
         if isinstance(checkpoint, dict):
             checkpoint.pop("Snapshot", None)
@@ -611,8 +607,6 @@ def handle_action(payload: dict) -> str:
         )
     if action == "status_flag":
         return capture_output(lambda: ASSISTANT.set_status_flag(str(payload.get("key") or ""), payload.get("value")))
-    if action == "wp_cost":
-        return "Book 1 has no action for that stat."
     if action == "section_combat_start":
         return capture_output(lambda: ASSISTANT.start_section_combat(str(payload.get("id") or "")))
     if action == "adjust":
@@ -620,8 +614,6 @@ def handle_action(payload: dict) -> str:
         mode = str(payload.get("mode") or "delta")
         value = int(payload.get("value") or 0)
         token = ["x", "set", str(value)] if mode == "set" else ["x", str(value)]
-        if stat == "wp":
-            return "Book 1 has no action for that stat."
         if stat == "end":
             return capture_output(lambda: ASSISTANT.adjust_endurance(token))
         if stat == "cs":
@@ -705,8 +697,6 @@ def handle_action(payload: dict) -> str:
                 if "activeWeapon" in payload:
                     ASSISTANT.set_combat_weapon(str(payload.get("activeWeapon") or ""), save=False)
                 ASSISTANT.combat["Modifier"] = int(payload.get("modifier") or 0)
-                ASSISTANT.combat["StaffWillpower"] = 0
-                ASSISTANT.combat["UseStaff"] = False
                 ASSISTANT.combat["CanEvade"] = truthy(payload.get("canEvade"))
                 ASSISTANT.combat["EvadeAfterRounds"] = max(0, int(payload.get("evadeAfterRounds") or 0))
                 victory_route = payload.get("victoryRoute")
@@ -718,10 +708,7 @@ def handle_action(payload: dict) -> str:
     if action == "combat_round":
         if "activeWeapon" in payload:
             ASSISTANT.set_combat_weapon(str(payload.get("activeWeapon") or ""), save=False)
-        ASSISTANT.combat["UseStaff"] = False
         tokens = ["combat", "evade" if payload.get("evade") else "round"]
-        if payload.get("wp"):
-            tokens.append(str(payload.get("wp")))
         if payload.get("roll") not in (None, ""):
             tokens.append(str(payload.get("roll")))
         return capture_output(lambda: ASSISTANT.combat_round(tokens, evade=bool(payload.get("evade"))))
@@ -730,10 +717,7 @@ def handle_action(payload: dict) -> str:
     if action == "combat_evade":
         if "activeWeapon" in payload:
             ASSISTANT.set_combat_weapon(str(payload.get("activeWeapon") or ""), save=False)
-        ASSISTANT.combat["UseStaff"] = False
         tokens = ["combat", "evade"]
-        if payload.get("wp"):
-            tokens.append(str(payload.get("wp")))
         if payload.get("roll") not in (None, ""):
             tokens.append(str(payload.get("roll")))
         return capture_output(lambda: ASSISTANT.evade_combat(tokens))

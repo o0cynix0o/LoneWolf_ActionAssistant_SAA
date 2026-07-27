@@ -304,5 +304,46 @@ class AsListTests(unittest.TestCase):
         self.assertEqual(lonewolf_redux.as_list("solo"), ["solo"])
 
 
+class GreyStarResidueRemovedTests(unittest.TestCase):
+    def test_new_character_has_no_willpower_or_magick_keys(self) -> None:
+        import io
+        import contextlib
+
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            app_server.apply_new_game({"bookNumber": 1, "autoGenerate": True})
+        character = app_server.ASSISTANT.state["Character"]
+        for key in ("WillpowerCurrent", "WillpowerBase", "LesserMagicks", "HigherMagicks"):
+            self.assertNotIn(key, character)
+
+    def test_karmo_potion_doubles_endurance_without_willpower_keyerror(self) -> None:
+        import io
+        import contextlib
+
+        assistant = app_server.ASSISTANT
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            app_server.apply_new_game({"bookNumber": 1, "autoGenerate": True})
+        assistant.character["EnduranceMax"] = 25
+        assistant.character["EnduranceCurrent"] = 10
+        assistant.inventory["BackpackItems"] = ["Karmo Potion"]
+        with contextlib.redirect_stdout(buf):
+            assistant.use_item("backpack", "Karmo Potion")  # previously KeyError on WillpowerCurrent
+        self.assertEqual(assistant.character["EnduranceCurrent"], 20)
+        with contextlib.redirect_stdout(buf):
+            assistant.finish_karmo_potion()
+        self.assertEqual(assistant.character["EnduranceCurrent"], 10)
+
+    def test_willpower_and_staff_helpers_are_gone(self) -> None:
+        for attr in (
+            "combat_uses_magical_staff",
+            "has_available_staff",
+            "change_willpower",
+            "adjust_willpower",
+            "pay_willpower_cost",
+        ):
+            self.assertFalse(hasattr(app_server.ASSISTANT, attr), attr)
+
+
 if __name__ == "__main__":
     unittest.main()
