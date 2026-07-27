@@ -171,5 +171,76 @@ class CreationDraftTests(unittest.TestCase):
         self.assertTrue(set(disciplines).issubset(app_server.lonewolf_redux.KAI_DISCIPLINES))
 
 
+class SavePathContainmentTests(unittest.TestCase):
+    def test_empty_path_passes_through(self) -> None:
+        self.assertEqual(app_server.confine_save_path(""), "")
+        self.assertEqual(app_server.confine_save_path(None), "")
+
+    def test_catalog_index_passes_through_only_for_load(self) -> None:
+        self.assertEqual(app_server.confine_save_path("2", allow_index=True), "2")
+        # A save action must not treat a bare number as a catalog index.
+        self.assertNotEqual(app_server.confine_save_path("2"), "2")
+
+    def test_plain_name_resolves_inside_saves(self) -> None:
+        resolved = Path(app_server.confine_save_path("my-hero.json"))
+        self.assertEqual(resolved.parent, app_server.PATHS.saves.resolve())
+
+    def test_directory_escape_is_rejected(self) -> None:
+        for attempt in ("../../../pwned.json", "..\\..\\pwned.json"):
+            with self.assertRaisesRegex(ValueError, "stay inside the saves folder"):
+                app_server.confine_save_path(attempt)
+
+
+class CorruptSaveTests(unittest.TestCase):
+    def test_corrupt_save_load_returns_false_without_raising(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            target = Path(temp) / "broken.json"
+            target.write_text("{ not valid json ", encoding="utf-8")
+            with mock.patch.object(app_server.ASSISTANT, "save_dir", Path(temp)):
+                self.assertFalse(app_server.ASSISTANT.load_game(str(target), quiet=True))
+
+
+class RequestGuardTests(unittest.TestCase):
+    def setUp(self) -> None:
+        import http.client
+
+        self.http_client = http.client
+        self.server, self.thread = app_server.start_server(port=0)
+        self.port = int(self.server.server_address[1])
+        self.local_origin = f"http://127.0.0.1:{self.port}"
+
+    def tearDown(self) -> None:
+        app_server.stop_server(self.server, self.thread)
+
+    def _post(self, body: dict, headers: dict, host: str | None = None) -> int:
+        connection = self.http_client.HTTPConnection("127.0.0.1", self.port, timeout=5)
+        connection.putrequest("POST", "/api/action", skip_host=True, skip_accept_encoding=True)
+        connection.putheader("Host", host or f"127.0.0.1:{self.port}")
+        for key, value in headers.items():
+            connection.putheader(key, value)
+        data = json.dumps(body).encode("utf-8")
+        connection.putheader("Content-Length", str(len(data)))
+        connection.endheaders()
+        connection.send(data)
+        status = connection.getresponse().status
+        connection.close()
+        return status
+
+    def test_same_origin_json_request_is_accepted(self) -> None:
+        headers = {"Content-Type": "application/json", "Origin": self.local_origin}
+        self.assertEqual(self._post({"action": "save", "path": ""}, headers), 200)
+
+    def test_cross_origin_is_rejected(self) -> None:
+        headers = {"Content-Type": "application/json", "Origin": "http://evil.example"}
+        self.assertEqual(self._post({"action": "shutdown"}, headers), 403)
+
+    def test_non_json_content_type_is_rejected(self) -> None:
+        self.assertEqual(self._post({"action": "shutdown"}, {"Content-Type": "text/plain"}), 403)
+
+    def test_rebinding_host_is_rejected(self) -> None:
+        headers = {"Content-Type": "application/json", "Origin": self.local_origin}
+        self.assertEqual(self._post({"action": "save", "path": ""}, headers, host="attacker.example"), 403)
+
+
 if __name__ == "__main__":
     unittest.main()

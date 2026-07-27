@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.1.4 — 2026-07-27
+
+- Made game saves crash-safe by writing each save to a temporary file and atomically replacing the previous one, so an interrupted autosave can no longer corrupt a campaign.
+- Recovered gracefully from an unreadable or corrupt save file instead of failing to load.
+- Confined save and load paths from the web interface to the managed saves folder, rejecting attempts to read or write elsewhere on disk.
+- Restricted the local web API to same-origin requests from the desktop app, closing a path that let other web pages drive the assistant in the background.
+
 ## 3.1.3 — 2026-07-24
 
 - Changed Small cards from proportional columns into compact 170-by-150-pixel tiles where content permits.

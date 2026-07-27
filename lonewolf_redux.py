@@ -6158,8 +6158,20 @@ class LoneWolfReduxAssistant:
         path.parent.mkdir(parents=True, exist_ok=True)
         self.settings["SavePath"] = str(path)
         self.sync_achievements(save=False)
-        with path.open("w", encoding="utf-8") as handle:
-            json.dump(self.state, handle, indent=2)
+        # Autosave fires after every combat round and section change, so write to
+        # a sibling temp file and atomically replace the target. An interrupted
+        # write then leaves the previous save intact instead of a truncated,
+        # unloadable file.
+        temp_path = path.with_name(f"{path.name}.tmp-{os.getpid()}")
+        try:
+            with temp_path.open("w", encoding="utf-8") as handle:
+                json.dump(self.state, handle, indent=2)
+                handle.flush()
+                os.fsync(handle.fileno())
+            os.replace(temp_path, path)
+        finally:
+            if temp_path.exists():
+                temp_path.unlink(missing_ok=True)
         self.last_save_file.write_text(str(path), encoding="utf-8")
         self.write_current_position()
         if not quiet:
@@ -6188,8 +6200,13 @@ class LoneWolfReduxAssistant:
             print(f"Save not found: {path}")
             return False
 
-        with path.open("r", encoding="utf-8") as handle:
-            self.state = normalize_state(json.load(handle))
+        try:
+            with path.open("r", encoding="utf-8") as handle:
+                loaded = json.load(handle)
+        except (OSError, json.JSONDecodeError) as exc:
+            print(f"Could not read save (file may be corrupt): {path} ({exc})")
+            return False
+        self.state = normalize_state(loaded)
         self.settings["SavePath"] = str(path)
         repair_messages = self.repair_loaded_combat_routes()
         self.last_save_file.write_text(str(path), encoding="utf-8")

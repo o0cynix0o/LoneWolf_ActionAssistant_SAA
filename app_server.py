@@ -17,7 +17,7 @@ from datetime import datetime
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import unquote, urlparse
+from urllib.parse import unquote, urlparse, urlsplit
 
 import lonewolf_redux
 import book_manager
@@ -29,6 +29,43 @@ UI_PREFERENCES_FILE = PATHS.ui_preferences
 SAVE_SLOT_DIR = PATHS.saves / "slots"
 SAVE_SLOT_COUNT = 6
 STATE_LOCK = threading.RLock()
+
+# The server binds to loopback, but a browser page or a DNS-rebinding host can
+# still reach it. Requests are only honored when they look like they came from
+# the local desktop UI itself.
+LOCAL_HOSTNAMES = {"localhost", "127.0.0.1", "::1"}
+
+
+def request_hostname(value: str | None) -> str | None:
+    """Return the lowercased hostname from a Host/Origin header value."""
+    if not value:
+        return None
+    parsed = urlsplit(value if "://" in value else "//" + value)
+    return (parsed.hostname or "").lower() or None
+
+
+def confine_save_path(raw: object, *, allow_index: bool = False) -> str:
+    """Confine a client-supplied save path to the saves directory.
+
+    The local CLI lets a user reference any path they type, but the HTTP API is
+    reachable by web content, so a path arriving in an action payload must
+    resolve inside PATHS.saves. Pure catalog indices (used by the web Load
+    buttons) are passed through unchanged.
+    """
+    text = str(raw or "").strip().strip('"')
+    if not text:
+        return ""
+    if allow_index and text.isdigit():
+        return text
+    base = PATHS.saves.resolve()
+    candidate = Path(text)
+    candidate = candidate if candidate.is_absolute() else base / candidate
+    resolved = candidate.resolve()
+    try:
+        resolved.relative_to(base)
+    except ValueError as exc:
+        raise ValueError("Save path must stay inside the saves folder.") from exc
+    return str(resolved)
 ASSISTANT = lonewolf_redux.LoneWolfReduxAssistant(
     save_dir=PATHS.saves,
     data_dir=PATHS.resource_data,
@@ -615,9 +652,11 @@ def handle_action(payload: dict) -> str:
     if action == "note":
         return capture_output(lambda: ASSISTANT.note_command(["note", str(payload.get("text") or "")]))
     if action == "save":
-        return capture_output(lambda: ASSISTANT.save_game(str(payload.get("path") or "")))
+        target = confine_save_path(payload.get("path"))
+        return capture_output(lambda: ASSISTANT.save_game(target))
     if action == "load":
-        return capture_output(lambda: ASSISTANT.load_game(str(payload.get("path") or "")))
+        target = confine_save_path(payload.get("path"), allow_index=True)
+        return capture_output(lambda: ASSISTANT.load_game(target))
     if action == "save_slot":
         return save_to_slot(int(payload.get("slot") or 1))
     if action == "load_slot":
@@ -716,6 +755,27 @@ class LoneWolfReduxHandler(BaseHTTPRequestHandler):
     def log_message(self, format: str, *args) -> None:  # noqa: A003
         return
 
+    def host_header_is_local(self) -> bool:
+        # An absent Host (bare HTTP/1.0) is allowed; a present Host must be local
+        # so a DNS-rebinding page (Host: attacker.example -> 127.0.0.1) is
+        # rejected before it can reach any endpoint.
+        host = request_hostname(self.headers.get("Host"))
+        return host is None or host in LOCAL_HOSTNAMES
+
+    def reject(self, message: str) -> None:
+        # Drain any request body before replying so keep-alive stays in sync and
+        # the caller reliably reads the 403 instead of a reset connection.
+        try:
+            length = int(self.headers.get("Content-Length") or 0)
+        except ValueError:
+            length = 0
+        if length > 0:
+            try:
+                self.rfile.read(length)
+            except OSError:
+                pass
+        self.send_json({"error": message}, HTTPStatus.FORBIDDEN)
+
     def send_json(self, data: dict, status: int = 200) -> None:
         body = json.dumps(data, indent=2).encode("utf-8")
         self.send_response(status)
@@ -733,6 +793,9 @@ class LoneWolfReduxHandler(BaseHTTPRequestHandler):
         self.wfile.write(data)
 
     def do_GET(self) -> None:  # noqa: N802
+        if not self.host_header_is_local():
+            self.reject("Requests must originate from localhost.")
+            return
         parsed = urlparse(self.path)
         if parsed.path == "/api/state":
             with STATE_LOCK:
@@ -773,6 +836,20 @@ class LoneWolfReduxHandler(BaseHTTPRequestHandler):
         self.serve_static(parsed.path)
 
     def do_POST(self) -> None:  # noqa: N802
+        if not self.host_header_is_local():
+            self.reject("Requests must originate from localhost.")
+            return
+        # A cross-site page can POST to loopback, so require a same-origin
+        # request. Demanding application/json also forces a CORS preflight for
+        # any cross-origin attempt, which the Origin check then rejects.
+        origin = self.headers.get("Origin")
+        if origin is not None and request_hostname(origin) not in LOCAL_HOSTNAMES:
+            self.reject("Cross-origin requests are not allowed.")
+            return
+        content_type = (self.headers.get("Content-Type") or "").split(";", 1)[0].strip().lower()
+        if content_type != "application/json":
+            self.reject("Requests must use application/json.")
+            return
         parsed = urlparse(self.path)
         if parsed.path not in {"/api/action", "/api/ui-preferences", "/api/native-books"}:
             self.send_json({"error": "Not found"}, HTTPStatus.NOT_FOUND)
