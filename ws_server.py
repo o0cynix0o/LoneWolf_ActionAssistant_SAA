@@ -78,13 +78,9 @@ def build_command() -> list[str]:
         str(PATHS.books_lw),
     ] + load_args
     if getattr(sys, "frozen", False):
-        # Keep the desktop EXE windowed so it never opens a visible Windows
-        # Terminal tab. The separately packaged console worker is launched
-        # inside WinPTY/ConPTY only when the in-app terminal is opened.
-        cli_executable = Path(sys.executable).with_name("Lone Wolf Action Assistant CLI.exe")
-        if cli_executable.is_file():
-            return [str(cli_executable)] + shared_args
-        # Compatibility fallback for incomplete development packages.
+        # The desktop EXE is windowed, so relaunching it with --cli under WinPTY
+        # runs the embedded terminal from the same frozen binary without opening
+        # a visible Windows Terminal tab and without a separate console EXE.
         return [sys.executable, "--cli"] + shared_args
     return [sys.executable, "-u", str(ASSISTANT_SCRIPT)] + shared_args
 
