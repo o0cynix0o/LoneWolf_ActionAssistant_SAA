@@ -3,10 +3,10 @@
 Prepared for the next agent (Codex) to pick up. The hardening work and frozen
 terminal fix through GitHub issue #12 are committed on branch
 `harden-save-and-api-3.1.4`, and that package was proven in the frozen app.
-Approved follow-up fixes for GitHub issues #13 and #14 are now present in
-source and the rebuilt 3.1.4 artifacts, committed as `3cd9a04`. Their source
-and frozen validation are complete. The installed-app smoke test and
-release/publish steps remain.
+Approved follow-up fixes for GitHub issues #13 through #15 are now present in
+source and the rebuilt 3.1.4 artifacts, committed as `3cd9a04` and `572bb35`.
+Their source and frozen validation are complete. The installed-app smoke test
+and release/publish steps remain.
 
 ## State at handoff
 
@@ -14,16 +14,23 @@ release/publish steps remain.
 - Version bumped to **3.1.4** everywhere (README, docs, installer `.iss`,
   `version_info.txt`, CHANGELOG). `version_info_cli.txt` was deleted (see CLI note).
 - Current source validation: `python -m unittest testing.test_saa_smoke` →
-  **40/40 pass** and `python saa_main.py --self-test` → OK.
+  **41/41 pass** and `python saa_main.py --self-test` → OK.
 - Git identity for this repo is set `--local` to Daniel Watson <o0cynix0o@gmail.com>.
 - The canonical 3.1.4 application EXE and installer were rebuilt successfully
-  with the issue #12–#14 fixes.
+  with the issue #12–#15 fixes.
 - Frozen CLI validation at 51 terminal columns rendered 50-character panels.
   The `inventory` command completed through the final `LW>` prompt,
   `scrollOnUserInput` kept the latest output in view, and the CLI worker owned
   no separate terminal window.
 - Frozen UI validation measured Small cards at exactly 220 pixels with zero
   horizontal overflow, and Drop Item rows wrapped cleanly within the card.
+- The approved wolf-mask sigil is shared temporarily by Kai, Magnakai, Grand
+  Master, and New Order. Frozen WebView2 validation confirmed the same mask for
+  books 1, 6, 13, and 21; it recolors with Kai Gold and Kalte Frost and remains
+  centered without overflow at desktop, minimum-window, and mobile widths.
+- The 26KB runtime mask is packaged and verified by the frozen self-test. The
+  original generated design master and its provenance note remain under
+  `design-assets` and are intentionally excluded from the runtime.
 - The canonical rebuilt executable is
   `dist\Lone Wolf Action Assistant\Lone Wolf Action Assistant.exe`. An older
   pre-fix executable still exists directly under `dist`; do not validate or
@@ -63,6 +70,11 @@ release/publish steps remain.
    input without disrupting deliberate scrollback, and made CLI text panels
    shrink to the current terminal width. Added regression coverage for GitHub
    issues #13 and #14.
+10. `572bb35` Replaced the four temporary series-divider symbols with the
+    approved angular wolf-mask sigil. All four series share the theme-aware mark
+    for now; the original generated source is retained outside runtime assets,
+    and the self-test now verifies the packaged mask over HTTP. GitHub issue #15
+    records the change.
 
 ## Approved follow-ups validated and committed
 
@@ -73,6 +85,9 @@ release/publish steps remain.
   the player types. CLI text panels derive their width from the current terminal
   and shrink when space is limited, while retaining the established maximum
   width on larger terminals.
+- **GitHub issue #15:** Kai, Magnakai, Grand Master, and New Order temporarily
+  share the approved wolf-mask sigil. Series-specific replacements are deferred
+  until the project owner revisits the design.
 - Source smoke tests, the source self-test, the rebuilt artifacts, and the
   focused frozen UI/CLI checks all pass.
 
@@ -84,6 +99,9 @@ release/publish steps remain.
 - **Nobles removal is behavior-neutral** and the legacy save-migration was kept
   on purpose. Do not remove that migration or you will zero out old saves' gold.
 - **Single EXE:** there is intentionally no separate CLI executable anymore.
+- **Shared series sigil:** do not reintroduce the rejected four-symbol set.
+  Keep the approved wolf mask on all four series until the project owner asks
+  to resume individual series designs.
 
 ## What Codex should do next
 
@@ -99,7 +117,7 @@ release/publish steps remain.
 ## Still open (not done — by design)
 
 These numbers are internal audit item labels from the original review, **not
-current GitHub issue numbers** and not the GitHub issues #12–#14 described
+current GitHub issue numbers** and not the GitHub issues #12–#15 described
 above.
 
 - **#10 God-class / module split** (`lonewolf_redux.py` is ~8.4k lines with a
@@ -113,6 +131,6 @@ above.
 ## Verify quickly
 
 ```powershell
-python -m unittest testing.test_saa_smoke      # 40 pass
+python -m unittest testing.test_saa_smoke      # 41 pass
 python saa_main.py --self-test                 # {"ok": true, ...}
 ```
