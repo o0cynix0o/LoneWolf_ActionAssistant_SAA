@@ -116,6 +116,40 @@ class CardSizingTests(unittest.TestCase):
         self.assertIn("resizable: false", assistant_html)
 
 
+class UiPreferencePersistenceTests(unittest.TestCase):
+    def test_card_dimensions_are_allowlisted_and_round_trip(self) -> None:
+        dimensions_key = "lonewolf_redux.cards.dimensions.view-sheet"
+        dimensions = {
+            "action-chart": {"width": 480, "height": 260},
+            "choices": {"width": 320, "height": 180},
+        }
+        rejected_key = "lonewolf_redux.cards.unapproved.view-sheet"
+
+        self.assertIn("lonewolf_redux.cards.dimensions.", app_server.UI_PREFERENCE_PREFIXES)
+        self.assertTrue(app_server.is_ui_preference_key(dimensions_key))
+        self.assertFalse(app_server.is_ui_preference_key(rejected_key))
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            preferences_file = Path(temp_dir) / "ui-preferences.json"
+            payload = {
+                "version": 1,
+                "values": {
+                    dimensions_key: json.dumps(dimensions),
+                    rejected_key: "must not persist",
+                },
+            }
+            with mock.patch.object(app_server, "UI_PREFERENCES_FILE", preferences_file):
+                saved = app_server.save_ui_preferences(payload)
+                loaded = app_server.load_ui_preferences()
+
+        self.assertEqual(saved, loaded)
+        self.assertNotIn(rejected_key, loaded["values"])
+        self.assertEqual(
+            json.loads(loaded["values"][dimensions_key]),
+            dimensions,
+        )
+
+
 class CardLayoutInteractionTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -184,7 +218,7 @@ class CardLayoutInteractionTests(unittest.TestCase):
                     return cls.assistant_html[match.start():index + 1]
         raise AssertionError(f"JavaScript function {name!r} has no closing brace")
 
-    def test_release_metadata_is_3_1_5(self) -> None:
+    def test_release_metadata_is_3_1_6(self) -> None:
         readme = (self.root / "README.md").read_text(encoding="utf-8")
         building = (self.root / "docs" / "BUILDING.md").read_text(encoding="utf-8")
         user_guide = (self.root / "docs" / "USER_GUIDE.md").read_text(encoding="utf-8")
@@ -320,6 +354,127 @@ class CardLayoutInteractionTests(unittest.TestCase):
         self.assertIn("setCardLayout(scope, mergedCardLayout(scope, ids))", persistence)
         self.assertIn("getCardLayout(scope)", merge)
         self.assertRegex(merge, r"currentSet\.has\(id\)\s*\?[\s\S]*:\s*id")
+
+    def test_free_resize_contract_exposes_custom_auto_and_a_dedicated_handle(self) -> None:
+        self.assertIn("cardDimensionsPrefix", self.assistant_html)
+        self.assertIn("lonewolf_redux.cards.dimensions.", self.assistant_html)
+        self.assertIn(".card-resize-handle", self.assistant_html)
+        self.assertRegex(
+            self.assistant_html,
+            r"<button\b[^>]*\bdata-card-resize-handle\b",
+        )
+        self.assertRegex(
+            self.assistant_html,
+            r"(?:data-card-resizable|dataset\.cardResizable)",
+        )
+        self.assertIn(".card-size-auto", self.assistant_html)
+        self.assertIn(".card-size-custom", self.assistant_html)
+
+    def test_card_dimension_helpers_use_per_scope_ui_preferences(self) -> None:
+        get_dimensions = self.function_source("getCardDimensions")
+        get_dimension = self.function_source("getCardDimension")
+        set_dimensions = self.function_source("setCardDimensions")
+        clear_dimensions = self.function_source("clearCardDimensions")
+
+        helper_source = "\n".join(
+            (get_dimensions, get_dimension, set_dimensions, clear_dimensions)
+        )
+        self.assertIn("cardDimensionsPrefix", helper_source)
+        self.assertRegex(
+            helper_source,
+            r"cardStorageKey\(\s*cardDimensionsPrefix\s*,\s*scope\s*\)",
+        )
+        self.assertIn("setJsonStorage", set_dimensions)
+        self.assertRegex(get_dimension, r"\bwidth\b")
+        self.assertRegex(get_dimension, r"\bheight\b")
+        self.assertRegex(clear_dimensions, r"\bdelete\b")
+
+        reset_scope = self.function_source("resetCardScope")
+        reset_all = self.function_source("resetAllCardLayouts")
+        self.assertIn("cardDimensionsPrefix", reset_scope)
+        self.assertIn("cardDimensionsPrefix", reset_all)
+
+    def test_presets_and_auto_clear_custom_card_dimensions(self) -> None:
+        get_size = self.function_source("getCardSize")
+        set_size = self.function_source("setCardSize")
+
+        self.assertRegex(get_size, r"['\"]auto['\"]")
+        self.assertRegex(set_size, r"['\"]auto['\"]")
+        self.assertIn("clearCardDimensions", set_size)
+        for preset in ("small", "medium", "large"):
+            self.assertRegex(set_size, rf"['\"]{preset}['\"]")
+
+    def test_pointer_resize_has_live_commit_and_every_cancel_path(self) -> None:
+        start_resize = self.function_source("startCardResize")
+        update_resize = self.function_source("updateCardResize")
+        complete_resize = self.function_source("completeCardResize")
+        cancel_resize = self.function_source("cancelCardResize")
+        render = self.function_source("render")
+
+        self.assertIn("cardResizeState", self.assistant_html)
+        self.assertIn("setPointerCapture", start_resize)
+        self.assertRegex(update_resize, r"\bwidth\b")
+        self.assertRegex(update_resize, r"\bheight\b")
+        self.assertNotIn("setCardDimensions", update_resize)
+        self.assertIn("setCardDimensions", complete_resize)
+        self.assertNotIn("setCardDimensions", cancel_resize)
+        self.assertIn("cancelCardResize", render)
+
+        for event_name in ("pointerdown", "pointermove", "pointerup", "pointercancel"):
+            self.assertRegex(
+                self.assistant_html,
+                rf"addEventListener\(\s*['\"]{event_name}['\"]",
+            )
+        self.assertRegex(
+            self.assistant_html,
+            r"addEventListener\(\s*['\"]blur['\"][\s\S]*?cancelCardResize",
+        )
+        self.assertRegex(
+            self.assistant_html,
+            r"addEventListener\(\s*['\"]visibilitychange['\"][\s\S]*?cancelCardResize",
+        )
+        self.assertRegex(
+            self.assistant_html,
+            r"(?:event\.key|key)\s*(?:={2,3}|!={1,2})\s*['\"]Escape['\"]"
+            r"[\s\S]*?cancelCardResize",
+        )
+
+    def test_resize_eligibility_keeps_static_and_campaign_cards_protected(self) -> None:
+        decorate_cards = self.function_source("decorateCards")
+        decorate_interface = self.function_source("decorateInterfaceCards")
+
+        self.assertIn("options.resizable", decorate_cards)
+        self.assertIn("campaignEntry", decorate_cards)
+        self.assertRegex(
+            decorate_cards,
+            r"(?:dataset\.cardResizable|data-card-resizable)",
+        )
+        self.assertIn("data-card-resize-handle", self.assistant_html)
+
+        tabs_match = re.search(
+            r"decorateCards\(\s*['\"]tabs['\"]\s*,[\s\S]*?,\s*"
+            r"\{(?P<options>[\s\S]*?)\}\s*\)",
+            decorate_interface,
+        )
+        self.assertIsNotNone(tabs_match)
+        self.assertRegex(
+            tabs_match.group("options"),
+            r"\bresizable\s*:\s*false\b",
+        )
+
+    def test_dynamic_cards_keep_stable_dimension_ids(self) -> None:
+        self.assertIn('data-card-id="combat-controls"', self.assistant_html)
+        self.assertIn('data-card-id="death-outcome"', self.assistant_html)
+
+    def test_auto_size_is_content_driven_and_tall_quick_cards_remain_reorderable(self) -> None:
+        self.assertRegex(
+            self.assistant_html,
+            r"\.dashboard-card\.card-size-auto\s*\{[^}]*"
+            r"flex\s*:\s*0\s+1\s+auto[^}]*width\s*:\s*fit-content",
+        )
+        auto_scroll = self.function_source("autoScrollCardDrag")
+        self.assertIn("quickPanel", auto_scroll)
+        self.assertIn("scroller.scrollBy", auto_scroll)
 
 
 class SeriesSigilTests(unittest.TestCase):

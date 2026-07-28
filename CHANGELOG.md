@@ -2,6 +2,11 @@
 
 ## 3.1.6 — Unreleased
 
+- Added bottom-right resize grips to eligible Quick Actions and active-tab cards for live, free width-and-height resizing within their existing section.
+- Added practical minimum dimensions, section-width clamping, and internal scrolling so compact custom cards keep every control accessible without overlapping neighboring cards.
+- Added an **Auto Size** card-menu option alongside the existing Small, Medium, and Large presets.
+- Saved custom dimensions per Windows player, card, and tab in UI preferences, with cancellation restoring the previous dimensions without saving.
+
 ## 3.1.5 — 2026-07-28
 
 - Added square drag handles to the Quick Actions and active-tab cards so players can reorder them on the existing grid without allowing cards to overlap or leave their section.
