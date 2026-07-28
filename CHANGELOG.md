@@ -1,5 +1,7 @@
 # Changelog
 
+## 3.1.5 — Unreleased
+
 ## 3.1.4 — 2026-07-27
 
 - Made game saves crash-safe by writing each save to a temporary file and atomically replacing the previous one, so an interrupted autosave can no longer corrupt a campaign.
