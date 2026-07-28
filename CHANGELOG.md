@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.1.5 — Unreleased
+## 3.1.5 — 2026-07-28
 
 - Added square drag handles to the Quick Actions and active-tab cards so players can reorder them on the existing grid without allowing cards to overlap or leave their section.
 - Kept each tab's card order independent and stored layout changes in per-player UI preferences rather than campaign saves.
