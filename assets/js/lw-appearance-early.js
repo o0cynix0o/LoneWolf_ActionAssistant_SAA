@@ -285,6 +285,28 @@
         background-color: color-mix(in srgb, var(--lw-muted-2) 22%, transparent) !important;
         color: var(--lw-text) !important;
       }
+      .card-drag-handle {
+        border-color: var(--lw-border-strong) !important;
+        border-radius: 4px !important;
+        background-color: color-mix(in srgb, var(--lw-muted-2) 10%, transparent) !important;
+        color: var(--lw-accent) !important;
+      }
+      .card-drag-handle:hover {
+        border-color: var(--lw-accent-2) !important;
+        background-color: color-mix(in srgb, var(--lw-muted-2) 18%, transparent) !important;
+        color: var(--lw-text) !important;
+      }
+      .dashboard-card.is-dragging,
+      .dashboard-card.card-drop-target {
+        --card-drag-accent: var(--lw-accent-2);
+      }
+      .dashboard-card.is-dragging {
+        box-shadow: 0 0 0 2px var(--card-drag-accent) !important;
+      }
+      .dashboard-card.card-drop-target::after {
+        background-color: var(--card-drag-accent) !important;
+        box-shadow: 0 0 0 1px var(--lw-bg) !important;
+      }
       input, select {
         background-color: var(--lw-bg) !important;
         border-color: var(--lw-border-strong) !important;
