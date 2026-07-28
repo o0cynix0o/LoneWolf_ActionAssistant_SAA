@@ -1,5 +1,24 @@
 # Changelog
 
+## 3.1.4 — 2026-07-27
+
+- Made game saves crash-safe by writing each save to a temporary file and atomically replacing the previous one, so an interrupted autosave can no longer corrupt a campaign.
+- Recovered gracefully from an unreadable or corrupt save file instead of failing to load.
+- Confined save and load paths from the web interface to the managed saves folder, rejecting attempts to read or write elsewhere on disk.
+- Restricted the local web API to same-origin requests from the desktop app, closing a path that let other web pages drive the assistant in the background.
+- Restricted the embedded terminal bridge to same-origin connections so other web pages cannot open a session against it.
+- Recovered gracefully from a missing or malformed Combat Results Table instead of crashing a combat round.
+- Removed duplicate and unknown Kai Disciplines when loading a save so rank counts and discipline-based combat checks stay accurate.
+- Hardened an internal list helper so it can no longer accidentally edit stored game data in place, removing a class of latent bookkeeping bug.
+- Removed the unused Willpower, Magick, and Magical Staff systems carried over from the Grey Star fork, fixing a crash that could occur when using the Book 2 Karmo Potion.
+- Removed the redundant "Nobles" currency, which only ever mirrored Gold Crowns, while still migrating older saves that stored gold under it.
+- Simplified the desktop package to a single executable: the embedded terminal now runs from the main application instead of a separate command-line program.
+- Fixed the frozen single-executable terminal worker so it attaches to WinPTY's parent console before reopening its input and output streams, allowing the embedded REPL to start without a separate console window (issue #12).
+- Changed Small dashboard cards to a compact 220-pixel width and allowed Drop Item rows to wrap instead of overflowing the card (issue #13).
+- Made the embedded CLI return to the latest output when the player types, and made text panels shrink to fit narrow terminals without growing wider than the established layout (issue #14).
+- Replaced the four temporary series-divider symbols with the approved angular wolf-mask sigil; Kai, Magnakai, Grand Master, and New Order share the same theme-aware mark until their individual designs are revisited (issue #15).
+- Corrected the distribution notice for the owner-cleared cover and title artwork and included `NOTICE.md` in both the one-folder build and installed application (issue #16).
+
 ## 3.1.3 — 2026-07-24
 
 - Changed Small cards from proportional columns into compact 170-by-150-pixel tiles where content permits.

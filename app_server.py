@@ -17,7 +17,7 @@ from datetime import datetime
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import unquote, urlparse
+from urllib.parse import unquote, urlparse, urlsplit
 
 import lonewolf_redux
 import book_manager
@@ -29,6 +29,43 @@ UI_PREFERENCES_FILE = PATHS.ui_preferences
 SAVE_SLOT_DIR = PATHS.saves / "slots"
 SAVE_SLOT_COUNT = 6
 STATE_LOCK = threading.RLock()
+
+# The server binds to loopback, but a browser page or a DNS-rebinding host can
+# still reach it. Requests are only honored when they look like they came from
+# the local desktop UI itself.
+LOCAL_HOSTNAMES = {"localhost", "127.0.0.1", "::1"}
+
+
+def request_hostname(value: str | None) -> str | None:
+    """Return the lowercased hostname from a Host/Origin header value."""
+    if not value:
+        return None
+    parsed = urlsplit(value if "://" in value else "//" + value)
+    return (parsed.hostname or "").lower() or None
+
+
+def confine_save_path(raw: object, *, allow_index: bool = False) -> str:
+    """Confine a client-supplied save path to the saves directory.
+
+    The local CLI lets a user reference any path they type, but the HTTP API is
+    reachable by web content, so a path arriving in an action payload must
+    resolve inside PATHS.saves. Pure catalog indices (used by the web Load
+    buttons) are passed through unchanged.
+    """
+    text = str(raw or "").strip().strip('"')
+    if not text:
+        return ""
+    if allow_index and text.isdigit():
+        return text
+    base = PATHS.saves.resolve()
+    candidate = Path(text)
+    candidate = candidate if candidate.is_absolute() else base / candidate
+    resolved = candidate.resolve()
+    try:
+        resolved.relative_to(base)
+    except ValueError as exc:
+        raise ValueError("Save path must stay inside the saves folder.") from exc
+    return str(resolved)
 ASSISTANT = lonewolf_redux.LoneWolfReduxAssistant(
     save_dir=PATHS.saves,
     data_dir=PATHS.resource_data,
@@ -137,7 +174,7 @@ def save_slot_entry(slot: int) -> dict:
                 "BookTitle": lonewolf_redux.book_title(book_number),
                 "Section": int(data.get("CurrentSection", 1)),
                 "Endurance": f"{character.get('EnduranceCurrent', '?')}/{character.get('EnduranceMax', '?')}",
-                "GoldCrowns": inventory.get("GoldCrowns", inventory.get("Nobles", "?")),
+                "GoldCrowns": inventory.get("GoldCrowns", "?"),
             }
         )
     except Exception:
@@ -263,12 +300,8 @@ def state_payload(message: str = "", achievement_unlocks: list[dict] | None = No
         ASSISTANT.save_game(quiet=True)
     state = json.loads(json.dumps(ASSISTANT.state))
     state["Combat"] = ASSISTANT.combat_status_payload()
-    for key in ("LesserMagicks", "HigherMagicks", "WillpowerBase", "WillpowerCurrent"):
-        state.get("Character", {}).pop(key, None)
-    for key in ("HasHerbPouch", "HerbPouchItems", "Nobles"):
+    for key in ("HasHerbPouch", "HerbPouchItems"):
         state.get("Inventory", {}).pop(key, None)
-    for key in ("UseStaff", "StaffWillpower"):
-        state.get("Combat", {}).pop(key, None)
     for checkpoint in lonewolf_redux.as_list(state.get("Automation", {}).get("SectionCheckpoints")):
         if isinstance(checkpoint, dict):
             checkpoint.pop("Snapshot", None)
@@ -574,8 +607,6 @@ def handle_action(payload: dict) -> str:
         )
     if action == "status_flag":
         return capture_output(lambda: ASSISTANT.set_status_flag(str(payload.get("key") or ""), payload.get("value")))
-    if action == "wp_cost":
-        return "Book 1 has no action for that stat."
     if action == "section_combat_start":
         return capture_output(lambda: ASSISTANT.start_section_combat(str(payload.get("id") or "")))
     if action == "adjust":
@@ -583,14 +614,12 @@ def handle_action(payload: dict) -> str:
         mode = str(payload.get("mode") or "delta")
         value = int(payload.get("value") or 0)
         token = ["x", "set", str(value)] if mode == "set" else ["x", str(value)]
-        if stat == "wp":
-            return "Book 1 has no action for that stat."
         if stat == "end":
             return capture_output(lambda: ASSISTANT.adjust_endurance(token))
         if stat == "cs":
             return capture_output(lambda: ASSISTANT.adjust_combat_skill(token))
-        if stat in {"gold", "nobles"}:
-            return capture_output(lambda: ASSISTANT.adjust_nobles(token))
+        if stat == "gold":
+            return capture_output(lambda: ASSISTANT.adjust_gold_crowns(token))
     if action == "add_item":
         return capture_output(lambda: ASSISTANT.add_item(["add", str(payload.get("type") or ""), str(payload.get("item") or "")]))
     if action == "drop_item":
@@ -615,9 +644,11 @@ def handle_action(payload: dict) -> str:
     if action == "note":
         return capture_output(lambda: ASSISTANT.note_command(["note", str(payload.get("text") or "")]))
     if action == "save":
-        return capture_output(lambda: ASSISTANT.save_game(str(payload.get("path") or "")))
+        target = confine_save_path(payload.get("path"))
+        return capture_output(lambda: ASSISTANT.save_game(target))
     if action == "load":
-        return capture_output(lambda: ASSISTANT.load_game(str(payload.get("path") or "")))
+        target = confine_save_path(payload.get("path"), allow_index=True)
+        return capture_output(lambda: ASSISTANT.load_game(target))
     if action == "save_slot":
         return save_to_slot(int(payload.get("slot") or 1))
     if action == "load_slot":
@@ -666,8 +697,6 @@ def handle_action(payload: dict) -> str:
                 if "activeWeapon" in payload:
                     ASSISTANT.set_combat_weapon(str(payload.get("activeWeapon") or ""), save=False)
                 ASSISTANT.combat["Modifier"] = int(payload.get("modifier") or 0)
-                ASSISTANT.combat["StaffWillpower"] = 0
-                ASSISTANT.combat["UseStaff"] = False
                 ASSISTANT.combat["CanEvade"] = truthy(payload.get("canEvade"))
                 ASSISTANT.combat["EvadeAfterRounds"] = max(0, int(payload.get("evadeAfterRounds") or 0))
                 victory_route = payload.get("victoryRoute")
@@ -679,10 +708,7 @@ def handle_action(payload: dict) -> str:
     if action == "combat_round":
         if "activeWeapon" in payload:
             ASSISTANT.set_combat_weapon(str(payload.get("activeWeapon") or ""), save=False)
-        ASSISTANT.combat["UseStaff"] = False
         tokens = ["combat", "evade" if payload.get("evade") else "round"]
-        if payload.get("wp"):
-            tokens.append(str(payload.get("wp")))
         if payload.get("roll") not in (None, ""):
             tokens.append(str(payload.get("roll")))
         return capture_output(lambda: ASSISTANT.combat_round(tokens, evade=bool(payload.get("evade"))))
@@ -691,10 +717,7 @@ def handle_action(payload: dict) -> str:
     if action == "combat_evade":
         if "activeWeapon" in payload:
             ASSISTANT.set_combat_weapon(str(payload.get("activeWeapon") or ""), save=False)
-        ASSISTANT.combat["UseStaff"] = False
         tokens = ["combat", "evade"]
-        if payload.get("wp"):
-            tokens.append(str(payload.get("wp")))
         if payload.get("roll") not in (None, ""):
             tokens.append(str(payload.get("roll")))
         return capture_output(lambda: ASSISTANT.evade_combat(tokens))
@@ -716,6 +739,27 @@ class LoneWolfReduxHandler(BaseHTTPRequestHandler):
     def log_message(self, format: str, *args) -> None:  # noqa: A003
         return
 
+    def host_header_is_local(self) -> bool:
+        # An absent Host (bare HTTP/1.0) is allowed; a present Host must be local
+        # so a DNS-rebinding page (Host: attacker.example -> 127.0.0.1) is
+        # rejected before it can reach any endpoint.
+        host = request_hostname(self.headers.get("Host"))
+        return host is None or host in LOCAL_HOSTNAMES
+
+    def reject(self, message: str) -> None:
+        # Drain any request body before replying so keep-alive stays in sync and
+        # the caller reliably reads the 403 instead of a reset connection.
+        try:
+            length = int(self.headers.get("Content-Length") or 0)
+        except ValueError:
+            length = 0
+        if length > 0:
+            try:
+                self.rfile.read(length)
+            except OSError:
+                pass
+        self.send_json({"error": message}, HTTPStatus.FORBIDDEN)
+
     def send_json(self, data: dict, status: int = 200) -> None:
         body = json.dumps(data, indent=2).encode("utf-8")
         self.send_response(status)
@@ -733,6 +777,9 @@ class LoneWolfReduxHandler(BaseHTTPRequestHandler):
         self.wfile.write(data)
 
     def do_GET(self) -> None:  # noqa: N802
+        if not self.host_header_is_local():
+            self.reject("Requests must originate from localhost.")
+            return
         parsed = urlparse(self.path)
         if parsed.path == "/api/state":
             with STATE_LOCK:
@@ -773,6 +820,20 @@ class LoneWolfReduxHandler(BaseHTTPRequestHandler):
         self.serve_static(parsed.path)
 
     def do_POST(self) -> None:  # noqa: N802
+        if not self.host_header_is_local():
+            self.reject("Requests must originate from localhost.")
+            return
+        # A cross-site page can POST to loopback, so require a same-origin
+        # request. Demanding application/json also forces a CORS preflight for
+        # any cross-origin attempt, which the Origin check then rejects.
+        origin = self.headers.get("Origin")
+        if origin is not None and request_hostname(origin) not in LOCAL_HOSTNAMES:
+            self.reject("Cross-origin requests are not allowed.")
+            return
+        content_type = (self.headers.get("Content-Type") or "").split(";", 1)[0].strip().lower()
+        if content_type != "application/json":
+            self.reject("Requests must use application/json.")
+            return
         parsed = urlparse(self.path)
         if parsed.path not in {"/api/action", "/api/ui-preferences", "/api/native-books"}:
             self.send_json({"error": "Not found"}, HTTPStatus.NOT_FOUND)

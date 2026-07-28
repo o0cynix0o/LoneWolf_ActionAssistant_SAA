@@ -8,13 +8,7 @@ $ErrorActionPreference = 'Stop'
 $ProjectRoot = $PSScriptRoot
 $VenvPython = Join-Path $ProjectRoot '.venv\Scripts\python.exe'
 $PackagedExe = Join-Path $ProjectRoot 'dist\Lone Wolf Action Assistant\Lone Wolf Action Assistant.exe'
-$PackagedCliExe = Join-Path $ProjectRoot 'dist\Lone Wolf Action Assistant\Lone Wolf Action Assistant CLI.exe'
 $LegacyOneFileExe = Join-Path $ProjectRoot 'dist\Lone Wolf Action Assistant.exe'
-$CliBuildRoot = Join-Path $ProjectRoot 'build\LoneWolf_ActionAssistant_CLI'
-$CliSpecRoot = Join-Path $CliBuildRoot 'spec'
-$CliDataSource = Join-Path $ProjectRoot 'data'
-$IconSource = Join-Path $ProjectRoot 'logo.ico'
-$CliVersionInfo = Join-Path $ProjectRoot 'version_info_cli.txt'
 $InstallerRoot = Join-Path $ProjectRoot 'installer'
 $Bootstrapper = Join-Path $InstallerRoot 'MicrosoftEdgeWebview2Setup.exe'
 $IsccCandidates = @(
@@ -41,24 +35,14 @@ try {
         -define icon:auto-resize=256,128,64,48,32,24,16 'logo.ico'
     if ($LASTEXITCODE -ne 0) { throw 'Icon conversion failed.' }
 
+    # The embedded terminal relaunches this same windowed EXE with --cli under
+    # WinPTY, so no separate console worker executable is built.
     & $Python -m PyInstaller --noconfirm --clean 'LoneWolf_ActionAssistant.spec'
     if ($LASTEXITCODE -ne 0) { throw 'PyInstaller build failed.' }
 
-    # The desktop executable is intentionally windowed. Build a small,
-    # console-subsystem worker for the embedded WinPTY terminal instead of
-    # making the desktop process create a visible Windows Terminal tab.
-    New-Item -ItemType Directory -Path $CliSpecRoot -Force | Out-Null
-    & $Python -m PyInstaller --noconfirm --clean --onefile --console `
-        --name 'Lone Wolf Action Assistant CLI' `
-        --distpath (Split-Path -Parent $PackagedCliExe) `
-        --workpath $CliBuildRoot `
-        --specpath $CliSpecRoot `
-        --add-data "$CliDataSource;data" `
-        --icon $IconSource `
-        --version-file $CliVersionInfo `
-        'saa_cli.py'
-    if ($LASTEXITCODE -ne 0) { throw 'Embedded CLI worker build failed.' }
-    if (-not (Test-Path -LiteralPath $PackagedCliExe)) { throw 'Embedded CLI worker was not created.' }
+    Copy-Item -LiteralPath (Join-Path $ProjectRoot 'NOTICE.md') `
+        -Destination (Join-Path (Split-Path -Parent $PackagedExe) 'NOTICE.md') `
+        -Force
 
     & $PackagedExe --self-test
     if ($LASTEXITCODE -ne 0) { throw 'Frozen executable self-test failed.' }

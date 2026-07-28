@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import ctypes
 import json
 import os
 import sys
@@ -36,18 +37,37 @@ def _book_folders() -> tuple[str, ...]:
     return tuple(str(meta.get("Folder") or "") for meta in lonewolf_redux.BOOKS.values())
 
 
-def _prepare_cli_stdio() -> None:
-    """Attach Python streams to the WinPTY/ConPTY console for a windowed EXE."""
+def _attach_parent_console(kernel32=None) -> bool:
+    """Attach a windowed frozen process to the console created by WinPTY."""
+    try:
+        if kernel32 is None:
+            kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+        get_console_window = kernel32.GetConsoleWindow
+        get_console_window.restype = ctypes.c_void_p
+        attach_console = kernel32.AttachConsole
+        attach_console.argtypes = [ctypes.c_uint]
+        attach_console.restype = ctypes.c_int
+        if get_console_window():
+            return True
+        return bool(attach_console(0xFFFFFFFF))  # ATTACH_PARENT_PROCESS
+    except (AttributeError, OSError):
+        return False
+
+
+def _prepare_cli_stdio() -> bool:
+    """Attach Python streams to the WinPTY console for a windowed EXE."""
     if os.name != "nt" or not getattr(sys, "frozen", False):
-        return
+        return True
+    if not _attach_parent_console():
+        _lifecycle_log(f"CLI console attachment failed: Windows error {ctypes.get_last_error()}")
     try:
         sys.stdin = open("CONIN$", "r", encoding="utf-8", errors="replace")
         sys.stdout = open("CONOUT$", "w", encoding="utf-8", errors="replace", buffering=1)
         sys.stderr = open("CONOUT$", "w", encoding="utf-8", errors="replace", buffering=1)
-    except OSError:
-        # WinPTY normally supplies a console. If it doesn't, the CLI will exit
-        # naturally rather than causing the desktop process to fail.
-        pass
+        return True
+    except OSError as exc:
+        _lifecycle_log(f"CLI console streams could not be opened: {exc}")
+        return False
 
 
 def _start_http(preferred_port: int):
@@ -88,6 +108,8 @@ def run_self_test() -> int:
         required = (
             PATHS.resource_root / "index.html",
             PATHS.resource_root / "assistant.html",
+            PATHS.resource_root / "NOTICE.md",
+            PATHS.resource_root / "assets" / "images" / "series-sigil-wolf-mask.png",
             PATHS.resource_data / "crt.json",
         )
         missing = [str(path) for path in required if not path.is_file()]
@@ -103,6 +125,14 @@ def run_self_test() -> int:
             payload = json.load(response)
         if "Books" not in payload:
             raise RuntimeError("Book-files API returned an invalid response.")
+        with urllib.request.urlopen(
+            f"{base_url}/assets/images/series-sigil-wolf-mask.png",
+            timeout=3,
+        ) as response:
+            sigil_type = response.headers.get_content_type()
+            sigil_signature = response.read(8)
+        if sigil_type != "image/png" or sigil_signature != b"\x89PNG\r\n\x1a\n":
+            raise RuntimeError("Series sigil asset was not served as a valid PNG.")
         result = {
             "ok": True,
             "httpPort": http_port,
@@ -177,7 +207,8 @@ def main() -> int:
     # flag so the existing CLI parser receives only its own arguments.
     if "--cli" in sys.argv[1:]:
         sys.argv.remove("--cli")
-        _prepare_cli_stdio()
+        if not _prepare_cli_stdio():
+            return 1
         lonewolf_redux.main()
         return 0
 

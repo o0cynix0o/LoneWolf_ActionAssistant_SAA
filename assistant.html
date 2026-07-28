@@ -544,8 +544,15 @@
     }
     #view.view-card-grid > .dashboard-card.card-size-small,
     .quick-panel > .dashboard-card.card-size-small {
-      flex: 0 0 170px;
-      max-width: 170px;
+      flex: 0 1 220px;
+      max-width: 220px;
+    }
+    .quick-panel > .dashboard-card.card-size-small .quick-drop-list {
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+    .quick-panel > .dashboard-card.card-size-small .quick-drop-list .item-row {
+      flex-wrap: wrap;
     }
     #view.view-card-grid > .dashboard-card.card-size-medium,
     .quick-panel > .dashboard-card.card-size-medium {
@@ -1512,15 +1519,14 @@
     function statControlName(stat) {
       const key = text(stat).toLowerCase();
       if (['end', 'endurance'].includes(key)) return 'END';
-      if (['wp', 'willpower'].includes(key)) return 'Unsupported';
       if (['cs', 'combat_skill', 'combat skill'].includes(key)) return 'CS';
-      if (['gold', 'crowns', 'goldcrowns', 'nobles'].includes(key)) return 'Gold Crowns';
+      if (['gold', 'crowns', 'goldcrowns'].includes(key)) return 'Gold Crowns';
       return text(stat, 'Stat');
     }
 
     function statControlLocation(stat) {
       const key = text(stat).toLowerCase();
-      if (['gold', 'crowns', 'goldcrowns', 'nobles'].includes(key)) return 'Inventory tab > Gold Crowns controls';
+      if (['gold', 'crowns', 'goldcrowns'].includes(key)) return 'Inventory tab > Gold Crowns controls';
       return `Vitals card > ${statControlName(stat)}`;
     }
 
@@ -1538,10 +1544,8 @@
       if (kind === 'item') return `if you have ${text(condition.name, 'the required item')}`;
       if (kind === 'power') return `if you have ${text(condition.name, 'the required Kai Discipline')}`;
       if (kind === 'no_power') return `if you do not have ${text(condition.name, 'the required Kai Discipline')}`;
-      if (kind === 'wp_gt' || kind === 'wp_gte') return '';
       if (kind === 'end_lt') return `if END is less than ${text(condition.value, 'the listed value')}`;
       if (kind === 'end_gte') return `if END is at least ${text(condition.value, 'the listed value')}`;
-      if (kind === 'staff_available') return '';
       return '';
     }
 
@@ -1629,7 +1633,7 @@
           how: `Choices card > Status Flags: click Set to turn ${label} on, or Clear to turn it off. If the flag is not listed, use Notes to record: ${label} ${value}.`
         };
       }
-      if (kind === 'restore_stored_nobles') {
+      if (kind === 'restore_stored_gold_crowns') {
         const extra = Number(action.extra || 0);
         return {
           summary: `Restore stored Gold Crowns${extra ? ` and add ${extra}` : ''}`,
@@ -2061,7 +2065,7 @@
       if (key === 'END') return asNumber(character.EnduranceCurrent);
       if (key === 'END Max') return asNumber(character.EnduranceMax);
       if (key === 'CS') return asNumber(character.CombatSkillCurrent);
-      if (key === 'Gold') return asNumber(inventory.GoldCrowns ?? inventory.Nobles);
+      if (key === 'Gold') return asNumber(inventory.GoldCrowns);
       return 0;
     }
 
@@ -2428,7 +2432,7 @@
             receiptDetail('Where', locationLabel(afterSnapshot)),
             receiptDetail('Combat Skill', `${text(character.CombatSkillCurrent)} (roll ${text(rolls.CombatSkill, '?')})`),
             receiptDetail('Endurance', `${text(character.EnduranceCurrent)} (roll ${text(rolls.Endurance, '?')})`),
-            receiptDetail('Gold Crowns', `${text(inventory.GoldCrowns ?? inventory.Nobles ?? 0)} (roll ${text(rolls.GoldCrowns, '?')})`),
+            receiptDetail('Gold Crowns', `${text(inventory.GoldCrowns ?? 0)} (roll ${text(rolls.GoldCrowns, '?')})`),
             receiptDetail('Starting Find', `${find} (roll ${text(rolls.StartingFind, '?')})`),
             character.WeaponskillWeapon ? receiptDetail('Weaponskill', `${text(character.WeaponskillWeapon)} (roll ${text(rolls.Weaponskill, '?')})`) : null,
             receiptDetail('Kai Disciplines', disciplines),
@@ -2672,7 +2676,7 @@
         ['Book', `${c.BookNumber}. ${book.title}`, 'status-book'],
         ['Section', app.state.CurrentSection, 'status-section'],
         ['END', `${c.EnduranceCurrent}/${c.EnduranceMax}`, 'status-end'],
-        ['Gold', currentInventory().GoldCrowns ?? currentInventory().Nobles ?? 0, 'status-gold'],
+        ['Gold', currentInventory().GoldCrowns ?? 0, 'status-gold'],
         ['CS', c.CombatSkillCurrent, 'status-cs']
       ].map(([label, value, className]) => `<div class="stat-card ${className}"><span>${label}</span><strong>${escapeHtml(value)}</strong></div>`).join('');
     }
@@ -2750,6 +2754,7 @@
       cliTerminal = new Terminal({
         cursorBlink: true,
         convertEol: true,
+        scrollOnUserInput: true,
         fontFamily: 'Consolas, "Cascadia Mono", "Courier New", monospace',
         fontSize: 14,
         theme: cliTheme()
@@ -2896,7 +2901,7 @@
             ${field('Character', escapeHtml(text(summary.CharacterName, currentCharacter().Name)))}
             ${field('Final END', `${escapeHtml(text(summary.EnduranceCurrent, currentCharacter().EnduranceCurrent))}/${escapeHtml(text(summary.EnduranceMax, currentCharacter().EnduranceMax))}`)}
             ${field('Combat Skill', escapeHtml(text(summary.CombatSkill, currentCharacter().CombatSkillCurrent)))}
-            ${field('Gold Crowns', escapeHtml(text(summary.GoldCrowns, currentInventory().GoldCrowns ?? currentInventory().Nobles ?? 0)))}
+            ${field('Gold Crowns', escapeHtml(text(summary.GoldCrowns, currentInventory().GoldCrowns ?? 0)))}
           </div>
         </div>
         <div class="panel">
@@ -3807,7 +3812,7 @@
         'status-book': [`${c.BookNumber}. ${book.title}`, ''],
         'status-section': [app.state.CurrentSection, ''],
         'status-end': [`${c.EnduranceCurrent}/${c.EnduranceMax}`, ''],
-        'status-gold': [currentInventory().GoldCrowns ?? currentInventory().Nobles ?? 0, ''],
+        'status-gold': [currentInventory().GoldCrowns ?? 0, ''],
         'status-cs': [c.CombatSkillCurrent, '']
       };
       const [value, subvalue] = values[id] || ['', ''];
@@ -4259,7 +4264,7 @@
       return `
         <div class="grid">
           ${field('Name', c.Name)}
-          ${field('Gold Crowns', inv.GoldCrowns ?? inv.Nobles ?? 0)}
+          ${field('Gold Crowns', inv.GoldCrowns ?? 0)}
           ${field('Combat Skill', `${c.CombatSkillCurrent} (base ${c.CombatSkillBase})`)}
           ${field('Endurance', `${c.EnduranceCurrent}/${c.EnduranceMax}`)}
           ${field('Meals', arr(inv.BackpackItems).filter((item) => text(item).toLowerCase() === 'meal').length)}
@@ -4765,7 +4770,7 @@
           <h2>Action Chart</h2>
           <div class="grid">
             ${field('Name', c.Name)}
-            ${field('Gold Crowns', inv.GoldCrowns ?? inv.Nobles ?? 0)}
+            ${field('Gold Crowns', inv.GoldCrowns ?? 0)}
             ${field('Combat Skill', `${c.CombatSkillCurrent} (base ${c.CombatSkillBase})`)}
             ${field('Endurance', `${c.EnduranceCurrent}/${c.EnduranceMax}`)}
             ${field('Meals', arr(inv.BackpackItems).filter((item) => text(item).toLowerCase() === 'meal').length)}
@@ -4946,7 +4951,6 @@
           </div>
         `;
       }).join('');
-      const wpPanel = '';
       return `
         <div class="panel">
           <h2>Section Assistant</h2>
@@ -4965,7 +4969,6 @@
         ${healingRows ? `<div class="panel"><h2>Kai Healing</h2>${healingRows}</div>` : ''}
         ${lossRows ? `<div class="panel"><h2>Choose Inventory Change</h2>${lossRows}</div>` : ''}
         ${statusRows ? `<div class="panel"><h2>Status Flags</h2>${statusRows}</div>` : ''}
-        ${wpPanel}
       `;
     }
 
@@ -5746,11 +5749,6 @@
         manualSectionAdvice('section loss', { id });
         return;
       }
-      if (isManualMode() && button.dataset.wpCost) {
-        const [cost, mode] = button.dataset.wpCost.split(':');
-        manualSectionAdvice('section costs', { cost: Number(cost), mode });
-        return;
-      }
       if (isManualMode() && button.dataset.combatAuto !== undefined) {
         manualSectionAdvice('combat auto-resolve');
         return;
@@ -5808,10 +5806,6 @@
       if (button.dataset.statusFlag) {
         const [key, value] = button.dataset.statusFlag.split(':');
         await action({ action: 'status_flag', key, value });
-      }
-      if (button.dataset.wpCost) {
-        const [cost, mode] = button.dataset.wpCost.split(':');
-        await action({ action: 'wp_cost', cost: Number(cost), mode });
       }
       if (button.dataset.adjust) {
         const [stat, delta] = button.dataset.adjust.split(':');

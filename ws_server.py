@@ -16,6 +16,7 @@ import subprocess
 import sys
 import threading
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from websockets.asyncio.server import serve
 from runtime_paths import PATHS
@@ -39,6 +40,22 @@ WS_PORT = int(os.environ.get("LONEWOLF_REDUX_WS_PORT", "8798"))
 INIT_COLS = 120
 INIT_ROWS = 30
 
+LOCAL_WS_HOSTNAMES = {"localhost", "127.0.0.1", "::1"}
+
+
+def origin_is_local(origin: str | None) -> bool:
+    """Return True when a handshake Origin is safe to accept.
+
+    A browser always sends Origin on a WebSocket handshake, so a missing Origin
+    means a non-browser client (e.g. the packaged CLI worker) and is allowed. A
+    present Origin must resolve to loopback so a page on another site cannot
+    open the embedded terminal against this bridge.
+    """
+    if not origin:
+        return True
+    parsed = urlsplit(origin if "://" in origin else "//" + origin)
+    return (parsed.hostname or "").lower() in LOCAL_WS_HOSTNAMES
+
 
 def build_command() -> list[str]:
     last_save_txt = PATHS.user_data / "last-save.txt"
@@ -61,18 +78,18 @@ def build_command() -> list[str]:
         str(PATHS.books_lw),
     ] + load_args
     if getattr(sys, "frozen", False):
-        # Keep the desktop EXE windowed so it never opens a visible Windows
-        # Terminal tab. The separately packaged console worker is launched
-        # inside WinPTY/ConPTY only when the in-app terminal is opened.
-        cli_executable = Path(sys.executable).with_name("Lone Wolf Action Assistant CLI.exe")
-        if cli_executable.is_file():
-            return [str(cli_executable)] + shared_args
-        # Compatibility fallback for incomplete development packages.
+        # The desktop EXE is windowed, so relaunching it with --cli under WinPTY
+        # runs the embedded terminal from the same frozen binary without opening
+        # a visible Windows Terminal tab and without a separate console EXE.
         return [sys.executable, "--cli"] + shared_args
     return [sys.executable, "-u", str(ASSISTANT_SCRIPT)] + shared_args
 
 
 async def terminal_session(websocket):
+    origin = websocket.request.headers.get("Origin")
+    if not origin_is_local(origin):
+        await websocket.close(code=1008, reason="cross-origin request rejected")
+        return
     command = build_command()
     if os.name == "nt" and winpty is not None:
         await terminal_session_winpty(websocket, command)
@@ -85,10 +102,9 @@ async def terminal_session(websocket):
 async def terminal_session_winpty(websocket, command: list[str]) -> None:
     loop = asyncio.get_running_loop()
     try:
-        # The bundled CLI worker is a console-subsystem executable. ConPTY
-        # closes its output channel immediately for that one-file worker on
-        # some Windows 11 systems, while the WinPTY backend keeps the embedded
-        # xterm stream alive. The desktop process itself remains windowed.
+        # The main EXE remains a windowed application. Its --cli entry point
+        # attaches to WinPTY's hidden console, which keeps the embedded xterm
+        # stream alive without opening a separate console window or terminal.
         backend = winpty.Backend.WinPTY if getattr(sys, "frozen", False) else None
         pty_proc = winpty.PtyProcess.spawn(
             command,
