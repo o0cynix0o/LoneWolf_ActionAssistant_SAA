@@ -32,6 +32,9 @@ and release/publish steps are listed below.
 - The 26KB runtime mask is packaged and verified by the frozen self-test. The
   original generated design master and its provenance note remain under
   `design-assets` and are intentionally excluded from the runtime.
+- The project owner confirmed the bundled low-resolution cover and title/banner
+  artwork is cleared for this distribution. `NOTICE.md` now records that
+  confirmation and is included in both the one-folder build and installer.
 - The canonical rebuilt executable is
   `dist\Lone Wolf Action Assistant\Lone Wolf Action Assistant.exe`. The older
   pre-fix executable that once existed directly under `dist` has been removed;

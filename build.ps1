@@ -40,6 +40,10 @@ try {
     & $Python -m PyInstaller --noconfirm --clean 'LoneWolf_ActionAssistant.spec'
     if ($LASTEXITCODE -ne 0) { throw 'PyInstaller build failed.' }
 
+    Copy-Item -LiteralPath (Join-Path $ProjectRoot 'NOTICE.md') `
+        -Destination (Join-Path (Split-Path -Parent $PackagedExe) 'NOTICE.md') `
+        -Force
+
     & $PackagedExe --self-test
     if ($LASTEXITCODE -ne 0) { throw 'Frozen executable self-test failed.' }
     if (Test-Path -LiteralPath $LegacyOneFileExe) {

@@ -18,7 +18,7 @@ VSVersionInfo(
           StringStruct(u'FileDescription', u'Lone Wolf Action Assistant'),
           StringStruct(u'FileVersion', u'3.1.4'),
           StringStruct(u'InternalName', u'LoneWolfActionAssistant'),
-          StringStruct(u'LegalCopyright', u'Application code distributed under the repository license. Project Aon books are not included.'),
+          StringStruct(u'LegalCopyright', u'Unofficial companion application. See NOTICE.md. Project Aon books are not included.'),
           StringStruct(u'OriginalFilename', u'Lone Wolf Action Assistant.exe'),
           StringStruct(u'ProductName', u'Lone Wolf Action Assistant'),
           StringStruct(u'ProductVersion', u'3.1.4')

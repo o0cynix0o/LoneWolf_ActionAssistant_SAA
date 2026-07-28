@@ -8,6 +8,7 @@ datas = [
     ("index.html", "."),
     ("library.html", "."),
     ("install-books.html", "."),
+    ("NOTICE.md", "."),
     ("logo.ico", "."),
     ("assets", "assets"),
     ("data", "data"),

@@ -17,6 +17,7 @@
 - Changed Small dashboard cards to a compact 220-pixel width and allowed Drop Item rows to wrap instead of overflowing the card (issue #13).
 - Made the embedded CLI return to the latest output when the player types, and made text panels shrink to fit narrow terminals without growing wider than the established layout (issue #14).
 - Replaced the four temporary series-divider symbols with the approved angular wolf-mask sigil; Kai, Magnakai, Grand Master, and New Order share the same theme-aware mark until their individual designs are revisited (issue #15).
+- Corrected the distribution notice for the owner-cleared cover and title artwork and included `NOTICE.md` in both the one-folder build and installed application (issue #16).
 
 ## 3.1.3 — 2026-07-24
 

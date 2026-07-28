@@ -138,6 +138,19 @@ class SeriesSigilTests(unittest.TestCase):
         self.assertTrue((root / "design-assets" / "README.md").is_file())
 
 
+class DistributionNoticeTests(unittest.TestCase):
+    def test_notice_matches_and_ships_with_the_authorized_release(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        notice = (root / "NOTICE.md").read_text(encoding="utf-8")
+        spec = (root / "LoneWolf_ActionAssistant.spec").read_text(encoding="utf-8")
+        build_script = (root / "build.ps1").read_text(encoding="utf-8")
+
+        self.assertIn("cleared for distribution", notice)
+        self.assertNotIn("do not redistribute the Lone Wolf book text, illustrations", notice)
+        self.assertIn('("NOTICE.md", ".")', spec)
+        self.assertIn("'NOTICE.md'", build_script)
+
+
 class ServiceTests(unittest.TestCase):
     def test_service_self_test(self) -> None:
         self.assertEqual(saa_main.run_self_test(), 0)

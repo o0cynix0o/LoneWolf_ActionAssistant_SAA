@@ -108,6 +108,7 @@ def run_self_test() -> int:
         required = (
             PATHS.resource_root / "index.html",
             PATHS.resource_root / "assistant.html",
+            PATHS.resource_root / "NOTICE.md",
             PATHS.resource_root / "assets" / "images" / "series-sigil-wolf-mask.png",
             PATHS.resource_data / "crt.json",
         )
