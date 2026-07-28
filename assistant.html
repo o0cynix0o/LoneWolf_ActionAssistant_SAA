@@ -8,6 +8,17 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; }
+    .visually-hidden {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
     body {
       margin: 0;
       height: 100vh;
@@ -431,6 +442,59 @@
       position: relative;
       min-width: 0;
     }
+    .card-drag-handle {
+      position: absolute;
+      top: 0.22rem;
+      left: 0.35rem;
+      z-index: 26;
+      width: 20px;
+      min-width: 20px;
+      height: 20px;
+      min-height: 20px;
+      padding: 0;
+      appearance: none;
+      display: grid;
+      place-items: center;
+      border: 1px solid #6d5f35;
+      border-radius: 4px;
+      background: color-mix(in srgb, #d5e8ea 10%, transparent);
+      color: #d5e8ea;
+      cursor: grab;
+      touch-action: none;
+      font-size: 0;
+      line-height: 0;
+    }
+    .dashboard-card > .card-drag-handle {
+      width: 20px;
+      min-width: 20px;
+      height: 20px;
+      min-height: 20px;
+    }
+    .card-drag-handle::before {
+      content: "";
+      width: 3px;
+      height: 3px;
+      margin: -6px 0 0 -6px;
+      border-radius: 999px;
+      background: currentColor;
+      box-shadow:
+        6px 0 0 currentColor,
+        0 6px 0 currentColor,
+        6px 6px 0 currentColor;
+    }
+    .card-drag-handle:hover {
+      border-color: #d1b865;
+      background: color-mix(in srgb, #d5e8ea 18%, transparent);
+      color: #ffffff;
+    }
+    .card-drag-handle:focus-visible {
+      outline: 1px solid #d5e8ea;
+      outline-offset: 2px;
+    }
+    .card-drag-handle:active,
+    body.card-drag-active .card-drag-handle {
+      cursor: grabbing;
+    }
     .dashboard-card[hidden],
     .quick-card[hidden],
     .tabs[hidden] {
@@ -500,6 +564,14 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+    .dashboard-card[data-card-movable="true"] > h2,
+    .dashboard-card[data-card-movable="true"] > .quick-title,
+    .dashboard-card[data-card-movable="true"] > .panel-title-row,
+    .dashboard-card[data-card-movable="true"] > .section-subtitle,
+    .dashboard-card[data-card-movable="true"] .combat-meter-title-row,
+    .dashboard-card[data-card-movable="true"] > .card-collapsed-title {
+      padding-left: 1.65rem;
+    }
     .dashboard-card [data-card-help] {
       cursor: help;
     }
@@ -517,7 +589,7 @@
     .dashboard-card.card-collapsed {
       min-height: 34px;
     }
-    .dashboard-card.card-collapsed > :not(.card-collapse-button):not(.card-menu-button):not(.card-menu):not(.card-collapsed-title) {
+    .dashboard-card.card-collapsed > :not(.card-drag-handle):not(.card-collapse-button):not(.card-menu-button):not(.card-menu):not(.card-collapsed-title) {
       display: none !important;
     }
     .dashboard-card.card-collapsed > .card-collapsed-title {
@@ -571,11 +643,41 @@
       grid-column: 1 / -1;
     }
     .dashboard-card.is-dragging {
-      opacity: 0.55;
+      opacity: 0.68;
+      box-shadow: 0 0 0 2px #d1b865;
     }
-    .dashboard-card.drag-over {
-      border-color: #d1b865;
-      outline: 1px solid #d1b865;
+    .dashboard-card.card-drop-target::after {
+      content: "";
+      position: absolute;
+      z-index: 30;
+      pointer-events: none;
+      border-radius: 999px;
+      background: #d1b865;
+      box-shadow: 0 0 0 1px #10130e;
+    }
+    .dashboard-card.card-drop-horizontal.card-drop-before::after,
+    .dashboard-card.card-drop-horizontal.card-drop-after::after {
+      top: 0.2rem;
+      bottom: 0.2rem;
+      width: 3px;
+    }
+    .dashboard-card.card-drop-horizontal.card-drop-before::after {
+      left: -0.42rem;
+    }
+    .dashboard-card.card-drop-horizontal.card-drop-after::after {
+      right: -0.42rem;
+    }
+    .dashboard-card.card-drop-vertical.card-drop-before::after,
+    .dashboard-card.card-drop-vertical.card-drop-after::after {
+      right: 0.2rem;
+      left: 0.2rem;
+      height: 3px;
+    }
+    .dashboard-card.card-drop-vertical.card-drop-before::after {
+      top: -0.42rem;
+    }
+    .dashboard-card.card-drop-vertical.card-drop-after::after {
+      bottom: -0.42rem;
     }
     .layout-bar {
       margin-bottom: 0.65rem;
@@ -1321,6 +1423,7 @@
       <nav class="tabs" id="tabs"></nav>
       <section id="view"></section>
       <div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="false"></div>
+      <div class="visually-hidden" id="cardLayoutStatus" aria-live="polite" aria-atomic="true"></div>
       <div class="message" id="message">Ready.</div>
     </section>
   </main>
@@ -1422,6 +1525,7 @@
     const tabs = document.getElementById('tabs');
     const view = document.getElementById('view');
     const toastStack = document.getElementById('toastStack');
+    const cardLayoutStatus = document.getElementById('cardLayoutStatus');
     const message = document.getElementById('message');
     const appMenu = document.getElementById('appMenu');
     const modeIndicator = document.getElementById('modeIndicator');
@@ -1432,8 +1536,9 @@
     let activeBook = 1;
     let activeSection = null;
     let book1Creation = null;
-    let draggedWidget = '';
     let activeCardMenu = '';
+    let cardDragState = null;
+    let suppressCardHandleClick = false;
     let bookFiles = { Installed: true, Books: [] };
     let currentReceipt = { summary: 'Ready.', details: [] };
     let receiptExpanded = false;
@@ -2628,6 +2733,7 @@
     }
 
     function render() {
+      cancelCardDrag({ restore: true, announce: false });
       setModeIndicator();
       renderStatus();
       if (isCliMode() && !campaignStartRequested) {
@@ -3435,12 +3541,40 @@
         'section': 'Apply section effects and section-aware rolls from the audit data.',
         'drop-item': 'Quickly remove carried items without opening the full Inventory tab.'
       };
-      return help[key] || (scope === 'tabs' ? 'Switch between assistant views. Re-add this from Settings if you close it.' : '');
+      return help[key] || (scope === 'tabs' ? 'Switch between assistant views. Collapse this row when you need more room.' : '');
+    }
+
+    function directScopedCards(parent, scope) {
+      if (!parent) return [];
+      return Array.from(parent.children).filter((card) => (
+        card.matches?.('[data-card-scope][data-card-id]')
+        && card.dataset.cardScope === scope
+      ));
+    }
+
+    function mergedCardLayout(scope, currentIds) {
+      const current = Array.from(new Set(arr(currentIds).map((id) => text(id).trim()).filter(Boolean)));
+      const currentSet = new Set(current);
+      const saved = Array.from(new Set(getCardLayout(scope).map((id) => text(id).trim()).filter(Boolean)));
+      if (!saved.length) return current;
+      let currentIndex = 0;
+      const merged = saved.map((id) => (
+        currentSet.has(id) ? current[currentIndex++] : id
+      ));
+      current.forEach((id) => {
+        if (!merged.includes(id)) merged.push(id);
+      });
+      return merged.filter(Boolean);
+    }
+
+    function persistDirectCardOrder(parent, scope) {
+      const ids = directScopedCards(parent, scope).map((card) => card.dataset.cardId).filter(Boolean);
+      setCardLayout(scope, mergedCardLayout(scope, ids));
     }
 
     function applyCardOrder(scope, cards) {
       const parent = cards[0]?.parentElement;
-      if (!parent) return cards;
+      if (!parent || cards.some((card) => card.parentElement !== parent)) return cards;
       const layout = getCardLayout(scope);
       if (!layout.length) return cards;
       const byId = new Map(cards.map((card) => [card.dataset.cardId, card]));
@@ -3488,13 +3622,19 @@
       return `<button class="card-collapse-button" type="button" data-card-collapse="${escapeHtml(scope)}:${escapeHtml(id)}" aria-label="${action} ${escapeHtml(title)} card" aria-expanded="${collapsed ? 'false' : 'true'}" title="${action} card"></button>`;
     }
 
+    function cardDragHandleHtml(scope, id, title) {
+      const token = `${scope}:${id}`;
+      return `<button class="card-drag-handle" type="button" data-card-drag-handle="${escapeHtml(token)}" aria-label="Move ${escapeHtml(title)} card" title="Drag to reorder. Click for movement controls."></button>`;
+    }
+
     function decorateCards(scope, cards, options = {}) {
       const actualCards = arr(cards).filter(Boolean);
       if (!actualCards.length) return;
       const seen = {};
       actualCards.forEach((card) => {
         const title = cardTitle(card);
-        const base = slugCardTitle(title, 'card');
+        const explicitId = text(card.dataset.cardId).trim();
+        const base = explicitId || slugCardTitle(title, 'card');
         seen[base] = (seen[base] || 0) + 1;
         const id = seen[base] === 1 ? base : `${base}-${seen[base]}`;
         card.dataset.cardScope = scope;
@@ -3510,13 +3650,17 @@
         const title = card.dataset.cardTitle || cardTitle(card);
         const defaultSize = options.defaultSize || 'large';
         const campaignEntry = campaignStartRequested && card.dataset.campaignEntry === 'true';
+        const movable = !campaignEntry && options.movable !== false;
+        const closeable = !campaignEntry && options.closeable !== false;
         const size = campaignEntry || options.resizable === false ? defaultSize : getCardSize(scope, id, defaultSize);
         const collapsed = campaignEntry ? false : collapsedCards.has(id);
-        card.hidden = campaignEntry ? false : closed.has(id);
+        card.hidden = closeable ? closed.has(id) : false;
+        card.dataset.cardMovable = movable ? 'true' : 'false';
         card.classList.add('dashboard-card');
         card.classList.toggle('card-collapsed', collapsed);
         card.classList.remove('card-size-small', 'card-size-medium', 'card-size-large');
         card.classList.add(`card-size-${size}`);
+        card.querySelector(':scope > .card-drag-handle')?.remove();
         card.querySelector(':scope > .card-collapse-button')?.remove();
         card.querySelector(':scope > .card-collapsed-title')?.remove();
         card.querySelector(':scope > .card-menu-button')?.remove();
@@ -3524,7 +3668,12 @@
         card.insertAdjacentHTML('afterbegin', `<div class="card-collapsed-title">${escapeHtml(title)}</div>`);
         if (!campaignEntry) {
           card.insertAdjacentHTML('afterbegin', cardCollapseButtonHtml(scope, id, title, collapsed));
-          card.insertAdjacentHTML('afterbegin', cardMenuHtml(scope, id, title, size, options));
+          if (options.menu !== false) {
+            card.insertAdjacentHTML('afterbegin', cardMenuHtml(scope, id, title, size, options));
+          }
+          if (movable) {
+            card.insertAdjacentHTML('afterbegin', cardDragHandleHtml(scope, id, title));
+          }
         }
         const help = cardHelp(title, scope);
         const helpTarget = card.querySelector(':scope > h2') || card.querySelector(':scope > .quick-title') || card.querySelector('.combat-meter-title-row h2');
@@ -3540,24 +3689,254 @@
       view.classList.add('view-card-grid');
       tabs.dataset.cardTitleOverride = 'Tabs';
       decorateCards('quick', Array.from(quickPanel.querySelectorAll(':scope > .quick-card')), { defaultSize: 'medium' });
-      decorateCards('tabs', [tabs], { defaultSize: 'large', movable: false, resizable: false });
+      if (getClosedCards('tabs').length) setClosedCards('tabs', []);
+      decorateCards('tabs', [tabs], {
+        defaultSize: 'large',
+        movable: false,
+        resizable: false,
+        closeable: false,
+        menu: false
+      });
       if (quickTabsDivider) quickTabsDivider.hidden = tabs.hidden;
       decorateCards(viewScope, Array.from(view.querySelectorAll(':scope > .panel')), { defaultSize: 'large' });
     }
 
     function moveCard(scope, id, direction) {
-      const cards = Array.from(document.querySelectorAll('[data-card-scope]')).filter((card) => card.dataset.cardScope === scope);
-      const ids = cards.map((card) => card.dataset.cardId).filter(Boolean);
-      if (!ids.includes(id)) return;
-      const index = ids.indexOf(id);
+      const source = Array.from(document.querySelectorAll('[data-card-scope][data-card-id]')).find((card) => (
+        card.dataset.cardScope === scope
+        && card.dataset.cardId === id
+        && card.dataset.cardMovable === 'true'
+      ));
+      const parent = source?.parentElement;
+      if (!source || !parent) return;
+      const cards = directScopedCards(parent, scope).filter((card) => (
+        card.dataset.cardMovable === 'true' && !card.hidden
+      ));
+      const index = cards.indexOf(source);
+      if (index < 0) return;
       const next = ['up', 'left'].includes(direction) ? index - 1 : index + 1;
-      if (next < 0 || next >= ids.length) return;
-      [ids[index], ids[next]] = [ids[next], ids[index]];
-      setCardLayout(scope, ids);
-      render();
+      if (next < 0 || next >= cards.length) return;
+      if (next < index) cards[next].before(source);
+      else cards[next].after(source);
+      persistDirectCardOrder(parent, scope);
+      closeMenus();
+    }
+
+    function isMovableCard(card) {
+      if (!card || card.dataset.cardMovable !== 'true') return false;
+      const parent = card.parentElement;
+      const scope = card.dataset.cardScope;
+      if (parent === quickPanel) return scope === 'quick';
+      if (parent === view) return scope.startsWith('view-');
+      return false;
+    }
+
+    function cardDragCards(parent, scope) {
+      return directScopedCards(parent, scope).filter((card) => (
+        card.dataset.cardMovable === 'true' && !card.hidden
+      ));
+    }
+
+    function clearCardDropIndicator() {
+      document.querySelectorAll('.card-drop-target, .card-drop-before, .card-drop-after, .card-drop-horizontal, .card-drop-vertical')
+        .forEach((card) => card.classList.remove(
+          'card-drop-target',
+          'card-drop-before',
+          'card-drop-after',
+          'card-drop-horizontal',
+          'card-drop-vertical'
+        ));
+    }
+
+    function announceCardLayout(messageText) {
+      if (!cardLayoutStatus) return;
+      cardLayoutStatus.textContent = '';
+      window.requestAnimationFrame(() => {
+        cardLayoutStatus.textContent = messageText;
+      });
+    }
+
+    function restoreCardDragOrder(state) {
+      if (!state?.parent?.isConnected || state.source.parentElement !== state.parent) return;
+      const byId = new Map(directScopedCards(state.parent, state.scope).map((card) => [card.dataset.cardId, card]));
+      state.originalIds.forEach((id) => {
+        const card = byId.get(id);
+        if (card) state.parent.appendChild(card);
+      });
+    }
+
+    function finishCardDragCleanup(state) {
+      if (!state) return;
+      cardDragState = null;
+      clearCardDropIndicator();
+      state.source?.classList.remove('is-dragging');
+      document.body.classList.remove('card-drag-active');
+      if (state.handle?.hasPointerCapture?.(state.pointerId)) {
+        try {
+          state.handle.releasePointerCapture(state.pointerId);
+        } catch {}
+      }
+    }
+
+    function cancelCardDrag(options = {}) {
+      const state = cardDragState;
+      if (!state) return;
+      if (options.restore !== false) restoreCardDragOrder(state);
+      const wasActive = state.active;
+      finishCardDragCleanup(state);
+      if (wasActive && options.announce !== false) announceCardLayout('Card move cancelled.');
+    }
+
+    function cardDragTargetAtPoint(state, clientX, clientY) {
+      if (!state?.parent?.isConnected || state.source.parentElement !== state.parent) return null;
+      const parentRect = state.parent.getBoundingClientRect();
+      const insideParent = (
+        clientX >= parentRect.left
+        && clientX <= parentRect.right
+        && clientY >= parentRect.top
+        && clientY <= parentRect.bottom
+      );
+      if (!insideParent) return null;
+      const sourceRect = state.source.getBoundingClientRect();
+      if (
+        clientX >= sourceRect.left
+        && clientX <= sourceRect.right
+        && clientY >= sourceRect.top
+        && clientY <= sourceRect.bottom
+      ) return null;
+      const candidates = cardDragCards(state.parent, state.scope).filter((card) => card !== state.source);
+      if (!candidates.length) return null;
+      const hit = document.elementsFromPoint(clientX, clientY)
+        .map((element) => element.closest?.('[data-card-scope][data-card-id]'))
+        .find((card) => (
+          card
+          && card !== state.source
+          && card.parentElement === state.parent
+          && card.dataset.cardScope === state.scope
+          && card.dataset.cardMovable === 'true'
+          && !card.hidden
+        ));
+      let target = hit;
+      if (!target) {
+        target = candidates.reduce((nearest, card) => {
+          const rect = card.getBoundingClientRect();
+          const dx = clientX - (rect.left + rect.width / 2);
+          const dy = clientY - (rect.top + rect.height / 2);
+          const distance = (dx * dx) + (dy * dy);
+          return !nearest || distance < nearest.distance ? { card, distance } : nearest;
+        }, null)?.card;
+      }
+      if (!target) return null;
+      const targetRect = target.getBoundingClientRect();
+      const verticalOverlap = Math.max(
+        0,
+        Math.min(sourceRect.bottom, targetRect.bottom) - Math.max(sourceRect.top, targetRect.top)
+      );
+      const horizontal = verticalOverlap >= Math.min(sourceRect.height, targetRect.height) * 0.35;
+      const before = horizontal
+        ? clientX < targetRect.left + (targetRect.width / 2)
+        : clientY < targetRect.top + (targetRect.height / 2);
+      return { target, before, axis: horizontal ? 'horizontal' : 'vertical' };
+    }
+
+    function showCardDragTarget(drop) {
+      clearCardDropIndicator();
+      if (!drop) return;
+      drop.target.classList.add(
+        'card-drop-target',
+        drop.before ? 'card-drop-before' : 'card-drop-after',
+        drop.axis === 'horizontal' ? 'card-drop-horizontal' : 'card-drop-vertical'
+      );
+    }
+
+    function autoScrollCardDrag(state, clientY) {
+      if (state.parent !== view || view.scrollHeight <= view.clientHeight) return;
+      const rect = view.getBoundingClientRect();
+      const edge = 42;
+      if (clientY < rect.top + edge) view.scrollBy(0, -18);
+      else if (clientY > rect.bottom - edge) view.scrollBy(0, 18);
+    }
+
+    function startCardDrag(event) {
+      const handle = event.target.closest?.('[data-card-drag-handle]');
+      if (!handle || event.isPrimary === false || event.button !== 0) return;
+      const source = handle.closest('[data-card-scope][data-card-id]');
+      if (!isMovableCard(source) || handle.parentElement !== source) return;
+      cancelCardDrag({ restore: true, announce: false });
+      const parent = source.parentElement;
+      const scope = source.dataset.cardScope;
+      cardDragState = {
+        pointerId: event.pointerId,
+        handle,
+        source,
+        parent,
+        scope,
+        startX: event.clientX,
+        startY: event.clientY,
+        active: false,
+        drop: null,
+        originalIds: directScopedCards(parent, scope).map((card) => card.dataset.cardId).filter(Boolean)
+      };
+      closeMenus();
+      try {
+        handle.setPointerCapture(event.pointerId);
+      } catch {}
+    }
+
+    function updateCardDrag(event) {
+      const state = cardDragState;
+      if (!state || event.pointerId !== state.pointerId) return;
+      if (!state.source.isConnected || state.source.parentElement !== state.parent) {
+        cancelCardDrag({ restore: true });
+        return;
+      }
+      const distance = Math.hypot(event.clientX - state.startX, event.clientY - state.startY);
+      if (!state.active && distance < 6) return;
+      if (!state.active) {
+        state.active = true;
+        state.source.classList.add('is-dragging');
+        document.body.classList.add('card-drag-active');
+      }
+      event.preventDefault();
+      autoScrollCardDrag(state, event.clientY);
+      state.drop = cardDragTargetAtPoint(state, event.clientX, event.clientY);
+      showCardDragTarget(state.drop);
+    }
+
+    function completeCardDrag(event) {
+      const state = cardDragState;
+      if (!state || event.pointerId !== state.pointerId) return;
+      if (!state.active) {
+        finishCardDragCleanup(state);
+        return;
+      }
+      suppressCardHandleClick = true;
+      window.setTimeout(() => { suppressCardHandleClick = false; }, 0);
+      const drop = state.drop;
+      const valid = (
+        drop
+        && state.source.parentElement === state.parent
+        && drop.target.parentElement === state.parent
+        && drop.target.dataset.cardScope === state.scope
+        && drop.target.dataset.cardMovable === 'true'
+      );
+      if (!valid) {
+        restoreCardDragOrder(state);
+        finishCardDragCleanup(state);
+        announceCardLayout('Card move cancelled.');
+        return;
+      }
+      if (drop.before) drop.target.before(state.source);
+      else drop.target.after(state.source);
+      persistDirectCardOrder(state.parent, state.scope);
+      const sourceTitle = state.source.dataset.cardTitle || cardTitle(state.source);
+      const targetTitle = drop.target.dataset.cardTitle || cardTitle(drop.target);
+      finishCardDragCleanup(state);
+      announceCardLayout(`Moved ${sourceTitle} ${drop.before ? 'before' : 'after'} ${targetTitle}.`);
     }
 
     function closeCard(scope, id) {
+      if (scope === 'tabs') return;
       const closed = new Set(getClosedCards(scope));
       const normalizedId = normalizeCardId(scope, id);
       closed.add(normalizedId);
@@ -3637,13 +4016,13 @@
     }
 
     function hiddenCardScopes() {
-      const scopes = new Set(['quick', 'tabs']);
+      const scopes = new Set(['quick']);
       views.forEach(([id]) => scopes.add(cardScopeForView(id)));
       scopes.add(cardScopeForView('settings'));
       Object.keys(localStorage).forEach((key) => {
         if (key.startsWith(cardClosedPrefix)) scopes.add(key.slice(cardClosedPrefix.length));
       });
-      return Array.from(scopes).filter(Boolean);
+      return Array.from(scopes).filter((scope) => Boolean(scope) && scope !== 'tabs');
     }
 
     function fallbackCardLabel(scope, id) {
@@ -4021,7 +4400,7 @@
       const safeScope = escapeHtml(scope);
       const safeId = escapeHtml(id);
       return `
-        <section class="${className}" data-widget="${safeId}" data-layout-scope="${safeScope}" draggable="true">
+        <section class="${className}" data-widget="${safeId}" data-layout-scope="${safeScope}">
           <div class="panel-title-row">
             <h2>${escapeHtml(title)}</h2>
             <div class="panel-tools">
@@ -5583,6 +5962,12 @@
         }
         return;
       }
+      if (button.dataset.cardDragHandle) {
+        if (suppressCardHandleClick) return;
+        const [scope, id] = button.dataset.cardDragHandle.split(':');
+        toggleCardMenu(scope, id);
+        return;
+      }
       if (button.dataset.cardMenuToggle) {
         const [scope, id] = button.dataset.cardMenuToggle.split(':');
         toggleCardMenu(scope, id);
@@ -5847,45 +6232,27 @@
       }
     });
 
-    document.addEventListener('dragstart', (event) => {
-      const header = event.target.closest?.('.panel-title-row');
-      const card = header?.closest?.('.dashboard-card');
-      if (!card) return;
-      draggedWidget = `${card.dataset.layoutScope || 'sheet'}:${card.dataset.widget || ''}`;
-      card.classList.add('is-dragging');
-      event.dataTransfer.effectAllowed = 'move';
-      event.dataTransfer.setData('text/plain', draggedWidget);
-    });
-
-    document.addEventListener('dragover', (event) => {
-      const card = event.target.closest?.('.dashboard-card');
-      if (!card || !draggedWidget) return;
-      const [sourceScope, sourceId] = draggedWidget.split(':');
-      if ((card.dataset.layoutScope || 'sheet') !== sourceScope || card.dataset.widget === sourceId) return;
-      event.preventDefault();
-      document.querySelectorAll('.dashboard-card.drag-over').forEach((item) => item.classList.remove('drag-over'));
-      card.classList.add('drag-over');
-    });
-
-    document.addEventListener('drop', (event) => {
-      const card = event.target.closest?.('.dashboard-card');
-      if (!card || !draggedWidget) return;
-      event.preventDefault();
-      const source = event.dataTransfer.getData('text/plain') || draggedWidget;
-      const [sourceScope, sourceId] = source.split(':');
-      const targetScope = card.dataset.layoutScope || 'sheet';
-      const target = card.dataset.widget || '';
-      document.querySelectorAll('.dashboard-card.drag-over, .dashboard-card.is-dragging').forEach((item) => item.classList.remove('drag-over', 'is-dragging'));
-      if (sourceScope === targetScope) {
-        if (sourceScope === 'top') dropTopWidget(sourceId, target);
-        else dropSheetWidget(sourceId, target);
+    document.addEventListener('pointerdown', startCardDrag);
+    document.addEventListener('pointermove', updateCardDrag, { passive: false });
+    document.addEventListener('pointerup', completeCardDrag);
+    document.addEventListener('pointercancel', (event) => {
+      if (cardDragState && event.pointerId === cardDragState.pointerId) {
+        cancelCardDrag({ restore: true });
       }
-      draggedWidget = '';
     });
-
-    document.addEventListener('dragend', () => {
-      draggedWidget = '';
-      document.querySelectorAll('.dashboard-card.drag-over, .dashboard-card.is-dragging').forEach((item) => item.classList.remove('drag-over', 'is-dragging'));
+    document.addEventListener('lostpointercapture', (event) => {
+      if (cardDragState && event.pointerId === cardDragState.pointerId) {
+        cancelCardDrag({ restore: true });
+      }
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape' || !cardDragState) return;
+      event.preventDefault();
+      cancelCardDrag({ restore: true });
+    });
+    window.addEventListener('blur', () => cancelCardDrag({ restore: true }));
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) cancelCardDrag({ restore: true });
     });
 
     document.addEventListener('change', (event) => {

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import io
 import json
+import re
 import tempfile
 import unittest
 import zipfile
@@ -113,6 +114,212 @@ class CardSizingTests(unittest.TestCase):
         self.assertIn('class="stat-set-line"', assistant_html)
         self.assertIn("options.resizable === false", assistant_html)
         self.assertIn("resizable: false", assistant_html)
+
+
+class CardLayoutInteractionTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.root = Path(saa_main.__file__).resolve().parent
+        cls.assistant_html = (cls.root / "assistant.html").read_text(encoding="utf-8")
+
+    @classmethod
+    def function_source(cls, name: str) -> str:
+        match = re.search(
+            rf"(?:async\s+)?function\s+{re.escape(name)}\b",
+            cls.assistant_html,
+        )
+        if not match:
+            raise AssertionError(f"JavaScript function {name!r} was not found")
+
+        parameters_start = cls.assistant_html.find("(", match.end())
+        if parameters_start < 0:
+            raise AssertionError(f"JavaScript function {name!r} has no parameter list")
+        parameter_depth = 0
+        quote = ""
+        escaped = False
+        parameters_end = -1
+        for index in range(parameters_start, len(cls.assistant_html)):
+            character = cls.assistant_html[index]
+            if quote:
+                if escaped:
+                    escaped = False
+                elif character == "\\":
+                    escaped = True
+                elif character == quote:
+                    quote = ""
+                continue
+            if character in {"'", '"', "`"}:
+                quote = character
+            elif character == "(":
+                parameter_depth += 1
+            elif character == ")":
+                parameter_depth -= 1
+                if parameter_depth == 0:
+                    parameters_end = index
+                    break
+        if parameters_end < 0:
+            raise AssertionError(f"JavaScript function {name!r} has no closing parenthesis")
+
+        start = cls.assistant_html.find("{", parameters_end)
+        depth = 0
+        quote = ""
+        escaped = False
+        for index in range(start, len(cls.assistant_html)):
+            character = cls.assistant_html[index]
+            if quote:
+                if escaped:
+                    escaped = False
+                elif character == "\\":
+                    escaped = True
+                elif character == quote:
+                    quote = ""
+                continue
+            if character in {"'", '"', "`"}:
+                quote = character
+            elif character == "{":
+                depth += 1
+            elif character == "}":
+                depth -= 1
+                if depth == 0:
+                    return cls.assistant_html[match.start():index + 1]
+        raise AssertionError(f"JavaScript function {name!r} has no closing brace")
+
+    def test_release_metadata_is_3_1_5(self) -> None:
+        readme = (self.root / "README.md").read_text(encoding="utf-8")
+        building = (self.root / "docs" / "BUILDING.md").read_text(encoding="utf-8")
+        user_guide = (self.root / "docs" / "USER_GUIDE.md").read_text(encoding="utf-8")
+        changelog = (self.root / "CHANGELOG.md").read_text(encoding="utf-8")
+        installer = (
+            self.root / "installer" / "LoneWolf_ActionAssistant.iss"
+        ).read_text(encoding="utf-8")
+        version_info = (self.root / "version_info.txt").read_text(encoding="utf-8")
+
+        self.assertIn("# Lone Wolf Action Assistant 3.1.5", readme)
+        self.assertIn("Version: **3.1.5**", readme)
+        self.assertIn("# Building Lone Wolf Action Assistant 3.1.5", building)
+        self.assertIn("# Lone Wolf Action Assistant 3.1.5", user_guide)
+        self.assertIn("## 3.1.5", changelog)
+        self.assertIn('#define AppVersion "3.1.5"', installer)
+        self.assertIn("filevers=(3, 1, 5, 0)", version_info)
+        self.assertIn("prodvers=(3, 1, 5, 0)", version_info)
+        self.assertIn("StringStruct(u'FileVersion', u'3.1.5')", version_info)
+        self.assertIn("StringStruct(u'ProductVersion', u'3.1.5')", version_info)
+
+    def test_movable_cards_get_a_dedicated_drag_handle(self) -> None:
+        self.assertIn("data-card-drag-handle", self.assistant_html)
+        self.assertIn(".card-drag-handle", self.assistant_html)
+        self.assertRegex(
+            self.assistant_html,
+            r"<button\b[^>]*\bdata-card-drag-handle\b",
+        )
+
+    def test_tabs_are_collapse_only_and_have_no_card_menu(self) -> None:
+        decorate_interface = self.function_source("decorateInterfaceCards")
+        match = re.search(
+            r"decorateCards\(\s*['\"]tabs['\"]\s*,[\s\S]*?,\s*\{(?P<options>[\s\S]*?)\}\s*\)",
+            decorate_interface,
+        )
+        self.assertIsNotNone(match, "tabs must be decorated with explicit options")
+        options = match.group("options")
+        for option in ("movable", "resizable", "closeable", "menu"):
+            self.assertRegex(options, rf"\b{option}\s*:\s*false\b")
+
+    def test_legacy_native_html_drag_system_is_removed(self) -> None:
+        self.assertNotIn('draggable="true"', self.assistant_html)
+        self.assertNotRegex(
+            self.assistant_html,
+            r"addEventListener\(\s*['\"](?:dragstart|dragover|drop|dragend)['\"]",
+        )
+
+    def test_pointer_drag_has_commit_and_cancel_paths(self) -> None:
+        for event_name in ("pointerdown", "pointermove", "pointerup", "pointercancel"):
+            self.assertRegex(
+                self.assistant_html,
+                rf"addEventListener\(\s*['\"]{event_name}['\"]",
+            )
+        self.assertIn("setPointerCapture", self.assistant_html)
+        self.assertRegex(
+            self.assistant_html,
+            r"addEventListener\(\s*['\"]pointercancel['\"][\s\S]{0,240}"
+            r"(?:cancel|clear|finish|end)[A-Za-z0-9_$]*CardDrag",
+        )
+        self.assertRegex(
+            self.assistant_html,
+            r"(?:event\.key|key)\s*(?:={2,3}|!={1,2})\s*['\"]Escape['\"][\s\S]{0,180}"
+            r"(?:cancel|clear|finish|end)[A-Za-z0-9_$]*CardDrag",
+        )
+
+    def test_pointer_drop_requires_same_parent_and_scope(self) -> None:
+        functions = [
+            self.function_source("cardDragTargetAtPoint"),
+            self.function_source("completeCardDrag"),
+        ]
+        boundary_functions = [
+            source
+            for source in functions
+            if (
+                re.search(
+                    r"(?:source|dragged)\.parentElement\s*={2,3}\s*target\.parentElement"
+                    r"|target\.parentElement\s*={2,3}\s*(?:source|dragged)\.parentElement",
+                    source,
+                )
+                or len(re.findall(r"(?:source|target)\.parentElement\s*={2,3}\s*state\.parent", source)) >= 2
+                or (
+                    "state.source.parentElement === state.parent" in source
+                    and "drop.target.parentElement === state.parent" in source
+                )
+            )
+            and (
+                re.search(
+                    r"(?:source|dragged)\.dataset\.cardScope\s*={2,3}\s*target\.dataset\.cardScope"
+                    r"|target\.dataset\.cardScope\s*={2,3}\s*(?:source|dragged)\.dataset\.cardScope",
+                    source,
+                )
+                or "drop.target.dataset.cardScope === state.scope" in source
+                or "target.dataset.cardScope === state.scope" in source
+            )
+        ]
+        self.assertTrue(
+            boundary_functions,
+            "a card-drop boundary helper must require the same direct parent and card scope",
+        )
+
+    def test_move_card_uses_direct_same_parent_siblings(self) -> None:
+        move_card = self.function_source("moveCard")
+        self.assertRegex(
+            move_card,
+            r"(?:parentElement|\.children|:scope\s*>)",
+        )
+        self.assertRegex(move_card, r"(?:direct[A-Za-z0-9_$]*Cards|cardsForContainer)\s*\(")
+
+        direct_helper = self.function_source("directScopedCards")
+        self.assertRegex(direct_helper, r"\.children\b|querySelectorAll\(\s*['\"]:scope\s*>")
+        self.assertIn("cardScope", direct_helper)
+
+    def test_non_closeable_tabs_ignore_legacy_closed_state(self) -> None:
+        decorate_cards = self.function_source("decorateCards")
+        hidden_assignment = re.search(r"card\.hidden\s*=\s*(?P<value>[^;]+);", decorate_cards)
+        self.assertIsNotNone(hidden_assignment)
+        self.assertRegex(
+            hidden_assignment.group("value"),
+            r"closeable|options\.closeable",
+        )
+        self.assertIn("closed.has(id)", hidden_assignment.group("value"))
+
+    def test_persisted_layout_keeps_all_direct_siblings_including_hidden_cards(self) -> None:
+        direct_helper = self.function_source("directScopedCards")
+        persistence = self.function_source("persistDirectCardOrder")
+        merge = self.function_source("mergedCardLayout")
+
+        self.assertRegex(direct_helper, r"\.children\b|querySelectorAll\(\s*['\"]:scope\s*>")
+        self.assertNotRegex(
+            direct_helper,
+            r":not\(\[hidden\]\)|!\s*\w+\.hidden|\.hidden\s*={2,3}\s*false",
+        )
+        self.assertIn("directScopedCards(parent, scope)", persistence)
+        self.assertIn("setCardLayout(scope, mergedCardLayout(scope, ids))", persistence)
+        self.assertIn("getCardLayout(scope)", merge)
+        self.assertRegex(merge, r"currentSet\.has\(id\)\s*\?[\s\S]*:\s*id")
 
 
 class SeriesSigilTests(unittest.TestCase):

@@ -2,6 +2,12 @@
 
 ## 3.1.5 — Unreleased
 
+- Added square drag handles to the Quick Actions and active-tab cards so players can reorder them on the existing grid without allowing cards to overlap or leave their section.
+- Kept each tab's card order independent and stored layout changes in per-player UI preferences rather than campaign saves.
+- Kept the Book/Section/END/Gold/CS summary and bottom status bar static, and made the Tabs row collapse-only.
+- Preserved the card menu's arrow controls as a keyboard and touch-friendly reorder option, including access by clicking the new drag handle.
+- Removed the obsolete native HTML drag system so it cannot compete with the constrained pointer-based card sorter.
+
 ## 3.1.4 — 2026-07-27
 
 - Made game saves crash-safe by writing each save to a temporary file and atomically replacing the previous one, so an interrupted autosave can no longer corrupt a campaign.

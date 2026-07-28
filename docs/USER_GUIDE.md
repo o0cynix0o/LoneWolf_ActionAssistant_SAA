@@ -39,6 +39,20 @@ books\lw\01fftd\sect1.htm
 
 Use **Open Managed Books Folder** when you need direct access to the selected storage location.
 
+## Arranging assistant cards
+
+The Assistant page keeps cards inside five fixed sections:
+
+- The Book, Section, END, Gold, and CS summary stays fixed.
+- Quick Actions cards can be reordered, resized, collapsed, and closed inside the Quick Actions section.
+- The Tabs row stays in place and can only be collapsed. Collapsing it hides the tab buttons without hiding the selected tab's content.
+- Cards in the selected tab can be reordered, resized, collapsed, and closed inside that tab. Each tab remembers its own layout.
+- The bottom status line stays fixed.
+
+Drag a card by the square grip in its top-left corner. Cards snap into the grid and cannot overlap, cross into another section, or move between tabs. Click the grip to open the card menu when you prefer the **Up**, **Down**, **Left**, and **Right** controls.
+
+Card layouts are saved with the current Windows player's UI preferences. They do not change campaign save data.
+
 ## Saves and upgrades
 
 Saves are stored separately from the installed program. Upgrading or uninstalling the application does not intentionally remove books or player saves.
