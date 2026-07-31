@@ -43,6 +43,18 @@ INIT_ROWS = 30
 LOCAL_WS_HOSTNAMES = {"localhost", "127.0.0.1", "::1"}
 
 
+def normalize_winpty_input(text: str) -> str:
+    """Translate xterm's standalone Enter event for WinPTY.
+
+    xterm.js emits ordinary typing one WebSocket message at a time and emits
+    Enter as a standalone carriage return.  WinPTY echoes that carriage return
+    but does not submit the line unless it receives the complete CRLF sequence.
+    Preserve every other input sequence verbatim so Backspace, pasted text, and
+    terminal control sequences retain their normal behavior.
+    """
+    return "\r\n" if text == "\r" else text
+
+
 def origin_is_local(origin: str | None) -> bool:
     """Return True when a handshake Origin is safe to accept.
 
@@ -160,7 +172,7 @@ async def terminal_session_winpty(websocket, command: list[str]) -> None:
                     except Exception:
                         pass
                 else:
-                    pty_proc.write(text)
+                    pty_proc.write(normalize_winpty_input(text))
         except Exception:
             pass
 

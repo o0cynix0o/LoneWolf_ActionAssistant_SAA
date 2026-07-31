@@ -520,6 +520,14 @@ class ServiceTests(unittest.TestCase):
 
 
 class FrozenCliTests(unittest.TestCase):
+    def test_winpty_submits_xterm_standalone_enter_as_crlf(self) -> None:
+        self.assertEqual(ws_server.normalize_winpty_input("\r"), "\r\n")
+
+    def test_winpty_preserves_other_terminal_input(self) -> None:
+        for text in ("s", "pasted command", "\x7f", "\x08", "\x1b[A", "line\rnext"):
+            with self.subTest(text=repr(text)):
+                self.assertEqual(ws_server.normalize_winpty_input(text), text)
+
     def test_embedded_terminal_follows_fresh_keyboard_input(self) -> None:
         root = Path(saa_main.__file__).resolve().parent
         assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
