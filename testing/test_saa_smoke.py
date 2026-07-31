@@ -520,6 +520,13 @@ class ServiceTests(unittest.TestCase):
 
 
 class FrozenCliTests(unittest.TestCase):
+    def test_xterm_uses_winpty_cursor_and_reflow_rules(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
+
+        self.assertIn("convertEol: false", assistant_html)
+        self.assertIn("windowsPty: { backend: 'winpty' }", assistant_html)
+
     def test_winpty_submits_xterm_standalone_enter_as_crlf(self) -> None:
         self.assertEqual(ws_server.normalize_winpty_input("\r"), "\r\n")
 

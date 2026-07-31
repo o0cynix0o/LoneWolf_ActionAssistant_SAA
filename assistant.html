@@ -2990,7 +2990,11 @@
 
       cliTerminal = new Terminal({
         cursorBlink: true,
-        convertEol: true,
+        // Output comes from a real Windows PTY, which already owns newline and
+        // cursor translation. Rewriting LF in xterm desynchronizes the visible
+        // cursor from WinPTY after larger redraws such as the hidden catalog.
+        convertEol: false,
+        windowsPty: { backend: 'winpty' },
         scrollOnUserInput: true,
         fontFamily: 'Consolas, "Cascadia Mono", "Courier New", monospace',
         fontSize: 14,
