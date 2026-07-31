@@ -1,4 +1,4 @@
-# Lone Wolf Action Assistant 3.1.5
+# Lone Wolf Action Assistant 3.1.6
 
 ## Installation
 
@@ -51,7 +51,13 @@ The Assistant page keeps cards inside five fixed sections:
 
 Drag a card by the square grip in its top-left corner. Cards snap into the grid and cannot overlap, cross into another section, or move between tabs. Click the grip to open the card menu when you prefer the **Up**, **Down**, **Left**, and **Right** controls.
 
-Card layouts are saved with the current Windows player's UI preferences. They do not change campaign save data.
+Eligible cards also have a square resize grip in their bottom-right corner. Hold the primary mouse or pointer button on that grip, drag freely to the width and height you want, and release to save the new dimensions. Other cards reflow around the resized card without overlapping it, and the card cannot grow wider than its section.
+
+If a card is shorter than its content, scroll inside the card to reach every control. Exceptionally tall Quick Actions cards keep that section scrollable so the Tabs row remains reachable. The card menu still provides **Small**, **Medium**, and **Large** presets. Choose **Auto Size** to remove custom dimensions and let the card size itself from its content again.
+
+Free resizing is available for Quick Actions cards and cards in the selected tab. It is not available for the fixed summary, the Tabs row, or the bottom status line. Press **Escape** while dragging a resize grip to cancel and restore the dimensions the card had before the drag.
+
+Card order, preset sizes, and custom dimensions are saved with the current Windows player's UI preferences. Dimensions are remembered separately for each card and each tab; they do not change campaign save data.
 
 ## Saves and upgrades
 

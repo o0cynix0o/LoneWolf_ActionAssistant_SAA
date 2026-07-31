@@ -291,9 +291,12 @@
       display: flex;
       flex-wrap: wrap;
       align-content: flex-start;
+      align-items: flex-start;
       gap: 0.5rem;
       background: #12160f;
       flex-shrink: 0;
+      max-height: 45vh;
+      overflow: auto;
     }
     .quick-tabs-divider {
       height: 0;
@@ -433,6 +436,7 @@
       display: flex;
       flex-wrap: wrap;
       align-content: start;
+      align-items: flex-start;
       gap: 0.65rem;
     }
     #view.view-card-grid > .panel {
@@ -495,6 +499,65 @@
     body.card-drag-active .card-drag-handle {
       cursor: grabbing;
     }
+    .card-resize-handle {
+      position: absolute;
+      right: 0.35rem;
+      bottom: 0.22rem;
+      z-index: 26;
+      width: 20px;
+      min-width: 20px;
+      height: 20px;
+      min-height: 20px;
+      padding: 0;
+      appearance: none;
+      border: 1px solid #6d5f35;
+      border-radius: 4px;
+      background: color-mix(in srgb, #d5e8ea 10%, transparent);
+      color: #d5e8ea;
+      cursor: nwse-resize;
+      touch-action: none;
+      font-size: 0;
+      line-height: 0;
+    }
+    .dashboard-card > .card-resize-handle {
+      width: 20px;
+      min-width: 20px;
+      height: 20px;
+      min-height: 20px;
+    }
+    .card-resize-handle::before,
+    .card-resize-handle::after {
+      content: "";
+      position: absolute;
+      right: 3px;
+      bottom: 3px;
+      width: 9px;
+      height: 1px;
+      background: currentColor;
+      transform: rotate(-45deg);
+      transform-origin: center;
+    }
+    .card-resize-handle::after {
+      right: 1px;
+      bottom: 1px;
+      width: 5px;
+    }
+    .card-resize-handle:hover {
+      border-color: #d1b865;
+      background: color-mix(in srgb, #d5e8ea 18%, transparent);
+      color: #ffffff;
+    }
+    .card-resize-handle:focus-visible {
+      outline: 1px solid #d5e8ea;
+      outline-offset: 2px;
+    }
+    body.card-resize-active {
+      cursor: nwse-resize;
+      user-select: none;
+    }
+    .dashboard-card.is-resizing {
+      box-shadow: 0 0 0 2px #d1b865;
+    }
     .dashboard-card[hidden],
     .quick-card[hidden],
     .tabs[hidden] {
@@ -554,10 +617,15 @@
     .dashboard-card > .quick-title,
     .dashboard-card > .panel-title-row,
     .dashboard-card > .section-subtitle,
+    .dashboard-card > .card-resize-content > h2,
+    .dashboard-card > .card-resize-content > .quick-title,
+    .dashboard-card > .card-resize-content > .panel-title-row,
+    .dashboard-card > .card-resize-content > .section-subtitle,
     .dashboard-card .combat-meter-title-row {
       padding-right: 3.35rem;
     }
-    .dashboard-card > .quick-title {
+    .dashboard-card > .quick-title,
+    .dashboard-card > .card-resize-content > .quick-title {
       min-height: 20px;
       line-height: 20px;
       overflow: hidden;
@@ -568,6 +636,10 @@
     .dashboard-card[data-card-movable="true"] > .quick-title,
     .dashboard-card[data-card-movable="true"] > .panel-title-row,
     .dashboard-card[data-card-movable="true"] > .section-subtitle,
+    .dashboard-card[data-card-movable="true"] > .card-resize-content > h2,
+    .dashboard-card[data-card-movable="true"] > .card-resize-content > .quick-title,
+    .dashboard-card[data-card-movable="true"] > .card-resize-content > .panel-title-row,
+    .dashboard-card[data-card-movable="true"] > .card-resize-content > .section-subtitle,
     .dashboard-card[data-card-movable="true"] .combat-meter-title-row,
     .dashboard-card[data-card-movable="true"] > .card-collapsed-title {
       padding-left: 1.65rem;
@@ -635,6 +707,61 @@
     .quick-panel > .dashboard-card.card-size-large {
       flex: 0 0 100%;
       max-width: 100%;
+    }
+    #view.view-card-grid > .dashboard-card.card-size-auto {
+      flex: 0 1 auto;
+      width: fit-content;
+      min-width: min(220px, 100%);
+      max-width: 100%;
+      height: auto;
+    }
+    .quick-panel > .dashboard-card.card-size-auto {
+      flex: 0 1 auto;
+      width: fit-content;
+      min-width: min(220px, 100%);
+      max-width: 100%;
+      height: auto;
+    }
+    #view.view-card-grid > .dashboard-card.card-size-custom,
+    .quick-panel > .dashboard-card.card-size-custom {
+      flex: 0 1 var(--card-custom-width);
+      width: var(--card-custom-width);
+      max-width: 100%;
+      height: var(--card-custom-height);
+      min-height: 120px !important;
+      align-self: flex-start;
+      display: flex;
+      flex-direction: column;
+    }
+    .dashboard-card[data-card-resizable="true"] {
+      padding-bottom: 1.55rem;
+    }
+    .dashboard-card[data-card-resizable="true"].card-collapsed {
+      padding-bottom: 0.55rem;
+    }
+    .dashboard-card > .card-resize-content {
+      display: contents;
+    }
+    .dashboard-card.card-size-custom > .card-resize-content {
+      display: block;
+      flex: 1 1 auto;
+      min-width: 0;
+      min-height: 0;
+      padding-right: 0.3rem;
+      padding-bottom: 0.1rem;
+      overflow: auto;
+      overscroll-behavior: contain;
+      scrollbar-gutter: stable;
+    }
+    .quick-column.card-size-custom > .card-resize-content {
+      display: grid;
+      align-content: start;
+      gap: 0.35rem;
+    }
+    #view.view-card-grid > .dashboard-card.card-size-custom.card-collapsed,
+    .quick-panel > .dashboard-card.card-size-custom.card-collapsed {
+      height: auto;
+      min-height: 34px !important;
     }
     .sheet-layout .dashboard-card.size-compact {
       grid-column: auto;
@@ -1384,8 +1511,9 @@
       .quick-panel { display: flex; }
       #view.view-card-grid > .dashboard-card,
       .quick-panel > .dashboard-card {
-        flex-basis: 100%;
-        max-width: 100%;
+        flex: 0 0 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
       }
     }
   </style>
@@ -1538,6 +1666,7 @@
     let book1Creation = null;
     let activeCardMenu = '';
     let cardDragState = null;
+    let cardResizeState = null;
     let suppressCardHandleClick = false;
     let bookFiles = { Installed: true, Books: [] };
     let currentReceipt = { summary: 'Ready.', details: [] };
@@ -1561,12 +1690,13 @@
     const sheetSizeKey = 'lonewolf_redux.sheet.sizes.v1';
     const cardLayoutPrefix = 'lonewolf_redux.cards.layout.';
     const cardSizePrefix = 'lonewolf_redux.cards.size.';
+    const cardDimensionsPrefix = 'lonewolf_redux.cards.dimensions.';
     const cardClosedPrefix = 'lonewolf_redux.cards.closed.';
     const cardCollapsedPrefix = 'lonewolf_redux.cards.collapsed.';
     const cardLabelPrefix = 'lonewolf_redux.cards.labels.';
     const appearancePreferenceKeys = Object.values(settingsApi.keys);
     const uiPreferenceStaticKeys = [topLayoutKey, topSizeKey, sheetLayoutKey, sheetSizeKey, ...appearancePreferenceKeys];
-    const uiPreferencePrefixes = [cardLayoutPrefix, cardSizePrefix, cardClosedPrefix, cardCollapsedPrefix, cardLabelPrefix];
+    const uiPreferencePrefixes = [cardLayoutPrefix, cardSizePrefix, cardDimensionsPrefix, cardClosedPrefix, cardCollapsedPrefix, cardLabelPrefix];
     const sizeOrder = ['compact', 'normal', 'full'];
     const sizeLabels = { compact: 'Compact', normal: 'Normal', full: 'Full' };
     let uiPreferencesReady = false;
@@ -2733,6 +2863,7 @@
     }
 
     function render() {
+      cancelCardResize({ restore: true, announce: false });
       cancelCardDrag({ restore: true, announce: false });
       setModeIndicator();
       renderStatus();
@@ -3285,7 +3416,7 @@
         ? 'Step back before this section. Use this when a route choice led to the death and you want to pick a different path.'
         : 'There is no earlier section checkpoint yet. Load a save or start a new run if repeat is not available.';
       view.innerHTML = `
-        <div class="panel panel-danger">
+        <div class="panel panel-danger" data-card-id="death-outcome">
           <h2>${escapeHtml(scene.title)}</h2>
           <p class="death-copy">${escapeHtml(scene.body)}</p>
           <div class="grid death-summary">
@@ -3454,15 +3585,59 @@
 
     function getCardSize(scope, id, defaultSize = 'large') {
       const size = text(getCardSizes(scope)[id], defaultSize);
-      return ['small', 'medium', 'large'].includes(size) ? size : defaultSize;
+      return ['auto', 'small', 'medium', 'large'].includes(size) ? size : defaultSize;
     }
 
     function setCardSize(scope, id, size) {
       const sizes = getCardSizes(scope);
-      sizes[id] = ['small', 'medium', 'large'].includes(size) ? size : 'large';
+      sizes[id] = ['auto', 'small', 'medium', 'large'].includes(size) ? size : 'large';
+      clearCardDimensions(scope, id);
       setJsonStorage(cardStorageKey(cardSizePrefix, scope), sizes);
       persistUiPreferences(true);
       render();
+    }
+
+    function normalizeCardDimensions(value) {
+      if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+      const rawWidth = Number(value.width);
+      const rawHeight = Number(value.height);
+      if (!Number.isFinite(rawWidth) || !Number.isFinite(rawHeight) || rawWidth <= 0 || rawHeight <= 0) return null;
+      return {
+        width: Math.round(Math.min(8192, Math.max(220, rawWidth))),
+        height: Math.round(Math.min(4096, Math.max(120, rawHeight)))
+      };
+    }
+
+    function getCardDimensions(scope) {
+      const dimensions = getJsonStorage(cardStorageKey(cardDimensionsPrefix, scope), {});
+      return dimensions && typeof dimensions === 'object' && !Array.isArray(dimensions) ? dimensions : {};
+    }
+
+    function getCardDimension(scope, id) {
+      const dimensions = normalizeCardDimensions(getCardDimensions(scope)[normalizeCardId(scope, id)]);
+      if (!dimensions) return null;
+      const { width, height } = dimensions;
+      return { width, height };
+    }
+
+    function setCardDimensions(scope, id, dimensions) {
+      const normalizedId = normalizeCardId(scope, id);
+      const normalized = normalizeCardDimensions(dimensions);
+      if (!normalizedId || !normalized) return false;
+      const allDimensions = getCardDimensions(scope);
+      allDimensions[normalizedId] = normalized;
+      setJsonStorage(cardStorageKey(cardDimensionsPrefix, scope), allDimensions);
+      persistUiPreferences(true);
+      return true;
+    }
+
+    function clearCardDimensions(scope, id) {
+      const normalizedId = normalizeCardId(scope, id);
+      const allDimensions = getCardDimensions(scope);
+      if (!normalizedId || !Object.prototype.hasOwnProperty.call(allDimensions, normalizedId)) return false;
+      delete allDimensions[normalizedId];
+      setJsonStorage(cardStorageKey(cardDimensionsPrefix, scope), allDimensions);
+      return true;
     }
 
     function getClosedCards(scope) {
@@ -3523,6 +3698,8 @@
         card.dataset.cardTitleOverride ||
         card.querySelector(':scope > h2')?.textContent ||
         card.querySelector(':scope > .quick-title')?.textContent ||
+        card.querySelector(':scope > .card-resize-content > h2')?.textContent ||
+        card.querySelector(':scope > .card-resize-content > .quick-title')?.textContent ||
         card.querySelector('.combat-meter-title-row h2')?.textContent,
         fallback
       ).trim();
@@ -3593,10 +3770,12 @@
     function cardMenuHtml(scope, id, title, size, options) {
       const movementDisabled = options.movable === false ? 'disabled' : '';
       const closeDisabled = options.closeable === false ? 'disabled' : '';
-      const sizeButton = (value, label) => `<button type="button" class="${size === value ? 'active' : ''}" data-card-size="${scope}:${id}:${value}">${label}</button>`;
+      const customDimensions = getCardDimension(scope, id);
+      const sizeButton = (value, label) => `<button type="button" class="${!customDimensions && size === value ? 'active' : ''}" data-card-size="${scope}:${id}:${value}">${label}</button>`;
       const sizeControls = options.resizable === false ? '' : `
-          <div class="menu-heading">Size</div>
-          <div class="menu-row three">
+          <div class="menu-heading" data-card-size-heading>Size${customDimensions ? ` — Custom ${customDimensions.width} × ${customDimensions.height}` : ''}</div>
+          <div class="menu-row">
+            ${sizeButton('auto', 'Auto Size')}
             ${sizeButton('small', 'Small')}
             ${sizeButton('medium', 'Medium')}
             ${sizeButton('large', 'Large')}
@@ -3627,6 +3806,21 @@
       return `<button class="card-drag-handle" type="button" data-card-drag-handle="${escapeHtml(token)}" aria-label="Move ${escapeHtml(title)} card" title="Drag to reorder. Click for movement controls."></button>`;
     }
 
+    function cardResizeHandleHtml(scope, id, title) {
+      const token = `${scope}:${id}`;
+      return `<button class="card-resize-handle" type="button" data-card-resize-handle="${escapeHtml(token)}" aria-label="Resize ${escapeHtml(title)} card" title="Drag to resize. Click for size controls."></button>`;
+    }
+
+    function ensureCardResizeContent(card) {
+      let content = card.querySelector(':scope > .card-resize-content');
+      if (content) return content;
+      content = document.createElement('div');
+      content.className = 'card-resize-content';
+      while (card.firstChild) content.appendChild(card.firstChild);
+      card.appendChild(content);
+      return content;
+    }
+
     function decorateCards(scope, cards, options = {}) {
       const actualCards = arr(cards).filter(Boolean);
       if (!actualCards.length) return;
@@ -3652,19 +3846,32 @@
         const campaignEntry = campaignStartRequested && card.dataset.campaignEntry === 'true';
         const movable = !campaignEntry && options.movable !== false;
         const closeable = !campaignEntry && options.closeable !== false;
-        const size = campaignEntry || options.resizable === false ? defaultSize : getCardSize(scope, id, defaultSize);
+        const resizable = !campaignEntry && options.resizable !== false;
+        const size = resizable ? getCardSize(scope, id, defaultSize) : defaultSize;
+        const customDimensions = resizable ? getCardDimension(scope, id) : null;
         const collapsed = campaignEntry ? false : collapsedCards.has(id);
         card.hidden = closeable ? closed.has(id) : false;
         card.dataset.cardMovable = movable ? 'true' : 'false';
+        card.dataset.cardResizable = resizable ? 'true' : 'false';
         card.classList.add('dashboard-card');
         card.classList.toggle('card-collapsed', collapsed);
-        card.classList.remove('card-size-small', 'card-size-medium', 'card-size-large');
-        card.classList.add(`card-size-${size}`);
+        card.classList.remove('card-size-auto', 'card-size-small', 'card-size-medium', 'card-size-large', 'card-size-custom');
+        if (customDimensions) {
+          card.classList.add('card-size-custom');
+          card.style.setProperty('--card-custom-width', `${customDimensions.width}px`);
+          card.style.setProperty('--card-custom-height', `${customDimensions.height}px`);
+        } else {
+          card.classList.add(`card-size-${size}`);
+          card.style.removeProperty('--card-custom-width');
+          card.style.removeProperty('--card-custom-height');
+        }
         card.querySelector(':scope > .card-drag-handle')?.remove();
+        card.querySelector(':scope > .card-resize-handle')?.remove();
         card.querySelector(':scope > .card-collapse-button')?.remove();
         card.querySelector(':scope > .card-collapsed-title')?.remove();
         card.querySelector(':scope > .card-menu-button')?.remove();
         card.querySelector(':scope > .card-menu')?.remove();
+        if (resizable) ensureCardResizeContent(card);
         card.insertAdjacentHTML('afterbegin', `<div class="card-collapsed-title">${escapeHtml(title)}</div>`);
         if (!campaignEntry) {
           card.insertAdjacentHTML('afterbegin', cardCollapseButtonHtml(scope, id, title, collapsed));
@@ -3674,9 +3881,16 @@
           if (movable) {
             card.insertAdjacentHTML('afterbegin', cardDragHandleHtml(scope, id, title));
           }
+          if (resizable && !collapsed) {
+            card.insertAdjacentHTML('beforeend', cardResizeHandleHtml(scope, id, title));
+          }
         }
         const help = cardHelp(title, scope);
-        const helpTarget = card.querySelector(':scope > h2') || card.querySelector(':scope > .quick-title') || card.querySelector('.combat-meter-title-row h2');
+        const helpTarget = card.querySelector(':scope > h2')
+          || card.querySelector(':scope > .quick-title')
+          || card.querySelector(':scope > .card-resize-content > h2')
+          || card.querySelector(':scope > .card-resize-content > .quick-title')
+          || card.querySelector('.combat-meter-title-row h2');
         if (help && helpTarget) {
           helpTarget.title = help;
           helpTarget.dataset.cardHelp = 'true';
@@ -3729,6 +3943,178 @@
       if (parent === quickPanel) return scope === 'quick';
       if (parent === view) return scope.startsWith('view-');
       return false;
+    }
+
+    function isResizableCard(card) {
+      if (!card || card.dataset.cardResizable !== 'true' || card.hidden || card.classList.contains('card-collapsed')) return false;
+      const parent = card.parentElement;
+      const scope = card.dataset.cardScope;
+      if (parent === quickPanel) return scope === 'quick';
+      if (parent === view) return scope.startsWith('view-');
+      return false;
+    }
+
+    function cardResizeBounds(parent) {
+      const styles = window.getComputedStyle(parent);
+      const horizontalPadding = (Number.parseFloat(styles.paddingLeft) || 0) + (Number.parseFloat(styles.paddingRight) || 0);
+      const maxWidth = Math.max(1, Math.floor(parent.clientWidth - horizontalPadding));
+      return {
+        minWidth: Math.min(220, maxWidth),
+        maxWidth,
+        minHeight: 120,
+        maxHeight: 4096
+      };
+    }
+
+    function constrainedCardDimensions(state, clientX, clientY) {
+      const bounds = cardResizeBounds(state.parent);
+      return {
+        width: Math.round(Math.min(bounds.maxWidth, Math.max(bounds.minWidth, state.startWidth + (clientX - state.startX)))),
+        height: Math.round(Math.min(bounds.maxHeight, Math.max(bounds.minHeight, state.startHeight + (clientY - state.startY))))
+      };
+    }
+
+    function applyLiveCardDimensions(state, dimensions) {
+      const card = state.source;
+      card.classList.remove('card-size-auto', 'card-size-small', 'card-size-medium', 'card-size-large');
+      card.classList.add('card-size-custom', 'is-resizing');
+      card.style.setProperty('--card-custom-width', `${dimensions.width}px`);
+      card.style.setProperty('--card-custom-height', `${dimensions.height}px`);
+      state.width = dimensions.width;
+      state.height = dimensions.height;
+    }
+
+    function updateCardCustomSizeMenu(card, dimensions) {
+      const menu = card.querySelector(':scope > .card-menu');
+      if (!menu) return;
+      menu.querySelectorAll('[data-card-size]').forEach((button) => button.classList.remove('active'));
+      const heading = menu.querySelector('[data-card-size-heading]');
+      if (heading) heading.textContent = `Size — Custom ${dimensions.width} × ${dimensions.height}`;
+    }
+
+    function restoreCardResizeStyles(state) {
+      if (!state?.source?.isConnected || state.source.parentElement !== state.parent) return;
+      state.source.classList.remove('card-size-auto', 'card-size-small', 'card-size-medium', 'card-size-large', 'card-size-custom', 'is-resizing');
+      state.originalSizeClasses.forEach((className) => state.source.classList.add(className));
+      if (state.originalWidth) state.source.style.setProperty('--card-custom-width', state.originalWidth);
+      else state.source.style.removeProperty('--card-custom-width');
+      if (state.originalHeight) state.source.style.setProperty('--card-custom-height', state.originalHeight);
+      else state.source.style.removeProperty('--card-custom-height');
+    }
+
+    function finishCardResizeCleanup(state) {
+      if (!state) return;
+      cardResizeState = null;
+      state.source?.classList.remove('is-resizing');
+      document.body.classList.remove('card-resize-active');
+      if (state.handle?.hasPointerCapture?.(state.pointerId)) {
+        try {
+          state.handle.releasePointerCapture(state.pointerId);
+        } catch {}
+      }
+    }
+
+    function cancelCardResize(options = {}) {
+      const state = cardResizeState;
+      if (!state) return;
+      if (options.restore !== false) restoreCardResizeStyles(state);
+      const wasActive = state.active;
+      finishCardResizeCleanup(state);
+      if (wasActive && options.announce !== false) announceCardLayout('Card resize cancelled.');
+    }
+
+    function startCardResize(event) {
+      const handle = event.target.closest?.('[data-card-resize-handle]');
+      if (!handle || event.isPrimary === false || event.button !== 0) return;
+      const source = handle.closest('[data-card-scope][data-card-id]');
+      if (!isResizableCard(source) || handle.parentElement !== source) return;
+      cancelCardDrag({ restore: true, announce: false });
+      cancelCardResize({ restore: true, announce: false });
+      const rect = source.getBoundingClientRect();
+      cardResizeState = {
+        pointerId: event.pointerId,
+        handle,
+        source,
+        parent: source.parentElement,
+        scope: source.dataset.cardScope,
+        id: source.dataset.cardId,
+        startX: event.clientX,
+        startY: event.clientY,
+        startWidth: rect.width,
+        startHeight: rect.height,
+        width: Math.round(rect.width),
+        height: Math.round(rect.height),
+        active: false,
+        originalSizeClasses: Array.from(source.classList).filter((className) => className.startsWith('card-size-')),
+        originalWidth: source.style.getPropertyValue('--card-custom-width'),
+        originalHeight: source.style.getPropertyValue('--card-custom-height')
+      };
+      try {
+        handle.setPointerCapture(event.pointerId);
+      } catch {}
+    }
+
+    function updateCardResize(event) {
+      const state = cardResizeState;
+      if (!state || event.pointerId !== state.pointerId) return;
+      if (
+        !state.source.isConnected
+        || state.source.parentElement !== state.parent
+        || state.source.dataset.cardScope !== state.scope
+        || state.source.dataset.cardId !== state.id
+        || !isResizableCard(state.source)
+      ) {
+        cancelCardResize({ restore: true });
+        return;
+      }
+      const distance = Math.hypot(event.clientX - state.startX, event.clientY - state.startY);
+      if (!state.active && distance < 6) return;
+      if (!state.active) {
+        state.active = true;
+        closeMenus();
+        document.body.classList.add('card-resize-active');
+      }
+      event.preventDefault();
+      const { width, height } = constrainedCardDimensions(state, event.clientX, event.clientY);
+      applyLiveCardDimensions(state, { width, height });
+    }
+
+    function completeCardResize(event) {
+      const state = cardResizeState;
+      if (!state || event.pointerId !== state.pointerId) return;
+      if (!state.active) {
+        finishCardResizeCleanup(state);
+        return;
+      }
+      event.preventDefault();
+      suppressCardHandleClick = true;
+      window.setTimeout(() => { suppressCardHandleClick = false; }, 0);
+      const valid = (
+        state.source.isConnected
+        && state.source.parentElement === state.parent
+        && state.source.dataset.cardScope === state.scope
+        && state.source.dataset.cardId === state.id
+        && isResizableCard(state.source)
+      );
+      if (!valid) {
+        restoreCardResizeStyles(state);
+        finishCardResizeCleanup(state);
+        announceCardLayout('Card resize cancelled.');
+        return;
+      }
+      applyLiveCardDimensions(state, constrainedCardDimensions(state, event.clientX, event.clientY));
+      const changed = Math.abs(state.width - state.startWidth) >= 1 || Math.abs(state.height - state.startHeight) >= 1;
+      if (!changed) {
+        restoreCardResizeStyles(state);
+        finishCardResizeCleanup(state);
+        return;
+      }
+      const title = state.source.dataset.cardTitle || cardTitle(state.source);
+      const dimensions = { width: state.width, height: state.height };
+      setCardDimensions(state.scope, state.id, dimensions);
+      updateCardCustomSizeMenu(state.source, dimensions);
+      finishCardResizeCleanup(state);
+      announceCardLayout(`Resized ${title} to ${dimensions.width} × ${dimensions.height}.`);
     }
 
     function cardDragCards(parent, scope) {
@@ -3850,11 +4236,12 @@
     }
 
     function autoScrollCardDrag(state, clientY) {
-      if (state.parent !== view || view.scrollHeight <= view.clientHeight) return;
-      const rect = view.getBoundingClientRect();
+      const scroller = state.parent === view ? view : state.parent === quickPanel ? quickPanel : null;
+      if (!scroller || scroller.scrollHeight <= scroller.clientHeight) return;
+      const rect = scroller.getBoundingClientRect();
       const edge = 42;
-      if (clientY < rect.top + edge) view.scrollBy(0, -18);
-      else if (clientY > rect.bottom - edge) view.scrollBy(0, 18);
+      if (clientY < rect.top + edge) scroller.scrollBy(0, -18);
+      else if (clientY > rect.bottom - edge) scroller.scrollBy(0, 18);
     }
 
     function startCardDrag(event) {
@@ -3862,6 +4249,7 @@
       if (!handle || event.isPrimary === false || event.button !== 0) return;
       const source = handle.closest('[data-card-scope][data-card-id]');
       if (!isMovableCard(source) || handle.parentElement !== source) return;
+      cancelCardResize({ restore: true, announce: false });
       cancelCardDrag({ restore: true, announce: false });
       const parent = source.parentElement;
       const scope = source.dataset.cardScope;
@@ -3967,13 +4355,13 @@
     }
 
     function resetCardScope(scope) {
-      [cardLayoutPrefix, cardSizePrefix, cardClosedPrefix, cardCollapsedPrefix].forEach((prefix) => localStorage.removeItem(cardStorageKey(prefix, scope)));
+      [cardLayoutPrefix, cardSizePrefix, cardDimensionsPrefix, cardClosedPrefix, cardCollapsedPrefix].forEach((prefix) => localStorage.removeItem(cardStorageKey(prefix, scope)));
       persistUiPreferences(true);
       render();
     }
 
     function resetAllCardLayouts() {
-      const prefixes = [cardLayoutPrefix, cardSizePrefix, cardClosedPrefix, cardCollapsedPrefix];
+      const prefixes = [cardLayoutPrefix, cardSizePrefix, cardDimensionsPrefix, cardClosedPrefix, cardCollapsedPrefix];
       Object.keys(localStorage)
         .filter((key) => prefixes.some((prefix) => key.startsWith(prefix)))
         .forEach((key) => localStorage.removeItem(key));
@@ -5373,7 +5761,7 @@
         ['Rounds', String(arr(combat.Log).length)]
       ];
       view.innerHTML = `
-        <div class="panel">
+        <div class="panel" data-card-id="combat-controls">
           <h2>${active ? 'Combat Controls' : 'Start Tracked Combat'}</h2>
           ${active ? `
             <form id="roundForm" class="controls combat-actions">
@@ -5968,6 +6356,12 @@
         toggleCardMenu(scope, id);
         return;
       }
+      if (button.dataset.cardResizeHandle) {
+        if (suppressCardHandleClick) return;
+        const [scope, id] = button.dataset.cardResizeHandle.split(':');
+        toggleCardMenu(scope, id);
+        return;
+      }
       if (button.dataset.cardMenuToggle) {
         const [scope, id] = button.dataset.cardMenuToggle.split(':');
         toggleCardMenu(scope, id);
@@ -6233,26 +6627,42 @@
     });
 
     document.addEventListener('pointerdown', startCardDrag);
+    document.addEventListener('pointerdown', startCardResize);
     document.addEventListener('pointermove', updateCardDrag, { passive: false });
+    document.addEventListener('pointermove', updateCardResize, { passive: false });
     document.addEventListener('pointerup', completeCardDrag);
+    document.addEventListener('pointerup', completeCardResize);
     document.addEventListener('pointercancel', (event) => {
       if (cardDragState && event.pointerId === cardDragState.pointerId) {
         cancelCardDrag({ restore: true });
+      }
+      if (cardResizeState && event.pointerId === cardResizeState.pointerId) {
+        cancelCardResize({ restore: true });
       }
     });
     document.addEventListener('lostpointercapture', (event) => {
       if (cardDragState && event.pointerId === cardDragState.pointerId) {
         cancelCardDrag({ restore: true });
       }
+      if (cardResizeState && event.pointerId === cardResizeState.pointerId) {
+        cancelCardResize({ restore: true });
+      }
     });
     document.addEventListener('keydown', (event) => {
-      if (event.key !== 'Escape' || !cardDragState) return;
+      if (event.key !== 'Escape' || (!cardDragState && !cardResizeState)) return;
       event.preventDefault();
       cancelCardDrag({ restore: true });
+      cancelCardResize({ restore: true });
     });
-    window.addEventListener('blur', () => cancelCardDrag({ restore: true }));
+    window.addEventListener('blur', () => {
+      cancelCardDrag({ restore: true });
+      cancelCardResize({ restore: true });
+    });
     document.addEventListener('visibilitychange', () => {
-      if (document.hidden) cancelCardDrag({ restore: true });
+      if (document.hidden) {
+        cancelCardDrag({ restore: true });
+        cancelCardResize({ restore: true });
+      }
     });
 
     document.addEventListener('change', (event) => {

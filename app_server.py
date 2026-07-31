@@ -88,6 +88,7 @@ UI_PREFERENCE_KEYS = {
 UI_PREFERENCE_PREFIXES = (
     "lonewolf_redux.cards.layout.",
     "lonewolf_redux.cards.size.",
+    "lonewolf_redux.cards.dimensions.",
     "lonewolf_redux.cards.closed.",
     "lonewolf_redux.cards.collapsed.",
     "lonewolf_redux.cards.labels.",
