@@ -2988,20 +2988,30 @@
       }
       container.innerHTML = '';
 
-      cliTerminal = new Terminal({
+      // The desktop shell reports the live PTY backend (WinPTY when frozen,
+      // ConPTY from source). WinPTY re-emits whole lines on redraws, so xterm
+      // needs its winpty compatibility rules or the cursor drifts after the
+      // first command's output and echo/backspace break. ConPTY marks wraps
+      // correctly on its own, so no hint is set there. Default to winpty since
+      // the shipped app is always frozen.
+      const ptyBackend = new URLSearchParams(window.location.search).get('ptyBackend')
+        || localStorage.getItem('lonewolf_redux.ptyBackend')
+        || 'winpty';
+      const terminalOptions = {
         cursorBlink: true,
         // The child CLI prints bare "\n" line endings, so xterm must translate
         // LF -> CRLF or every new line keeps the previous column (staircase),
         // which desyncs the cursor and makes echo/backspace look doubled.
         convertEol: true,
-        // Do NOT pin windowsPty.backend: the Python bridge uses ConPTY when run
-        // from source and WinPTY only when frozen, so a hardcoded hint mismatches
-        // the real stream half the time and corrupts reflow, echo, and backspace.
         scrollOnUserInput: true,
         fontFamily: 'Consolas, "Cascadia Mono", "Courier New", monospace',
         fontSize: 14,
         theme: cliTheme()
-      });
+      };
+      if (ptyBackend === 'winpty') {
+        terminalOptions.windowsPty = { backend: 'winpty' };
+      }
+      cliTerminal = new Terminal(terminalOptions);
       if (window.FitAddon?.FitAddon) {
         cliFitAddon = new FitAddon.FitAddon();
         cliTerminal.loadAddon(cliFitAddon);

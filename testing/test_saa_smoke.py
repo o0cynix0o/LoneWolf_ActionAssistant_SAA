@@ -520,15 +520,23 @@ class ServiceTests(unittest.TestCase):
 
 
 class FrozenCliTests(unittest.TestCase):
-    def test_xterm_terminal_uses_portable_display_rules(self) -> None:
+    def test_xterm_terminal_matches_live_pty_backend(self) -> None:
         # The PTY backend differs by build (ConPTY from source, WinPTY when
-        # frozen), so xterm must NOT pin windowsPty.backend, and must translate
-        # LF -> CRLF so bare "\n" output does not staircase the cursor.
+        # frozen), so the shell passes the live backend to the page instead of
+        # xterm guessing. xterm must always translate LF -> CRLF (staircase
+        # fix) and apply the winpty compatibility rules only for WinPTY.
         root = Path(saa_main.__file__).resolve().parent
         assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
+        index_html = (root / "index.html").read_text(encoding="utf-8")
+        saa_main_src = Path(saa_main.__file__).read_text(encoding="utf-8")
 
         self.assertIn("convertEol: true", assistant_html)
-        self.assertNotIn("windowsPty:", assistant_html)
+        self.assertIn("ptyBackend === 'winpty'", assistant_html)
+        self.assertIn("windowsPty = { backend: 'winpty' }", assistant_html)
+        self.assertIn("lonewolf_redux.ptyBackend", assistant_html)
+        self.assertIn("lonewolf_redux.ptyBackend", index_html)
+        self.assertIn("ptyBackend={pty_backend}", saa_main_src)
+        self.assertIn('"winpty" if getattr(sys, "frozen", False) else "conpty"', saa_main_src)
 
     def test_winpty_submits_xterm_standalone_enter_as_crlf(self) -> None:
         self.assertEqual(ws_server.normalize_winpty_input("\r"), "\r\n")

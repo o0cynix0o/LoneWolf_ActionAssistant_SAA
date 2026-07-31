@@ -174,9 +174,14 @@ def run_desktop() -> int:
         websocket = _start_websocket(DEFAULT_WS_PORT)
         _wait_for_http(base_url)
 
+        # The embedded terminal must tell xterm which Windows PTY backend it is
+        # rendering: the frozen EXE forces WinPTY (see ws_server), while running
+        # from source uses ConPTY. A wrong hint corrupts cursor/reflow tracking
+        # after large redraws, so pass the real backend through to the page.
+        pty_backend = "winpty" if getattr(sys, "frozen", False) else "conpty"
         window = webview.create_window(
             APP_TITLE,
-            f"{base_url}/index.html?wsPort={websocket.port}",
+            f"{base_url}/index.html?wsPort={websocket.port}&ptyBackend={pty_backend}",
             width=1440,
             height=960,
             min_size=(1000, 700),

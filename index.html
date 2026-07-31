@@ -584,9 +584,16 @@
 
   <script src="assets/js/lw-settings.js"></script>
   <script>
-    const desktopWsPort = new URLSearchParams(window.location.search).get('wsPort');
+    const desktopParams = new URLSearchParams(window.location.search);
+    const desktopWsPort = desktopParams.get('wsPort');
     if (desktopWsPort) {
       localStorage.setItem('lonewolf_redux.wsPort', desktopWsPort);
+    }
+    // The desktop shell reports the live PTY backend so the embedded xterm can
+    // match its cursor/reflow rules (WinPTY when frozen, ConPTY from source).
+    const desktopPtyBackend = desktopParams.get('ptyBackend');
+    if (desktopPtyBackend) {
+      localStorage.setItem('lonewolf_redux.ptyBackend', desktopPtyBackend);
     }
 
     const loreLines = [
