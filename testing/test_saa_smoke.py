@@ -520,12 +520,15 @@ class ServiceTests(unittest.TestCase):
 
 
 class FrozenCliTests(unittest.TestCase):
-    def test_xterm_uses_winpty_cursor_and_reflow_rules(self) -> None:
+    def test_xterm_terminal_uses_portable_display_rules(self) -> None:
+        # The PTY backend differs by build (ConPTY from source, WinPTY when
+        # frozen), so xterm must NOT pin windowsPty.backend, and must translate
+        # LF -> CRLF so bare "\n" output does not staircase the cursor.
         root = Path(saa_main.__file__).resolve().parent
         assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
 
-        self.assertIn("convertEol: false", assistant_html)
-        self.assertIn("windowsPty: { backend: 'winpty' }", assistant_html)
+        self.assertIn("convertEol: true", assistant_html)
+        self.assertNotIn("windowsPty:", assistant_html)
 
     def test_winpty_submits_xterm_standalone_enter_as_crlf(self) -> None:
         self.assertEqual(ws_server.normalize_winpty_input("\r"), "\r\n")
