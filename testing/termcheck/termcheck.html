@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>LW Terminal Config Check</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css">
+<script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.js"></script>
+<style>
+  body { background:#11110f; color:#e8e2d0; font-family:Segoe UI, sans-serif; margin:16px; }
+  h1 { font-size:18px; }
+  .panel { border:1px solid #4a4636; border-radius:8px; margin:14px 0; padding:10px; }
+  .label { font-weight:bold; color:#d8b45a; margin-bottom:6px; }
+  .term { height:230px; }
+  .hint { color:#9a927c; font-size:13px; }
+  code { color:#c8e0a0; }
+</style>
+</head>
+<body>
+<h1>Lone Wolf CLI — terminal config comparison</h1>
+<p class="hint">Type a command in <b>each</b> box below (e.g. <code>help</code> then Enter, then <code>sheet</code> then Enter),
+and watch how the <b>typing</b> feels. Tell me which panel(s) let you type <b>smoothly</b> (letters appear instantly,
+no one-character lag, backspace works). Each box is a separate game session.</p>
+
+<div class="panel"><div class="label">A — convertEol:true, windowsPty:winpty (current app config)</div><div class="term" id="tA"></div></div>
+<div class="panel"><div class="label">B — convertEol:true, NO windowsPty</div><div class="term" id="tB"></div></div>
+<div class="panel"><div class="label">C — convertEol:false, windowsPty:winpty</div><div class="term" id="tC"></div></div>
+<div class="panel"><div class="label">D — convertEol:false, NO windowsPty</div><div class="term" id="tD"></div></div>
+
+<script>
+const WS = 'ws://127.0.0.1:8900';
+const base = { cursorBlink:true, scrollOnUserInput:true, fontFamily:'Consolas, monospace', fontSize:14,
+               theme:{ background:'#11110f', foreground:'#e8e2d0' } };
+const configs = [
+  ['tA', { ...base, convertEol:true,  windowsPty:{backend:'winpty'} }],
+  ['tB', { ...base, convertEol:true }],
+  ['tC', { ...base, convertEol:false, windowsPty:{backend:'winpty'} }],
+  ['tD', { ...base, convertEol:false }],
+];
+for (const [id, opts] of configs) {
+  const term = new Terminal(opts);
+  const fit = new FitAddon.FitAddon();
+  term.loadAddon(fit);
+  term.open(document.getElementById(id));
+  try { fit.fit(); } catch {}
+  const sock = new WebSocket(WS);
+  sock.binaryType = 'arraybuffer';
+  sock.addEventListener('open', () => {
+    sock.send(`\x00${JSON.stringify({type:'resize', rows:term.rows, cols:term.cols})}`);
+    term.focus();
+  });
+  sock.addEventListener('message', e => {
+    term.write(typeof e.data === 'string' ? e.data : new TextDecoder().decode(e.data));
+  });
+  sock.addEventListener('close', () => term.writeln('\r\n[disconnected]'));
+  term.onData(d => { if (sock.readyState === WebSocket.OPEN) sock.send(d); });
+}
+</script>
+</body>
+</html>
