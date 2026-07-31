@@ -14,6 +14,7 @@ from unittest import mock
 
 import app_server
 import book_manager
+import cheat_session
 import lonewolf_redux
 import saa_main
 import ws_server
@@ -218,7 +219,7 @@ class CardLayoutInteractionTests(unittest.TestCase):
                     return cls.assistant_html[match.start():index + 1]
         raise AssertionError(f"JavaScript function {name!r} has no closing brace")
 
-    def test_release_metadata_is_3_1_6(self) -> None:
+    def test_release_metadata_is_3_1_7(self) -> None:
         readme = (self.root / "README.md").read_text(encoding="utf-8")
         building = (self.root / "docs" / "BUILDING.md").read_text(encoding="utf-8")
         user_guide = (self.root / "docs" / "USER_GUIDE.md").read_text(encoding="utf-8")
@@ -228,16 +229,16 @@ class CardLayoutInteractionTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         version_info = (self.root / "version_info.txt").read_text(encoding="utf-8")
 
-        self.assertIn("# Lone Wolf Action Assistant 3.1.6", readme)
-        self.assertIn("Version: **3.1.6**", readme)
-        self.assertIn("# Building Lone Wolf Action Assistant 3.1.6", building)
-        self.assertIn("# Lone Wolf Action Assistant 3.1.6", user_guide)
-        self.assertIn("## 3.1.6", changelog)
-        self.assertIn('#define AppVersion "3.1.6"', installer)
-        self.assertIn("filevers=(3, 1, 6, 0)", version_info)
-        self.assertIn("prodvers=(3, 1, 6, 0)", version_info)
-        self.assertIn("StringStruct(u'FileVersion', u'3.1.6')", version_info)
-        self.assertIn("StringStruct(u'ProductVersion', u'3.1.6')", version_info)
+        self.assertIn("# Lone Wolf Action Assistant 3.1.7", readme)
+        self.assertIn("Version: **3.1.7**", readme)
+        self.assertIn("# Building Lone Wolf Action Assistant 3.1.7", building)
+        self.assertIn("# Lone Wolf Action Assistant 3.1.7", user_guide)
+        self.assertIn("## 3.1.7", changelog)
+        self.assertIn('#define AppVersion "3.1.7"', installer)
+        self.assertIn("filevers=(3, 1, 7, 0)", version_info)
+        self.assertIn("prodvers=(3, 1, 7, 0)", version_info)
+        self.assertIn("StringStruct(u'FileVersion', u'3.1.7')", version_info)
+        self.assertIn("StringStruct(u'ProductVersion', u'3.1.7')", version_info)
 
     def test_movable_cards_get_a_dedicated_drag_handle(self) -> None:
         self.assertIn("data-card-drag-handle", self.assistant_html)
@@ -878,6 +879,172 @@ class GreyStarResidueRemovedTests(unittest.TestCase):
             "pay_willpower_cost",
         ):
             self.assertFalse(hasattr(app_server.ASSISTANT, attr), attr)
+
+
+class CheatSessionTests(unittest.TestCase):
+    @staticmethod
+    def fixture_session(*effects: str) -> tuple[cheat_session.CheatSession, dict[str, str]]:
+        phrases = {effect: f"fixture-{index}" for index, effect in enumerate(effects, 1)}
+        digest_map = {
+            cheat_session.digest_code(phrase): effect for effect, phrase in phrases.items()
+        }
+        return cheat_session.CheatSession(digest_map), phrases
+
+    @staticmethod
+    def assistant(temp_dir: str, session: cheat_session.CheatSession) -> lonewolf_redux.LoneWolfReduxAssistant:
+        root = Path(lonewolf_redux.__file__).resolve().parent
+        base = Path(temp_dir)
+        return lonewolf_redux.LoneWolfReduxAssistant(
+            save_dir=base / "saves",
+            data_dir=root / "data",
+            state_data_dir=base / "state",
+            books_dir=base / "books",
+            cheat_provider=session,
+        )
+
+    def test_toggle_is_case_insensitive_and_achievement_lock_is_session_sticky(self) -> None:
+        session, phrases = self.fixture_session("max_cs")
+        digest = cheat_session.digest_code(phrases["max_cs"].upper())
+        enabled = session.toggle_digest(digest)
+        disabled = session.toggle_digest(digest)
+
+        self.assertTrue(enabled["enabled"])
+        self.assertFalse(disabled["enabled"])
+        self.assertFalse(session.is_active("max_cs"))
+        self.assertTrue(session.achievements_locked())
+
+    def test_forced_rolls_are_mutually_exclusive(self) -> None:
+        session, phrases = self.fixture_session("force_nine", "force_zero")
+        session.toggle_digest(cheat_session.digest_code(phrases["force_nine"]))
+        self.assertEqual(session.forced_digit(), 9)
+        session.toggle_digest(cheat_session.digest_code(phrases["force_zero"]))
+        self.assertEqual(session.forced_digit(), 0)
+        self.assertFalse(session.is_active("force_nine"))
+
+    def test_session_effects_survive_new_assistant_and_do_not_enter_save_json(self) -> None:
+        session, phrases = self.fixture_session("max_health", "max_cs")
+        session.toggle_digest(cheat_session.digest_code(phrases["max_health"]))
+        session.toggle_digest(cheat_session.digest_code(phrases["max_cs"]))
+        with tempfile.TemporaryDirectory() as temp_dir:
+            first = self.assistant(temp_dir, session)
+            base_end = first.character["EnduranceMax"]
+            path = Path(temp_dir) / "saves" / "clean.json"
+            first.save_game(str(path), quiet=True)
+            second = self.assistant(temp_dir, session)
+            saved = json.loads(path.read_text(encoding="utf-8"))
+
+        self.assertEqual(second.effective_endurance_current(), 99)
+        self.assertEqual(second.effective_combat_skill(), 99)
+        self.assertEqual(saved["Character"]["EnduranceMax"], base_end)
+        self.assertNotIn("Cheat", json.dumps(saved))
+
+    def test_developer_sandbox_blocks_save_and_restores_snapshot(self) -> None:
+        session, phrases = self.fixture_session("developer_sight")
+        digest = cheat_session.digest_code(phrases["developer_sight"])
+        with tempfile.TemporaryDirectory() as temp_dir:
+            assistant = self.assistant(temp_dir, session)
+            original = int(assistant.character["CombatSkillCurrent"])
+            with redirect_stdout(io.StringIO()):
+                assistant.toggle_cheat_digest(digest)
+                assistant.character["CombatSkillCurrent"] = original + 50
+                blocked_path = Path(temp_dir) / "saves" / "sandbox.json"
+                assistant.save_game(str(blocked_path), quiet=True)
+                assistant.toggle_cheat_digest(digest)
+
+            self.assertFalse(blocked_path.exists())
+            self.assertEqual(assistant.character["CombatSkillCurrent"], original)
+
+    def test_resource_guards_preserve_costs_but_keep_gains(self) -> None:
+        session, phrases = self.fixture_session("infinite_gold", "infinite_meals")
+        session.toggle_digest(cheat_session.digest_code(phrases["infinite_gold"]))
+        session.toggle_digest(cheat_session.digest_code(phrases["infinite_meals"]))
+        with tempfile.TemporaryDirectory() as temp_dir:
+            assistant = self.assistant(temp_dir, session)
+            assistant.inventory["GoldCrowns"] = 10
+            assistant.inventory["BackpackItems"] = ["Meal", "Meal"]
+            before = assistant.cheat_resource_snapshot()
+            assistant.inventory["GoldCrowns"] = 3
+            assistant.inventory["BackpackItems"] = []
+            assistant.finalize_cheat_resources(before)
+            self.assertEqual(assistant.inventory["GoldCrowns"], 10)
+            self.assertEqual(assistant.inventory["BackpackItems"].count("Meal"), 2)
+
+            before = assistant.cheat_resource_snapshot()
+            assistant.inventory["GoldCrowns"] = 15
+            assistant.finalize_cheat_resources(before)
+            self.assertEqual(assistant.inventory["GoldCrowns"], 15)
+
+    def test_bottomless_inventory_and_all_disciplines_are_effective_only(self) -> None:
+        session, phrases = self.fixture_session("bottomless_inventory", "all_disciplines")
+        session.toggle_digest(cheat_session.digest_code(phrases["bottomless_inventory"]))
+        session.toggle_digest(cheat_session.digest_code(phrases["all_disciplines"]))
+        with tempfile.TemporaryDirectory() as temp_dir:
+            assistant = self.assistant(temp_dir, session)
+            assistant.inventory["Weapons"] = ["Axe", "Sword"]
+            self.assertTrue(assistant.add_inventory_item("weapon", "Spear"))
+            self.assertEqual(set(assistant.effective_disciplines()), set(lonewolf_redux.KAI_DISCIPLINES))
+            self.assertEqual(assistant.character["KaiDisciplines"], [])
+
+    def test_one_round_combat_and_god_mode_use_effective_stats(self) -> None:
+        session, phrases = self.fixture_session("one_round_combat", "god_mode")
+        session.toggle_digest(cheat_session.digest_code(phrases["one_round_combat"]))
+        session.toggle_digest(cheat_session.digest_code(phrases["god_mode"]))
+        with tempfile.TemporaryDirectory() as temp_dir:
+            assistant = self.assistant(temp_dir, session)
+            with redirect_stdout(io.StringIO()):
+                assistant.start_combat(["combat", "start", "Fixture Enemy", "50", "200"])
+                assistant.combat_round(["combat", "round", "0"])
+
+            self.assertFalse(assistant.combat["Active"])
+            self.assertEqual(assistant.effective_combat_skill(), 99)
+            self.assertEqual(assistant.effective_endurance_current(), 99)
+            self.assertEqual(assistant.state["CombatHistory"][-1]["Outcome"], "Victory")
+
+    def test_unkillable_restores_full_latest_safe_checkpoint(self) -> None:
+        session, phrases = self.fixture_session("unkillable")
+        session.toggle_digest(cheat_session.digest_code(phrases["unkillable"]))
+        with tempfile.TemporaryDirectory() as temp_dir:
+            assistant = self.assistant(temp_dir, session)
+            assistant.character["EnduranceCurrent"] = 17
+            assistant.save_section_checkpoint("ready")
+            assistant.character["EnduranceCurrent"] = 1
+            with redirect_stdout(io.StringIO()):
+                assistant.register_death("instant", "fixture failure")
+
+            self.assertEqual(assistant.character["EnduranceCurrent"], 17)
+            self.assertFalse(assistant.death_active())
+
+    def test_achievement_sync_is_suppressed_after_activation(self) -> None:
+        session, phrases = self.fixture_session("max_cs")
+        session.toggle_digest(cheat_session.digest_code(phrases["max_cs"]))
+        with tempfile.TemporaryDirectory() as temp_dir:
+            assistant = self.assistant(temp_dir, session)
+            with mock.patch.object(assistant, "achievement_satisfied", return_value=True):
+                self.assertEqual(assistant.sync_achievements(), [])
+            self.assertEqual(assistant.achievement_unlocked_ids(), set())
+
+    def test_desktop_bridge_requires_token_and_returns_authoritative_status(self) -> None:
+        import urllib.error
+        import urllib.request
+
+        server, thread = app_server.start_server(port=0)
+        try:
+            url = f"http://127.0.0.1:{server.server_address[1]}/api/internal/session-cheats"
+            client = cheat_session.RemoteCheatClient(url, app_server.CHEAT_SESSION.token)
+            self.assertEqual(client.status()["active"], app_server.CHEAT_SESSION.status()["active"])
+
+            request = urllib.request.Request(
+                url,
+                data=b'{"operation":"status"}',
+                headers={"Content-Type": "application/json", "X-LoneWolf-Session": "invalid"},
+                method="POST",
+            )
+            with self.assertRaises(urllib.error.HTTPError) as raised:
+                urllib.request.urlopen(request, timeout=3)
+            self.assertEqual(raised.exception.code, 403)
+            raised.exception.close()
+        finally:
+            app_server.stop_server(server, thread)
 
 
 if __name__ == "__main__":

@@ -21,6 +21,14 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+from cheat_session import (
+    CheatSession,
+    EFFECT_DIGESTS,
+    decrypt_catalog,
+    digest_code,
+    is_catalog_code,
+    provider_from_environment,
+)
 from runtime_paths import PATHS
 
 
@@ -37,6 +45,25 @@ SECTION_FLOW_GLOB = "book*-section-flows.json"
 ROUTE_CHECK_GLOB = "book*-route-checks.json"
 ACHIEVEMENT_SCHEMA_VERSION = 1
 LEGACY_PLAYER_LOSS_KEYS = ("Gray" + "StarLoss",)
+
+ACTIVE_CHEAT_PROVIDER: Any = None
+
+CHEAT_EFFECT_TITLES = {
+    "god_mode": "Kai Supreme Master",
+    "unkillable": "Naar Has No Claim",
+    "infinite_health": "Ishir Protects",
+    "max_health": "Strength of Sommerlund",
+    "max_cs": "Sommerswerd Drawn",
+    "infinite_gold": "Crowns of Durenor",
+    "infinite_meals": "Huntmaster's Feast",
+    "bottomless_inventory": "Armory of Holmgard",
+    "one_round_combat": "Doom of Helgedad",
+    "force_nine": "Light of Ishir",
+    "force_zero": "Shadow of Naar",
+    "all_disciplines": "Book of the Magnakai",
+    "developer_sight": "Sun Eagle Sight",
+}
+DEVELOPER_COMMANDS = {"warp", "set", "give", "take", "flags", "wincombat", "reloadsection", "cheatstate"}
 
 ANSI_COLORS = {
     "Black": "30",
@@ -979,6 +1006,10 @@ def normalize_state(state: dict[str, Any]) -> dict[str, Any]:
 
 
 def random_digit() -> int:
+    if ACTIVE_CHEAT_PROVIDER is not None:
+        forced = ACTIVE_CHEAT_PROVIDER.forced_digit()
+        if forced is not None:
+            return int(forced)
     return random.randint(0, 9)
 
 
@@ -2273,7 +2304,9 @@ class LoneWolfReduxAssistant:
         data_dir: Path = DEFAULT_DATA_DIR,
         state_data_dir: Path = DEFAULT_STATE_DATA_DIR,
         books_dir: Path = DEFAULT_BOOKS_DIR,
+        cheat_provider: Any | None = None,
     ) -> None:
+        global ACTIVE_CHEAT_PROVIDER
         self.save_dir = save_dir
         # data_dir is read-only application reference data. Runtime state is
         # deliberately separate so a frozen app never writes into Program Files
@@ -2281,6 +2314,9 @@ class LoneWolfReduxAssistant:
         self.data_dir = data_dir
         self.state_data_dir = state_data_dir
         self.books_dir = books_dir
+        self.cheats = cheat_provider or CheatSession()
+        ACTIVE_CHEAT_PROVIDER = self.cheats
+        self._cheat_catalog: list[dict[str, str]] | None = None
         self.last_save_file = self.state_data_dir / "last-save.txt"
         self.state = normalize_state(default_state())
         self.crt: dict[str, Any] | None = None
@@ -2314,6 +2350,77 @@ class LoneWolfReduxAssistant:
     @property
     def automation_flags(self) -> dict[str, Any]:
         return self.automation["Flags"]
+
+    def cheat_active(self, effect: str) -> bool:
+        return bool(self.cheats.is_active(effect))
+
+    def effective_endurance_max(self) -> int:
+        if self.cheat_active("god_mode") or self.cheat_active("max_health"):
+            return 99
+        return int(self.character["EnduranceMax"])
+
+    def effective_endurance_current(self) -> int:
+        if self.cheat_active("infinite_health") and not (
+            self.cheat_active("god_mode") or self.cheat_active("max_health")
+        ):
+            return int(self.character["EnduranceMax"])
+        if self.cheat_active("god_mode") or self.cheat_active("max_health"):
+            return max(0, min(99, int(self.cheats.runtime_value("endurance", 99))))
+        return int(self.character["EnduranceCurrent"])
+
+    def set_effective_endurance(self, value: int) -> None:
+        value = int(value)
+        if self.cheat_active("god_mode") or self.cheat_active("max_health"):
+            self.cheats.set_runtime_value("endurance", max(0, min(99, value)))
+            return
+        if self.cheat_active("infinite_health"):
+            self.character["EnduranceCurrent"] = int(self.character["EnduranceMax"])
+            return
+        self.character["EnduranceCurrent"] = max(0, value)
+
+    def change_effective_endurance(self, delta: int) -> tuple[int, int]:
+        before = self.effective_endurance_current()
+        if int(delta) < 0 and (
+            self.cheat_active("god_mode") or self.cheat_active("infinite_health")
+        ):
+            return before, before
+        maximum = self.effective_endurance_max()
+        after = max(0, min(maximum, before + int(delta)))
+        self.set_effective_endurance(after)
+        return before, after
+
+    def effective_combat_skill(self) -> int:
+        if self.cheat_active("god_mode") or self.cheat_active("max_cs"):
+            return 99
+        return int(self.character["CombatSkillCurrent"])
+
+    def effective_disciplines(self) -> list[str]:
+        known = clean_kai_disciplines(self.character.get("KaiDisciplines"))
+        if self.cheat_active("all_disciplines"):
+            return list(dict.fromkeys(known + KAI_DISCIPLINES))
+        return known
+
+    def cheat_resource_snapshot(self) -> dict[str, int]:
+        return {
+            "gold": int(self.inventory.get("GoldCrowns") or 0),
+            "meals": as_list(self.inventory.get("BackpackItems")).count("Meal"),
+            "endurance": int(self.character.get("EnduranceCurrent") or 0),
+        }
+
+    def finalize_cheat_resources(self, before: dict[str, int]) -> None:
+        if self.cheat_active("infinite_gold"):
+            self.inventory["GoldCrowns"] = max(
+                int(before.get("gold") or 0), int(self.inventory.get("GoldCrowns") or 0)
+            )
+        if self.cheat_active("infinite_meals"):
+            items = as_list(self.inventory.get("BackpackItems"))
+            missing = max(0, int(before.get("meals") or 0) - items.count("Meal"))
+            if missing:
+                self.inventory["BackpackItems"] = items + (["Meal"] * missing)
+        if self.cheat_active("god_mode") or self.cheat_active("infinite_health"):
+            self.character["EnduranceCurrent"] = max(
+                int(before.get("endurance") or 0), int(self.character.get("EnduranceCurrent") or 0)
+            )
 
     def ensure_dirs(self) -> None:
         self.save_dir.mkdir(parents=True, exist_ok=True)
@@ -2869,6 +2976,8 @@ class LoneWolfReduxAssistant:
         return entry
 
     def sync_achievements(self, *, save: bool = False) -> list[dict[str, Any]]:
+        if self.cheats.achievements_locked():
+            return []
         state = self.achievement_state()
         state["Unlocked"] = [
             entry
@@ -3010,6 +3119,30 @@ class LoneWolfReduxAssistant:
         return death
 
     def register_death(self, death_type: str = "death", cause: str = "") -> None:
+        if self.cheat_active("unkillable"):
+            checkpoints = self.section_checkpoints()
+            if checkpoints:
+                target = checkpoints[-1]
+                if str(target.get("Stage") or "ready") == "entry" and len(checkpoints) > 1:
+                    target = checkpoints[-2]
+                snapshot = target.get("Snapshot")
+                if isinstance(snapshot, dict):
+                    save_path = str(self.settings.get("SavePath") or "")
+                    achievements = json_clone(self.achievement_state())
+                    restored = normalize_state(json_clone(snapshot))
+                    restored["Settings"]["SavePath"] = save_path
+                    restored["Settings"]["AutoSave"] = True
+                    restored["Achievements"] = achievements
+                    restored["Automation"]["SectionCheckpoints"] = json_clone(checkpoints)
+                    restored["Automation"]["DeathState"] = {"Active": False}
+                    self.state = restored
+                    self.write_current_position()
+                    self.autosave()
+                    print(
+                        f"Naar has no claim. Returned to Book {self.character['BookNumber']}, "
+                        f"section {self.state['CurrentSection']}."
+                    )
+                    return
         if self.death_active():
             return
         kind = str(death_type or "death").lower()
@@ -3198,11 +3331,12 @@ class LoneWolfReduxAssistant:
 
         if key == "BackpackItems" and not bool(self.automation_flags.get("backpackAvailable", True)):
             return False
-        if key == "Weapons" and len(as_list(self.inventory["Weapons"])) >= 2:
+        unlimited = self.cheat_active("bottomless_inventory")
+        if key == "Weapons" and not unlimited and len(as_list(self.inventory["Weapons"])) >= 2:
             return False
-        if key == "BackpackItems" and item_slot_total(self.inventory["BackpackItems"]) + item_slot_cost(item) > 8:
+        if key == "BackpackItems" and not unlimited and item_slot_total(self.inventory["BackpackItems"]) + item_slot_cost(item) > 8:
             return False
-        if key == "HerbPouchItems" and item_slot_total(self.inventory["HerbPouchItems"]) + item_slot_cost(item) > 8:
+        if key == "HerbPouchItems" and not unlimited and item_slot_total(self.inventory["HerbPouchItems"]) + item_slot_cost(item) > 8:
             return False
         if key == "SpecialItems" and item in as_list(self.inventory["SpecialItems"]):
             return True
@@ -3255,7 +3389,7 @@ class LoneWolfReduxAssistant:
         return False
 
     def has_power(self, name: str) -> bool:
-        return name in as_list(self.character.get("KaiDisciplines"))
+        return name in self.effective_disciplines()
 
     def section_source_routes(self, book_number: int | None = None, section: int | None = None) -> list[int]:
         book_number = int(book_number or self.character["BookNumber"])
@@ -3475,9 +3609,9 @@ class LoneWolfReduxAssistant:
         if kind == "no_power":
             return not self.has_power(str(condition.get("name") or ""))
         if kind in {"kai_rank_gte", "rank_gte"}:
-            return kai_rank_meets(self.character.get("KaiDisciplines"), str(condition.get("name") or condition.get("rank") or condition.get("value") or ""))
+            return kai_rank_meets(self.effective_disciplines(), str(condition.get("name") or condition.get("rank") or condition.get("value") or ""))
         if kind in {"discipline_count_gte", "kai_disciplines_gte"}:
-            return len(clean_kai_disciplines(self.character.get("KaiDisciplines"))) >= int(condition.get("value") or 0)
+            return len(self.effective_disciplines()) >= int(condition.get("value") or 0)
         if kind == "item":
             return self.has_item(
                 str(condition.get("name") or ""),
@@ -3516,9 +3650,9 @@ class LoneWolfReduxAssistant:
         if kind in {"active_weaponskill_weapon", "weaponskill_active_weapon"}:
             return self.active_weapon_matches_weaponskill()
         if kind == "end_lt":
-            return int(self.character["EnduranceCurrent"]) < int(condition.get("value") or 0)
+            return self.effective_endurance_current() < int(condition.get("value") or 0)
         if kind == "end_gte":
-            return int(self.character["EnduranceCurrent"]) >= int(condition.get("value") or 0)
+            return self.effective_endurance_current() >= int(condition.get("value") or 0)
         return False
 
     def active_weapon_matches_weaponskill(self) -> bool:
@@ -3542,9 +3676,9 @@ class LoneWolfReduxAssistant:
     def route_check_stat_value(self, stat: str) -> int:
         key = str(stat or "").replace("_", "").replace(" ", "").lower()
         if key in {"end", "endurance"}:
-            return int(self.character["EnduranceCurrent"])
+            return self.effective_endurance_current()
         if key in {"cs", "combatskill"}:
-            return int(self.character["CombatSkillCurrent"])
+            return self.effective_combat_skill()
         if key in {"gold", "goldcrowns", "crowns"}:
             return int(self.inventory.get("GoldCrowns") or 0)
         return 0
@@ -5064,11 +5198,11 @@ class LoneWolfReduxAssistant:
         weaponskill_weapon = str(self.character.get("WeaponskillWeapon") or "").lower()
         if active_key == "sommerswerd":
             sword_skills = {"sword", "short sword", "broadsword"}
-            bonus = 10 if "Weaponskill" in as_list(self.character.get("KaiDisciplines")) and weaponskill_weapon in sword_skills else 8
+            bonus = 10 if "Weaponskill" in self.effective_disciplines() and weaponskill_weapon in sword_skills else 8
             modifier += bonus
             notes.append(f"Sommerswerd: +{bonus} CS")
         elif active_key == "magic spear":
-            if "Weaponskill" in as_list(self.character.get("KaiDisciplines")) and weaponskill_weapon == "spear":
+            if "Weaponskill" in self.effective_disciplines() and weaponskill_weapon == "spear":
                 modifier += 2
                 notes.append("Weaponskill (Spear): +2 CS")
         elif active_key == "bone sword":
@@ -5076,7 +5210,7 @@ class LoneWolfReduxAssistant:
                 modifier += 1
                 notes.append("Bone Sword: +1 CS in Kalte")
         elif (
-            "Weaponskill" in as_list(self.character.get("KaiDisciplines"))
+            "Weaponskill" in self.effective_disciplines()
             and active_key == weaponskill_weapon
         ):
             modifier += 2
@@ -5084,18 +5218,13 @@ class LoneWolfReduxAssistant:
         if self.has_item("Shield", ["special"]):
             modifier += 2
             notes.append("Shield: +2 CS")
-        if "Mindblast" in as_list(self.character.get("KaiDisciplines")) and not bool(self.combat.get("EnemyImmune")):
+        if "Mindblast" in self.effective_disciplines() and not bool(self.combat.get("EnemyImmune")):
             modifier += 2
             notes.append("Mindblast: +2 CS")
         return modifier, notes
 
     def change_endurance(self, delta: int) -> str:
-        before = int(self.character["EnduranceCurrent"])
-        next_value = before + int(delta)
-        if delta > 0:
-            next_value = min(next_value, int(self.character["EnduranceMax"]))
-        self.character["EnduranceCurrent"] = max(0, next_value)
-        after = int(self.character["EnduranceCurrent"])
+        before, after = self.change_effective_endurance(int(delta))
         return f"END {before}->{after}"
 
     def change_gold_crowns(self, delta: int) -> str:
@@ -5108,26 +5237,26 @@ class LoneWolfReduxAssistant:
         mode = str(action.get("mode") or "delta").lower()
         if stat in {"end", "endurance"}:
             if mode == "set":
-                before = int(self.character["EnduranceCurrent"])
-                value = max(0, min(int(action.get("value") or 0), int(self.character["EnduranceMax"])))
-                self.character["EnduranceCurrent"] = value
+                before = self.effective_endurance_current()
+                value = max(0, min(int(action.get("value") or 0), self.effective_endurance_max()))
+                self.set_effective_endurance(value)
                 return f"END {before}->{value}"
             if mode in {"restore_max", "restoremax", "full_recover"}:
-                before = int(self.character["EnduranceCurrent"])
-                self.character["EnduranceCurrent"] = int(self.character["EnduranceMax"])
-                return f"END {before}->{self.character['EnduranceCurrent']}"
+                before = self.effective_endurance_current()
+                self.set_effective_endurance(self.effective_endurance_max())
+                return f"END {before}->{self.effective_endurance_current()}"
             if mode == "half_recover_floor":
-                gain = int(self.character["EnduranceCurrent"]) // 2
+                gain = self.effective_endurance_current() // 2
                 return self.change_endurance(gain)
             if mode == "restore_missing_half_floor":
-                missing = max(0, int(self.character["EnduranceMax"]) - int(self.character["EnduranceCurrent"]))
+                missing = max(0, self.effective_endurance_max() - self.effective_endurance_current())
                 return self.change_endurance(missing // 2)
             if mode == "restore_combat_loss_half_floor":
                 loss = self.combat_player_loss_for_book(int(self.character["BookNumber"]))
                 message = self.change_endurance(loss // 2)
                 return f"{message}; combat END loss {loss}"
             if mode == "half_loss_floor":
-                loss = int(self.character["EnduranceCurrent"]) // 2
+                loss = self.effective_endurance_current() // 2
                 return self.change_endurance(-loss)
             return self.change_endurance(int(action.get("delta") or 0))
         if stat in {"cs", "combat_skill", "combat skill"}:
@@ -5865,7 +5994,7 @@ class LoneWolfReduxAssistant:
         )
         self.automation["Journal"] = journal[-100:]
         messages = [f"Automation: Limbdeath blood poisoning", message]
-        if int(self.character["EnduranceCurrent"]) <= 0:
+        if self.effective_endurance_current() <= 0:
             self.register_death("failure", "Limbdeath blood poisoning ended the mission.")
         return messages
 
@@ -6033,6 +6162,10 @@ class LoneWolfReduxAssistant:
         return self.save_dir / f"{name}.json"
 
     def save_game(self, path_text: str = "", quiet: bool = False) -> bool:
+        if self.cheat_active("developer_sight"):
+            if not quiet:
+                print("Developer Sight is active; sandbox changes were not saved.")
+            return True
         path = self.resolve_save_path(path_text)
         path.parent.mkdir(parents=True, exist_ok=True)
         self.settings["SavePath"] = str(path)
@@ -6250,7 +6383,7 @@ class LoneWolfReduxAssistant:
         panel_header("Action Chart", accent=SCREEN_ACCENTS["sheet"])
         panel_row("Name", self.character["Name"])
         panel_pair_row("Book", f"{self.character['BookNumber']}. {book['Title']}", "Section", self.state["CurrentSection"])
-        panel_pair_row("Combat Skill", f"{self.character['CombatSkillCurrent']} (base {self.character['CombatSkillBase']})", "Endurance", f"{self.character['EnduranceCurrent']}/{self.character['EnduranceMax']}", left_color="Cyan", right_color=endurance_color(self.character["EnduranceCurrent"], self.character["EnduranceMax"]))
+        panel_pair_row("Combat Skill", f"{self.effective_combat_skill()} (base {self.character['CombatSkillBase']})", "Endurance", f"{self.effective_endurance_current()}/{self.effective_endurance_max()}", left_color="Cyan", right_color=endurance_color(self.effective_endurance_current(), self.effective_endurance_max()))
         panel_pair_row("Gold Crowns", self.inventory.get("GoldCrowns", 0), "Meals", as_list(self.inventory["BackpackItems"]).count("Meal"), left_color="Yellow", right_color="DarkYellow")
         panel_pair_row("Completed", format_list(self.character["CompletedBooks"]), "Autosave", "On")
         if str(self.settings.get("SavePath", "")).strip():
@@ -6258,8 +6391,8 @@ class LoneWolfReduxAssistant:
         panel_footer()
 
         panel_header("Kai Disciplines", accent=SCREEN_ACCENTS["disciplines"])
-        panel_row("Known", format_list(self.character["KaiDisciplines"]))
-        rank_count, rank_name = kai_rank_for_disciplines(self.character.get("KaiDisciplines"))
+        panel_row("Known", format_list(self.effective_disciplines()))
+        rank_count, rank_name = kai_rank_for_disciplines(self.effective_disciplines())
         panel_row("Kai Rank", f"{rank_name} ({rank_count} disciplines)")
         if self.character.get("WeaponskillWeapon"):
             panel_row("Weaponskill", self.character["WeaponskillWeapon"])
@@ -6345,7 +6478,7 @@ class LoneWolfReduxAssistant:
         self.show_disciplines_screen()
 
     def show_disciplines_screen(self) -> None:
-        known = as_list(self.character.get("KaiDisciplines"))
+        known = self.effective_disciplines()
         rank_count, rank_name = kai_rank_for_disciplines(known)
         panel_header("Kai Disciplines", accent=SCREEN_ACCENTS["disciplines"])
         panel_row("Known", f"{len(known)}/5")
@@ -6523,14 +6656,11 @@ class LoneWolfReduxAssistant:
             return
         mode, value = change
         if mode == "set":
-            self.character["EnduranceCurrent"] = max(0, value)
+            self.set_effective_endurance(value)
         else:
-            next_value = self.character["EnduranceCurrent"] + value
-            if value > 0:
-                next_value = min(next_value, self.character["EnduranceMax"])
-            self.character["EnduranceCurrent"] = max(0, next_value)
+            self.change_effective_endurance(value)
         self.autosave()
-        print(f"Endurance: {self.character['EnduranceCurrent']}/{self.character['EnduranceMax']}")
+        print(f"Endurance: {self.effective_endurance_current()}/{self.effective_endurance_max()}")
 
     def adjust_combat_skill(self, tokens: list[str]) -> None:
         change = self.number_change(tokens)
@@ -6559,12 +6689,16 @@ class LoneWolfReduxAssistant:
 
     def meal_command(self, tokens: list[str]) -> None:
         if len(tokens) > 1 and tokens[1].lower() == "missed":
-            self.character["EnduranceCurrent"] = max(0, self.character["EnduranceCurrent"] - 3)
+            self.change_effective_endurance(-3)
             self.autosave()
             print(
                 f"Missed meal: -3 END. "
-                f"Endurance: {self.character['EnduranceCurrent']}/{self.character['EnduranceMax']}"
+                f"Endurance: {self.effective_endurance_current()}/{self.effective_endurance_max()}"
             )
+            return
+        if self.cheat_active("infinite_meals"):
+            self.autosave()
+            print("Consumed one Meal. Huntmaster's feast remains untouched.")
             return
         removed, items = remove_first_matching(self.inventory["BackpackItems"], "Meal")
         if not removed:
@@ -6696,8 +6830,9 @@ class LoneWolfReduxAssistant:
             return
         item_type = tokens[1].lower()
         item = rest_of_line(tokens, 2)
+        unlimited = self.cheat_active("bottomless_inventory")
         if item_type == "weapon":
-            if len(as_list(self.inventory["Weapons"])) >= 2:
+            if not unlimited and len(as_list(self.inventory["Weapons"])) >= 2:
                 print("Weapon limit is 2. Drop a weapon first.")
                 return
             self.inventory["Weapons"] = as_list(self.inventory["Weapons"]) + [item]
@@ -6705,7 +6840,7 @@ class LoneWolfReduxAssistant:
             if not bool(self.automation_flags.get("backpackAvailable", True)):
                 print("Backpack is not currently available.")
                 return
-            if item_slot_total(self.inventory["BackpackItems"]) + item_slot_cost(item) > 8:
+            if not unlimited and item_slot_total(self.inventory["BackpackItems"]) + item_slot_cost(item) > 8:
                 print("Backpack limit is 8 items. Drop an item first.")
                 return
             self.inventory["BackpackItems"] = as_list(self.inventory["BackpackItems"]) + [item]
@@ -6743,7 +6878,7 @@ class LoneWolfReduxAssistant:
         print("Kai Disciplines can only be changed during character creation or a book transition.")
 
     def assign_missing_weaponskill_weapon(self, roll: Any | None = None, *, save: bool = True) -> bool:
-        if "Weaponskill" not in as_list(self.character.get("KaiDisciplines")):
+        if "Weaponskill" not in self.effective_disciplines():
             print("Weaponskill is not one of your Kai Disciplines.")
             return False
         if str(self.character.get("WeaponskillWeapon") or "").strip():
@@ -6767,8 +6902,8 @@ class LoneWolfReduxAssistant:
     def combat_status_payload(self) -> dict[str, Any]:
         self.sync_active_combat_with_section_preset()
         payload = json.loads(json.dumps(self.combat))
-        payload["PlayerEnduranceCurrent"] = int(self.character["EnduranceCurrent"])
-        payload["PlayerEnduranceMax"] = int(self.character["EnduranceMax"])
+        payload["PlayerEnduranceCurrent"] = self.effective_endurance_current()
+        payload["PlayerEnduranceMax"] = self.effective_endurance_max()
         payload["PlayerEnduranceLabel"] = "END"
         payload["RoundCount"] = self.combat_round_count()
         payload["AvailableWeapons"] = self.available_combat_weapons()
@@ -6896,12 +7031,14 @@ class LoneWolfReduxAssistant:
 
     def combat_skill_for_round(self, round_number: int | None = None) -> int:
         self.sync_active_combat_with_section_preset()
+        if self.cheat_active("god_mode") or self.cheat_active("max_cs"):
+            return 99
         fixed = self.combat.get("FixedPlayerCombatSkill")
         if fixed is not None:
             return int(fixed) + int(self.combat.get("Modifier") or 0) + self.combat_timed_modifier_for_round(round_number)
 
         cs = (
-            int(self.character["CombatSkillCurrent"])
+            self.effective_combat_skill()
             + int(self.combat.get("Modifier") or 0)
             + self.combat_timed_modifier_for_round(round_number)
         )
@@ -7403,7 +7540,12 @@ class LoneWolfReduxAssistant:
         # with the enemy-defeated branch checked further below.
         self.sync_active_combat_with_section_preset()
         round_count = self.combat_round_count()
-        if int(self.character["EnduranceCurrent"]) <= 0:
+        forced_one_round_victory = (
+            self.cheat_active("one_round_combat")
+            and round_count >= 1
+            and int(self.combat.get("EnemyEnduranceCurrent") or 0) <= 0
+        )
+        if self.effective_endurance_current() <= 0:
             print("Lone Wolf has fallen.")
             enemy_name = str(self.combat.get("EnemyName") or "the enemy")
             self.archive_current_combat("Defeat")
@@ -7425,7 +7567,7 @@ class LoneWolfReduxAssistant:
             return True
 
         player_loss_route = self.combat.get("PlayerLossRoute")
-        if player_loss_route and self.combat_player_loss_total() > 0:
+        if not forced_one_round_victory and player_loss_route and self.combat_player_loss_total() > 0:
             self.archive_current_combat("Wounded")
             self.restore_player_endurance_after_combat_effects()
             self.combat["Active"] = False
@@ -7434,7 +7576,7 @@ class LoneWolfReduxAssistant:
             return True
 
         comparison_routes = self.combat.get("OneRoundComparisonRoutes")
-        if isinstance(comparison_routes, dict) and comparison_routes and round_count >= 1:
+        if not forced_one_round_victory and isinstance(comparison_routes, dict) and comparison_routes and round_count >= 1:
             last_round = as_list(self.combat.get("Log"))[-1]
             player_loss = int(last_round.get("PlayerLoss") or last_round.get("LoneWolfReduxLoss") or 0)
             enemy_loss = int(last_round.get("EnemyLoss") or 0)
@@ -7458,7 +7600,7 @@ class LoneWolfReduxAssistant:
             return True
 
         limit = int(self.combat.get("RoundLimit") or 0)
-        if limit and self.combat.get("SurvivalRoute") and round_count >= limit:
+        if not forced_one_round_victory and limit and self.combat.get("SurvivalRoute") and round_count >= limit:
             route = self.combat.get("SurvivalRoute")
             self.archive_current_combat("Survived")
             self.restore_player_endurance_after_combat_effects()
@@ -7599,7 +7741,7 @@ class LoneWolfReduxAssistant:
         panel_header("Combat", accent=SCREEN_ACCENTS["combat"])
         panel_row("Enemy", self.combat["EnemyName"])
         panel_pair_row("Enemy CS", self.combat["EnemyCombatSkill"], "Enemy END", f"{self.combat['EnemyEnduranceCurrent']}/{self.combat['EnemyEnduranceMax']}")
-        panel_pair_row("Lone Wolf CS", player_cs, "END", f"{self.character['EnduranceCurrent']}/{self.character['EnduranceMax']}", left_color="Cyan", right_color=endurance_color(self.character["EnduranceCurrent"], self.character["EnduranceMax"]))
+        panel_pair_row("Lone Wolf CS", player_cs, "END", f"{self.effective_endurance_current()}/{self.effective_endurance_max()}", left_color="Cyan", right_color=endurance_color(self.effective_endurance_current(), self.effective_endurance_max()))
         panel_pair_row("Ratio", ratio, "Weapon", self.combat_active_weapon() or "Unarmed", left_color="Yellow" if ratio < 0 else "Green", right_color="White")
         panel_row("Modifier", self.combat["Modifier"])
         panel_footer()
@@ -7630,7 +7772,9 @@ class LoneWolfReduxAssistant:
         ratio = player_cs - self.combat_effective_enemy_combat_skill()
         column, enemy_loss_raw, player_loss_raw = self.get_crt_result(ratio, roll)
         base_enemy_loss = self.loss_value(enemy_loss_raw, int(self.combat["EnemyEnduranceCurrent"]))
-        player_loss = self.loss_value(player_loss_raw, int(self.character["EnduranceCurrent"]))
+        player_loss = self.loss_value(player_loss_raw, self.effective_endurance_current())
+        if self.cheat_active("god_mode") or self.cheat_active("infinite_health"):
+            player_loss = 0
         ignored_player_loss = 0
         if round_number <= int(self.combat.get("IgnorePlayerLossRounds") or 0):
             ignored_player_loss = player_loss
@@ -7692,8 +7836,10 @@ class LoneWolfReduxAssistant:
             else:
                 special_check_label = str(player_loss_random_check.get("safeLabel") or "safe")
 
+        if self.cheat_active("one_round_combat") and not evade:
+            enemy_loss = int(self.combat["EnemyEnduranceCurrent"])
         self.combat["EnemyEnduranceCurrent"] = max(0, int(self.combat["EnemyEnduranceCurrent"]) - enemy_loss)
-        self.character["EnduranceCurrent"] = max(0, int(self.character["EnduranceCurrent"]) - player_loss)
+        self.change_effective_endurance(-player_loss)
         round_entry = {
             "Round": round_number,
             "Roll": roll,
@@ -7705,7 +7851,7 @@ class LoneWolfReduxAssistant:
             "IgnoredPlayerLoss": ignored_player_loss,
             "LoneWolfReduxLoss": player_loss,
             "PlayerLoss": player_loss,
-            "PlayerEnd": int(self.character["EnduranceCurrent"]),
+            "PlayerEnd": self.effective_endurance_current(),
             "EnemyEnd": int(self.combat["EnemyEnduranceCurrent"]),
             "Evade": evade,
         }
@@ -7731,14 +7877,14 @@ class LoneWolfReduxAssistant:
         print(f"Lone Wolf loss: {player_loss}")
         print(f"Enemy END: {self.combat['EnemyEnduranceCurrent']}/{self.combat['EnemyEnduranceMax']}")
         print(
-            f"Lone Wolf END: {self.character['EnduranceCurrent']}/"
-            f"{self.character['EnduranceMax']}"
+            f"Lone Wolf END: {self.effective_endurance_current()}/"
+            f"{self.effective_endurance_max()}"
         )
 
         special_messages = self.apply_combat_per_round_actions()
         if special_messages and self.combat.get("Log"):
             self.combat["Log"][-1]["SpecialEffects"] = special_messages
-            self.combat["Log"][-1]["FinalPlayerEnd"] = int(self.character["EnduranceCurrent"])
+            self.combat["Log"][-1]["FinalPlayerEnd"] = self.effective_endurance_current()
 
         for message in special_messages:
             print(message)
@@ -8303,14 +8449,146 @@ class LoneWolfReduxAssistant:
         self.autosave()
         print("Note added.")
 
+    def show_cheat_catalog(self) -> None:
+        if self._cheat_catalog is None:
+            return
+        status = self.cheats.status()
+        active = set(status.get("active", []))
+        print("")
+        print("+------------------------- FORBIDDEN KAI LORE -------------------------+")
+        for entry in self._cheat_catalog:
+            effect = str(entry.get("effect") or "")
+            marker = "ON " if effect in active else "OFF"
+            print(f"| [{marker}] {str(entry.get('code') or ''):<22} {entry.get('description')}")
+        print("+------------------------------------------------------------------------+")
+        print("| Sun Eagle Sight commands (requires its code):")
+        print("| warp <book> <section> | set <stat> <value> | give/take <type> <item>")
+        print("| flags | wincombat | reloadsection | cheatstate | back")
+        if status.get("achievementLocked"):
+            print("| Achievements are locked until the desktop application closes.")
+        print("+------------------------------------------------------------------------+")
+
+    def toggle_cheat_digest(self, digest: str) -> None:
+        known_effect = EFFECT_DIGESTS.get(digest)
+        if known_effect is None:
+            known_effect = getattr(self.cheats, "digest_map", {}).get(digest)
+        snapshot = json_clone(self.state) if known_effect == "developer_sight" else None
+        result = self.cheats.toggle_digest(digest, snapshot=snapshot)
+        if not result.get("recognized"):
+            return
+        restored = result.get("restoredSnapshot")
+        if isinstance(restored, dict):
+            self.state = normalize_state(restored)
+            self.write_current_position()
+        effect = str(result.get("effect") or "")
+        state = "ON" if result.get("enabled") else "OFF"
+        print(f"{CHEAT_EFFECT_TITLES.get(effect, effect)}: {state}")
+        if result.get("enabled"):
+            print("Achievements are locked until the desktop application closes.")
+        if self._cheat_catalog is not None:
+            self.show_cheat_catalog()
+
+    def invoke_developer_command(self, tokens: list[str]) -> None:
+        command = tokens[0].lower()
+        if command == "warp":
+            if len(tokens) < 3:
+                print("Use: warp <book> <section>")
+                return
+            self.set_book(int(tokens[1]), int(tokens[2]))
+            return
+        if command == "set":
+            if len(tokens) < 3:
+                print("Use: set <end|maxend|cs|gold|meals> <value>")
+                return
+            stat = tokens[1].lower()
+            value = int(tokens[2])
+            if stat in {"end", "endurance"}:
+                self.character["EnduranceCurrent"] = max(0, value)
+            elif stat in {"maxend", "maxhealth"}:
+                self.character["EnduranceMax"] = max(1, value)
+                self.character["EnduranceCurrent"] = min(
+                    int(self.character["EnduranceCurrent"]), int(self.character["EnduranceMax"])
+                )
+            elif stat in {"cs", "combatskill"}:
+                self.character["CombatSkillCurrent"] = value
+            elif stat in {"gold", "crowns"}:
+                self.inventory["GoldCrowns"] = max(0, value)
+            elif stat == "meals":
+                items = [item for item in as_list(self.inventory["BackpackItems"]) if item != "Meal"]
+                self.inventory["BackpackItems"] = items + (["Meal"] * max(0, value))
+            else:
+                print(f"Unknown developer stat: {stat}")
+                return
+            self.autosave()
+            print(f"Developer value set: {stat}={value}")
+            return
+        if command == "give":
+            self.add_item(["add"] + tokens[1:])
+            return
+        if command == "take":
+            self.drop_item(["drop"] + tokens[1:])
+            return
+        if command == "flags":
+            print(json.dumps(self.automation_flags, indent=2, sort_keys=True))
+            return
+        if command == "wincombat":
+            if not self.combat.get("Active"):
+                print("No active combat.")
+                return
+            self.combat["EnemyEnduranceCurrent"] = 0
+            self.route_after_combat_round()
+            return
+        if command == "reloadsection":
+            self.apply_current_section_automation()
+            return
+        if command == "cheatstate":
+            print(json.dumps(self.cheats.status(), indent=2, sort_keys=True))
+
+    def invoke_hidden_command(self, line: str) -> bool | None:
+        stripped = line.strip()
+        if is_catalog_code(stripped):
+            if self._cheat_catalog is None:
+                self._cheat_catalog = decrypt_catalog(stripped)
+                self.show_cheat_catalog()
+            else:
+                self._cheat_catalog = None
+                print("Forbidden Kai Lore closed.")
+            return True
+
+        tokens = stripped.split()
+        command = tokens[0].lower() if tokens else ""
+        if self._cheat_catalog is not None and command == "back":
+            self._cheat_catalog = None
+            print("Returned to the Lone Wolf prompt.")
+            return True
+
+        digest = digest_code(stripped)
+        if digest in EFFECT_DIGESTS:
+            self.toggle_cheat_digest(digest)
+            return True
+
+        if command in DEVELOPER_COMMANDS and self.cheat_active("developer_sight"):
+            self.invoke_developer_command(tokens)
+            return True
+
+        if self._cheat_catalog is not None:
+            print("That lore is not recorded here. Enter a listed code or 'back'.")
+            return True
+        return None
+
     def invoke(self, line: str) -> bool:
         if "\x15" in line:
             line = line.rsplit("\x15", 1)[-1]
         if not line.strip():
             return True
 
+        hidden_result = self.invoke_hidden_command(line)
+        if hidden_result is not None:
+            return hidden_result
+
         tokens = line.strip().split()
         command = tokens[0].lower()
+        cheat_resources = self.cheat_resource_snapshot()
 
         try:
             if command in {"help", "?"}:
@@ -8442,6 +8720,8 @@ class LoneWolfReduxAssistant:
             print(f"Command error: {exc}")
             with ERROR_LOG_FILE.open("a", encoding="utf-8") as handle:
                 handle.write(f"Command error: {exc}\n")
+        finally:
+            self.finalize_cheat_resources(cheat_resources)
         return True
 
     def run(self, load_path: str = "") -> None:
@@ -8458,7 +8738,7 @@ class LoneWolfReduxAssistant:
 
         while True:
             try:
-                line = input("LW> ")
+                line = input("CHEAT> " if self._cheat_catalog is not None else "LW> ")
             except (EOFError, KeyboardInterrupt):
                 print("")
                 break
@@ -8482,6 +8762,7 @@ def main() -> None:
         data_dir=Path(args.data_dir),
         state_data_dir=Path(args.state_data_dir),
         books_dir=Path(args.books_dir),
+        cheat_provider=provider_from_environment(os.environ),
     )
     assistant.run(load_path=args.load)
 

@@ -8,6 +8,7 @@ saves/
 current-position.json
 data/last-save.txt
 data/ui-preferences.json
+CHEAT_CODES_PRIVATE.md
 
 # Build and installer output
 build/

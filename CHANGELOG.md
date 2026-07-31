@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.1.7 — Unreleased
+
+- Added internal session-scoped QA and diagnostic support for playtesting.
+
 ## 3.1.6 — 2026-07-31
 
 - Added bottom-right resize grips to eligible Quick Actions and active-tab cards for live, free width-and-height resizing within their existing section.

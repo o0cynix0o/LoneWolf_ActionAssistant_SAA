@@ -21,6 +21,7 @@ from urllib.parse import unquote, urlparse, urlsplit
 
 import lonewolf_redux
 import book_manager
+from cheat_session import CheatSession
 from runtime_paths import PATHS
 
 
@@ -34,6 +35,7 @@ STATE_LOCK = threading.RLock()
 # still reach it. Requests are only honored when they look like they came from
 # the local desktop UI itself.
 LOCAL_HOSTNAMES = {"localhost", "127.0.0.1", "::1"}
+CHEAT_SESSION = CheatSession()
 
 
 def request_hostname(value: str | None) -> str | None:
@@ -71,6 +73,7 @@ ASSISTANT = lonewolf_redux.LoneWolfReduxAssistant(
     data_dir=PATHS.resource_data,
     state_data_dir=PATHS.user_data,
     books_dir=PATHS.books_lw,
+    cheat_provider=CHEAT_SESSION,
 )
 LAST_OUTPUT = ""
 
@@ -300,6 +303,10 @@ def state_payload(message: str = "", achievement_unlocks: list[dict] | None = No
     if new_unlocks:
         ASSISTANT.save_game(quiet=True)
     state = json.loads(json.dumps(ASSISTANT.state))
+    state["Character"]["EnduranceCurrent"] = ASSISTANT.effective_endurance_current()
+    state["Character"]["EnduranceMax"] = ASSISTANT.effective_endurance_max()
+    state["Character"]["CombatSkillCurrent"] = ASSISTANT.effective_combat_skill()
+    state["Character"]["KaiDisciplines"] = ASSISTANT.effective_disciplines()
     state["Combat"] = ASSISTANT.combat_status_payload()
     for key in ("HasHerbPouch", "HerbPouchItems"):
         state.get("Inventory", {}).pop(key, None)
@@ -836,7 +843,7 @@ class LoneWolfReduxHandler(BaseHTTPRequestHandler):
             self.reject("Requests must use application/json.")
             return
         parsed = urlparse(self.path)
-        if parsed.path not in {"/api/action", "/api/ui-preferences", "/api/native-books"}:
+        if parsed.path not in {"/api/action", "/api/ui-preferences", "/api/native-books", "/api/internal/session-cheats"}:
             self.send_json({"error": "Not found"}, HTTPStatus.NOT_FOUND)
             return
         length = int(self.headers.get("Content-Length") or 0)
@@ -844,6 +851,14 @@ class LoneWolfReduxHandler(BaseHTTPRequestHandler):
             payload = json.loads(self.rfile.read(length).decode("utf-8") or "{}")
         except json.JSONDecodeError:
             self.send_json({"error": "Invalid JSON"}, HTTPStatus.BAD_REQUEST)
+            return
+        if parsed.path == "/api/internal/session-cheats":
+            supplied = self.headers.get("X-LoneWolf-Session") or ""
+            if not secrets.compare_digest(supplied, CHEAT_SESSION.token):
+                self.send_json({"error": "Invalid desktop session token."}, HTTPStatus.FORBIDDEN)
+                return
+            with STATE_LOCK:
+                self.send_json(CHEAT_SESSION.handle(payload))
             return
         if parsed.path == "/api/ui-preferences":
             with STATE_LOCK:
@@ -866,6 +881,7 @@ class LoneWolfReduxHandler(BaseHTTPRequestHandler):
                     self.send_json({"creationDraft": create_book1_creation_draft(payload)})
                     return
                 before_unlocks = ASSISTANT.achievement_unlocked_ids()
+                cheat_resources = ASSISTANT.cheat_resource_snapshot()
                 if action_name == "shutdown":
                     ASSISTANT.save_game(quiet=True)
                     message = "Lone Wolf assistant server is shutting down."
@@ -874,6 +890,7 @@ class LoneWolfReduxHandler(BaseHTTPRequestHandler):
                     threading.Thread(target=self.server.shutdown, daemon=True).start()
                     return
                 message = handle_action(payload)
+                ASSISTANT.finalize_cheat_resources(cheat_resources)
                 ASSISTANT.sync_achievements(save=False)
                 after_unlocks = [
                     entry

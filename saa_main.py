@@ -168,8 +168,10 @@ def run_desktop() -> int:
         _lifecycle_log("desktop startup begin")
         http_server, http_thread = _start_http(DEFAULT_HTTP_PORT)
         http_port = int(http_server.server_address[1])
-        websocket = _start_websocket(DEFAULT_WS_PORT)
         base_url = f"http://127.0.0.1:{http_port}"
+        os.environ["LONEWOLF_SAA_CHEAT_URL"] = f"{base_url}/api/internal/session-cheats"
+        os.environ["LONEWOLF_SAA_CHEAT_TOKEN"] = app_server.CHEAT_SESSION.token
+        websocket = _start_websocket(DEFAULT_WS_PORT)
         _wait_for_http(base_url)
 
         window = webview.create_window(
@@ -193,6 +195,8 @@ def run_desktop() -> int:
         if http_server is not None:
             _lifecycle_log("stopping http")
             app_server.stop_server(http_server, http_thread)
+        os.environ.pop("LONEWOLF_SAA_CHEAT_URL", None)
+        os.environ.pop("LONEWOLF_SAA_CHEAT_TOKEN", None)
         _lifecycle_log("desktop shutdown complete")
 
 
