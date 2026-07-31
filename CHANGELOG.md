@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.1.6 — Unreleased
+## 3.1.6 — 2026-07-31
 
 - Added bottom-right resize grips to eligible Quick Actions and active-tab cards for live, free width-and-height resizing within their existing section.
 - Added practical minimum dimensions, section-width clamping, and internal scrolling so compact custom cards keep every control accessible without overlapping neighboring cards.
