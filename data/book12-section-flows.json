@@ -11,7 +11,27 @@
           "Section": 94
         }
       ],
-      "incomingRouteCount": 0
+      "incomingRouteCount": 0,
+      "roll": {
+        "summary": "Shadow Gate endurance loss.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 99,
+            "label": "Shadow Gate endurance loss",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "deltaFrom": "total",
+                "multiplier": -1
+              }
+            ],
+            "route": 94
+          }
+        ],
+        "zeroAsTen": true
+      }
     },
     "2": {
       "auditStatus": "source-link-baseline",
@@ -122,7 +142,51 @@
           "Section": 75
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Lore-circle route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 5,
+            "route": 275,
+            "label": "Route"
+          },
+          {
+            "min": 6,
+            "max": 99,
+            "route": 75,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Lore-circle of Solaris",
+            "value": 2,
+            "condition": {
+              "type": "lore_circle",
+              "name": "Solaris"
+            }
+          },
+          {
+            "label": "Lore-circles of Solaris and Fire",
+            "value": 1,
+            "condition": {
+              "type": "all",
+              "conditions": [
+                {
+                  "type": "lore_circle",
+                  "name": "Solaris"
+                },
+                {
+                  "type": "lore_circle",
+                  "name": "Fire"
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "7": {
       "auditStatus": "source-link-baseline",
@@ -394,7 +458,30 @@
           "Section": 152
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Magnakai strength check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 244,
+            "label": "Route"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 152,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Magnakai Disciplines",
+            "valueFrom": "magnakai_discipline_count"
+          }
+        ]
+      }
     },
     "22": {
       "auditStatus": "source-link-baseline",
@@ -685,7 +772,34 @@
           "Section": 304
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Invisibility route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 118,
+            "label": "Route"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 304,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Invisibility",
+            "value": 4,
+            "condition": {
+              "type": "power",
+              "name": "Invisibility"
+            }
+          }
+        ]
+      }
     },
     "38": {
       "auditStatus": "source-link-baseline",
@@ -825,7 +939,43 @@
           "Section": 70
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Stealth route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 5,
+            "route": 348,
+            "label": "Route"
+          },
+          {
+            "min": 6,
+            "max": 99,
+            "route": 70,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Invisibility and Psi-screen",
+            "value": 4,
+            "condition": {
+              "type": "all",
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Invisibility"
+                },
+                {
+                  "type": "power",
+                  "name": "Psi-screen"
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "47": {
       "auditStatus": "source-link-baseline",
@@ -841,7 +991,34 @@
           "Section": 129
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Spirit Lore-circle route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 5,
+            "route": 204,
+            "label": "Route"
+          },
+          {
+            "min": 6,
+            "max": 99,
+            "route": 129,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Lore-circle of Spirit",
+            "value": 3,
+            "condition": {
+              "type": "lore_circle",
+              "name": "Spirit"
+            }
+          }
+        ]
+      }
     },
     "48": {
       "auditStatus": "source-link-baseline",
@@ -1062,7 +1239,43 @@
           "Section": 205
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Light and Solaris route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 233,
+            "label": "Route"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 205,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Lore-circles of Light and Solaris",
+            "value": 3,
+            "condition": {
+              "type": "all",
+              "conditions": [
+                {
+                  "type": "lore_circle",
+                  "name": "Light"
+                },
+                {
+                  "type": "lore_circle",
+                  "name": "Solaris"
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "60": {
       "auditStatus": "source-link-baseline",
@@ -1137,7 +1350,34 @@
           "Section": 149
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Huntmastery route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 237,
+            "label": "Route"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 149,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Huntmastery",
+            "value": 3,
+            "condition": {
+              "type": "power",
+              "name": "Huntmastery"
+            }
+          }
+        ]
+      }
     },
     "65": {
       "auditStatus": "source-link-baseline",
@@ -1304,7 +1544,30 @@
           "Section": 332
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Ship route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 42,
+            "label": "Route"
+          },
+          {
+            "min": 4,
+            "max": 6,
+            "route": 288,
+            "label": "Route"
+          },
+          {
+            "min": 7,
+            "max": 9,
+            "route": 332,
+            "label": "Route"
+          }
+        ]
+      }
     },
     "75": {
       "auditStatus": "source-link-baseline",
@@ -1495,7 +1758,51 @@
           "Section": 227
         }
       ],
-      "incomingRouteCount": 4
+      "incomingRouteCount": 4,
+      "roll": {
+        "summary": "Cliff escape check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 22,
+            "label": "Route"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 227,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Invisibility",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Invisibility"
+            }
+          },
+          {
+            "label": "Huntmastery at Primate rank",
+            "value": 3,
+            "condition": {
+              "type": "all",
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Huntmastery"
+                },
+                {
+                  "type": "magnakai_rank_gte",
+                  "value": 4
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "87": {
       "auditStatus": "source-link-baseline",
@@ -1573,7 +1880,24 @@
           "Section": 194
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Ship route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 16,
+            "label": "Route"
+          },
+          {
+            "min": 5,
+            "max": 9,
+            "route": 194,
+            "label": "Route"
+          }
+        ]
+      }
     },
     "92": {
       "auditStatus": "source-link-baseline",
@@ -1589,7 +1913,42 @@
           "Section": 65
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Invisibility route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 189,
+            "label": "Route"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 65,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Invisibility",
+            "value": 3,
+            "condition": {
+              "type": "power",
+              "name": "Invisibility"
+            }
+          },
+          {
+            "label": "Mentora rank",
+            "value": 2,
+            "condition": {
+              "type": "magnakai_rank_gte",
+              "value": 7
+            }
+          }
+        ]
+      }
     },
     "93": {
       "auditStatus": "source-link-baseline",
@@ -1647,7 +2006,43 @@
           "Section": 161
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Light and Solaris route check.",
+        "outcomes": [
+          {
+            "min": -99,
+            "max": 4,
+            "route": 72,
+            "label": "Route"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 161,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Lore-circles of Solaris and Light",
+            "value": 3,
+            "condition": {
+              "type": "all",
+              "conditions": [
+                {
+                  "type": "lore_circle",
+                  "name": "Solaris"
+                },
+                {
+                  "type": "lore_circle",
+                  "name": "Light"
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "97": {
       "auditStatus": "source-link-baseline",
@@ -1676,7 +2071,43 @@
           "Section": 205
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Light and Solaris route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 233,
+            "label": "Route"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 205,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Lore-circles of Light and Solaris",
+            "value": 3,
+            "condition": {
+              "type": "all",
+              "conditions": [
+                {
+                  "type": "lore_circle",
+                  "name": "Light"
+                },
+                {
+                  "type": "lore_circle",
+                  "name": "Solaris"
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "99": {
       "auditStatus": "source-link-baseline",
@@ -1924,7 +2355,24 @@
           "Section": 16
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Ship route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 194,
+            "label": "Route"
+          },
+          {
+            "min": 5,
+            "max": 9,
+            "route": 16,
+            "label": "Route"
+          }
+        ]
+      }
     },
     "111": {
       "auditStatus": "source-link-baseline",
@@ -1940,7 +2388,30 @@
           "Section": 279
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Magnakai rank route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 7,
+            "route": 8,
+            "label": "Route"
+          },
+          {
+            "min": 8,
+            "max": 99,
+            "route": 279,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Magnakai Disciplines above three",
+            "valueFrom": "magnakai_discipline_count_above_three"
+          }
+        ]
+      }
     },
     "112": {
       "auditStatus": "source-link-baseline",
@@ -2149,7 +2620,34 @@
           "Section": 48
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Lore-circle route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 342,
+            "label": "Route"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 48,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Lore-circle of Solaris",
+            "value": 4,
+            "condition": {
+              "type": "lore_circle",
+              "name": "Solaris"
+            }
+          }
+        ]
+      }
     },
     "125": {
       "auditStatus": "source-link-baseline",
@@ -2224,7 +2722,24 @@
           "Section": 180
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Ship route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 20,
+            "label": "Route"
+          },
+          {
+            "min": 7,
+            "max": 9,
+            "route": 180,
+            "label": "Route"
+          }
+        ]
+      }
     },
     "130": {
       "auditStatus": "source-link-baseline",
@@ -2627,7 +3142,48 @@
           "Section": 319
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Roadside route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 2,
+            "route": 341,
+            "label": "Route"
+          },
+          {
+            "min": 3,
+            "max": 8,
+            "route": 9,
+            "label": "Route"
+          },
+          {
+            "min": 9,
+            "max": 99,
+            "route": 319,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Huntmastery",
+            "value": 1,
+            "condition": {
+              "type": "power",
+              "name": "Huntmastery"
+            }
+          },
+          {
+            "label": "Lore-circle of Solaris",
+            "value": 3,
+            "condition": {
+              "type": "lore_circle",
+              "name": "Solaris"
+            }
+          }
+        ]
+      }
     },
     "156": {
       "auditStatus": "source-link-baseline",
@@ -3065,7 +3621,60 @@
           "Section": 11
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Animal control route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 7,
+            "route": 158,
+            "label": "Route"
+          },
+          {
+            "min": 8,
+            "max": 99,
+            "route": 11,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Lore-circles of Fire and Solaris",
+            "value": 1,
+            "condition": {
+              "type": "all",
+              "conditions": [
+                {
+                  "type": "lore_circle",
+                  "name": "Fire"
+                },
+                {
+                  "type": "lore_circle",
+                  "name": "Solaris"
+                }
+              ]
+            }
+          },
+          {
+            "label": "Animal Control at Archmaster rank",
+            "value": 3,
+            "condition": {
+              "type": "all",
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Animal Control"
+                },
+                {
+                  "type": "magnakai_rank_gte",
+                  "value": 9
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "179": {
       "auditStatus": "source-link-baseline",
@@ -3091,7 +3700,27 @@
           "Section": 71
         }
       ],
-      "incomingRouteCount": 3
+      "incomingRouteCount": 3,
+      "roll": {
+        "summary": "Shrapnel wound loss.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 99,
+            "label": "Shrapnel wound",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "deltaFrom": "total",
+                "multiplier": -1
+              }
+            ],
+            "route": 71
+          }
+        ],
+        "zeroAsTen": true
+      }
     },
     "181": {
       "auditStatus": "source-link-baseline",
@@ -3521,7 +4150,34 @@
           "Section": 114
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Spirit Lore-circle route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 102,
+            "label": "Route"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 114,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Lore-circle of Spirit",
+            "value": 5,
+            "condition": {
+              "type": "lore_circle",
+              "name": "Spirit"
+            }
+          }
+        ]
+      }
     },
     "204": {
       "auditStatus": "source-link-baseline",
@@ -3537,7 +4193,24 @@
           "Section": 180
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Ship route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 2,
+            "route": 20,
+            "label": "Route"
+          },
+          {
+            "min": 3,
+            "max": 9,
+            "route": 180,
+            "label": "Route"
+          }
+        ]
+      }
     },
     "205": {
       "auditStatus": "source-link-baseline",
@@ -3580,7 +4253,62 @@
           "Section": 123
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Cliff descent check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 62,
+            "label": "Route"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 123,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Rope",
+            "value": 1,
+            "condition": {
+              "type": "item",
+              "name": "Rope",
+              "containers": [
+                "backpack"
+              ]
+            }
+          },
+          {
+            "label": "Huntmastery at Primate rank",
+            "value": 2,
+            "condition": {
+              "type": "all",
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Huntmastery"
+                },
+                {
+                  "type": "magnakai_rank_gte",
+                  "value": 4
+                }
+              ]
+            }
+          },
+          {
+            "label": "Lore-circle of Solaris",
+            "value": 3,
+            "condition": {
+              "type": "lore_circle",
+              "name": "Solaris"
+            }
+          }
+        ]
+      }
     },
     "207": {
       "auditStatus": "source-link-baseline",
@@ -3618,7 +4346,30 @@
           "Section": 151
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Magnakai rank route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 9,
+            "route": 309,
+            "label": "Route"
+          },
+          {
+            "min": 10,
+            "max": 99,
+            "route": 151,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Magnakai Disciplines above three",
+            "valueFrom": "magnakai_discipline_count_above_three"
+          }
+        ]
+      }
     },
     "210": {
       "auditStatus": "source-link-baseline",
@@ -4174,7 +4925,43 @@
           "Section": 173
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Pathsmanship route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 120,
+            "label": "Route"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 173,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Pathsmanship at Mentora rank",
+            "value": 5,
+            "condition": {
+              "type": "all",
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Pathsmanship"
+                },
+                {
+                  "type": "magnakai_rank_gte",
+                  "value": 7
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "243": {
       "auditStatus": "source-link-baseline",
@@ -4368,7 +5155,48 @@
           "Section": 321
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Roadside route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 122,
+            "label": "Route"
+          },
+          {
+            "min": 4,
+            "max": 7,
+            "route": 53,
+            "label": "Route"
+          },
+          {
+            "min": 8,
+            "max": 99,
+            "route": 321,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Huntmastery"
+            }
+          },
+          {
+            "label": "Lore-circle of Spirit",
+            "value": 3,
+            "condition": {
+              "type": "lore_circle",
+              "name": "Spirit"
+            }
+          }
+        ]
+      }
     },
     "254": {
       "auditStatus": "source-link-baseline",
@@ -4397,7 +5225,30 @@
           "Section": 133
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Magnakai strength check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 5,
+            "route": 90,
+            "label": "Route"
+          },
+          {
+            "min": 6,
+            "max": 99,
+            "route": 133,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Magnakai Disciplines",
+            "valueFrom": "magnakai_discipline_count"
+          }
+        ]
+      }
     },
     "256": {
       "auditStatus": "source-link-baseline",
@@ -4413,7 +5264,24 @@
           "Section": 180
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Ship route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 1,
+            "route": 20,
+            "label": "Route"
+          },
+          {
+            "min": 2,
+            "max": 9,
+            "route": 180,
+            "label": "Route"
+          }
+        ]
+      }
     },
     "257": {
       "auditStatus": "source-link-baseline",
@@ -4429,7 +5297,43 @@
           "Section": 112
         }
       ],
-      "incomingRouteCount": 3
+      "incomingRouteCount": 3,
+      "roll": {
+        "summary": "Animal control route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 333,
+            "label": "Route"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 112,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Animal Control at Archmaster rank",
+            "value": 4,
+            "condition": {
+              "type": "all",
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Animal Control"
+                },
+                {
+                  "type": "magnakai_rank_gte",
+                  "value": 9
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "258": {
       "auditStatus": "source-link-baseline",
@@ -4708,7 +5612,43 @@
           "Section": 23
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Mountain route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 59,
+            "label": "Route"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 23,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Huntmastery and Pathsmanship",
+            "value": 2,
+            "condition": {
+              "type": "all",
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Huntmastery"
+                },
+                {
+                  "type": "power",
+                  "name": "Pathsmanship"
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "274": {
       "auditStatus": "source-link-baseline",
@@ -4950,7 +5890,48 @@
           "Section": 321
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Roadside route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 122,
+            "label": "Route"
+          },
+          {
+            "min": 4,
+            "max": 7,
+            "route": 53,
+            "label": "Route"
+          },
+          {
+            "min": 8,
+            "max": 99,
+            "route": 321,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Huntmastery"
+            }
+          },
+          {
+            "label": "Lore-circle of Spirit",
+            "value": 3,
+            "condition": {
+              "type": "lore_circle",
+              "name": "Spirit"
+            }
+          }
+        ]
+      }
     },
     "291": {
       "auditStatus": "source-link-baseline",
@@ -5648,7 +6629,48 @@
           "Section": 321
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Roadside route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 122,
+            "label": "Route"
+          },
+          {
+            "min": 4,
+            "max": 7,
+            "route": 53,
+            "label": "Route"
+          },
+          {
+            "min": 8,
+            "max": 99,
+            "route": 321,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Huntmastery"
+            }
+          },
+          {
+            "label": "Lore-circle of Spirit",
+            "value": 3,
+            "condition": {
+              "type": "lore_circle",
+              "name": "Spirit"
+            }
+          }
+        ]
+      }
     },
     "335": {
       "auditStatus": "source-link-baseline",

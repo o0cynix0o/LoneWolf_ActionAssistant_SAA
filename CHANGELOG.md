@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.4.3 - Internal Testing
+
+- Added 94 source-verified Book 9-12 Random Number Table rules, covering roll routes, rank and discipline modifiers, and clear ENDURANCE effects.
+- Added support for source checks that add one point per Magnakai Discipline, including the later-book "above three" variation.
+- Left 21 RNT cases reader-directed where the printed result depends on an active weapon, unspecified missile bonus, or prior item-use history.
+
 ## 3.4.2 - Internal Testing
 
 - Added the complete source Combat Skill and ENDURANCE catalogue for all 172 Book 9-12 combat encounters.

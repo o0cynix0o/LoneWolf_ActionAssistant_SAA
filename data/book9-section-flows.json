@@ -137,7 +137,24 @@
           "Section": 260
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Dagger reaction check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 119,
+            "label": "Route"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 260,
+            "label": "Route"
+          }
+        ]
+      }
     },
     "9": {
       "auditStatus": "source-link-baseline",
@@ -640,7 +657,43 @@
           "Section": 138
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Ledge jump check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 317,
+            "label": "Route"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 138,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Divination or Huntmastery",
+            "value": 3,
+            "condition": {
+              "type": "any",
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Divination"
+                },
+                {
+                  "type": "power",
+                  "name": "Huntmastery"
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "39": {
       "auditStatus": "source-link-baseline",
@@ -1152,7 +1205,33 @@
           "Section": 312
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Crossbow wound loss.",
+        "outcomes": [
+          {
+            "min": -99,
+            "max": 99,
+            "label": "Crossbow wound",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "deltaFrom": "total",
+                "multiplier": -1
+              }
+            ],
+            "route": 312
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Crossbow wound",
+            "value": 2
+          }
+        ],
+        "zeroAsTen": true
+      }
     },
     "73": {
       "auditStatus": "source-link-baseline",
@@ -1467,7 +1546,34 @@
           "Section": 246
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Sealed chamber escape check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 73,
+            "label": "Route"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 246,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Nexus",
+            "value": 4,
+            "condition": {
+              "type": "power",
+              "name": "Nexus"
+            }
+          }
+        ]
+      }
     },
     "92": {
       "auditStatus": "source-link-baseline",
@@ -1483,7 +1589,24 @@
           "Section": 257
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Doomwolf ambush check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 293,
+            "label": "Route"
+          },
+          {
+            "min": 5,
+            "max": 9,
+            "route": 257,
+            "label": "Route"
+          }
+        ]
+      }
     },
     "93": {
       "auditStatus": "source-link-baseline",
@@ -1531,7 +1654,48 @@
           "Section": 238
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Arrow volley reaction check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 125,
+            "label": "Route"
+          },
+          {
+            "min": 4,
+            "max": 8,
+            "route": 309,
+            "label": "Route"
+          },
+          {
+            "min": 9,
+            "max": 99,
+            "route": 238,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Huntmastery"
+            }
+          },
+          {
+            "label": "Lore-circle of Solaris",
+            "value": 3,
+            "condition": {
+              "type": "lore_circle",
+              "name": "Solaris"
+            }
+          }
+        ]
+      }
     },
     "96": {
       "auditStatus": "source-link-baseline",
@@ -1623,7 +1787,34 @@
           "Section": 198
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Bow shot at the siege screen.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 70,
+            "label": "Route"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 198,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Weaponmastery with Bow",
+            "value": 3,
+            "condition": {
+              "type": "weaponmastery_weapon",
+              "name": "Bow"
+            }
+          }
+        ]
+      }
     },
     "100": {
       "auditStatus": "source-link-baseline",
@@ -2301,7 +2492,42 @@
           "Section": 236
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Net escape check.",
+        "outcomes": [
+          {
+            "min": -99,
+            "max": 3,
+            "route": 182,
+            "label": "Route"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 236,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Huntmastery",
+            "value": 1,
+            "condition": {
+              "type": "power",
+              "name": "Huntmastery"
+            }
+          },
+          {
+            "label": "Lore-circle of Fire",
+            "value": 2,
+            "condition": {
+              "type": "lore_circle",
+              "name": "Fire"
+            }
+          }
+        ]
+      }
     },
     "138": {
       "auditStatus": "source-link-baseline",
@@ -2368,7 +2594,40 @@
           "Section": 114
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Lake escape check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 4,
+            "label": "Route"
+          },
+          {
+            "min": 4,
+            "max": 7,
+            "route": 289,
+            "label": "Route"
+          },
+          {
+            "min": 8,
+            "max": 99,
+            "route": 114,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Nexus",
+            "value": 4,
+            "condition": {
+              "type": "power",
+              "name": "Nexus"
+            }
+          }
+        ]
+      }
     },
     "142": {
       "auditStatus": "source-link-baseline",
@@ -3547,7 +3806,34 @@
           "Section": 117
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Thrown dagger check.",
+        "outcomes": [
+          {
+            "min": -99,
+            "max": 6,
+            "route": 287,
+            "label": "Route"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 117,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Weaponmastery with Dagger",
+            "value": 4,
+            "condition": {
+              "type": "weaponmastery_weapon",
+              "name": "Dagger"
+            }
+          }
+        ]
+      }
     },
     "216": {
       "auditStatus": "source-link-baseline",
@@ -3563,7 +3849,42 @@
           "Section": 310
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Sky-snake bow shot.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 7,
+            "route": 9,
+            "label": "Route"
+          },
+          {
+            "min": 8,
+            "max": 99,
+            "route": 310,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Weaponmastery with Bow",
+            "value": 3,
+            "condition": {
+              "type": "weaponmastery_weapon",
+              "name": "Bow"
+            }
+          },
+          {
+            "label": "Huntmastery",
+            "value": 1,
+            "condition": {
+              "type": "power",
+              "name": "Huntmastery"
+            }
+          }
+        ]
+      }
     },
     "217": {
       "auditStatus": "source-link-baseline",
@@ -3786,7 +4107,34 @@
           "Section": 107
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Shadow bow shot.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 5,
+            "route": 330,
+            "label": "Route"
+          },
+          {
+            "min": 6,
+            "max": 99,
+            "route": 107,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Divination",
+            "value": 3,
+            "condition": {
+              "type": "power",
+              "name": "Divination"
+            }
+          }
+        ]
+      }
     },
     "230": {
       "auditStatus": "source-link-baseline",
@@ -3802,7 +4150,34 @@
           "Section": 297
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Rocky landing check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 89,
+            "label": "Route"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 297,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Huntmastery",
+            "value": 3,
+            "condition": {
+              "type": "power",
+              "name": "Huntmastery"
+            }
+          }
+        ]
+      }
     },
     "231": {
       "auditStatus": "source-link-baseline",
@@ -3821,7 +4196,49 @@
           "Section": 81
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Cliff fall check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 1,
+            "route": 195,
+            "label": "Route"
+          },
+          {
+            "min": 2,
+            "max": 6,
+            "route": 332,
+            "label": "Route"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 81,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Huntmastery or Nexus",
+            "value": 3,
+            "condition": {
+              "type": "any",
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Huntmastery"
+                },
+                {
+                  "type": "power",
+                  "name": "Nexus"
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "232": {
       "auditStatus": "source-link-baseline",
@@ -3957,7 +4374,42 @@
           "Section": 350
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Zakhan dagger strike.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 20,
+            "label": "Route"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 350,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Weaponmastery with Dagger",
+            "value": 3,
+            "condition": {
+              "type": "weaponmastery_weapon",
+              "name": "Dagger"
+            }
+          },
+          {
+            "label": "Lore-circle of Fire",
+            "value": 1,
+            "condition": {
+              "type": "lore_circle",
+              "name": "Fire"
+            }
+          }
+        ]
+      }
     },
     "240": {
       "auditStatus": "source-link-baseline",
@@ -4749,7 +5201,34 @@
           "Section": 270
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Siege missile reaction check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 5,
+            "route": 112,
+            "label": "Route"
+          },
+          {
+            "min": 6,
+            "max": 99,
+            "route": 270,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Lore-circle of Solaris",
+            "value": 4,
+            "condition": {
+              "type": "lore_circle",
+              "name": "Solaris"
+            }
+          }
+        ]
+      }
     },
     "287": {
       "auditStatus": "source-link-baseline",
@@ -4953,7 +5432,24 @@
           "Section": 137
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Senate decision check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 58,
+            "label": "Route"
+          },
+          {
+            "min": 5,
+            "max": 9,
+            "route": 137,
+            "label": "Route"
+          }
+        ]
+      }
     },
     "301": {
       "auditStatus": "source-link-baseline",
@@ -5233,7 +5729,24 @@
           "Section": 257
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Doomwolf escape check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 293,
+            "label": "Route"
+          },
+          {
+            "min": 4,
+            "max": 9,
+            "route": 257,
+            "label": "Route"
+          }
+        ]
+      }
     },
     "315": {
       "auditStatus": "source-link-baseline",

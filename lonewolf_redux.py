@@ -5125,6 +5125,19 @@ class LoneWolfReduxAssistant:
                     value = int(self.character["EnduranceCurrent"])
                 elif value_from in {"cs", "combat_skill", "combat skill"}:
                     value = int(self.character["CombatSkillCurrent"])
+                elif value_from in {
+                    "magnakai_discipline_count",
+                    "magnakai_disciplines",
+                }:
+                    value = len(clean_magnakai_disciplines(self.character.get("MagnakaiDisciplines")))
+                elif value_from in {
+                    "magnakai_discipline_count_above_three",
+                    "magnakai_disciplines_above_three",
+                }:
+                    value = max(
+                        0,
+                        len(clean_magnakai_disciplines(self.character.get("MagnakaiDisciplines"))) - 3,
+                    )
                 else:
                     value = 0
             else:

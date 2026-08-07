@@ -189,7 +189,34 @@
           "Section": 229
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Sorcerous weapon dodge.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 310,
+            "label": "Route"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 229,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Huntmastery"
+            }
+          }
+        ]
+      }
     },
     "12": {
       "auditStatus": "source-link-baseline",
@@ -266,7 +293,40 @@
           "Section": 319
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Sniper arrow reaction check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 2,
+            "route": 264,
+            "label": "Route"
+          },
+          {
+            "min": 3,
+            "max": 5,
+            "route": 121,
+            "label": "Route"
+          },
+          {
+            "min": 6,
+            "max": 99,
+            "route": 319,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Huntmastery",
+            "value": 3,
+            "condition": {
+              "type": "power",
+              "name": "Huntmastery"
+            }
+          }
+        ]
+      }
     },
     "17": {
       "auditStatus": "source-link-baseline",
@@ -436,7 +496,34 @@
           "Section": 15
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Chasm jump check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 54,
+            "label": "Route"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 15,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Huntmastery",
+            "value": 3,
+            "condition": {
+              "type": "power",
+              "name": "Huntmastery"
+            }
+          }
+        ]
+      }
     },
     "28": {
       "auditStatus": "source-link-baseline",
@@ -723,7 +810,40 @@
           "Section": 319
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Sniper arrow reaction check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 2,
+            "route": 264,
+            "label": "Route"
+          },
+          {
+            "min": 3,
+            "max": 5,
+            "route": 121,
+            "label": "Route"
+          },
+          {
+            "min": 6,
+            "max": 99,
+            "route": 319,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Huntmastery",
+            "value": 3,
+            "condition": {
+              "type": "power",
+              "name": "Huntmastery"
+            }
+          }
+        ]
+      }
     },
     "45": {
       "auditStatus": "source-link-baseline",
@@ -778,7 +898,24 @@
           "Section": 289
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Rope swing check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 304,
+            "label": "Route"
+          },
+          {
+            "min": 5,
+            "max": 9,
+            "route": 289,
+            "label": "Route"
+          }
+        ]
+      }
     },
     "49": {
       "auditStatus": "source-link-baseline",
@@ -1046,7 +1183,40 @@
           "Section": 319
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Sniper arrow reaction check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 2,
+            "route": 264,
+            "label": "Route"
+          },
+          {
+            "min": 3,
+            "max": 5,
+            "route": 121,
+            "label": "Route"
+          },
+          {
+            "min": 6,
+            "max": 99,
+            "route": 319,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Huntmastery",
+            "value": 3,
+            "condition": {
+              "type": "power",
+              "name": "Huntmastery"
+            }
+          }
+        ]
+      }
     },
     "67": {
       "auditStatus": "source-link-baseline",
@@ -1494,7 +1664,34 @@
           "Section": 338
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Death Knight evasion check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 107,
+            "label": "Route"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 338,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Invisibility",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Invisibility"
+            }
+          }
+        ]
+      }
     },
     "95": {
       "auditStatus": "source-link-baseline",
@@ -1625,7 +1822,34 @@
           "Section": 215
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Chasm jump check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 154,
+            "label": "Route"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 215,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Huntmastery",
+            "value": 3,
+            "condition": {
+              "type": "power",
+              "name": "Huntmastery"
+            }
+          }
+        ]
+      }
     },
     "104": {
       "auditStatus": "source-link-baseline",
@@ -1710,7 +1934,49 @@
           "Section": 153
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Arrow volley reaction check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 1,
+            "route": 91,
+            "label": "Route"
+          },
+          {
+            "min": 2,
+            "max": 6,
+            "route": 283,
+            "label": "Route"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 153,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Huntmastery and Animal Control",
+            "value": 3,
+            "condition": {
+              "type": "all",
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Huntmastery"
+                },
+                {
+                  "type": "power",
+                  "name": "Animal Control"
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "109": {
       "auditStatus": "source-link-baseline",
@@ -2380,7 +2646,24 @@
           "Section": 259
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Swamp route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 59,
+            "label": "Route"
+          },
+          {
+            "min": 5,
+            "max": 9,
+            "route": 259,
+            "label": "Route"
+          }
+        ]
+      }
     },
     "145": {
       "auditStatus": "source-link-baseline",
@@ -3209,7 +3492,34 @@
           "Section": 335
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "River approach check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 67,
+            "label": "Route"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 335,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Lore-circle of Solaris",
+            "value": 3,
+            "condition": {
+              "type": "lore_circle",
+              "name": "Solaris"
+            }
+          }
+        ]
+      }
     },
     "195": {
       "auditStatus": "source-link-baseline",
@@ -3492,7 +3802,24 @@
           "Section": 32
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Roadside route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 221,
+            "label": "Route"
+          },
+          {
+            "min": 5,
+            "max": 9,
+            "route": 32,
+            "label": "Route"
+          }
+        ]
+      }
     },
     "213": {
       "auditStatus": "source-link-baseline",
@@ -3681,7 +4008,43 @@
           "Section": 43
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Enemy-patrol evasion check.",
+        "outcomes": [
+          {
+            "min": -99,
+            "max": 6,
+            "route": 265,
+            "label": "Route"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 43,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Huntmastery at Primate rank",
+            "value": 2,
+            "condition": {
+              "type": "all",
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Huntmastery"
+                },
+                {
+                  "type": "magnakai_rank_gte",
+                  "value": 4
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "225": {
       "auditStatus": "source-link-baseline",
@@ -3827,7 +4190,34 @@
           "Section": 178
         }
       ],
-      "incomingRouteCount": 3
+      "incomingRouteCount": 3,
+      "roll": {
+        "summary": "Cavern escape check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 312,
+            "label": "Route"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 178,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Lore-circle of Fire",
+            "value": 5,
+            "condition": {
+              "type": "lore_circle",
+              "name": "Fire"
+            }
+          }
+        ]
+      }
     },
     "235": {
       "auditStatus": "source-link-baseline",
@@ -3843,7 +4233,42 @@
           "Section": 279
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Forest escape check.",
+        "outcomes": [
+          {
+            "min": -99,
+            "max": 5,
+            "route": 182,
+            "label": "Route"
+          },
+          {
+            "min": 6,
+            "max": 99,
+            "route": 279,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Huntmastery",
+            "value": 1,
+            "condition": {
+              "type": "power",
+              "name": "Huntmastery"
+            }
+          },
+          {
+            "label": "Lore-circle of Solaris",
+            "value": 2,
+            "condition": {
+              "type": "lore_circle",
+              "name": "Solaris"
+            }
+          }
+        ]
+      }
     },
     "236": {
       "auditStatus": "source-link-baseline",
@@ -4341,7 +4766,34 @@
           "Section": 33
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Rooftop escape check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 208,
+            "label": "Route"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 33,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Huntmastery",
+            "value": 3,
+            "condition": {
+              "type": "power",
+              "name": "Huntmastery"
+            }
+          }
+        ]
+      }
     },
     "268": {
       "auditStatus": "source-link-baseline",
@@ -4564,7 +5016,27 @@
           "Section": 156
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Cave trap injury.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 99,
+            "label": "Cave trap injury",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "deltaFrom": "total",
+                "multiplier": -1
+              }
+            ],
+            "route": 156
+          }
+        ],
+        "zeroAsTen": true
+      }
     },
     "282": {
       "auditStatus": "source-link-baseline",
@@ -4614,7 +5086,43 @@
           "Section": 183
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Mounted pursuit check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 236,
+            "label": "Route"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 183,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Animal Control and Huntmastery",
+            "value": 3,
+            "condition": {
+              "type": "all",
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Animal Control"
+                },
+                {
+                  "type": "power",
+                  "name": "Huntmastery"
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "285": {
       "auditStatus": "source-link-baseline",
@@ -5379,7 +5887,48 @@
           "Section": 184
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Tower escape check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 1,
+            "route": 243,
+            "label": "Route"
+          },
+          {
+            "min": 2,
+            "max": 7,
+            "route": 99,
+            "label": "Route"
+          },
+          {
+            "min": 8,
+            "max": 99,
+            "route": 184,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Huntmastery"
+            }
+          },
+          {
+            "label": "Lore-circle of Solaris",
+            "value": 2,
+            "condition": {
+              "type": "lore_circle",
+              "name": "Solaris"
+            }
+          }
+        ]
+      }
     },
     "331": {
       "auditStatus": "source-link-baseline",
@@ -5408,7 +5957,34 @@
           "Section": 47
         }
       ],
-      "incomingRouteCount": 3
+      "incomingRouteCount": 3,
+      "roll": {
+        "summary": "River crossing check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 348,
+            "label": "Route"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 47,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Lore-circle of Solaris",
+            "value": 3,
+            "condition": {
+              "type": "lore_circle",
+              "name": "Solaris"
+            }
+          }
+        ]
+      }
     },
     "333": {
       "auditStatus": "source-link-baseline",

@@ -74,6 +74,26 @@ alternate victory routes, round limits, or post-combat rewards.
 | 11 | 36 | 30 | 0 |
 | 12 | 58 | 51 | 1 |
 
+## Books 9-12: Random Number Table Rules
+
+The assistant now maps 94 clear Random Number Table rules. These cover
+source-defined route ranges, discipline, Lore-circle, rank, rope, and
+Weaponmastery modifiers, plus unambiguous ENDURANCE recovery and loss rolls.
+The rules engine now also supports modifiers based on the total number of
+Magnakai Disciplines and the count above the initial three.
+
+| Book | Source player RNT rolls | Automated in this pass | Reader-directed |
+| --- | ---: | ---: | ---: |
+| 9 | 20 | 18 | 2 |
+| 10 | 26 | 20 | 6 |
+| 11 | 29 | 23 | 6 |
+| 12 | 40 | 33 | 7 |
+
+The 21 reader-directed rolls are preserved in the reader because their
+printed outcome depends on a chosen active weapon, an unspecified missile or
+bow bonus, or prior use of a particular item. They will be mapped only after
+those dependencies are represented explicitly in the save and rules model.
+
 ## Internal Testing Boundary
 
 Books 9-12 are now internal testing paths. They offer fresh Magnakai setup,
@@ -83,7 +103,7 @@ pass, which must map and test, for every required case:
 
 1. Magnakai advancement and each book's printed entry equipment rules.
 2. Conditional choices for disciplines, special items, prior events, and route state.
-3. Combat-result exceptions, item losses and gains, and random-number effects.
+3. Combat-result exceptions, item losses and gains, and the remaining conditional random-number effects.
 4. Book completion and the next-book transfer rules.
 
 This keeps the assistant honest: the campaign spine is testable now, while

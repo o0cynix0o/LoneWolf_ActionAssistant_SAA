@@ -11,7 +11,27 @@
           "Section": 20
         }
       ],
-      "incomingRouteCount": 0
+      "incomingRouteCount": 0,
+      "roll": {
+        "summary": "Shadow Gate endurance loss.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 99,
+            "label": "Shadow Gate endurance loss",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "deltaFrom": "total",
+                "multiplier": -1
+              }
+            ],
+            "route": 20
+          }
+        ],
+        "zeroAsTen": true
+      }
     },
     "2": {
       "auditStatus": "source-link-baseline",
@@ -70,7 +90,24 @@
           "Section": 318
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Tunnel route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 202,
+            "label": "Route"
+          },
+          {
+            "min": 7,
+            "max": 9,
+            "route": 318,
+            "label": "Route"
+          }
+        ]
+      }
     },
     "6": {
       "auditStatus": "source-link-baseline",
@@ -190,7 +227,30 @@
           "Section": 199
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Magnakai strength check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 8,
+            "route": 271,
+            "label": "Route"
+          },
+          {
+            "min": 9,
+            "max": 99,
+            "route": 199,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Magnakai Disciplines",
+            "valueFrom": "magnakai_discipline_count"
+          }
+        ]
+      }
     },
     "14": {
       "auditStatus": "source-link-baseline",
@@ -363,7 +423,30 @@
           "Section": 224
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Ruin route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 172,
+            "label": "Route"
+          },
+          {
+            "min": 4,
+            "max": 6,
+            "route": 307,
+            "label": "Route"
+          },
+          {
+            "min": 7,
+            "max": 9,
+            "route": 224,
+            "label": "Route"
+          }
+        ]
+      }
     },
     "25": {
       "auditStatus": "source-link-baseline",
@@ -644,7 +727,34 @@
           "Section": 328
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Fire Lore-circle check.",
+        "outcomes": [
+          {
+            "min": -99,
+            "max": 2,
+            "route": 328,
+            "label": "Route"
+          },
+          {
+            "min": 3,
+            "max": 99,
+            "route": 191,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Lore-circle of Fire",
+            "value": 2,
+            "condition": {
+              "type": "lore_circle",
+              "name": "Fire"
+            }
+          }
+        ]
+      }
     },
     "40": {
       "auditStatus": "source-link-baseline",
@@ -956,7 +1066,30 @@
           "Section": 338
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Roadside route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 2,
+            "route": 73,
+            "label": "Route"
+          },
+          {
+            "min": 3,
+            "max": 6,
+            "route": 179,
+            "label": "Route"
+          },
+          {
+            "min": 7,
+            "max": 9,
+            "route": 338,
+            "label": "Route"
+          }
+        ]
+      }
     },
     "61": {
       "auditStatus": "source-link-baseline",
@@ -985,7 +1118,43 @@
           "Section": 49
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Chasm escape check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 5,
+            "route": 310,
+            "label": "Route"
+          },
+          {
+            "min": 6,
+            "max": 99,
+            "route": 49,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Nexus or Huntmastery",
+            "value": 4,
+            "condition": {
+              "type": "any",
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Nexus"
+                },
+                {
+                  "type": "power",
+                  "name": "Huntmastery"
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "63": {
       "auditStatus": "source-link-baseline",
@@ -1210,7 +1379,24 @@
           "Section": 240
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "City route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 142,
+            "label": "Route"
+          },
+          {
+            "min": 5,
+            "max": 9,
+            "route": 240,
+            "label": "Route"
+          }
+        ]
+      }
     },
     "76": {
       "auditStatus": "source-link-baseline",
@@ -1545,7 +1731,43 @@
           "Section": 49
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Chasm escape check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 5,
+            "route": 310,
+            "label": "Route"
+          },
+          {
+            "min": 6,
+            "max": 99,
+            "route": 49,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Nexus or Huntmastery",
+            "value": 4,
+            "condition": {
+              "type": "any",
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Nexus"
+                },
+                {
+                  "type": "power",
+                  "name": "Huntmastery"
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "96": {
       "auditStatus": "source-link-baseline",
@@ -1780,7 +2002,30 @@
           "Section": 295
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Magnakai rank route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 130,
+            "label": "Route"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 295,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Magnakai Disciplines above three",
+            "valueFrom": "magnakai_discipline_count_above_three"
+          }
+        ]
+      }
     },
     "110": {
       "auditStatus": "source-link-baseline",
@@ -2234,7 +2479,24 @@
           "Section": 202
         }
       ],
-      "incomingRouteCount": 6
+      "incomingRouteCount": 6,
+      "roll": {
+        "summary": "Tunnel route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 2,
+            "route": 318,
+            "label": "Route"
+          },
+          {
+            "min": 3,
+            "max": 9,
+            "route": 202,
+            "label": "Route"
+          }
+        ]
+      }
     },
     "139": {
       "auditStatus": "source-link-baseline",
@@ -2518,7 +2780,34 @@
           "Section": 230
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Invisibility strength check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 8,
+            "route": 349,
+            "label": "Route"
+          },
+          {
+            "min": 9,
+            "max": 99,
+            "route": 230,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Magnakai Disciplines",
+            "condition": {
+              "type": "power",
+              "name": "Invisibility"
+            },
+            "valueFrom": "magnakai_discipline_count"
+          }
+        ]
+      }
     },
     "158": {
       "auditStatus": "source-link-baseline",
@@ -3020,7 +3309,40 @@
           "Section": 342
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Huntmastery rank route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 2,
+            "route": 104,
+            "label": "Route"
+          },
+          {
+            "min": 3,
+            "max": 7,
+            "route": 269,
+            "label": "Route"
+          },
+          {
+            "min": 8,
+            "max": 99,
+            "route": 342,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Magnakai Disciplines above three",
+            "condition": {
+              "type": "power",
+              "name": "Huntmastery"
+            },
+            "valueFrom": "magnakai_discipline_count_above_three"
+          }
+        ]
+      }
     },
     "190": {
       "auditStatus": "source-link-baseline",
@@ -3069,7 +3391,40 @@
           "Section": 304
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Huntmastery rank route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 65,
+            "label": "Route"
+          },
+          {
+            "min": 4,
+            "max": 7,
+            "route": 146,
+            "label": "Route"
+          },
+          {
+            "min": 8,
+            "max": 99,
+            "route": 304,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Magnakai Disciplines above three",
+            "condition": {
+              "type": "power",
+              "name": "Huntmastery"
+            },
+            "valueFrom": "magnakai_discipline_count_above_three"
+          }
+        ]
+      }
     },
     "193": {
       "auditStatus": "source-link-baseline",
@@ -3173,7 +3528,34 @@
           "Section": 214
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Animal control route check.",
+        "outcomes": [
+          {
+            "min": -99,
+            "max": 3,
+            "route": 214,
+            "label": "Route"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 128,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Animal Control",
+            "value": 3,
+            "condition": {
+              "type": "power",
+              "name": "Animal Control"
+            }
+          }
+        ]
+      }
     },
     "199": {
       "auditStatus": "source-link-baseline",
@@ -3918,7 +4300,34 @@
           "Section": 110
         }
       ],
-      "incomingRouteCount": 3
+      "incomingRouteCount": 3,
+      "roll": {
+        "summary": "Shadow route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 57,
+            "label": "Route"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 110,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Lore-circle of Solaris",
+            "value": 3,
+            "condition": {
+              "type": "lore_circle",
+              "name": "Solaris"
+            }
+          }
+        ]
+      }
     },
     "244": {
       "auditStatus": "source-link-baseline",
@@ -3934,7 +4343,54 @@
           "Section": 279
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Cliff descent check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 239,
+            "label": "Route"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 279,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Rope",
+            "value": 1,
+            "condition": {
+              "type": "item",
+              "name": "Rope",
+              "containers": [
+                "backpack"
+              ]
+            }
+          },
+          {
+            "label": "Huntmastery at Primate rank",
+            "value": 3,
+            "condition": {
+              "type": "all",
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Huntmastery"
+                },
+                {
+                  "type": "magnakai_rank_gte",
+                  "value": 4
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "245": {
       "auditStatus": "source-link-baseline",
@@ -4506,7 +4962,24 @@
           "Section": 202
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Tunnel route check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 2,
+            "route": 318,
+            "label": "Route"
+          },
+          {
+            "min": 3,
+            "max": 9,
+            "route": 202,
+            "label": "Route"
+          }
+        ]
+      }
     },
     "277": {
       "auditStatus": "source-link-baseline",
@@ -4868,7 +5341,61 @@
           "Section": 165
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Falling debris injury.",
+        "outcomes": [
+          {
+            "min": -99,
+            "max": 3,
+            "label": "Minor debris injury",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "delta": -2
+              }
+            ],
+            "route": 165
+          },
+          {
+            "min": 4,
+            "max": 6,
+            "label": "Debris injury",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "delta": -3
+              }
+            ],
+            "route": 165
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "label": "Severe debris injury",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "delta": -4
+              }
+            ],
+            "route": 165
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Huntmastery",
+            "value": -2,
+            "condition": {
+              "type": "power",
+              "name": "Huntmastery"
+            }
+          }
+        ]
+      }
     },
     "300": {
       "auditStatus": "source-link-baseline",
@@ -5050,7 +5577,26 @@
           "Section": 106
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Healing recovery.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 99,
+            "label": "Healing recovery",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "deltaFrom": "total"
+              }
+            ],
+            "route": 106
+          }
+        ],
+        "zeroAsTen": true
+      }
     },
     "313": {
       "auditStatus": "source-link-baseline",
@@ -5114,7 +5660,34 @@
           "Section": 214
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Animal control route check.",
+        "outcomes": [
+          {
+            "min": -99,
+            "max": 3,
+            "route": 214,
+            "label": "Route"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 128,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Animal Control",
+            "value": 3,
+            "condition": {
+              "type": "power",
+              "name": "Animal Control"
+            }
+          }
+        ]
+      }
     },
     "317": {
       "auditStatus": "source-link-baseline",
@@ -5383,7 +5956,61 @@
           "Section": 165
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "roll": {
+        "summary": "Falling debris injury.",
+        "outcomes": [
+          {
+            "min": -99,
+            "max": 3,
+            "label": "Minor debris injury",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "delta": -1
+              }
+            ],
+            "route": 165
+          },
+          {
+            "min": 4,
+            "max": 6,
+            "label": "Debris injury",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "delta": -2
+              }
+            ],
+            "route": 165
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "label": "Severe debris injury",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "delta": -3
+              }
+            ],
+            "route": 165
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Huntmastery",
+            "value": -2,
+            "condition": {
+              "type": "power",
+              "name": "Huntmastery"
+            }
+          }
+        ]
+      }
     },
     "333": {
       "auditStatus": "source-link-baseline",
@@ -5646,7 +6273,43 @@
           "Section": 49
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Chasm escape check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 5,
+            "route": 310,
+            "label": "Route"
+          },
+          {
+            "min": 6,
+            "max": 99,
+            "route": 49,
+            "label": "Route"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Nexus or Huntmastery",
+            "value": 4,
+            "condition": {
+              "type": "any",
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Nexus"
+                },
+                {
+                  "type": "power",
+                  "name": "Huntmastery"
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "350": {
       "auditStatus": "source-link-baseline",
