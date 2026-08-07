@@ -76,7 +76,7 @@ alternate victory routes, round limits, or post-combat rewards.
 
 ## Books 9-12: Random Number Table Rules
 
-The assistant now maps 113 clear Random Number Table rules. These cover
+The assistant now maps all 116 clear Random Number Table rules. These cover
 source-defined route ranges, discipline, Lore-circle, rank, rope, and
 Weaponmastery modifiers, plus unambiguous ENDURANCE recovery and loss rolls.
 The rules engine now also supports modifiers based on the total number of
@@ -85,14 +85,15 @@ Magnakai Disciplines and the count above the initial three.
 | Book | Source player RNT rolls | Automated | Reader-directed |
 | --- | ---: | ---: | ---: |
 | 9 | 20 | 20 | 0 |
-| 10 | 27 | 25 | 2 |
+| 10 | 27 | 27 | 0 |
 | 11 | 29 | 29 | 0 |
-| 12 | 40 | 39 | 1 |
+| 12 | 40 | 40 | 0 |
 
-The three remaining reader-directed rolls are preserved in the reader because
-their printed outcome depends on a selected active weapon or previous player
-choice. They will be mapped only after those dependencies are represented
-explicitly in the save and rules model.
+Book 10 Section 128 now asks which carried weapon is used before applying its
+source modifiers. Book 10 Section 218 is a play-or-leave dice-game panel that
+records every stake and payout. Book 12 Section 145 offers a kept Dose of
+Adgana; its chosen combat use applies the first-use or repeat-use CS bonus,
+consumes the dose, and performs the source addiction check after combat.
 
 The Book 10 source contains 27 player RNT instructions. The earlier 26-count
 ledger omitted Section 218's two-player dice game; the installed Project Aon

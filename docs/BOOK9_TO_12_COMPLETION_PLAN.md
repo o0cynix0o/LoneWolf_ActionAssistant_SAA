@@ -28,9 +28,9 @@ solely because the app lacks a representable condition.
 | --- | --- | --- |
 | Direct discipline/stat rules | 9:347, 10:166, 10:203, 12:172 | Automated and regression-tested. |
 | Missile or bow bonus | 10:70, 10:96, 10:293, 11:76, 11:151, 11:193, 11:284, 11:322, 11:333, 12:99, 12:107, 12:135, 12:186, 12:324 | Automated with the source-verified Weaponmastery-with-Bow +3 bonus; Book 12:324 also recognizes Huntmastery at Archmaster rank. |
-| Active weapon selection | 10:128 | Requires a non-combat active-weapon selection. |
+| Active weapon selection | 10:128 | Automated with a required carried-weapon choice before the roll. |
 | Item slot loss | 9:201 | Automated: uses the persisted Action Chart order, with the source-defined Special Item to Backpack Item fallback. |
-| Stateful player choice | 10:218, 12:145 | Requires dice-game state and prior Adgana-use history respectively. |
+| Stateful player choice | 10:218, 12:145 | Automated with persisted dice-game state and Adgana use history respectively. |
 
 ## Phase 2: Conditional Reader Choices
 
@@ -81,10 +81,11 @@ tested model or a documented player-choice prompt.
 - Book 9 Section 201 is automated. Its theft roll removes the source-defined
   first or second Special Item from the persisted Action Chart order, or the
   first Backpack Item when fewer than two Special Items are carried.
-- The remaining stateful rules include Book 10 Section 128's deliberately
-  chosen strike weapon, Book 10 Section 218's multi-player dice game, and
-  Book 12 Section 145's kept/used/repeat-use Adgana lifecycle. These require
-  player-decision or between-combat state, not a safe automatic item removal.
+- Book 10 Section 128 now persists the player-selected carried weapon before
+  the strike roll; Book 10 Section 218 records each dice-game round, stake,
+  payout, and leave route; and Book 12 Section 145 adds a Dose of Adgana as
+  optional loot, consumes it only when chosen before combat, then records its
+  first-use/repeat-use bonus and post-combat addiction result.
 
 ## Phase 4: Combat and Campaign Outcomes
 

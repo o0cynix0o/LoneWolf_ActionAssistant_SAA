@@ -48,7 +48,7 @@ SECTION_FLOW_OVERLAY_GLOB = "*-rnt-rules.json"
 ROUTE_CHECK_GLOB = "book*-route-checks.json"
 ACHIEVEMENT_SCHEMA_VERSION = 1
 LEGACY_PLAYER_LOSS_KEYS = ("Gray" + "StarLoss",)
-RUN_SIGNATURE_VERSION = "v3-run-1"
+RUN_SIGNATURE_VERSION = "v3-run-2"
 
 DIFFICULTY_DEFINITIONS = {
     "Story": {
@@ -878,6 +878,8 @@ def default_automation() -> dict[str, Any]:
         "AppliedLoot": [],
         "ItemHistory": [],
         "StagedRolls": {},
+        "SectionSelections": {},
+        "DiceGames": {},
         "Ending": None,
         "PendingBookSetup": None,
         "DeathState": {"Active": False},
@@ -984,6 +986,9 @@ def default_state() -> dict[str, Any]:
             "RestoreHalfPlayerEnduranceLossAfterCombat": False,
             "StoredPlayerEnduranceBeforeCombat": None,
             "SommerswerdAllowed": False,
+            "AdganaBonus": 0,
+            "AdganaRepeatUse": False,
+            "AdganaResolved": None,
             "Outcome": "",
             "StartedSection": 1,
             "Log": [],
@@ -1106,7 +1111,7 @@ def run_signature_payload(state: dict[str, Any]) -> dict[str, Any]:
             for key in (
                 "AppliedVisitEffects", "Journal", "Flags", "Stored", "LastRoll", "AppliedRollEffects",
                 "AppliedHealing", "AppliedLossChoices", "AppliedRouteActions", "AppliedLoot", "ItemHistory",
-                "StagedRolls", "Ending", "DeathState", "DeathHistory",
+                "StagedRolls", "SectionSelections", "DiceGames", "PendingAdgana", "Ending", "DeathState", "DeathHistory",
             )
         },
     }
@@ -1248,6 +1253,12 @@ def normalize_state(state: dict[str, Any]) -> dict[str, Any]:
         state["Automation"]["Stored"] = {}
     if not isinstance(state["Automation"].get("StagedRolls"), dict):
         state["Automation"]["StagedRolls"] = {}
+    if not isinstance(state["Automation"].get("SectionSelections"), dict):
+        state["Automation"]["SectionSelections"] = {}
+    if not isinstance(state["Automation"].get("DiceGames"), dict):
+        state["Automation"]["DiceGames"] = {}
+    if state["Automation"].get("PendingAdgana") is not None and not isinstance(state["Automation"].get("PendingAdgana"), dict):
+        state["Automation"].pop("PendingAdgana", None)
     if state["Automation"].get("LastRoll") is not None and not isinstance(state["Automation"].get("LastRoll"), dict):
         state["Automation"]["LastRoll"] = None
     if not isinstance(state["Automation"].get("DeathState"), dict):
@@ -5091,6 +5102,12 @@ class LoneWolfReduxAssistant:
             return self.automation_flags.get(str(condition.get("key") or "")) == condition.get("value", True)
         if kind == "no_flag":
             return self.automation_flags.get(str(condition.get("key") or "")) != condition.get("value", True)
+        if kind in {"section_selection_value", "section_selection_values"}:
+            selection_id = str(condition.get("id") or "").strip()
+            selections = self.automation.get("SectionSelections")
+            selected = selections.get(self.current_visit_key(), {}).get(selection_id) if isinstance(selections, dict) else None
+            values = [str(value) for value in as_list(condition.get("values") or condition.get("value"))]
+            return bool(selection_id) and str(selected or "") in values
         if kind in {"active_weaponskill_weapon", "weaponskill_active_weapon"}:
             return self.active_weapon_matches_weaponskill()
         if kind == "end_lt":
@@ -5650,6 +5667,15 @@ class LoneWolfReduxAssistant:
 
     def roll_current_section(self, raw_roll: int | None = None) -> dict[str, Any]:
         flow = self.current_section_flow_entry() or {}
+        selection = self.current_roll_selection_payload(flow)
+        if selection and selection["Required"] and not selection["Selected"]:
+            return {
+                "BookNumber": int(self.character["BookNumber"]),
+                "Section": int(self.state["CurrentSection"]),
+                "Blocked": True,
+                "BlockedReason": f"Choose {selection['Label']} before rolling.",
+                "ActionMessages": [],
+            }
         if isinstance(flow.get("stagedRoll"), dict):
             result = self.roll_staged_current_section(flow, raw_roll)
         elif not isinstance(flow.get("roll"), dict):
@@ -5680,6 +5706,177 @@ class LoneWolfReduxAssistant:
         )
         self.automation["LastRoll"] = result
         self.autosave()
+        return result
+
+    def roll_selection_key(self) -> str:
+        return self.current_visit_key()
+
+    def current_roll_selection_payload(self, entry: dict[str, Any] | None = None) -> dict[str, Any] | None:
+        flow = entry if isinstance(entry, dict) else (self.current_section_flow_entry() or {})
+        selection = flow.get("rollSelection") if isinstance(flow, dict) else None
+        if not isinstance(selection, dict):
+            return None
+        selection_id = str(selection.get("id") or "").strip()
+        if not selection_id:
+            return None
+        choices = [str(choice) for choice in as_list(selection.get("choices")) if str(choice).strip()]
+        if str(selection.get("source") or "").lower() == "weapons":
+            choices = self.available_combat_weapons(include_jewelled_dagger=True)
+        selected = None
+        selections = self.automation.get("SectionSelections")
+        if isinstance(selections, dict):
+            stored = selections.get(self.roll_selection_key())
+            if isinstance(stored, dict):
+                selected = str(stored.get(selection_id) or "") or None
+        return {
+            "Id": selection_id,
+            "Label": str(selection.get("label") or "Selection"),
+            "Summary": str(selection.get("summary") or ""),
+            "Options": choices,
+            "Selected": selected,
+            "Required": bool(selection.get("required", True)),
+        }
+
+    def set_roll_selection(self, selection_id: str, value: str) -> None:
+        payload = self.current_roll_selection_payload()
+        if payload is None or str(payload["Id"]) != str(selection_id):
+            print("That selection is not available for this section.")
+            return
+        value = str(value or "").strip()
+        if value not in payload["Options"]:
+            print("Choose one of the available options.")
+            return
+        selections = self.automation.get("SectionSelections")
+        if not isinstance(selections, dict):
+            selections = {}
+            self.automation["SectionSelections"] = selections
+        visit = selections.setdefault(self.roll_selection_key(), {})
+        visit[str(selection_id)] = value
+        self.autosave()
+        print(f"{payload['Label']}: {value}")
+
+    def dice_game_key(self, game_id: str) -> str:
+        return f"{self.current_visit_key()}:dice:{game_id}"
+
+    def current_dice_game_payload(self, entry: dict[str, Any] | None = None) -> dict[str, Any] | None:
+        flow = entry if isinstance(entry, dict) else (self.current_section_flow_entry() or {})
+        game = flow.get("diceGame") if isinstance(flow, dict) else None
+        if not isinstance(game, dict) or not str(game.get("id") or "").strip():
+            return None
+        game_id = str(game.get("id"))
+        games = self.automation.get("DiceGames")
+        stored = games.get(self.dice_game_key(game_id)) if isinstance(games, dict) else None
+        if not isinstance(stored, dict):
+            stored = {}
+        stake = max(0, int(game.get("stake") or 0))
+        return {
+            "Id": game_id,
+            "Label": str(game.get("label") or "Dice game"),
+            "Summary": str(game.get("summary") or ""),
+            "Stake": stake,
+            "Payout": max(0, int(game.get("payout") or 0)),
+            "Ready": int(self.inventory.get("GoldCrowns") or 0) >= stake,
+            "BlockedReason": "You need enough Gold Crowns for the next stake.",
+            "Rounds": int(stored.get("Rounds") or 0),
+            "LastResult": stored.get("LastResult") if isinstance(stored.get("LastResult"), dict) else None,
+            "LeaveRoute": int(game.get("leaveRoute") or 0) or None,
+        }
+
+    def play_dice_game(self, game_id: str) -> None:
+        payload = self.current_dice_game_payload()
+        if payload is None or str(payload["Id"]) != str(game_id):
+            print("That dice game is not available for this section.")
+            return
+        if not payload["Ready"]:
+            print(payload["BlockedReason"])
+            return
+        flow = self.current_section_flow_entry() or {}
+        game = flow.get("diceGame") or {}
+        picks = max(1, int(game.get("picks") or 2))
+        opponents = max(1, int(game.get("opponents") or 2))
+        opponent_picks = [[random_digit() for _ in range(picks)] for _ in range(opponents)]
+        player_picks = [random_digit() for _ in range(picks)]
+        opponent_totals = [sum(values) for values in opponent_picks]
+        player_total = sum(player_picks)
+        won = player_total > max(opponent_totals)
+        gold_before = int(self.inventory.get("GoldCrowns") or 0)
+        self.change_gold_crowns(-int(payload["Stake"]))
+        if won:
+            self.change_gold_crowns(int(payload["Payout"]))
+        result = {
+            "PlayedAt": datetime.now().isoformat(timespec="seconds"),
+            "OpponentPicks": opponent_picks,
+            "OpponentTotals": opponent_totals,
+            "PlayerPicks": player_picks,
+            "PlayerTotal": player_total,
+            "Won": won,
+            "GoldBefore": gold_before,
+            "GoldAfter": int(self.inventory.get("GoldCrowns") or 0),
+        }
+        games = self.automation.get("DiceGames")
+        if not isinstance(games, dict):
+            games = {}
+            self.automation["DiceGames"] = games
+        stored = games.setdefault(self.dice_game_key(str(game_id)), {})
+        stored["Rounds"] = int(stored.get("Rounds") or 0) + 1
+        stored["LastResult"] = result
+        journal = as_list(self.automation.get("Journal"))
+        journal.append({"Kind": "dice_game", "AppliedAt": result["PlayedAt"], "VisitKey": self.current_visit_key(), "BookNumber": int(self.character["BookNumber"]), "Section": int(self.state["CurrentSection"]), "Summary": str(payload["Label"]), "Messages": [f"{'Won' if won else 'Lost'}: total {player_total} against {', '.join(str(total) for total in opponent_totals)}."]})
+        self.automation["Journal"] = journal[-100:]
+        self.autosave()
+        outcome = "won" if won else "lost"
+        print(f"Dice game: {outcome}; you rolled {player_total}, opponents rolled {', '.join(str(total) for total in opponent_totals)}. Gold {gold_before}->{self.inventory['GoldCrowns']}.")
+
+    def leave_dice_game(self, game_id: str) -> None:
+        payload = self.current_dice_game_payload()
+        if payload is None or str(payload["Id"]) != str(game_id) or not payload.get("LeaveRoute"):
+            print("There is no leave route for this game.")
+            return
+        self.follow_route(int(payload["LeaveRoute"]))
+
+    def current_adgana_payload(self, entry: dict[str, Any] | None = None) -> dict[str, Any] | None:
+        flow = entry if isinstance(entry, dict) else (self.current_section_flow_entry() or {})
+        if not self.flow_combat_entries_for_entry(flow):
+            return None
+        pending = self.automation.get("PendingAdgana")
+        if isinstance(pending, dict) and pending.get("VisitKey") == self.current_visit_key():
+            return {"Available": False, "Prepared": True, "Bonus": int(pending.get("Bonus") or 0), "Summary": "Dose of Adgana prepared for this combat."}
+        has_dose = self.has_item("Dose of Adgana", ["special"])
+        prior_use = bool(self.automation_flags.get("adganaUsed"))
+        return {"Available": has_dose, "Prepared": False, "Bonus": 3 if prior_use else 6, "Summary": f"Use a Dose of Adgana for +{3 if prior_use else 6} CS in this combat. It is consumed, then addiction is checked after combat."}
+
+    def prepare_adgana_for_current_combat(self) -> None:
+        payload = self.current_adgana_payload()
+        if payload is None or payload.get("Prepared"):
+            print("Adgana is already prepared or this section has no combat.")
+            return
+        if not payload.get("Available"):
+            print("No Dose of Adgana is available.")
+            return
+        if self.remove_inventory_items("Dose of Adgana", 1, ["special"]) != 1:
+            print("Could not consume the Dose of Adgana.")
+            return
+        self.automation["PendingAdgana"] = {"VisitKey": self.current_visit_key(), "Bonus": int(payload["Bonus"]), "RepeatUse": int(payload["Bonus"]) == 3}
+        self.autosave()
+        print(f"Adgana prepared: +{payload['Bonus']} CS for the coming combat.")
+
+    def resolve_adgana_addiction(self) -> dict[str, Any] | None:
+        if not int(self.combat.get("AdganaBonus") or 0):
+            return None
+        prior_use = bool(self.combat.get("AdganaRepeatUse"))
+        raw = random_digit()
+        addicted = raw <= (3 if prior_use else 1)
+        result = {"Raw": raw, "RepeatUse": prior_use, "Addicted": addicted}
+        if addicted:
+            before_max = int(self.character["EnduranceMax"])
+            before_current = self.effective_endurance_current()
+            self.character["EnduranceMax"] = max(1, before_max - 4)
+            self.set_effective_endurance(min(before_current, self.character["EnduranceMax"]))
+            result["Message"] = f"Adgana addiction roll {raw}: max END {before_max}->{self.character['EnduranceMax']}."
+        else:
+            result["Message"] = f"Adgana addiction roll {raw}: no addiction."
+        self.automation_flags["adganaUsed"] = True
+        self.combat["AdganaResolved"] = result
         return result
 
     def cartwheel_session_key(self) -> str:
@@ -6451,8 +6648,11 @@ class LoneWolfReduxAssistant:
                 "IncomingRouteCount": int(entry.get("incomingRouteCount") or 0),
             },
             "LastRoll": last_roll,
+            "RollSelection": self.current_roll_selection_payload(entry),
             "RouteChecks": self.evaluate_route_checks(entry, automation),
             "StagedRoll": self.current_staged_roll_payload(entry),
+            "DiceGame": self.current_dice_game_payload(entry),
+            "Adgana": self.current_adgana_payload(entry),
             "Cartwheel": self.current_cartwheel_payload(entry),
             "Portholes": self.current_portholes_payload(entry),
             "GoldDistraction": self.current_gold_distraction_payload(entry),
@@ -6844,7 +7044,13 @@ class LoneWolfReduxAssistant:
     def combat_weapon_modifier_and_notes(self) -> tuple[int, list[str]]:
         active = self.combat_active_weapon()
         if not active:
-            return -4, ["No weapon: -4 CS"]
+            modifier = -4
+            notes = ["No weapon: -4 CS"]
+            adgana_bonus = int(self.combat.get("AdganaBonus") or 0)
+            if adgana_bonus:
+                modifier += adgana_bonus
+                notes.append(f"Adgana: +{adgana_bonus} CS")
+            return modifier, notes
 
         modifier = 0
         notes = [f"Weapon: {active}"]
@@ -6892,6 +7098,10 @@ class LoneWolfReduxAssistant:
         if "Mindblast" in self.effective_disciplines() and not bool(self.combat.get("EnemyImmune")):
             modifier += 2
             notes.append("Mindblast: +2 CS")
+        adgana_bonus = int(self.combat.get("AdganaBonus") or 0)
+        if adgana_bonus:
+            modifier += adgana_bonus
+            notes.append(f"Adgana: +{adgana_bonus} CS")
         return modifier, notes
 
     def change_endurance(self, delta: int, *, gameplay: bool = True) -> str:
@@ -8872,7 +9082,11 @@ class LoneWolfReduxAssistant:
     def archive_current_combat(self, outcome: str) -> None:
         if not self.combat.get("EnemyName"):
             return
+        adgana_result = self.resolve_adgana_addiction()
         entry = self.current_combat_archive_entry(outcome)
+        if adgana_result:
+            entry["Adgana"] = adgana_result
+            print(str(adgana_result["Message"]))
         history = as_list(self.state.get("CombatHistory"))
         self.state["CombatHistory"] = (history + [entry])[-100:]
         self.combat["Outcome"] = outcome
@@ -9103,6 +9317,12 @@ class LoneWolfReduxAssistant:
                 "AfterVictoryActions": as_list(preset.get("afterVictoryActions")),
             }
         )
+        pending_adgana = self.automation.get("PendingAdgana")
+        if isinstance(pending_adgana, dict) and pending_adgana.get("VisitKey") == self.current_visit_key():
+            self.combat["AdganaBonus"] = int(pending_adgana.get("Bonus") or 0)
+            self.combat["AdganaRepeatUse"] = bool(pending_adgana.get("RepeatUse"))
+            self.automation.pop("PendingAdgana", None)
+            messages.append(f"Adgana: +{self.combat['AdganaBonus']} CS for this combat")
         if self.combat.get("ForceUnarmed"):
             self.combat["ActiveWeapon"] = ""
         elif preset.get("virtualWeapon"):
@@ -9672,6 +9892,9 @@ class LoneWolfReduxAssistant:
                 "SectionCombatId": "",
                 "VictoryChoices": [],
                 "AfterVictoryActions": [],
+                "AdganaBonus": 0,
+                "AdganaRepeatUse": False,
+                "AdganaResolved": None,
                 "Outcome": "",
                 "StartedSection": int(self.state["CurrentSection"]),
                 "Log": [],

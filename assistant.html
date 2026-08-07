@@ -5976,6 +5976,9 @@
       const entry = flow.Entry || {};
       const lastRoll = flow.LastRoll;
       const sectionRoll = entry.roll || entry.stagedRoll;
+      const rollSelection = flow.RollSelection || null;
+      const diceGame = flow.DiceGame || null;
+      const adgana = flow.Adgana || null;
       const stagedSummary = stagedRollSummary(entry, flow.StagedRoll);
       const sourceRoutes = arr(flow.SourceRoutes);
       const automation = flow.Automation || {};
@@ -6013,10 +6016,39 @@
           </div>
         `).join('')}
       ` : '<p class="muted">No roll recorded for this section yet.</p>';
+      const rollSelectionRows = rollSelection ? `
+        <div class="item-row">
+          <small>${escapeHtml(rollSelection.Selected ? 'Selected' : 'Choose')}</small>
+          <span class="wrap">${escapeHtml(text(rollSelection.Summary, rollSelection.Label))}</span>
+        </div>
+        <div class="controls">
+          <select data-roll-selection title="${escapeHtml(rollSelection.Label)}">
+            <option value="">Choose a weapon</option>
+            ${arr(rollSelection.Options).map((option) => `<option value="${escapeHtml(option)}" ${option === rollSelection.Selected ? 'selected' : ''}>${escapeHtml(option)}</option>`).join('')}
+          </select>
+          <button type="button" data-roll-selection-save="${escapeHtml(rollSelection.Id)}">Save choice</button>
+        </div>
+        ${rollSelection.Selected ? `<p class="muted">Using: ${escapeHtml(rollSelection.Selected)}</p>` : ''}
+      ` : '';
+      const diceGameRows = diceGame ? `
+        <div class="panel" data-dice-game="${escapeHtml(diceGame.Id)}">
+          <h2>${escapeHtml(text(diceGame.Label, 'Dice Game'))}</h2>
+          <p class="muted">${escapeHtml(text(diceGame.Summary))}</p>
+          <div class="item-row"><small>Rounds</small><span>${escapeHtml(text(diceGame.Rounds, 0))}</span></div>
+          ${diceGame.LastResult ? `<div class="item-row"><small>${diceGame.LastResult.Won ? 'Won' : 'Lost'}</small><span>You ${escapeHtml(text(diceGame.LastResult.PlayerTotal))}; opponents ${escapeHtml(arr(diceGame.LastResult.OpponentTotals).join(', '))}. Gold ${escapeHtml(text(diceGame.LastResult.GoldBefore))} -> ${escapeHtml(text(diceGame.LastResult.GoldAfter))}</span></div>` : ''}
+          <div class="controls">
+            <button type="button" data-dice-game-play="${escapeHtml(diceGame.Id)}" ${diceGame.Ready ? '' : `disabled title="${escapeHtml(text(diceGame.BlockedReason))}"`}>Play round</button>
+            <button type="button" data-dice-game-leave="${escapeHtml(diceGame.Id)}">Leave</button>
+          </div>
+          ${diceGame.Ready ? '' : `<p class="muted">${escapeHtml(text(diceGame.BlockedReason))}</p>`}
+        </div>
+      ` : '';
       const combatRows = arr(entry.combat).map((combat) => `
         <div class="item-row">
           <small>CS ${escapeHtml(text(combat.enemy?.cs || combat.enemies?.[0]?.cs, '?'))}</small>
           <span>${escapeHtml(text(combat.label || combat.enemy?.name || combat.enemies?.[0]?.name, 'Section combat'))}</span>
+          ${adgana?.Available ? `<button type="button" data-adgana-prepare title="${escapeHtml(text(adgana.Summary))}">Use Adgana +${escapeHtml(text(adgana.Bonus))}</button>` : ''}
+          ${adgana?.Prepared ? `<span class="muted">Adgana +${escapeHtml(text(adgana.Bonus))} prepared</span>` : ''}
           ${modeActionButton(`data-section-combat-start="${escapeHtml(text(combat.id))}"`, 'Start', 'combat presets')}
         </div>
       `).join('');
@@ -6074,6 +6106,7 @@
           <h2>Section Assistant</h2>
           <div class="section-subtitle">Automatic Entry Effect</div>
           ${automationRows}
+          ${rollSelectionRows}
           <div class="controls">
             <input id="manualRoll" type="number" min="0" max="9" placeholder="Optional roll">
             ${modeActionButton('data-roll', 'Roll', 'roll helper')}
@@ -6082,6 +6115,7 @@
           ${rollRows}
           <div class="controls">${routeRows || '<span class="muted">No source routes found.</span>'}</div>
         </div>
+        ${diceGameRows}
         ${combatRows ? `<div class="panel"><h2>Section Combat</h2>${combatRows}</div>` : ''}
         ${lootRows ? `<div class="panel"><h2>Loot And Section Items</h2>${lootRows}</div>` : ''}
         ${shopRows ? `<div class="panel"><h2>${escapeHtml(text(flow.Shop?.Title, 'Shop'))}</h2>${shopRows}</div>` : ''}
@@ -6969,7 +7003,14 @@
         const input = document.getElementById('manualRoll');
         await action({ action: 'roll', raw: input?.value || '' });
       }
+      if (button.dataset.rollSelectionSave !== undefined) {
+        const select = button.closest('.panel')?.querySelector('[data-roll-selection]');
+        await action({ action: 'roll_selection', id: button.dataset.rollSelectionSave, value: select?.value || '' });
+      }
       if (button.dataset.route) await action({ action: 'route', section: Number(button.dataset.route) });
+      if (button.dataset.diceGamePlay !== undefined) await action({ action: 'dice_game_play', id: button.dataset.diceGamePlay });
+      if (button.dataset.diceGameLeave !== undefined) await action({ action: 'dice_game_leave', id: button.dataset.diceGameLeave });
+      if (button.dataset.adganaPrepare !== undefined) await action({ action: 'adgana_prepare' });
       if (button.dataset.sectionCombatStart !== undefined) {
         activeView = 'combat';
         await action({ action: 'section_combat_start', id: button.dataset.sectionCombatStart });

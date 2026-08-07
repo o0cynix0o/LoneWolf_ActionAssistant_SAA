@@ -3001,7 +3001,20 @@
           "Section": 274
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "book12-145-adgana",
+          "label": "Keep Dose of Adgana",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Dose of Adgana"
+            }
+          ]
+        }
+      ]
     },
     "146": {
       "auditStatus": "source-link-baseline",

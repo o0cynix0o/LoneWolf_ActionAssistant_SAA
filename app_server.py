@@ -611,6 +611,8 @@ def handle_action(payload: dict) -> str:
         raw = payload.get("raw")
         raw_roll = int(raw) if str(raw or "").strip() else None
         result = ASSISTANT.roll_current_section(raw_roll)
+        if result.get("Blocked"):
+            return str(result.get("BlockedReason") or "This roll needs a selection first.")
         route = result.get("Route")
         route_text = f" -> section {route}" if route else ""
         stage_text = f" | {result['StageLabel']}" if result.get("StageLabel") else ""
@@ -621,6 +623,18 @@ def handle_action(payload: dict) -> str:
         return "\n".join(messages)
     if action == "route":
         return capture_output(lambda: ASSISTANT.follow_route(int(payload.get("section") or 1)))
+    if action == "roll_selection":
+        return capture_output(
+            lambda: ASSISTANT.set_roll_selection(
+                str(payload.get("id") or ""), str(payload.get("value") or "")
+            )
+        )
+    if action == "dice_game_play":
+        return capture_output(lambda: ASSISTANT.play_dice_game(str(payload.get("id") or "")))
+    if action == "dice_game_leave":
+        return capture_output(lambda: ASSISTANT.leave_dice_game(str(payload.get("id") or "")))
+    if action == "adgana_prepare":
+        return capture_output(lambda: ASSISTANT.prepare_adgana_for_current_combat())
     if action == "flow_loot":
         return capture_output(lambda: ASSISTANT.apply_flow_loot(str(payload.get("id") or "")))
     if action == "shop_sale":

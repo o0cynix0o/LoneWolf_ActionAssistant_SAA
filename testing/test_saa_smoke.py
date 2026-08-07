@@ -1367,7 +1367,7 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
 
     def test_magnakai_combat_and_rnt_catalogue_totals_remain_source_complete(self) -> None:
         expected_combat = {6: 28, 7: 39, 8: 37, 9: 38, 10: 40, 11: 37, 12: 59}
-        expected_rnt = {6: 22, 7: 22, 8: 16, 9: 20, 10: 25, 11: 29, 12: 39}
+        expected_rnt = {6: 22, 7: 22, 8: 16, 9: 20, 10: 27, 11: 29, 12: 40}
         root = Path(lonewolf_redux.__file__).resolve().parent / "data"
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
@@ -1383,10 +1383,87 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
                 rnt_count = sum(
                     1
                     for entry in flows.values()
-                    if isinstance(entry, dict) and ("roll" in entry or "stagedRoll" in entry)
+                    if isinstance(entry, dict)
+                    and (
+                        "roll" in entry
+                        or "stagedRoll" in entry
+                        or "diceGame" in entry
+                        or any(
+                            str(loot.get("id") or "") == "book12-145-adgana"
+                            for loot in entry.get("loot", [])
+                            if isinstance(loot, dict)
+                        )
+                    )
                 )
                 self.assertEqual(combat_count, expected_combat[book_number])
                 self.assertEqual(rnt_count, expected_rnt[book_number])
+
+    def test_book10_128_requires_and_applies_the_chosen_weapon(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state["Character"].update({"BookNumber": 10, "MagnakaiDisciplines": ["Huntmastery"]})
+            assistant.state["Inventory"]["Weapons"] = ["Dagger", "Axe"]
+            assistant.set_section(128)
+            self.assertTrue(assistant.roll_current_section(7)["Blocked"])
+            assistant.set_roll_selection("book10-128-strike-weapon", "Dagger")
+            result = assistant.roll_current_section(7)
+            self.assertEqual((result["Total"], result["Route"]), (6, 95))
+            assistant.set_roll_selection("book10-128-strike-weapon", "Axe")
+            result = assistant.roll_current_section(7)
+            self.assertEqual((result["Total"], result["Route"]), (10, 233))
+
+    def test_book10_218_dice_game_books_gold_and_can_leave(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state["Character"]["BookNumber"] = 10
+            assistant.state["Inventory"]["GoldCrowns"] = 10
+            assistant.set_section(218)
+            with mock.patch.object(lonewolf_redux, "random_digit", side_effect=[1, 1, 2, 2, 3, 3]):
+                assistant.play_dice_game("book10-218-lune-dice")
+            game = assistant.current_dice_game_payload()
+            self.assertEqual(assistant.inventory["GoldCrowns"], 13)
+            self.assertEqual(game["LastResult"]["OpponentTotals"], [2, 4])
+            self.assertEqual(game["LastResult"]["PlayerTotal"], 6)
+            self.assertTrue(game["LastResult"]["Won"])
+            assistant.leave_dice_game("book10-218-lune-dice")
+            self.assertEqual(assistant.state["CurrentSection"], 29)
+
+    def test_adgana_consumes_a_dose_adds_combat_skill_and_checks_addiction(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state["Character"].update({"BookNumber": 12, "EnduranceMax": 20, "EnduranceCurrent": 20})
+            assistant.state["Inventory"]["SpecialItems"] = ["Dose of Adgana"]
+            assistant.set_section(2)
+            self.assertEqual(assistant.current_adgana_payload()["Bonus"], 6)
+            assistant.prepare_adgana_for_current_combat()
+            self.assertNotIn("Dose of Adgana", assistant.inventory["SpecialItems"])
+            assistant.start_section_combat()
+            modifier, notes = assistant.combat_weapon_modifier_and_notes()
+            self.assertEqual(assistant.combat["AdganaBonus"], 6)
+            self.assertIn("Adgana: +6 CS", notes)
+            self.assertEqual(modifier, 6)
+            assistant.combat["EnemyEnduranceCurrent"] = 0
+            assistant.combat["Log"] = [{"Round": 1, "PlayerLoss": 0, "EnemyLoss": 27}]
+            with mock.patch.object(lonewolf_redux, "random_digit", return_value=1):
+                self.assertTrue(assistant.route_after_combat_round())
+            self.assertEqual(assistant.character["EnduranceMax"], 16)
+            self.assertTrue(assistant.automation_flags["adganaUsed"])
+            self.assertTrue(assistant.state["CombatHistory"][-1]["Adgana"]["Addicted"])
+            assistant.state["Inventory"]["SpecialItems"] = ["Dose of Adgana"]
+            assistant.set_section(2)
+            self.assertEqual(assistant.current_adgana_payload()["Bonus"], 3)
 
     def test_magnakai_combat_restrictions_and_conditional_damage_match_source(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
