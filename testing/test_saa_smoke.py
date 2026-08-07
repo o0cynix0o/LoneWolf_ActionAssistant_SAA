@@ -210,6 +210,89 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
         self.assertEqual(book11["Character"]["MagnakaiRank"], 8)
         self.assertEqual(book11["Character"]["Book11Setup"]["EquipmentChoices"], [])
 
+    def test_later_magnakai_campaign_can_continue_through_book12_and_end_cleanly(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            assistant.state["Character"].update(
+                {
+                    "BookNumber": 8,
+                    "MagnakaiDisciplines": [
+                        "Weaponmastery", "Animal Control", "Curing", "Invisibility", "Huntmastery",
+                    ],
+                    "MagnakaiRank": 5,
+                    "WeaponmasteryWeapons": ["Sword", "Bow", "Axe", "Mace", "Dagger"],
+                }
+            )
+            assistant.state["Inventory"].update({"Weapons": ["Sword"], "SpecialItems": ["Campaign Keepsake"]})
+
+            assistant.ensure_book_completed()
+            self.assertEqual(assistant.open_next_book(), 9)
+            assistant.continue_to_later_magnakai(
+                book_number=9, magnakai_discipline="Pathsmanship", weaponmastery_weapon="Spear",
+                gold_roll=0, equipment_choices=["quiver", "rope", "laumspur", "lantern", "meals"],
+            )
+            self.assertEqual((assistant.character["BookNumber"], assistant.character["MagnakaiRank"]), (9, 6))
+            self.assertIn("Campaign Keepsake", assistant.inventory["SpecialItems"])
+
+            assistant.ensure_book_completed()
+            assistant.continue_to_later_magnakai(
+                book_number=10, magnakai_discipline="Divination", weaponmastery_weapon="Quarterstaff",
+                gold_roll=0, equipment_choices=["quiver", "rope", "laumspur", "lantern", "meals"],
+                transition_drops=[f"backpack:{index}" for index in range(7)],
+            )
+            assistant.ensure_book_completed()
+            assistant.continue_to_later_magnakai(
+                book_number=11, magnakai_discipline="Psi-surge", weaponmastery_weapon="Warhammer",
+                equipment_choices=[],
+            )
+            self.assertEqual(assistant.character["Book11Setup"]["EquipmentChoices"], [])
+
+            assistant.ensure_book_completed()
+            assistant.continue_to_later_magnakai(
+                book_number=12, magnakai_discipline="Psi-screen", weaponmastery_weapon="Broadsword",
+                gold_roll=0, equipment_choices=["quiver", "rope", "laumspur", "lantern", "meals", "dagger"],
+                transition_drops=[f"backpack:{index}" for index in range(6)],
+            )
+            assistant.ensure_book_completed()
+            completion = assistant.book_completion_payload()
+
+        self.assertEqual((assistant.character["BookNumber"], assistant.character["MagnakaiRank"]), (12, 9))
+        self.assertFalse(completion["CanContinue"])
+        self.assertEqual(assistant.run_state["Status"], "Completed")
+
+    def test_later_magnakai_nonstandard_combat_presets_resolve_their_source_routes(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            for section, route, required_rounds in (
+                (36, 328, 0), (86, 328, 0), (98, 223, 1), (119, 49, 0),
+                (127, 223, 1), (217, 334, 0), (260, 328, 0), (308, 223, 1),
+            ):
+                assistant.state["Character"]["BookNumber"] = 9
+                assistant.set_section(section)
+                assistant.start_section_combat()
+                assistant.combat["Log"] = [{"Round": index + 1} for index in range(required_rounds)]
+                self.assertTrue(assistant.can_evade_combat_now())
+                assistant.evade_combat(["combat", "evade"], manual_losses=(0, 0))
+                self.assertEqual(assistant.state["CurrentSection"], route)
+
+            assistant.state["Character"]["BookNumber"] = 12
+            assistant.set_section(224)
+            assistant.start_section_combat()
+            self.assertTrue(assistant.can_evade_combat_now())
+            assistant.evade_combat(["combat", "evade"], manual_losses=(0, 0))
+            self.assertEqual(assistant.state["CurrentSection"], 58)
+
     def test_later_magnakai_high_confidence_section_effects_apply(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
@@ -1677,10 +1760,14 @@ class CampaignEntryPointTests(unittest.TestCase):
 
     def test_completion_ui_contains_magnakai_campaign_handoffs(self) -> None:
         assistant_html = self.source_text("assistant.html")
+        server_source = self.source_text("app_server.py")
         self.assertIn("nextBook >= 2 && nextBook <= 12", assistant_html)
         self.assertIn("Choose exactly 3 Magnakai Disciplines", assistant_html)
         self.assertIn("New Magnakai Discipline", assistant_html)
         self.assertIn("Continue to Book ${escapeHtml(nextBook)}", assistant_html)
+        self.assertIn("Leave Behind Before Field Issue", assistant_html)
+        self.assertIn("transitionDrops: formData.getAll('transitionDrops')", assistant_html)
+        self.assertIn("transition_drops=payload.get(\"transitionDrops\")", server_source)
 
     def test_cli_new_creates_a_fresh_book6_magnakai_campaign(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:

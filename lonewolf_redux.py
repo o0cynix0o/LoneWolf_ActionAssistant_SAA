@@ -2219,6 +2219,7 @@ def prepare_later_magnakai_state(
     weaponmastery_weapon: str = "",
     gold_roll: Any | None = None,
     equipment_choices: Any = None,
+    transition_drops: Any = None,
 ) -> dict[str, Any]:
     """Move a completed Book 8-11 campaign into its source-defined next setup."""
     if book_number not in {9, 10, 11, 12}:
@@ -2269,6 +2270,9 @@ def prepare_later_magnakai_state(
     prepared["Combat"] = json_clone(default_state()["Combat"])
     prepared["Combat"]["StartedSection"] = 1
     discard_transition_stored_gear(prepared)
+    transition_messages = apply_later_magnakai_transition_drops(
+        inventory, transition_drops
+    )
 
     entry_specials = {
         9: ["Map of the Republic of Anari"],
@@ -2278,7 +2282,9 @@ def prepare_later_magnakai_state(
     for item in entry_specials.get(book_number, []):
         inventory["SpecialItems"] = add_unique_item(inventory.get("SpecialItems"), item)
     if issue_count:
-        _apply_magnakai_field_issue(prepared, choices, book_number=book_number)
+        transition_messages.extend(
+            _apply_magnakai_field_issue(prepared, choices, book_number=book_number)
+        )
         roll = coerce_random_digit(gold_roll)
         inventory["GoldCrowns"] = min(50, int(inventory.get("GoldCrowns") or 0) + 10 + roll)
     else:
@@ -2291,6 +2297,8 @@ def prepare_later_magnakai_state(
         "WeaponmasteryWeapon": weaponmastery_weapon,
         "GoldRoll": roll,
         "EquipmentChoices": choices,
+        "TransitionDrops": clean_later_magnakai_transition_drops(transition_drops),
+        "Messages": transition_messages,
     }
     prepared["CurrentBookStats"] = {
         "BookNumber": book_number,
@@ -2305,6 +2313,45 @@ def prepare_later_magnakai_state(
     sync_magnakai_lore_circle_bonuses(prepared)
     prepared["CurrentBookStats"]["StartingEnduranceMax"] = int(character["EnduranceMax"])
     return normalize_state(prepared)
+
+
+def clean_later_magnakai_transition_drops(values: Any) -> list[tuple[str, int]]:
+    """Validate the explicit carried-item drops made before a later-book issue."""
+    cleaned: list[tuple[str, int]] = []
+    for value in as_list(values):
+        container, separator, raw_index = str(value or "").partition(":")
+        container = container.strip().lower()
+        if separator != ":" or container not in {"weapon", "backpack"}:
+            raise ValueError("Transition drops must identify a carried weapon or Backpack slot.")
+        try:
+            index = int(raw_index)
+        except ValueError as exc:
+            raise ValueError("Transition drop slots must be whole numbers.") from exc
+        if index < 0 or (container, index) in cleaned:
+            raise ValueError("Transition drops must use distinct carried-item slots.")
+        cleaned.append((container, index))
+    return cleaned
+
+
+def apply_later_magnakai_transition_drops(
+    inventory: dict[str, Any], values: Any
+) -> list[str]:
+    """Leave chosen carried items behind before applying a new field issue."""
+    drops = clean_later_magnakai_transition_drops(values)
+    by_container: dict[str, list[int]] = {"weapon": [], "backpack": []}
+    for container, index in drops:
+        by_container[container].append(index)
+    messages: list[str] = []
+    for container, indexes in by_container.items():
+        key = "Weapons" if container == "weapon" else "BackpackItems"
+        items = as_list(inventory.get(key))
+        for index in sorted(indexes, reverse=True):
+            if index >= len(items):
+                raise ValueError("A selected transition item is no longer carried.")
+            item = items.pop(index)
+            messages.append(f"Left behind: {item}")
+        inventory[key] = items
+    return messages
 
 
 def _clean_magnakai_field_issue_choices(choices: Any, *, book_number: int = 7) -> list[str]:
@@ -10284,6 +10331,7 @@ class LoneWolfReduxAssistant:
         book6_weapon_exchanges: Any = None,
         book6_de_curing_option: int = 0,
         book6_de_weaponskill_option: int = 0,
+        transition_drops: Any = None,
     ) -> None:
         completion = self.book_completion_payload()
         if not completion.get("Active"):
@@ -10318,6 +10366,7 @@ class LoneWolfReduxAssistant:
                 weaponmastery_weapon=book6_weaponmastery_weapons,
                 gold_roll=book6_gold_roll,
                 equipment_choices=book6_equipment_choices,
+                transition_drops=transition_drops,
             )
             return
         if next_book in {9, 10, 11, 12}:
@@ -10588,6 +10637,7 @@ class LoneWolfReduxAssistant:
         weaponmastery_weapon: Any = "",
         gold_roll: int | None = None,
         equipment_choices: Any = None,
+        transition_drops: Any = None,
     ) -> None:
         completion = self.book_completion_payload()
         summary = completion.get("Summary") if isinstance(completion.get("Summary"), dict) else {}
@@ -10606,6 +10656,7 @@ class LoneWolfReduxAssistant:
             weaponmastery_weapon=str(weaponmastery_weapon or ""),
             gold_roll=gold_roll,
             equipment_choices=equipment_choices,
+            transition_drops=transition_drops,
         )
         self.automation["Ending"] = None
         self.automation["PendingBookSetup"] = None
@@ -10615,6 +10666,10 @@ class LoneWolfReduxAssistant:
         self.write_current_position()
         self.autosave()
         print(f"Advanced to Book {book_number}: {BOOK_CATALOG[int(book_number)]['Title']}")
+        setup = self.character.get(f"Book{book_number}Setup")
+        if isinstance(setup, dict):
+            for message in as_list(setup.get("Messages")):
+                print(str(message))
 
     def book_start_checkpoint(self, book_number: int) -> dict[str, Any] | None:
         checkpoints = [

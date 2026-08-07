@@ -101,6 +101,19 @@ tested model or a documented player-choice prompt.
 **Exit criteria:** every printed combat has its essential special behavior
 represented, and every book ending has a deterministic next step.
 
+### Phase 4 Progress
+
+- The recorded nonstandard Book 9-12 combats are exercised as actual combat
+  flows: all eight Book 9 evade routes, Book 11 Section 204's special weapon
+  and immunity rules, and Book 12's immediate and delayed evasion encounters
+  are covered alongside the existing forced-unarmed test.
+- The campaign transition is covered end to end from Book 8 through Book 12.
+  Book 12 closes the supported campaign without offering an invalid Book 13
+  handoff.
+- A full Backpack or two carried Weapons can no longer dead-end a later-book
+  field issue. The handoff presents an explicit player-selected leave-behind
+  list and records those drops in the new book's setup history.
+
 ## Phase 5: Campaign Verification
 
 **Goal:** validate actual player workflows, not just data files.

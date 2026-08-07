@@ -3412,6 +3412,16 @@
         const magnakaiChoices = arr(completion.MagnakaiDisciplineChoices);
         const masteredWeapons = ['Dagger', 'Spear', 'Mace', 'Warhammer', 'Sword', 'Axe', 'Short Sword', 'Quarterstaff', 'Broadsword', 'Bow'];
         const issueCount = nextBook === 11 ? 0 : equipmentChoiceCountForBook(nextBook);
+        const carriedItems = [
+          ...weapons.map((item, index) => ['weapon', index, item]),
+          ...arr((completion.Summary || {}).BackpackItems).map((item, index) => ['backpack', index, item])
+        ];
+        const transitionDrops = issueCount && carriedItems.length ? `
+          <div class="check-field">
+            <span>Leave Behind Before Field Issue</span>
+            <div class="check-grid">${carriedItems.map(([container, index, item]) => `<label class="check-option"><input type="checkbox" name="transitionDrops" value="${escapeHtml(container)}:${escapeHtml(index)}"><span>${escapeHtml(item)} [${escapeHtml(container)}]</span></label>`).join('')}</div>
+          </div>
+        ` : '';
         const issueText = issueCount
           ? `<div class="check-field"><span>Book ${escapeHtml(nextBook)} Field Issue - choose exactly ${escapeHtml(issueCount)}</span><div class="check-grid">${equipmentOptionsForBook(nextBook).map(([id, label]) => `<label class="check-option"><input type="checkbox" name="equipmentChoices" value="${escapeHtml(id)}"><span>${escapeHtml(label)}</span></label>`).join('')}</div></div>`
           : '<p class="muted">Book 11 carries your existing equipment forward. There is no new field issue.</p>';
@@ -3421,6 +3431,7 @@
             <label class="field">Weaponmastery Weapon<select name="weaponmasteryWeapon"><option value="">Not choosing Weaponmastery</option>${masteredWeapons.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('')}</select></label>
             ${nextBook === 11 ? '' : '<label class="field">Gold Roll<input name="goldRoll" type="number" min="0" max="9" placeholder="0-9"></label>'}
             ${issueText}
+            ${transitionDrops}
             <button type="submit">Continue to Book ${escapeHtml(nextBook)}</button>
           </form>
         `;
@@ -7317,7 +7328,8 @@
             magnakaiDiscipline: magnakaiSelections[0],
             weaponmasteryWeapon: masterySelections[0] || '',
             goldRoll: data.goldRoll,
-            equipmentChoices: equipmentSelections
+            equipmentChoices: equipmentSelections,
+            transitionDrops: formData.getAll('transitionDrops')
           });
           return;
         }

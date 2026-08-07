@@ -770,6 +770,7 @@ def handle_action(payload: dict) -> str:
                 book6_weapon_exchanges=payload.get("weaponExchanges"),
                 book6_de_curing_option=int(payload.get("deCuringOption") or 0),
                 book6_de_weaponskill_option=int(payload.get("deWeaponskillOption") or 0),
+                transition_drops=payload.get("transitionDrops"),
             )
         )
     if action == "repeat_book":
