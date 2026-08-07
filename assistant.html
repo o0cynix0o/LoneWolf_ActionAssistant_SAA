@@ -5981,9 +5981,13 @@
       const automation = flow.Automation || {};
       const healing = flow.Healing || {};
       const automationMessages = arr(automation.Messages);
-      const routeRows = sourceRoutes.map((route) => (
-        `<button type="button" data-route="${escapeHtml(route.Section)}">${escapeHtml(routeLabel(route))}</button>`
-      )).join('');
+      const routeRows = sourceRoutes.map((route) => {
+        const available = route.Available !== false;
+        const reason = text(route.BlockedReason, 'This route is not available to the current Action Chart.');
+        return available
+          ? `<button type="button" data-route="${escapeHtml(route.Section)}">${escapeHtml(routeLabel(route))}</button>`
+          : `<button type="button" disabled title="${escapeHtml(reason)}">${escapeHtml(routeLabel(route))}</button><span class="muted wrap">${escapeHtml(reason)}</span>`;
+      }).join('');
       const automationRows = automation.Summary ? `
         <div class="item-row">
           <small>${automation.Applied ? 'Applied' : 'Ready'}</small>

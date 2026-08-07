@@ -1038,6 +1038,71 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
         self.assertTrue(assistant.evaluate_flow_condition({"type": "lore_circle", "name": "Fire"}))
         self.assertTrue(assistant.evaluate_flow_condition({"type": "weaponmastery_weapon", "name": "Bow"}))
 
+    def test_reader_marks_explicit_magnakai_route_gates_and_engine_enforces_them(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            source = base / "books" / "09tcof"
+            source.mkdir(parents=True)
+            (source / "sect23.htm").write_text(
+                '<p class="choice">If you have the Magnakai Discipline of Pathsmanship, turn to <a href="sect337.htm">337</a>.</p>',
+                encoding="utf-8",
+            )
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 9}, "CurrentSection": 23})
+            locked = assistant.current_section_flow_payload()["SourceRoutes"][0]
+            assistant.follow_route(337)
+            locked_section = assistant.state["CurrentSection"]
+
+            assistant.state["Character"]["MagnakaiDisciplines"] = ["Pathsmanship"]
+            unlocked = assistant.current_section_flow_payload()["SourceRoutes"][0]
+            assistant.follow_route(337)
+
+        self.assertFalse(locked["Available"])
+        self.assertIn("Pathsmanship", locked["BlockedReason"])
+        self.assertEqual(locked_section, 23)
+        self.assertTrue(unlocked["Available"])
+        self.assertEqual(assistant.state["CurrentSection"], 337)
+
+    def test_reader_recognizes_explicit_item_rank_and_arrow_route_gates(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 12, "MagnakaiRank": 5}})
+
+            rope_condition, rope_reason = assistant.infer_source_route_condition(
+                "If you have a Rope and wish to use it, turn to 48."
+            )
+            rank_condition, rank_reason = assistant.infer_source_route_condition(
+                "If you have reached the rank of Principalin or higher, turn to 12."
+            )
+            arrow_condition, arrow_reason = assistant.infer_source_route_condition(
+                "If you have at least two Arrows in your Quiver, turn to 344."
+            )
+
+            self.assertFalse(assistant.evaluate_flow_condition(rope_condition))
+            self.assertFalse(assistant.evaluate_flow_condition(rank_condition))
+            self.assertFalse(assistant.evaluate_flow_condition(arrow_condition))
+            assistant.inventory["BackpackItems"] = ["Rope"]
+            assistant.inventory["QuiverArrows"] = 2
+            assistant.character["MagnakaiRank"] = 6
+
+        self.assertTrue(assistant.evaluate_flow_condition(rope_condition))
+        self.assertTrue(assistant.evaluate_flow_condition(rank_condition))
+        self.assertTrue(assistant.evaluate_flow_condition(arrow_condition))
+        self.assertEqual(rope_reason, "Requires Rope.")
+        self.assertEqual(rank_reason, "Requires Principalin rank.")
+        self.assertEqual(arrow_reason, "Requires at least 2 Arrows.")
+
     def test_endurance_max_automation_clamps_current_endurance(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)

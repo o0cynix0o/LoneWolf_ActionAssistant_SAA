@@ -46,6 +46,22 @@ solely because the app lacks a representable condition.
 **Exit criteria:** a player can see which choices are unavailable and why,
 and cannot accidentally follow a route the current Action Chart forbids.
 
+### Phase 2 Progress
+
+- The reader and route endpoint now share the same availability decision, so
+  an unavailable route is both disabled in the UI and rejected by the rules
+  engine.
+- The source reader recognizes explicit Magnakai Discipline, rank,
+  Lore-circle, named carried-item, and stated Arrow-count gates. It gives the
+  player the specific missing requirement instead of silently hiding the
+  choice.
+- Flow data can also attach explicit `condition` and `blockedReason` fields to
+  an individual source route for audited gold, quantity, prior-event, and
+  special-item gates.
+- Wording that cannot safely be represented yet, including prior-adventure
+  history and context-sensitive item use, intentionally remains a normal
+  reader choice until its route state is audited in Phase 3.
+
 ## Phase 3: Inventory and Special-Item Rules
 
 **Goal:** complete source-verified equipment state changes.

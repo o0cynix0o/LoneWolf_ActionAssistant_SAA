@@ -4680,7 +4680,12 @@ class LoneWolfReduxAssistant:
                 if target in seen:
                     continue
                 seen.add(target)
-                choices.append({"Section": target, "Label": label or f"Go to {target}"})
+                payload = {"Section": target, "Label": label or f"Go to {target}"}
+                condition, blocked_reason = self.infer_source_route_condition(payload["Label"])
+                if condition:
+                    payload["Condition"] = condition
+                    payload["BlockedReason"] = blocked_reason
+                choices.append(payload)
 
         if choices:
             return choices
@@ -4695,6 +4700,114 @@ class LoneWolfReduxAssistant:
                 continue
             result.append({"Section": section, "Label": f"Go to {section}"})
         return result
+
+    def infer_source_route_condition(self, label: str) -> tuple[dict[str, Any] | None, str]:
+        """Recognize only explicit Action Chart gates in official source choice text."""
+        source = re.sub(r"\s+", " ", str(label or "")).strip()
+        lowered = source.lower()
+        clause = re.split(r"\bturn to\b", source, maxsplit=1, flags=re.IGNORECASE)[0]
+        magnakai_ranks = {
+            "primate": 4,
+            "tutelary": 5,
+            "principalin": 6,
+            "mentora": 7,
+            "scion-kai": 8,
+            "archmaster": 9,
+        }
+        rank_match = re.search(
+            r"\b(?:rank of|rank)\s+(?:kai master\s+)?([a-z-]+)",
+            clause,
+            flags=re.IGNORECASE,
+        )
+        rank_name = rank_match.group(1).lower() if rank_match else ""
+
+        if re.match(r"^if you have (?:attained|reached) the (?:kai )?rank\b", lowered):
+            if rank_name not in magnakai_ranks:
+                return None, ""
+            return (
+                {"type": "magnakai_rank_gte", "value": magnakai_ranks[rank_name]},
+                f"Requires {rank_name.title()} rank.",
+            )
+
+        lore_match = re.match(
+            r"^if you have completed the lore-circle of (?:the )?([a-z-]+)\b",
+            lowered,
+        )
+        if lore_match:
+            lore_name = lore_match.group(1).title()
+            return (
+                {"type": "lore_circle", "name": lore_name},
+                f"Requires the Lore-circle of {lore_name}.",
+            )
+
+        arrow_match = re.match(
+            r"^if you (?:have|possess) at least (one|two|three|four|five|six|seven|eight|nine|ten|\d+) arrows?\b",
+            lowered,
+        )
+        if arrow_match and "one more arrow" not in lowered:
+            words = {
+                "one": 1, "two": 2, "three": 3, "four": 4, "five": 5,
+                "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
+            }
+            raw_count = arrow_match.group(1)
+            count = words.get(raw_count, int(raw_count) if raw_count.isdigit() else 0)
+            if count:
+                return (
+                    {"type": "arrows_gte", "value": count},
+                    f"Requires at least {count} Arrow{'s' if count != 1 else ''}.",
+                )
+
+        route_items = (
+            "Kalte Firesphere", "Torch and Tinderbox", "Sommerswerd", "Black Cube",
+            "Black Key", "Bullwhip", "Dagger", "Mirror", "Lantern", "Rope", "Bow",
+        )
+        for item in route_items:
+            if re.match(
+                rf"^if you (?:have|possess) (?:(?:a|an|the)\s+)?{re.escape(item.lower())}\b",
+                lowered,
+            ):
+                return {"type": "item", "name": item}, f"Requires {item}."
+
+        if not re.match(r"^if you (?:have|possess) the magnakai discipline of\b", lowered):
+            return None, ""
+
+        disciplines = [
+            name
+            for name in MAGNAKAI_DISCIPLINES
+            if re.search(rf"(?<![a-z]){re.escape(name.lower())}(?![a-z])", clause.lower())
+        ]
+        if not disciplines:
+            return None, ""
+
+        conditions: list[dict[str, Any]] = [
+            {"type": "power", "name": name} for name in disciplines
+        ]
+        if rank_name in magnakai_ranks:
+            conditions.append({"type": "magnakai_rank_gte", "value": magnakai_ranks[rank_name]})
+
+        uses_or = bool(re.search(r"\s+or\s+", clause, flags=re.IGNORECASE))
+        condition = conditions[0] if len(conditions) == 1 else {
+            "type": "any" if uses_or else "all",
+            "conditions": conditions,
+        }
+        requirement = " or ".join(disciplines) if uses_or else " and ".join(disciplines)
+        if rank_name in magnakai_ranks:
+            requirement = f"{requirement}{' or' if uses_or else ' and'} {rank_name.title()} rank"
+        return condition, f"Requires {requirement}."
+
+    def route_availability_payload(self, route: dict[str, Any]) -> dict[str, Any]:
+        payload = dict(route)
+        condition = payload.get("Condition", payload.get("condition"))
+        if not isinstance(condition, dict):
+            payload["Available"] = True
+            payload["BlockedReason"] = ""
+            return payload
+        available = self.evaluate_flow_condition(condition)
+        payload["Available"] = available
+        payload["BlockedReason"] = "" if available else str(
+            payload.get("BlockedReason") or payload.get("blockedReason") or "This route is not available to the current Action Chart."
+        )
+        return payload
 
     def flow_source_route_payload(self, entry: dict[str, Any] | None) -> list[dict[str, Any]]:
         if not isinstance(entry, dict):
@@ -4724,6 +4837,12 @@ class LoneWolfReduxAssistant:
                 actions = route.get("Actions", route.get("actions"))
                 if actions is not None:
                     payload["Actions"] = as_list(actions)
+                condition = route.get("Condition", route.get("condition"))
+                if isinstance(condition, dict):
+                    payload["Condition"] = condition
+                blocked_reason = route.get("BlockedReason", route.get("blockedReason"))
+                if blocked_reason:
+                    payload["BlockedReason"] = str(blocked_reason)
                 effect_label = route.get("EffectLabel", route.get("effectLabel"))
                 if effect_label:
                     payload["EffectLabel"] = str(effect_label)
@@ -4754,6 +4873,10 @@ class LoneWolfReduxAssistant:
             source = source_by_section.get(section, {})
             if source.get("Label"):
                 payload["Label"] = str(source["Label"])
+            if "Condition" in source and "Condition" not in payload and "condition" not in payload:
+                payload["Condition"] = source["Condition"]
+            if source.get("BlockedReason") and not payload.get("BlockedReason"):
+                payload["BlockedReason"] = source["BlockedReason"]
             payload["Audited"] = True
             merged.append(payload)
         return merged
@@ -4821,6 +4944,17 @@ class LoneWolfReduxAssistant:
     def follow_route(self, section: int) -> None:
         target = int(section)
         current = int(self.state["CurrentSection"])
+        route_payload = next(
+            (
+                route
+                for route in as_list(self.current_section_flow_payload().get("SourceRoutes"))
+                if isinstance(route, dict) and int(route.get("Section") or 0) == target
+            ),
+            None,
+        )
+        if isinstance(route_payload, dict) and not bool(route_payload.get("Available", True)):
+            print(str(route_payload.get("BlockedReason") or "This route is not available to the current Action Chart."))
+            return
         legal_routes = self.legal_route_targets_for_current_section()
         if legal_routes and target not in legal_routes:
             print(
@@ -4918,6 +5052,12 @@ class LoneWolfReduxAssistant:
                 else sum(len(as_list(self.inventory.get(key))) for key in self.automation_containers(condition.get("containers")))
             )
             return count < int(condition.get("value") or 0)
+        if kind in {"arrows_gte", "arrow_count_gte"}:
+            arrows = int(self.inventory.get("QuiverArrows") or 0) + self.count_items("Arrow", ["backpack"])
+            return arrows >= int(condition.get("value") or 0)
+        if kind in {"arrows_lt", "arrow_count_lt"}:
+            arrows = int(self.inventory.get("QuiverArrows") or 0) + self.count_items("Arrow", ["backpack"])
+            return arrows < int(condition.get("value") or 0)
         if kind in {"gold_gte", "gold_at_least"}:
             return int(self.inventory.get("GoldCrowns") or 0) >= int(condition.get("value") or 0)
         if kind in {"gold_lt", "gold_below"}:
@@ -6286,6 +6426,11 @@ class LoneWolfReduxAssistant:
             display_routes = source_routes or self.route_button_payload(
                 self.section_source_routes(book_number, section)
             )
+        display_routes = [
+            self.route_availability_payload(route)
+            for route in display_routes
+            if isinstance(route, dict)
+        ]
         last_roll = self.automation.get("LastRoll")
         if not (
             isinstance(last_roll, dict)
