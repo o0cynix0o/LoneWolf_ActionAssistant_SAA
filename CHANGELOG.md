@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.1.9 - 2026-08-07
+
+- Completed the Book 1 section audit for availability rules and automation opportunities.
+- Added the missing mandatory 2 ENDURANCE loss at Section 320 after the Kraan claw attack.
+
 ## 3.1.8 - 2026-08-07
 
 - Fixed the Book 6+ Disciplines tab to lead with the Magnakai Action Chart and the current Magnakai Disciplines.

@@ -148,6 +148,10 @@
       "summary": "Deduct 1 END for cuts and bruises.",
       "actions": [{"type": "stat", "stat": "end", "delta": -1}]
     },
+    "320": {
+      "summary": "Deduct 2 END from the Kraan's claw attack.",
+      "actions": [{"type": "stat", "stat": "end", "delta": -2}]
+    },
     "327": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 327 ends the mission."}]},
     "343": {
       "summary": "Deduct 2 END.",
