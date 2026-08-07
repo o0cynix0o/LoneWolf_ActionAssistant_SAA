@@ -1,8 +1,8 @@
-# Lone Wolf Action Assistant 3.1.9
+# Lone Wolf Action Assistant 3.2.0
 
 Lone Wolf Action Assistant is a standalone Windows desktop play aid for the *Lone Wolf* gamebooks. It preserves the established HTML interface and embedded command-line terminal while packaging the application, Python runtime, and dependencies into one fast-launch application folder with a single normal EXE to start it.
 
-Version: **3.1.9**
+Version: **3.2.0**
 
 Current game support: **Books 1–8 are playable V3 paths. Books 6–8 support both
 fresh Magnakai setup and campaign continuation, with V1-derived automation and

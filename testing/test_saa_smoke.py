@@ -105,6 +105,72 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
         self.assertEqual(assistant.character["EnduranceCurrent"], 18)
         self.assertTrue(any("2->" in message or "20->18" in message for message in messages))
 
+    def test_book2_section290_replaces_poisoned_food_with_a_meal(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            assistant.state["Character"]["BookNumber"] = 2
+            assistant.state["Inventory"]["BackpackItems"] = ["Meal"]
+            assistant.state["Character"]["EnduranceCurrent"] = 20
+            assistant.set_section(290)
+            assistant.apply_section_automation(force=True, visit_changed=True)
+
+        self.assertEqual(assistant.inventory["BackpackItems"], [])
+        self.assertEqual(assistant.character["EnduranceCurrent"], 20)
+
+    def test_book6_jakan_tournament_penalty_and_zero_roll_route(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            assistant.state["Character"].update({"BookNumber": 6, "CombatSkillCurrent": 20})
+            assistant.set_section(298)
+            assistant.apply_section_automation(force=True, visit_changed=True)
+            assistant.set_section(26)
+            assistant.start_section_combat()
+            modifier = assistant.combat["Modifier"]
+            with redirect_stdout(io.StringIO()):
+                assistant.combat_round(["combat", "round", "0"])
+
+        self.assertEqual(modifier, -2)
+        self.assertEqual(assistant.state["CurrentSection"], 335)
+
+    def test_book7_lorestone_and_bat_swarm_effects(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            assistant.state["Character"].update(
+                {"BookNumber": 7, "EnduranceCurrent": 20, "EnduranceMax": 30}
+            )
+            assistant.set_section(53)
+            assistant.apply_section_automation(force=True, visit_changed=True)
+            after_bats = assistant.character["EnduranceCurrent"]
+            assistant.set_section(250)
+            assistant.apply_section_automation(force=True, visit_changed=True)
+            after_first_lorestone = assistant.character["EnduranceCurrent"]
+            assistant.state["Character"]["EnduranceCurrent"] = 12
+            assistant.set_section(267)
+            assistant.apply_section_automation(force=True, visit_changed=True)
+
+        self.assertEqual(after_bats, 15)
+        self.assertEqual(after_first_lorestone, 30)
+        self.assertEqual(assistant.character["EnduranceCurrent"], 30)
+        self.assertIn("Lorestone of Herdos", assistant.inventory["SpecialItems"])
+
 
 class LegacySaveCompatibilityTests(unittest.TestCase):
     def test_magnakai_save_keeps_book_identity_and_v1_fields(self) -> None:
@@ -1359,7 +1425,7 @@ class CardLayoutInteractionTests(unittest.TestCase):
                     return cls.assistant_html[match.start():index + 1]
         raise AssertionError(f"JavaScript function {name!r} has no closing brace")
 
-    def test_release_metadata_is_3_1_9(self) -> None:
+    def test_release_metadata_is_3_2_0(self) -> None:
         readme = (self.root / "README.md").read_text(encoding="utf-8")
         building = (self.root / "docs" / "BUILDING.md").read_text(encoding="utf-8")
         user_guide = (self.root / "docs" / "USER_GUIDE.md").read_text(encoding="utf-8")
@@ -1369,16 +1435,16 @@ class CardLayoutInteractionTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         version_info = (self.root / "version_info.txt").read_text(encoding="utf-8")
 
-        self.assertIn("# Lone Wolf Action Assistant 3.1.9", readme)
-        self.assertIn("Version: **3.1.9**", readme)
-        self.assertIn("# Building Lone Wolf Action Assistant 3.1.9", building)
-        self.assertIn("# Lone Wolf Action Assistant 3.1.9", user_guide)
-        self.assertIn("## 3.1.9", changelog)
-        self.assertIn('#define AppVersion "3.1.9"', installer)
+        self.assertIn("# Lone Wolf Action Assistant 3.2.0", readme)
+        self.assertIn("Version: **3.2.0**", readme)
+        self.assertIn("# Building Lone Wolf Action Assistant 3.2.0", building)
+        self.assertIn("# Lone Wolf Action Assistant 3.2.0", user_guide)
+        self.assertIn("## 3.2.0", changelog)
+        self.assertIn('#define AppVersion "3.2.0"', installer)
         self.assertIn("filevers=(3, 1, 9, 0)", version_info)
         self.assertIn("prodvers=(3, 1, 9, 0)", version_info)
-        self.assertIn("StringStruct(u'FileVersion', u'3.1.9')", version_info)
-        self.assertIn("StringStruct(u'ProductVersion', u'3.1.9')", version_info)
+        self.assertIn("StringStruct(u'FileVersion', u'3.2.0')", version_info)
+        self.assertIn("StringStruct(u'ProductVersion', u'3.2.0')", version_info)
 
     def test_movable_cards_get_a_dedicated_drag_handle(self) -> None:
         self.assertIn("data-card-drag-handle", self.assistant_html)

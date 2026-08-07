@@ -159,6 +159,10 @@
       "summary": "Required Meal during the ride through Tarnalin.",
       "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": false}]
     },
+    "290": {
+      "summary": "Replace the poisoned food with a Meal or lose 3 END.",
+      "actions": [{"type": "meal", "count": 1, "mode": "all_or_loss", "enduranceLoss": 3, "huntingExempt": false}]
+    },
     "292": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 292 ends the mission."}]},
     "304": {"summary": "Terminal death.", "actions": [{"type": "ending", "ending": "death", "cause": "Section 304 ends the mission."}]},
     "305": {

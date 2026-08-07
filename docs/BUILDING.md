@@ -1,4 +1,4 @@
-# Building Lone Wolf Action Assistant 3.1.9
+# Building Lone Wolf Action Assistant 3.2.0
 
 ## Requirements
 

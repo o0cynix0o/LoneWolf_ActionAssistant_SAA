@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.2.0 - 2026-08-07
+
+- Completed the source-first Books 2-7 section audit and recorded the coverage in `docs/BOOK2_TO_7_SECTION_AUDIT.md`.
+- Automated Book 2 Section 290's poisoned-food meal replacement.
+- Added the Book 6 Jakan tournament penalty and its zero-roll break route without changing the Kalte bow behavior.
+- Added Book 7 Section 53's bat-swarm injury and Sections 250/267 Lorestone recovery effects.
+
 ## 3.1.9 - 2026-08-07
 
 - Completed the Book 1 section audit for availability rules and automation opportunities.

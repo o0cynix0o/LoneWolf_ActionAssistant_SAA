@@ -923,6 +923,7 @@ def default_state() -> dict[str, Any]:
             "IgnorePlayerLossRounds": 0,
             "IgnoreEnemyLossRounds": 0,
             "CombatRollRoutes": {},
+            "ConditionalCombatRollRoutes": [],
             "FixedPlayerCombatSkill": None,
             "RequiredWeapon": "",
             "EnemyQueue": [],
@@ -8733,6 +8734,10 @@ class LoneWolfReduxAssistant:
                 "CombatRollRoutes": preset.get("combatRollRoutes")
                 if isinstance(preset.get("combatRollRoutes"), dict)
                 else {},
+                "ConditionalCombatRollRoutes": [
+                    entry for entry in as_list(preset.get("conditionalCombatRollRoutes"))
+                    if isinstance(entry, dict)
+                ],
                 "DoubleEnemyLoss": bool(preset.get("doubleEnemyLoss", False)),
                 "DoubleEnemyLossWithSommerswerd": bool(preset.get("doubleEnemyLossWithSommerswerd", False)),
                 "RestorePlayerEnduranceAfterCombat": bool(preset.get("restorePlayerEnduranceAfterCombat", False)),
@@ -9521,8 +9526,23 @@ class LoneWolfReduxAssistant:
             self.show_death_screen()
             return
         combat_roll_routes = self.combat.get("CombatRollRoutes")
-        if roll is not None and not evade and isinstance(combat_roll_routes, dict) and combat_roll_routes:
-            route = combat_roll_routes.get(str(roll), combat_roll_routes.get(roll))
+        conditional_routes = self.combat.get("ConditionalCombatRollRoutes")
+        route = None
+        if roll is not None and not evade:
+            for conditional_route in as_list(conditional_routes):
+                if not isinstance(conditional_route, dict):
+                    continue
+                condition = conditional_route.get("condition")
+                if isinstance(condition, dict) and not self.evaluate_flow_condition(condition):
+                    continue
+                routes = conditional_route.get("routes")
+                if not isinstance(routes, dict):
+                    continue
+                route = routes.get(str(roll), routes.get(roll))
+                if route:
+                    break
+            if not route and isinstance(combat_roll_routes, dict) and combat_roll_routes:
+                route = combat_roll_routes.get(str(roll), combat_roll_routes.get(roll))
             if route:
                 self.archive_current_combat("Special Route")
                 self.restore_player_endurance_after_combat_effects()

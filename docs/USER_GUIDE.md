@@ -1,4 +1,4 @@
-# Lone Wolf Action Assistant 3.1.9
+# Lone Wolf Action Assistant 3.2.0
 
 ## Installation
 
