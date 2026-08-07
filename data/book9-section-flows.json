@@ -6330,7 +6330,7 @@
       "incomingRouteCount": 1
     },
     "347": {
-      "auditStatus": "source-link-baseline",
+      "auditStatus": "source-verified-rnt",
       "classification": [
         "single_route",
         "magnakai_check"
@@ -6347,7 +6347,75 @@
           "Section": 119
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Divination or Huntmastery avoids the assassin's random attack.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 260,
+            "label": "Assassin attack route",
+            "conditions": [
+              {
+                "type": "all",
+                "conditions": [
+                  {
+                    "type": "no_power",
+                    "name": "Divination"
+                  },
+                  {
+                    "type": "no_power",
+                    "name": "Huntmastery"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "min": 7,
+            "max": 9,
+            "route": 119,
+            "label": "Assassin escape route",
+            "conditions": [
+              {
+                "type": "all",
+                "conditions": [
+                  {
+                    "type": "no_power",
+                    "name": "Divination"
+                  },
+                  {
+                    "type": "no_power",
+                    "name": "Huntmastery"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "min": 0,
+            "max": 9,
+            "route": 36,
+            "label": "Discipline avoids the random attack",
+            "conditions": [
+              {
+                "type": "any",
+                "conditions": [
+                  {
+                    "type": "power",
+                    "name": "Divination"
+                  },
+                  {
+                    "type": "power",
+                    "name": "Huntmastery"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     "348": {
       "auditStatus": "source-link-baseline",

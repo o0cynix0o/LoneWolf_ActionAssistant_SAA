@@ -3573,7 +3573,7 @@
       ]
     },
     "172": {
-      "auditStatus": "source-link-baseline",
+      "auditStatus": "source-verified-rnt",
       "classification": [
         "single_route"
       ],
@@ -3583,7 +3583,37 @@
           "Section": 222
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Cargo-hold fall endurance loss.",
+        "zeroAsTen": true,
+        "modifiers": [
+          {
+            "label": "Lore-circle of Solaris",
+            "value": -2,
+            "condition": {
+              "type": "lore_circle",
+              "name": "Solaris"
+            }
+          }
+        ],
+        "outcomes": [
+          {
+            "min": -99,
+            "max": 99,
+            "route": 222,
+            "label": "Recover from the fall",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "deltaFrom": "total",
+                "multiplier": -1
+              }
+            ]
+          }
+        ]
+      }
     },
     "173": {
       "auditStatus": "source-link-baseline",

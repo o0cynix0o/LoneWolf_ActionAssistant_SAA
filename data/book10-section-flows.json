@@ -3068,7 +3068,7 @@
       "incomingRouteCount": 1
     },
     "166": {
-      "auditStatus": "source-link-baseline",
+      "auditStatus": "source-verified-rnt",
       "classification": [
         "single_route"
       ],
@@ -3078,7 +3078,37 @@
           "Section": 186
         }
       ],
-      "incomingRouteCount": 4
+      "incomingRouteCount": 4,
+      "roll": {
+        "summary": "Arrow wound while crossing the river.",
+        "zeroAsTen": true,
+        "modifiers": [
+          {
+            "label": "Huntmastery",
+            "value": -2,
+            "condition": {
+              "type": "power",
+              "name": "Huntmastery"
+            }
+          }
+        ],
+        "outcomes": [
+          {
+            "min": -99,
+            "max": 99,
+            "route": 186,
+            "label": "Cross the river",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "deltaFrom": "total",
+                "multiplier": -1
+              }
+            ]
+          }
+        ]
+      }
     },
     "167": {
       "auditStatus": "source-link-baseline",
@@ -3706,7 +3736,7 @@
       "incomingRouteCount": 4
     },
     "203": {
-      "auditStatus": "source-link-baseline",
+      "auditStatus": "source-verified-rnt",
       "classification": [
         "single_route"
       ],
@@ -3716,7 +3746,37 @@
           "Section": 190
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "roll": {
+        "summary": "Arrow-removal endurance loss.",
+        "zeroAsTen": true,
+        "modifiers": [
+          {
+            "label": "Curing",
+            "value": -3,
+            "condition": {
+              "type": "power",
+              "name": "Curing"
+            }
+          }
+        ],
+        "outcomes": [
+          {
+            "min": -99,
+            "max": 99,
+            "route": 190,
+            "label": "Survive the arrow removal",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "deltaFrom": "total",
+                "multiplier": -1
+              }
+            ]
+          }
+        ]
+      }
     },
     "204": {
       "auditStatus": "source-link-baseline",

@@ -110,7 +110,10 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             self.assertTrue(automation_path.is_file())
             self.assertEqual(set(flows), {str(section) for section in range(1, 351)})
             self.assertTrue(
-                all(flow["auditStatus"] == "source-link-baseline" for flow in flows.values())
+                all(
+                    flow["auditStatus"] in {"source-link-baseline", "source-verified-rnt"}
+                    for flow in flows.values()
+                )
             )
 
     def test_book8_completion_offers_the_book9_internal_testing_handoff(self) -> None:
@@ -1053,6 +1056,48 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
         self.assertEqual(result["Total"], 6)
         self.assertEqual(result["Route"], 119)
 
+    def test_later_magnakai_unambiguous_rnt_rules_apply_source_modifiers_and_routes(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 9}, "CurrentSection": 347})
+            self.assertEqual(assistant.roll_current_section(raw_roll=6)["Route"], 260)
+            assistant.set_section(347)
+            self.assertEqual(assistant.roll_current_section(raw_roll=7)["Route"], 119)
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 9, "MagnakaiDisciplines": ["Divination"]}, "CurrentSection": 347})
+            self.assertEqual(assistant.roll_current_section(raw_roll=0)["Route"], 36)
+
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 10, "MagnakaiDisciplines": ["Huntmastery"], "EnduranceCurrent": 24, "EnduranceMax": 24}, "CurrentSection": 166})
+            river = assistant.roll_current_section(raw_roll=0)
+            self.assertEqual(river["Total"], 8)
+            self.assertEqual(river["Route"], 186)
+            self.assertEqual(assistant.character["EnduranceCurrent"], 16)
+
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 10, "MagnakaiDisciplines": ["Curing"], "EnduranceCurrent": 24, "EnduranceMax": 24}, "CurrentSection": 203})
+            arrows = assistant.roll_current_section(raw_roll=0)
+            self.assertEqual(arrows["Total"], 7)
+            self.assertEqual(arrows["Route"], 190)
+            self.assertEqual(assistant.character["EnduranceCurrent"], 17)
+
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 12, "LoreCirclesCompleted": ["Solaris"], "EnduranceCurrent": 24, "EnduranceMax": 24}, "CurrentSection": 172})
+            fall = assistant.roll_current_section(raw_roll=0)
+            self.assertEqual(fall["Total"], 8)
+            self.assertEqual(fall["Route"], 222)
+            self.assertEqual(assistant.character["EnduranceCurrent"], 16)
+
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 10, "MagnakaiDisciplines": ["Weaponmastery"], "WeaponmasteryWeapons": ["Bow"]}, "CurrentSection": 70})
+            self.assertEqual(assistant.roll_current_section(raw_roll=5)["Route"], 195)
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 11, "MagnakaiDisciplines": ["Weaponmastery"], "WeaponmasteryWeapons": ["Bow"]}, "CurrentSection": 322})
+            self.assertEqual(assistant.roll_current_section(raw_roll=6)["Route"], 286)
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 12, "MagnakaiDisciplines": ["Weaponmastery", "Huntmastery"], "WeaponmasteryWeapons": ["Bow"], "MagnakaiRank": 9}, "CurrentSection": 324})
+            self.assertEqual(assistant.roll_current_section(raw_roll=4)["Route"], 287)
+
     def test_book8_source_entry_effect_restores_endurance(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
@@ -1250,18 +1295,26 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
 
     def test_magnakai_combat_and_rnt_catalogue_totals_remain_source_complete(self) -> None:
         expected_combat = {6: 28, 7: 39, 8: 37, 9: 38, 10: 40, 11: 37, 12: 59}
-        expected_rnt = {6: 22, 7: 22, 8: 16, 9: 18, 10: 20, 11: 23, 12: 33}
+        expected_rnt = {6: 22, 7: 22, 8: 16, 9: 19, 10: 25, 11: 29, 12: 39}
         root = Path(lonewolf_redux.__file__).resolve().parent / "data"
-        for book_number in expected_combat:
-            flows = json.loads((root / f"book{book_number}-section-flows.json").read_text(encoding="utf-8"))[str(book_number)]
-            combat_count = sum(len(entry.get("combat", [])) for entry in flows.values() if isinstance(entry, dict))
-            rnt_count = sum(
-                1
-                for entry in flows.values()
-                if isinstance(entry, dict) and ("roll" in entry or "stagedRoll" in entry)
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=root,
+                state_data_dir=base / "state",
+                books_dir=base / "books",
             )
-            self.assertEqual(combat_count, expected_combat[book_number])
-            self.assertEqual(rnt_count, expected_rnt[book_number])
+            for book_number in expected_combat:
+                flows = assistant.section_flows[str(book_number)]
+                combat_count = sum(len(entry.get("combat", [])) for entry in flows.values() if isinstance(entry, dict))
+                rnt_count = sum(
+                    1
+                    for entry in flows.values()
+                    if isinstance(entry, dict) and ("roll" in entry or "stagedRoll" in entry)
+                )
+                self.assertEqual(combat_count, expected_combat[book_number])
+                self.assertEqual(rnt_count, expected_rnt[book_number])
 
     def test_magnakai_combat_restrictions_and_conditional_damage_match_source(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:

@@ -44,6 +44,7 @@ ERROR_LOG_FILE = PATHS.logs / "lonewolf_redux-error.log"
 SCREEN_WIDTH = 74
 SECTION_AUTOMATION_GLOB = "book*-simple-automations.json"
 SECTION_FLOW_GLOB = "book*-section-flows.json"
+SECTION_FLOW_OVERLAY_GLOB = "*-rnt-rules.json"
 ROUTE_CHECK_GLOB = "book*-route-checks.json"
 ACHIEVEMENT_SCHEMA_VERSION = 1
 LEGACY_PLAYER_LOSS_KEYS = ("Gray" + "StarLoss",)
@@ -3635,8 +3636,10 @@ class LoneWolfReduxAssistant:
 
     def load_section_flows(self) -> None:
         section_flows = self.load_book_data_collection(SECTION_FLOW_GLOB, "Section flow")
+        rnt_overlays = self.load_book_data_collection(SECTION_FLOW_OVERLAY_GLOB, "RNT rule")
         route_checks = self.load_book_data_collection(ROUTE_CHECK_GLOB, "Route check")
-        self.section_flows = self.merge_section_flow_data(section_flows, route_checks)
+        self.section_flows = self.merge_section_flow_data(section_flows, rnt_overlays)
+        self.section_flows = self.merge_section_flow_data(self.section_flows, route_checks)
 
     def write_current_position(self) -> None:
         try:
@@ -5155,6 +5158,12 @@ class LoneWolfReduxAssistant:
         matched_actions: list[dict[str, Any]] = []
         for outcome in as_list(roll.get("outcomes")):
             if not isinstance(outcome, dict):
+                continue
+            condition = outcome.get("condition")
+            if isinstance(condition, dict) and not self.evaluate_flow_condition(condition):
+                continue
+            conditions = [item for item in as_list(outcome.get("conditions")) if isinstance(item, dict)]
+            if conditions and not all(self.evaluate_flow_condition(item) for item in conditions):
                 continue
             test = str(outcome.get("test") or "range").lower()
             matched = False
