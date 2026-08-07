@@ -5101,6 +5101,59 @@ class LoneWolfReduxAssistant:
             self.automation["Journal"] = journal[-100:]
         return messages
 
+    def section_combat_route_requires_resolution(self, target: int) -> bool:
+        """Return whether this route is only available after the current combat."""
+        entries = self.flow_combat_entries()
+        if not entries:
+            return False
+        post_combat_routes: set[int] = set()
+        for entry in entries:
+            for key in (
+                "victoryRoute",
+                "defeatRoute",
+                "evadeRoute",
+                "flawlessVictoryRoute",
+                "woundedVictoryRoute",
+                "winWithinRoute",
+                "tooLateRoute",
+                "survivalRoute",
+                "roundExceededRoute",
+                "enemyEnduranceThresholdRoute",
+            ):
+                value = entry.get(key)
+                if value is not None:
+                    post_combat_routes.add(int(value))
+            post_combat_routes.update(
+                int(value)
+                for value in as_list(entry.get("victoryChoices"))
+                if str(value).strip()
+            )
+
+        if int(target) in post_combat_routes:
+            return True
+        source_routes = self.flow_source_route_payload(self.current_section_flow_entry())
+        if not source_routes:
+            source_routes = self.route_button_payload(self.section_source_routes())
+        return len(source_routes) == 1 and int(source_routes[0].get("Section") or 0) == int(target)
+
+    def current_section_combat_is_resolved(self) -> bool:
+        visit_key = self.current_visit_key()
+        completed_outcomes = {
+            "victory",
+            "evaded",
+            "survived",
+            "completed",
+            "timed out",
+            "threshold",
+            "special route",
+        }
+        return any(
+            isinstance(entry, dict)
+            and str(entry.get("VisitKey") or "") == visit_key
+            and str(entry.get("Outcome") or "").strip().lower() in completed_outcomes
+            for entry in as_list(self.state.get("CombatHistory"))
+        )
+
     def legal_route_targets_for_current_section(self) -> set[int]:
         book = book_metadata(int(self.character["BookNumber"]))
         section = int(self.state["CurrentSection"])
@@ -5128,6 +5181,13 @@ class LoneWolfReduxAssistant:
         if isinstance(route_payload, dict) and not bool(route_payload.get("Available", True)):
             print(str(route_payload.get("BlockedReason") or "This route is not available to the current Action Chart."))
             return
+        if self.section_combat_route_requires_resolution(target):
+            if self.combat.get("Active"):
+                print("Finish the active section combat before following this route.")
+                return
+            if not self.current_section_combat_is_resolved():
+                print("Resolve the listed section combat before following this route.")
+                return
         legal_routes = self.legal_route_targets_for_current_section()
         if legal_routes and target not in legal_routes:
             print(
@@ -9226,6 +9286,7 @@ class LoneWolfReduxAssistant:
             "Outcome": outcome,
             "BookNumber": int(self.character["BookNumber"]),
             "Section": int(self.combat.get("StartedSection") or self.state["CurrentSection"]),
+            "VisitKey": self.current_visit_key(),
             "EnemyName": self.combat.get("EnemyName", ""),
             "EnemyCombatSkill": int(self.combat.get("EnemyCombatSkill") or 0),
             "EnemyEnduranceMax": int(self.combat.get("EnemyEnduranceMax") or 0),

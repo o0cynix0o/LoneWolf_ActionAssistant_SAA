@@ -1272,6 +1272,25 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
             assistant.apply_section_automation(force=True, visit_changed=True)
         self.assertTrue(assistant.death_active())
 
+    def test_magnakai_final_sections_complete_books7_to12(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            completed = []
+            for book_number in range(7, 13):
+                assistant.state = lonewolf_redux.normalize_state(
+                    {"Character": {"BookNumber": book_number}, "CurrentSection": 350}
+                )
+                assistant.apply_section_automation(force=True, visit_changed=True)
+                completed.append(book_number in assistant.character["CompletedBooks"])
+
+        self.assertEqual(completed, [True] * 6)
+
     def test_book8_giak_scroll_is_added_to_pocket_items(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
@@ -1319,6 +1338,34 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
         self.assertEqual(locked_section, 23)
         self.assertTrue(unlocked["Available"])
         self.assertEqual(assistant.state["CurrentSection"], 337)
+
+    def test_required_combat_route_cannot_be_followed_before_the_current_fight_is_won(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.create_book1_character_state(
+                kai_disciplines=["Sixth Sense", "Hunting", "Healing", "Weaponskill", "Mindblast"]
+            )
+            assistant.set_run_configuration("Normal", False, "ManualCRT")
+            with redirect_stdout(io.StringIO()):
+                assistant.set_section(255)
+                assistant.follow_route(82)
+                blocked_section = assistant.state["CurrentSection"]
+                assistant.start_section_combat("255-gourgaz")
+                assistant.follow_route(82)
+                active_section = assistant.state["CurrentSection"]
+                assistant.combat_round(["combat", "manual"], manual_losses=(30, 0))
+
+        self.assertEqual(blocked_section, 255)
+        self.assertEqual(active_section, 255)
+        self.assertFalse(assistant.combat["Active"])
+        self.assertEqual(assistant.state["CurrentSection"], 82)
+        self.assertTrue(assistant.state["CombatHistory"][-1]["VisitKey"].startswith("1:255:"))
 
     def test_reader_recognizes_explicit_item_rank_and_arrow_route_gates(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:

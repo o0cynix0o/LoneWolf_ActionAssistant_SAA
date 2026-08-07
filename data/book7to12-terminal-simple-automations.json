@@ -1,0 +1,51 @@
+{
+  "7": {
+    "350": {
+      "summary": "Complete Castle of Death.",
+      "actions": [
+        {"type": "ending", "ending": "success", "completeBook": 7}
+      ]
+    }
+  },
+  "8": {
+    "350": {
+      "summary": "Complete The Jungle of Horrors.",
+      "actions": [
+        {"type": "ending", "ending": "success", "completeBook": 8}
+      ]
+    }
+  },
+  "9": {
+    "350": {
+      "summary": "Complete The Cauldron of Fear.",
+      "actions": [
+        {"type": "ending", "ending": "success", "completeBook": 9}
+      ]
+    }
+  },
+  "10": {
+    "350": {
+      "summary": "Complete The Dungeons of Torgar.",
+      "actions": [
+        {"type": "ending", "ending": "success", "completeBook": 10}
+      ]
+    }
+  },
+  "11": {
+    "350": {
+      "summary": "Complete The Prisoners of Time.",
+      "actions": [
+        {"type": "ending", "ending": "success", "completeBook": 11}
+      ]
+    }
+  },
+  "12": {
+    "350": {
+      "summary": "Complete The Masters of Darkness.",
+      "actions": [
+        {"type": "remove_item", "name": "Crystal Explosive", "containers": ["special"]},
+        {"type": "ending", "ending": "success", "completeBook": 12}
+      ]
+    }
+  }
+}
