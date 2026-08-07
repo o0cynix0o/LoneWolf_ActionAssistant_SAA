@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.4.1 - Internal Testing
+
+- Added 117 source-verified mandatory section effects across Books 9-12: unavoidable ENDURANCE losses, required meals, full recovery events, and the Book 12 Bow loss.
+- Preserved the printed Book 11 Section 74 exception: Huntmastery cannot replace that required meal.
+- Added regression coverage for representative effects in every newly testable book.
+
 ## 3.4.0 - Internal Testing
 
 - Enabled Books 9-12 as internal testing campaigns with reader navigation, saves, manual tools, fresh Magnakai setup, and campaign handoffs.

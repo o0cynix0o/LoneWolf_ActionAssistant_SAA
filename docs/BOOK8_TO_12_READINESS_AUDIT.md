@@ -40,6 +40,25 @@ the book's prose.
 The app now recognizes the folders `09tcof`, `10tdot`, `11tpot`, and `12tmod`.
 It validates and imports their official HTML ZIPs or extracted folders.
 
+## Books 9-12: Direct Mandatory Effects
+
+The first source-verified rules pass maps 117 effects that are mandatory once
+the reader reaches the identified section. It deliberately excludes effects
+whose availability depends on a prior route, a selected item, a discipline,
+an RNT result, or a combat outcome.
+
+| Book | Direct effects automated | Covered effect types |
+| --- | ---: | --- |
+| 9 | 28 | ENDURANCE loss, required meals, full recovery |
+| 10 | 34 | ENDURANCE loss, required meals |
+| 11 | 30 | ENDURANCE loss, required meals, recovery |
+| 12 | 25 | ENDURANCE loss, required meals, recovery, lost Bow |
+
+Meals use the normal Hunting/Huntmastery exemption only where the source
+permits it. Book 11 Section 74 is explicitly mapped as an exception: the
+printed rule requires a Meal or the ENDURANCE loss even when the player has
+Huntmastery.
+
 ## Internal Testing Boundary
 
 Books 9-12 are now internal testing paths. They offer fresh Magnakai setup,
@@ -49,7 +68,7 @@ pass, which must map and test, for every required case:
 
 1. Magnakai advancement and each book's printed entry equipment rules.
 2. Conditional choices for disciplines, special items, prior events, and route state.
-3. Combat stats, combat-result exceptions, losses, gains, meals, and random-number effects.
+3. Combat stats, combat-result exceptions, item losses and gains, and random-number effects.
 4. Book completion and the next-book transfer rules.
 
 This keeps the assistant honest: the campaign spine is testable now, while
