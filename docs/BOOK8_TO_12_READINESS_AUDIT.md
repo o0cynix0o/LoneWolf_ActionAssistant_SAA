@@ -94,6 +94,34 @@ printed outcome depends on a chosen active weapon, an unspecified missile or
 bow bonus, or prior use of a particular item. They will be mapped only after
 those dependencies are represented explicitly in the save and rules model.
 
+## Books 9-12: First Inventory Rules Pass
+
+This pass adds only item changes whose source wording establishes both the
+item and its destination without requiring the assistant to infer a choice.
+Optional pickups remain explicit loot buttons. Where the book requires the
+player to choose a loss, the assistant presents a loss picker instead of
+selecting an item itself.
+
+| Book | Optional loot choices | Prompted losses | Mandatory item events |
+| --- | ---: | ---: | ---: |
+| 9 | 4 | 1 | 7 |
+| 10 | 13 | 0 | 4 |
+| 11 | 11 | 0 | 4 |
+| 12 | 6 | 0 | 6 |
+
+Examples include Book 9's Psychic Ring and Iron Key, Book 10's Bullwhip and
+Death Knight supplies, Book 11's Ironheart Broadsword and Obsidian Seal, and
+Book 12's mission items. The pass also removes the named Rope, Sabito,
+Bullwhip, Bow, and Crystal Explosive where the source explicitly consumes or
+loses them.
+
+The following cases remain reader-directed: losses tied to an exact Action
+Chart slot when the underlying list has changed, weapon destruction tied to
+the weapon actually used, quantity choices, confiscation and later recovery,
+and special item powers such as Helshezag, the Bronin Vest, and the Silver
+Bracers. Those require stateful equipment effects or route history, not a
+safe generic inventory mutation.
+
 ## Internal Testing Boundary
 
 Books 9-12 are now internal testing paths. They offer fresh Magnakai setup,
@@ -103,7 +131,7 @@ pass, which must map and test, for every required case:
 
 1. Magnakai advancement and each book's printed entry equipment rules.
 2. Conditional choices for disciplines, special items, prior events, and route state.
-3. Combat-result exceptions, item losses and gains, and the remaining conditional random-number effects.
+3. Combat-result exceptions, stateful special-item powers, remaining conditional item changes, and the remaining conditional random-number effects.
 4. Book completion and the next-book transfer rules.
 
 This keeps the assistant honest: the campaign spine is testable now, while

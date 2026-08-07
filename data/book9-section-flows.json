@@ -417,7 +417,17 @@
           "Section": 213
         }
       ],
-      "incomingRouteCount": 3
+      "incomingRouteCount": 3,
+      "lossChoices": [
+        {
+          "id": "24-ranger-weapon-loss",
+          "label": "Choose Weapon dropped during the escape",
+          "summary": "The book requires one carried Weapon to be erased before section 213.",
+          "containers": [
+            "weapon"
+          ]
+        }
+      ]
     },
     "25": {
       "auditStatus": "source-link-baseline",
@@ -1488,7 +1498,20 @@
           "Section": 11
         }
       ],
-      "incomingRouteCount": 3
+      "incomingRouteCount": 3,
+      "loot": [
+        {
+          "id": "87-psychic-ring",
+          "label": "Keep Psychic Ring",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Psychic Ring"
+            }
+          ]
+        }
+      ]
     },
     "88": {
       "auditStatus": "source-link-baseline",
@@ -4757,7 +4780,42 @@
           "Section": 248
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "259-sword",
+          "label": "Keep Sword",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "weapon",
+              "name": "Sword"
+            }
+          ]
+        },
+        {
+          "id": "259-dagger",
+          "label": "Keep Dagger",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "weapon",
+              "name": "Dagger"
+            }
+          ]
+        },
+        {
+          "id": "259-iron-key",
+          "label": "Keep Iron Key",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Iron Key"
+            }
+          ]
+        }
+      ]
     },
     "260": {
       "auditStatus": "source-link-baseline",

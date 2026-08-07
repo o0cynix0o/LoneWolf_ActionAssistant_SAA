@@ -3257,7 +3257,31 @@
           "Section": 262
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "159-bronin-vest",
+          "label": "Keep Bronin Vest",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Bronin Vest"
+            }
+          ]
+        },
+        {
+          "id": "159-silver-bracers",
+          "label": "Keep Silver Bracers",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Silver Bracers"
+            }
+          ]
+        }
+      ]
     },
     "160": {
       "auditStatus": "source-link-baseline",
@@ -3840,7 +3864,20 @@
           "Section": 29
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "187-zejar-dulaga",
+          "label": "Keep Zejar-dulaga",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Zejar-dulaga"
+            }
+          ]
+        }
+      ]
     },
     "188": {
       "auditStatus": "source-link-baseline",
@@ -5020,7 +5057,20 @@
           "Section": 130
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "loot": [
+        {
+          "id": "246-black-key",
+          "label": "Keep Black Key",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Black Key"
+            }
+          ]
+        }
+      ]
     },
     "247": {
       "auditStatus": "source-link-baseline",
@@ -6244,7 +6294,39 @@
           "Section": 263
         }
       ],
-      "incomingRouteCount": 3
+      "incomingRouteCount": 3,
+      "loot": [
+        {
+          "id": "308-black-key",
+          "label": "Keep Black Key",
+          "condition": {
+            "type": "no_power",
+            "name": "Divination"
+          },
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Black Key"
+            }
+          ]
+        },
+        {
+          "id": "308-black-cube",
+          "label": "Keep Black Cube",
+          "condition": {
+            "type": "no_power",
+            "name": "Divination"
+          },
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Black Cube"
+            }
+          ]
+        }
+      ]
     },
     "309": {
       "auditStatus": "source-link-baseline",

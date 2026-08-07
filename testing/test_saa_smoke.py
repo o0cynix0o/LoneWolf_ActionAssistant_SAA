@@ -257,6 +257,57 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
         self.assertEqual(book11_forced_meal_endurance, 17)
         self.assertEqual(assistant.inventory["Weapons"], [])
 
+    def test_later_magnakai_audited_item_events_apply_without_guessing(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+
+            assistant.state["Character"]["BookNumber"] = 9
+            assistant.state["Inventory"]["Weapons"] = ["Sword", "Dagger"]
+            assistant.set_section(24)
+            assistant.apply_section_loss("24-ranger-weapon-loss", "weapon", "Sword")
+            book9_loss = assistant.inventory["Weapons"]
+            assistant.state["Inventory"]["BackpackItems"] = ["Rope", "Sabito"]
+            assistant.set_section(7)
+            assistant.apply_section_automation(force=True, visit_changed=True)
+            book9_pack = assistant.inventory["BackpackItems"]
+            assistant.set_section(87)
+            assistant.apply_flow_loot("87-psychic-ring")
+
+            assistant.state["Character"]["BookNumber"] = 10
+            assistant.state["Inventory"]["GoldCrowns"] = 0
+            assistant.set_section(145)
+            assistant.apply_flow_loot("145-gold")
+            assistant.apply_flow_loot("145-bullwhip")
+
+            assistant.state["Character"]["BookNumber"] = 11
+            assistant.set_section(210)
+            assistant.apply_section_automation(force=True, visit_changed=True)
+
+            assistant.state["Character"].update({"BookNumber": 12, "MagnakaiDisciplines": []})
+            assistant.set_section(308)
+            assistant.apply_flow_loot("308-black-key")
+            assistant.apply_flow_loot("308-black-cube")
+            no_divination_loot = assistant.current_flow_loot_payload()
+            assistant.state["Character"]["MagnakaiDisciplines"] = ["Divination"]
+            divination_loot = assistant.current_flow_loot_payload()
+
+        self.assertEqual(book9_loss, ["Dagger"])
+        self.assertEqual(book9_pack, ["Sabito"])
+        self.assertIn("Psychic Ring", assistant.inventory["SpecialItems"])
+        self.assertEqual(assistant.inventory["GoldCrowns"], 9)
+        self.assertIn("Bullwhip", assistant.inventory["SpecialItems"])
+        self.assertIn("Obsidian Seal", assistant.inventory["SpecialItems"])
+        self.assertIn("Black Key", assistant.inventory["BackpackItems"])
+        self.assertIn("Black Cube", assistant.inventory["BackpackItems"])
+        self.assertTrue(all(item["Applied"] for item in no_divination_loot))
+        self.assertTrue(all(not item["Ready"] for item in divination_loot))
+
     def test_later_magnakai_rnt_routes_and_effects_follow_source_modifiers(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
@@ -1694,7 +1745,7 @@ class CardLayoutInteractionTests(unittest.TestCase):
                     return cls.assistant_html[match.start():index + 1]
         raise AssertionError(f"JavaScript function {name!r} has no closing brace")
 
-    def test_release_metadata_is_3_4_3_internal_testing(self) -> None:
+    def test_release_metadata_is_3_4_4_internal_testing(self) -> None:
         readme = (self.root / "README.md").read_text(encoding="utf-8")
         building = (self.root / "docs" / "BUILDING.md").read_text(encoding="utf-8")
         user_guide = (self.root / "docs" / "USER_GUIDE.md").read_text(encoding="utf-8")
@@ -1704,16 +1755,16 @@ class CardLayoutInteractionTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         version_info = (self.root / "version_info.txt").read_text(encoding="utf-8")
 
-        self.assertIn("# Lone Wolf Action Assistant 3.4.3 Internal Testing", readme)
-        self.assertIn("Version: **3.4.3 Internal Testing**", readme)
-        self.assertIn("# Building Lone Wolf Action Assistant 3.4.3 Internal Testing", building)
-        self.assertIn("# Lone Wolf Action Assistant 3.4.3 Internal Testing", user_guide)
-        self.assertIn("## 3.4.3 - Internal Testing", changelog)
-        self.assertIn('#define AppVersion "3.4.3"', installer)
-        self.assertIn("filevers=(3, 4, 3, 0)", version_info)
-        self.assertIn("prodvers=(3, 4, 3, 0)", version_info)
-        self.assertIn("StringStruct(u'FileVersion', u'3.4.3')", version_info)
-        self.assertIn("StringStruct(u'ProductVersion', u'3.4.3')", version_info)
+        self.assertIn("# Lone Wolf Action Assistant 3.4.4 Internal Testing", readme)
+        self.assertIn("Version: **3.4.4 Internal Testing**", readme)
+        self.assertIn("# Building Lone Wolf Action Assistant 3.4.4 Internal Testing", building)
+        self.assertIn("# Lone Wolf Action Assistant 3.4.4 Internal Testing", user_guide)
+        self.assertIn("## 3.4.4 - Internal Testing", changelog)
+        self.assertIn('#define AppVersion "3.4.4"', installer)
+        self.assertIn("filevers=(3, 4, 4, 0)", version_info)
+        self.assertIn("prodvers=(3, 4, 4, 0)", version_info)
+        self.assertIn("StringStruct(u'FileVersion', u'3.4.4')", version_info)
+        self.assertIn("StringStruct(u'ProductVersion', u'3.4.4')", version_info)
 
     def test_movable_cards_get_a_dedicated_drag_handle(self) -> None:
         self.assertIn("data-card-drag-handle", self.assistant_html)

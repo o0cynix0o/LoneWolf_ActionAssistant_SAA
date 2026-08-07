@@ -1432,7 +1432,20 @@
           "Section": 247
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "loot": [
+        {
+          "id": "79-medal",
+          "label": "Keep Medal",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Medal"
+            }
+          ]
+        }
+      ]
     },
     "80": {
       "auditStatus": "source-link-baseline",
@@ -2676,7 +2689,64 @@
           "Section": 75
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "loot": [
+        {
+          "id": "145-bullwhip",
+          "label": "Keep Bullwhip",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Bullwhip"
+            }
+          ]
+        },
+        {
+          "id": "145-gold",
+          "label": "Keep 9 Gold Crowns",
+          "actions": [
+            {
+              "type": "stat",
+              "stat": "gold",
+              "delta": 9
+            }
+          ]
+        },
+        {
+          "id": "145-torch",
+          "label": "Keep Torch",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Torch"
+            }
+          ]
+        },
+        {
+          "id": "145-tinder-box",
+          "label": "Keep Tinder Box",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Tinder Box"
+            }
+          ]
+        },
+        {
+          "id": "145-water",
+          "label": "Keep Bottle of Water",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Bottle of Water"
+            }
+          ]
+        }
+      ]
     },
     "146": {
       "auditStatus": "source-link-baseline",
@@ -3900,7 +3970,20 @@
           "Section": 144
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "217-gorodon-horn",
+          "label": "Keep Gorodon Horn",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Gorodon Horn"
+            }
+          ]
+        }
+      ]
     },
     "218": {
       "auditStatus": "source-link-baseline",
@@ -4963,7 +5046,85 @@
           "Section": 155
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "277-broadsword",
+          "label": "Keep Broadsword",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "weapon",
+              "name": "Broadsword"
+            }
+          ]
+        },
+        {
+          "id": "277-axe",
+          "label": "Keep Axe",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "weapon",
+              "name": "Axe"
+            }
+          ]
+        },
+        {
+          "id": "277-water",
+          "label": "Keep Bottle of Water",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Bottle of Water"
+            }
+          ]
+        },
+        {
+          "id": "277-torch",
+          "label": "Keep Torch",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Torch"
+            }
+          ]
+        },
+        {
+          "id": "277-blanket",
+          "label": "Keep Blanket",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Blanket"
+            }
+          ]
+        },
+        {
+          "id": "277-meals",
+          "label": "Keep food for 3 Meals",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            },
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Meal"
+            }
+          ]
+        }
+      ]
     },
     "278": {
       "auditStatus": "source-link-baseline",

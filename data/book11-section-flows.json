@@ -133,7 +133,20 @@
           "Section": 251
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "7-ironheart-broadsword",
+          "label": "Keep Ironheart Broadsword",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Ironheart Broadsword"
+            }
+          ]
+        }
+      ]
     },
     "8": {
       "auditStatus": "source-link-baseline",
@@ -319,7 +332,20 @@
           "Section": 117
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "18-ookor-charm",
+          "label": "Keep Ookor Charm",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Ookor Charm"
+            }
+          ]
+        }
+      ]
     },
     "19": {
       "auditStatus": "source-link-baseline",
@@ -664,7 +690,20 @@
           "Section": 247
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "36-khetu-spores",
+          "label": "Collect Khetu Spores",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Khetu Spores"
+            }
+          ]
+        }
+      ]
     },
     "37": {
       "auditStatus": "source-link-baseline",
@@ -1359,7 +1398,20 @@
           "Section": 117
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "74-haina",
+          "label": "Keep Haina",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Haina"
+            }
+          ]
+        }
+      ]
     },
     "75": {
       "auditStatus": "source-link-baseline",
@@ -2186,7 +2238,20 @@
           "Section": 185
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "121-khetu-spores",
+          "label": "Collect Khetu Spores",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Khetu Spores"
+            }
+          ]
+        }
+      ]
     },
     "122": {
       "auditStatus": "source-link-baseline",
@@ -2611,7 +2676,20 @@
           "Section": 82
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "146-baylons-bough-fungi",
+          "label": "Keep Baylon's Bough Fungi",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Baylon's Bough Fungi"
+            }
+          ]
+        }
+      ]
     },
     "147": {
       "auditStatus": "source-link-baseline",
@@ -3114,7 +3192,20 @@
           "Section": 334
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "177-silver-rod",
+          "label": "Keep Silver Rod",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Silver Rod"
+            }
+          ]
+        }
+      ]
     },
     "178": {
       "auditStatus": "source-link-baseline",
@@ -4128,7 +4219,20 @@
           "Section": 139
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "loot": [
+        {
+          "id": "231-yoacor-dagger",
+          "label": "Keep Yoacor Dagger (counts as a Sword)",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "weapon",
+              "name": "Yoacor Dagger (Sword)"
+            }
+          ]
+        }
+      ]
     },
     "232": {
       "auditStatus": "source-link-baseline",
@@ -4154,7 +4258,20 @@
           "Section": 238
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "233-map",
+          "label": "Keep Map to Tolakos",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Map to Tolakos"
+            }
+          ]
+        }
+      ]
     },
     "234": {
       "auditStatus": "source-link-baseline",
@@ -4686,7 +4803,20 @@
           "Section": 323
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "261-silver-flask",
+          "label": "Keep Silver Flask",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Silver Flask"
+            }
+          ]
+        }
+      ]
     },
     "262": {
       "auditStatus": "source-link-baseline",
@@ -4992,7 +5122,20 @@
           "Section": 247
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "loot": [
+        {
+          "id": "277-khetu-spores",
+          "label": "Collect Khetu Spores",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "backpack",
+              "name": "Khetu Spores"
+            }
+          ]
+        }
+      ]
     },
     "278": {
       "auditStatus": "source-link-baseline",

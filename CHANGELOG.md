@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.4.4 - Internal Testing
+
+- Added 34 source-verified optional item pickups, a prompted Book 9 Weapon loss, and 21 mandatory item gains or losses across Books 9-12.
+- Added direct inventory handling for explicit awards, consumed or lost named items, fixed-position Backpack losses, and the Book 12 Crystal Explosive objective.
+- Kept special-item combat powers, position-dependent losses, and prior-route-dependent inventory changes reader-directed until their dependencies are modeled.
+
 ## 3.4.3 - Internal Testing
 
 - Added 94 source-verified Book 9-12 Random Number Table rules, covering roll routes, rank and discipline modifiers, and clear ENDURANCE effects.
