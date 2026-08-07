@@ -59,6 +59,862 @@ class BookImportTests(unittest.TestCase):
             self.assertTrue((Path(target_temp) / "01fftd" / "sect1.htm").is_file())
 
 
+class SupportedBookDataBaselineTests(unittest.TestCase):
+    """Protect the complete supported-book baseline and its automation data."""
+
+    def test_supported_books_have_loaded_automation_and_flow_data(self) -> None:
+        expected_books = {1, 2, 3, 4, 5, 6, 7, 8}
+        self.assertEqual(set(lonewolf_redux.BOOKS), expected_books)
+
+        root = Path(lonewolf_redux.__file__).resolve().parent
+        for book_number in expected_books:
+            self.assertTrue((root / "data" / f"book{book_number}-simple-automations.json").is_file())
+            self.assertTrue((root / "data" / f"book{book_number}-section-flows.json").is_file())
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=root / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+
+        self.assertTrue(expected_books.issubset({int(key) for key in assistant.section_automation}))
+        self.assertTrue(expected_books.issubset({int(key) for key in assistant.section_flows}))
+
+    def test_magnakai_catalog_entries_remain_available_for_play_and_readers(self) -> None:
+        self.assertEqual(
+            [lonewolf_redux.book_metadata(number)["Folder"] for number in (6, 7, 8)],
+            ["06tkot", "07cd", "08tjoh"],
+        )
+
+
+class LegacySaveCompatibilityTests(unittest.TestCase):
+    def test_magnakai_save_keeps_book_identity_and_v1_fields(self) -> None:
+        legacy = {
+            "Version": "0.5.0",
+            "RuleSet": "Magnakai",
+            "CurrentSection": 266,
+            "Character": {
+                "Name": "Legacy Lone Wolf",
+                "BookNumber": 7,
+                "Disciplines": ["Healing", "Weaponskill"],
+                "MagnakaiDisciplines": ["Curing", "Weaponmastery"],
+                "MagnakaiRank": "Aspirant",
+                "WeaponmasteryWeapons": ["Sword"],
+                "LoreCirclesCompleted": ["Circle of Fire"],
+                "ImprovedDisciplines": ["Curing"],
+                "LegacyKaiComplete": True,
+            },
+            "Inventory": {
+                "Weapons": ["Sword"],
+                "BackpackItems": ["Meal"],
+                "SpecialItems": ["Book of the Magnakai"],
+                "GoldCrowns": 12,
+                "QuiverArrows": 8,
+                "PocketSpecialItems": ["Silver Key"],
+            },
+            "CurrentBookStats": {"BookNumber": 7},
+            "SectionCheckpoints": [{"Key": "7:266", "Stage": "ready"}],
+            "DeathHistory": [{"Type": "combat", "Section": 265}],
+            "DeathState": {"Active": True, "Type": "combat"},
+            "Conditions": {"Poisoned": True},
+            "Storage": {"Vault": ["Legacy item"]},
+        }
+
+        result = lonewolf_redux.normalize_state(legacy)
+
+        self.assertEqual(lonewolf_redux.book_title(7), "Castle of Death")
+        self.assertEqual(result["Character"]["BookNumber"], 7)
+        self.assertEqual(result["CurrentBookStats"]["BookTitle"], "Castle of Death")
+        self.assertEqual(result["Character"]["KaiDisciplines"], ["Healing", "Weaponskill"])
+        self.assertEqual(result["Character"]["MagnakaiDisciplines"], ["Curing", "Weaponmastery"])
+        self.assertEqual(result["Character"]["WeaponmasteryWeapons"], ["Sword"])
+        self.assertEqual(result["Inventory"]["QuiverArrows"], 8)
+        self.assertEqual(result["Inventory"]["PocketSpecialItems"], ["Silver Key"])
+        self.assertEqual(result["Automation"]["SectionCheckpoints"], legacy["SectionCheckpoints"])
+        self.assertEqual(result["Automation"]["DeathHistory"], legacy["DeathHistory"])
+        self.assertTrue(result["Automation"]["DeathState"]["Active"])
+        self.assertEqual(result["Conditions"], legacy["Conditions"])
+        self.assertEqual(result["Storage"], legacy["Storage"])
+
+    def test_imported_magnakai_weaponmastery_is_available_in_combat(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state(
+                {
+                    "Character": {
+                        "BookNumber": 6,
+                        "MagnakaiDisciplines": ["Weaponmastery"],
+                        "WeaponmasteryWeapons": ["Sword"],
+                    },
+                    "Inventory": {"Weapons": ["Sword"]},
+                }
+            )
+            assistant.combat["ActiveWeapon"] = "Sword"
+
+            modifier, notes = assistant.combat_weapon_modifier_and_notes()
+
+        self.assertEqual(modifier, 3)
+        self.assertIn("Weaponmastery (Sword): +3 CS", notes)
+
+    def test_book6_setup_carries_campaign_state_and_applies_v1_start_rules(self) -> None:
+        source = lonewolf_redux.default_state()
+        source["Character"].update({"BookNumber": 5, "KaiDisciplines": ["Healing"]})
+        source["Inventory"].update(
+            {
+                "Weapons": ["Sword"],
+                "BackpackItems": ["Meal", "Potion"],
+                "SpecialItems": ["Book of the Magnakai"],
+                "GoldCrowns": 35,
+            }
+        )
+
+        result = lonewolf_redux.prepare_book6_state(
+            source,
+            magnakai_disciplines=["Weaponmastery", "Curing", "Nexus"],
+            weaponmastery_weapons=["Sword", "Bow", "Axe"],
+            gold_roll=8,
+            equipment_choices=["quiver", "rations", "herb_pouch"],
+            de_curing_option=3,
+            de_weaponskill_option=1,
+        )
+
+        self.assertEqual(result["RuleSet"], "Magnakai")
+        self.assertEqual(result["Character"]["BookNumber"], 6)
+        self.assertEqual(result["Character"]["MagnakaiRank"], 3)
+        self.assertEqual(result["Character"]["MagnakaiDisciplines"], ["Weaponmastery", "Curing", "Nexus"])
+        self.assertEqual(result["Inventory"]["BackpackItems"], ["Special Rations"] * 5)
+        self.assertEqual(result["Inventory"]["QuiverArrows"], 6)
+        self.assertTrue(result["Inventory"]["HasHerbPouch"])
+        self.assertIn("Map of the Stornlands", result["Inventory"]["SpecialItems"])
+        self.assertEqual(result["Inventory"]["GoldCrowns"], 50)
+        self.assertEqual(result["Conditions"]["BookSixDECuringOption"], 3)
+
+    def test_completed_book5_can_transition_to_book6_in_the_engine(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            assistant.state["Character"]["BookNumber"] = 5
+            assistant.state["Automation"]["Ending"] = {"BookNumber": 5, "Type": "success"}
+            assistant.state["CurrentBookStats"] = {"BookNumber": 5, "BookTitle": "Shadow on the Sand"}
+
+            assistant.continue_completed_book(
+                book6_magnakai_disciplines=["Curing", "Nexus", "Divination"],
+                book6_gold_roll=0,
+                book6_equipment_choices=["rope"],
+            )
+
+        self.assertEqual(assistant.character["BookNumber"], 6)
+        self.assertEqual(assistant.state["CurrentSection"], 1)
+        self.assertEqual(assistant.state["Automation"]["Ending"], None)
+
+    def test_book5_completion_advertises_the_magnakai_continuation(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            assistant.state["Character"]["BookNumber"] = 5
+            assistant.state["Automation"]["Ending"] = {"BookNumber": 5, "Type": "success"}
+            payload = assistant.book_completion_payload()
+        self.assertEqual(payload["NextBookNumber"], 6)
+        self.assertEqual(payload["NextBookTitle"], "The Kingdoms of Terror")
+        self.assertIn("Curing", payload["MagnakaiDisciplineChoices"])
+
+    def test_book6_automation_uses_magnakai_curing_and_huntmastery(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state(
+                {
+                    "Character": {
+                        "BookNumber": 6,
+                        "EnduranceCurrent": 15,
+                        "EnduranceMax": 20,
+                        "MagnakaiDisciplines": ["Curing", "Huntmastery"],
+                    },
+                    "CurrentSection": 146,
+                }
+            )
+
+            self.assertIn("Curing", assistant.current_healing_payload()["Summary"])
+            messages = assistant.apply_section_automation(force=True, visit_changed=True)
+
+        self.assertTrue(any("Huntmastery: no Meal needed" in message for message in messages))
+
+    def test_book6_rnt_modifier_and_route_match_v1(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 6, "MagnakaiDisciplines": ["Divination"]}, "CurrentSection": 317})
+            result = assistant.roll_current_section(raw_roll=9)
+
+        self.assertEqual(result["Total"], 4)
+        self.assertEqual(result["Route"], 85)
+
+    def test_book6_archery_tournament_sums_three_picks_then_applies_bow_bonus_once(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state(
+                {"Character": {"BookNumber": 6, "MagnakaiDisciplines": ["Weaponmastery"], "WeaponmasteryWeapons": ["Bow"]}, "CurrentSection": 340}
+            )
+            first = assistant.roll_current_section(raw_roll=1)
+            second = assistant.roll_current_section(raw_roll=2)
+            final = assistant.roll_current_section(raw_roll=3)
+
+        self.assertFalse(first["Complete"])
+        self.assertFalse(second["Complete"])
+        self.assertTrue(final["Complete"])
+        self.assertEqual(final["Subtotal"], 6)
+        self.assertEqual(final["Total"], 9)
+        self.assertEqual(final["Modifiers"], [{"Label": "Weaponmastery with Bow", "Value": 3, "Applies": True}])
+
+    def test_book6_special_rnt_effects_apply_once_with_v1_zero_as_ten(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 6, "EnduranceCurrent": 20, "EnduranceMax": 20}, "CurrentSection": 56})
+            first = assistant.roll_current_section(raw_roll=0)
+            second = assistant.roll_current_section(raw_roll=0)
+
+        self.assertEqual(first["Total"], 10)
+        self.assertEqual(assistant.character["EnduranceCurrent"], 10)
+        self.assertIn("already applied", second["ActionMessages"][0])
+
+    def test_book6_loot_table_applies_selected_items_once(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 6}, "CurrentSection": 145})
+            assistant.apply_flow_loot("gold")
+            assistant.apply_flow_loot("ruby-ring")
+            assistant.apply_flow_loot("gold")
+
+        self.assertEqual(assistant.inventory["GoldCrowns"], 12)
+        self.assertIn("Ruby Ring", assistant.inventory["SpecialItems"])
+
+    def test_book6_apothecary_and_ticket_choices_charge_source_prices(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state(
+                {"Character": {"BookNumber": 6}, "Inventory": {"GoldCrowns": 15}, "CurrentSection": 2}
+            )
+            self.assertIn("laumspur", {option["id"] for option in assistant.flow_loot_options()})
+            assistant.apply_flow_loot("laumspur")
+            assistant.set_section(10)
+            assistant.apply_flow_loot("ticket-luyen")
+
+        self.assertEqual(assistant.inventory["GoldCrowns"], 0)
+        self.assertIn("Potion of Laumspur", assistant.inventory["BackpackItems"])
+        self.assertIn("Riverboat Ticket to Luyen", assistant.inventory["PocketSpecialItems"])
+
+    def test_book6_purchase_choices_are_hidden_when_gold_is_insufficient(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state(
+                {"Character": {"BookNumber": 6}, "Inventory": {"GoldCrowns": 1}, "CurrentSection": 2}
+            )
+
+        self.assertEqual(assistant.flow_loot_options(), [])
+
+    def test_book6_shop_purchase_rolls_back_when_weapon_slots_are_full(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state(
+                {"Character": {"BookNumber": 6}, "Inventory": {"GoldCrowns": 10, "Weapons": ["Sword", "Dagger"]}, "CurrentSection": 98}
+            )
+            assistant.apply_flow_loot("buy-broadsword")
+
+        self.assertEqual(assistant.inventory["GoldCrowns"], 10)
+        self.assertEqual(assistant.inventory["Weapons"], ["Sword", "Dagger"])
+
+    def test_book6_mercenary_sale_uses_live_inventory_and_source_price(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state(
+                {"Character": {"BookNumber": 6}, "Inventory": {"GoldCrowns": 4, "Weapons": ["Sword", "Bow"]}, "CurrentSection": 76}
+            )
+            sales = assistant.current_section_flow_payload()["Shop"]["Sales"]
+            assistant.apply_shop_sale("Weapons:1")
+
+        self.assertEqual([(sale["Label"], sale["Price"]) for sale in sales], [("Sword [Weapon]", 3), ("Bow [Weapon]", 5)])
+        self.assertEqual(assistant.inventory["Weapons"], ["Bow"])
+        self.assertEqual(assistant.inventory["GoldCrowns"], 7)
+
+    def test_book6_weaponsmith_and_cartographer_sales_match_source_prices(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 6}, "Inventory": {"GoldCrowns": 0, "QuiverArrows": 3}, "CurrentSection": 98})
+            assistant.apply_shop_sale("arrows")
+            assistant.set_section(275)
+            assistant.inventory["BackpackItems"] = ["Map of Tekaro"]
+            sale = assistant.current_section_flow_payload()["Shop"]["Sales"][0]
+            assistant.apply_shop_sale(sale["Id"])
+
+        self.assertEqual(assistant.inventory["QuiverArrows"], 0)
+        self.assertEqual(assistant.inventory["BackpackItems"], [])
+        self.assertEqual(assistant.inventory["GoldCrowns"], 4)
+
+    def test_book6_final_section_records_campaign_completion(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 6}, "CurrentSection": 350})
+            assistant.apply_section_automation(force=True, visit_changed=True)
+
+        self.assertIn(6, assistant.character["CompletedBooks"])
+        self.assertEqual(assistant.automation["Ending"]["Type"], "success")
+
+    def test_book7_setup_preserves_campaign_and_adds_v1_start_state(self) -> None:
+        source = lonewolf_redux.default_state()
+        source["Character"].update({"BookNumber": 6, "MagnakaiDisciplines": ["Curing", "Nexus", "Weaponmastery"], "WeaponmasteryWeapons": ["Sword", "Bow", "Axe"]})
+        source["Inventory"].update({"SpecialItems": ["Cess"], "BackpackItems": ["Meal"], "GoldCrowns": 20})
+        result = lonewolf_redux.prepare_book7_state(source, magnakai_discipline="Divination", weaponmastery_weapon="Mace", gold_roll=5, equipment_choices=["fireseeds", "quiver"])
+        self.assertEqual(result["Character"]["BookNumber"], 7)
+        self.assertEqual(result["Character"]["MagnakaiRank"], 4)
+        self.assertIn("Power-key", result["Inventory"]["PocketSpecialItems"])
+        self.assertEqual(result["Inventory"]["QuiverArrows"], 6)
+        self.assertEqual(result["Inventory"]["GoldCrowns"], 35)
+
+    def test_book7_terminal_source_section_registers_death(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 7}, "CurrentSection": 349})
+            assistant.apply_section_automation(force=True, visit_changed=True)
+        self.assertTrue(assistant.death_active())
+
+    def test_book7_oxygen_rnt_applies_the_v1_base_modifier_once(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 7, "EnduranceCurrent": 20, "EnduranceMax": 20}, "CurrentSection": 26})
+            result = assistant.roll_current_section(raw_roll=4)
+        self.assertEqual(result["Total"], 7)
+        self.assertEqual(assistant.character["EnduranceCurrent"], 13)
+
+    def test_book8_setup_adds_pass_and_fifth_magnakai_rank(self) -> None:
+        source = lonewolf_redux.default_state()
+        source["Character"].update({"BookNumber": 7, "MagnakaiDisciplines": ["Curing", "Nexus", "Divination", "Weaponmastery"], "WeaponmasteryWeapons": ["Sword", "Bow", "Axe", "Mace"]})
+        result = lonewolf_redux.prepare_book8_state(source, magnakai_discipline="Psi-screen", weaponmastery_weapon="Dagger", gold_roll=0, equipment_choices=["rope"])
+        self.assertEqual(result["Character"]["BookNumber"], 8)
+        self.assertEqual(result["Character"]["MagnakaiRank"], 5)
+        self.assertIn("Pass", result["Inventory"]["PocketSpecialItems"])
+
+    def test_standalone_book6_matches_the_v1_magnakai_starting_rules(self) -> None:
+        result = lonewolf_redux.create_magnakai_character_state(
+            book_number=6,
+            name="Standalone Six",
+            magnakai_disciplines=["Curing", "Weaponmastery", "Nexus"],
+            weaponmastery_weapons=["Sword", "Bow", "Axe"],
+            combat_skill_roll=4,
+            endurance_roll=7,
+            gold_roll=3,
+            equipment_choices=["sword", "quiver", "rations", "padded", "axe", "tinderbox", "rope"],
+            de_curing_option=3,
+            de_weaponskill_option=1,
+        )
+        self.assertEqual(result["RuleSet"], "Magnakai")
+        self.assertEqual(result["Character"]["MagnakaiRank"], 3)
+        self.assertEqual(result["Character"]["CombatSkillBase"], 14)
+        self.assertEqual(result["Character"]["EnduranceMax"], 27)
+        self.assertEqual(result["Inventory"]["GoldCrowns"], 13)
+        self.assertIn("Map of the Stornlands", result["Inventory"]["SpecialItems"])
+        self.assertEqual(result["Inventory"]["QuiverArrows"], 6)
+        self.assertFalse(result["Inventory"]["HasHerbPouch"])
+
+    def test_standalone_book7_and_8_add_their_fixed_pocket_items(self) -> None:
+        book7 = lonewolf_redux.create_magnakai_character_state(
+            book_number=7,
+            magnakai_disciplines=["Curing", "Nexus", "Divination", "Weaponmastery"],
+            weaponmastery_weapons=["Sword", "Bow", "Axe", "Mace"],
+            gold_roll=0,
+            equipment_choices=["quiver", "fireseeds", "rope", "laumspur", "lantern"],
+        )
+        book8 = lonewolf_redux.create_magnakai_character_state(
+            book_number=8,
+            magnakai_disciplines=["Curing", "Nexus", "Divination", "Weaponmastery", "Psi-screen"],
+            weaponmastery_weapons=["Sword", "Bow", "Axe", "Mace", "Dagger"],
+            gold_roll=9,
+            equipment_choices=["rope", "laumspur", "lantern", "meals", "fireseeds"],
+        )
+        self.assertEqual(book7["Character"]["MagnakaiRank"], 4)
+        self.assertIn("Power-key", book7["Inventory"]["PocketSpecialItems"])
+        self.assertEqual(book7["Inventory"]["QuiverArrows"], 6)
+        self.assertEqual(book8["Character"]["MagnakaiRank"], 5)
+        self.assertIn("Pass", book8["Inventory"]["PocketSpecialItems"])
+        self.assertEqual(book8["Inventory"]["GoldCrowns"], 19)
+
+    def test_magnakai_lore_circles_apply_v1_stat_bonuses_and_route_aliases(self) -> None:
+        state = lonewolf_redux.create_magnakai_character_state(
+            book_number=6,
+            magnakai_disciplines=["Weaponmastery", "Huntmastery", "Curing"],
+            weaponmastery_weapons=["Sword", "Bow", "Axe"],
+            combat_skill_roll=0,
+            endurance_roll=0,
+            equipment_choices=["sword", "laumspur", "quiver", "rations", "padded", "tinderbox", "rope"],
+        )
+        self.assertEqual(state["Character"]["LoreCirclesCompleted"], ["Circle of Fire"])
+        self.assertEqual(state["Character"]["CombatSkillBase"], 11)
+        self.assertEqual(state["Character"]["EnduranceMax"], 22)
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            assistant.state = state
+            self.assertTrue(assistant.evaluate_flow_condition({"type": "lore_circle", "name": "Fire"}))
+
+    def test_book8_cabin_roll_uses_v1_lore_circle_precedence(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state(
+                {
+                    "Character": {
+                        "BookNumber": 8,
+                        "LoreCirclesCompleted": ["Circle of Fire", "Circle of Light"],
+                    },
+                    "CurrentSection": 17,
+                }
+            )
+            result = assistant.roll_current_section(raw_roll=5)
+
+        self.assertEqual(result["Total"], 8)
+        self.assertEqual(result["Route"], 77)
+
+    def test_v1_lore_circle_bonus_is_not_applied_twice_during_a_handoff(self) -> None:
+        source = lonewolf_redux.default_state()
+        source["Character"].update(
+            {
+                "BookNumber": 6,
+                "CombatSkillBase": 21,
+                "CombatSkillCurrent": 21,
+                "EnduranceMax": 30,
+                "EnduranceCurrent": 30,
+                "MagnakaiDisciplines": ["Weaponmastery", "Huntmastery", "Curing"],
+                "WeaponmasteryWeapons": ["Sword", "Bow", "Axe"],
+                "LoreCirclesCompleted": ["Circle of Fire"],
+            }
+        )
+        source["EquipmentBonuses"] = {"LoreCircleCombatSkill": 1, "LoreCircleEndurance": 2}
+        result = lonewolf_redux.prepare_book7_state(
+            source,
+            magnakai_discipline="Divination",
+            weaponmastery_weapon="Dagger",
+            gold_roll=0,
+            equipment_choices=[],
+        )
+        self.assertEqual(result["Character"]["CombatSkillBase"], 21)
+        self.assertEqual(result["Character"]["EnduranceMax"], 30)
+        self.assertEqual(result["Character"]["LoreCircleBonuses"], {"CombatSkill": 1, "Endurance": 2})
+
+    def test_standalone_magnakai_creation_rejects_invalid_rank_setup(self) -> None:
+        with self.assertRaisesRegex(ValueError, "exactly 4 Magnakai"):
+            lonewolf_redux.create_magnakai_character_state(
+                book_number=7,
+                magnakai_disciplines=["Curing", "Nexus", "Divination"],
+            )
+
+    def test_book8_terminal_source_section_registers_death(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 8}, "CurrentSection": 281})
+            assistant.apply_section_automation(force=True, visit_changed=True)
+        self.assertTrue(assistant.death_active())
+
+    def test_book8_giak_scroll_is_added_to_pocket_items(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 8}, "CurrentSection": 312})
+            assistant.apply_section_automation(force=True, visit_changed=True)
+        self.assertIn("Giak Scroll", assistant.inventory["PocketSpecialItems"])
+        self.assertNotIn("Giak Scroll", assistant.inventory["SpecialItems"])
+
+    def test_magnakai_flow_conditions_cover_rank_lore_and_weaponmastery(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 8, "MagnakaiDisciplines": ["Weaponmastery"], "MagnakaiRank": 5, "WeaponmasteryWeapons": ["Bow"], "LoreCirclesCompleted": ["Fire"]}})
+        self.assertTrue(assistant.evaluate_flow_condition({"type": "magnakai_rank_gte", "value": 4}))
+        self.assertTrue(assistant.evaluate_flow_condition({"type": "lore_circle", "name": "Fire"}))
+        self.assertTrue(assistant.evaluate_flow_condition({"type": "weaponmastery_weapon", "name": "Bow"}))
+
+    def test_endurance_max_automation_clamps_current_endurance(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"EnduranceCurrent": 24, "EnduranceMax": 24}})
+        assistant.apply_automation_stat({"stat": "end_max", "delta": -4})
+        self.assertEqual(assistant.character["EnduranceMax"], 20)
+        self.assertEqual(assistant.character["EnduranceCurrent"], 20)
+
+    def test_book8_rnt_uses_magnakai_rank_and_routes(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 8, "MagnakaiRank": 4}, "CurrentSection": 284})
+            result = assistant.roll_current_section(raw_roll=3)
+        self.assertEqual(result["Total"], 6)
+        self.assertEqual(result["Route"], 119)
+
+    def test_book8_source_entry_effect_restores_endurance(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 8, "EnduranceCurrent": 8, "EnduranceMax": 24}, "CurrentSection": 100})
+            assistant.apply_section_automation(force=True, visit_changed=True)
+        self.assertEqual(assistant.character["EnduranceCurrent"], 24)
+
+    def test_book8_route_payment_matches_source_cost(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 8}, "Inventory": {"GoldCrowns": 25}, "CurrentSection": 244})
+            assistant.follow_route(20)
+        self.assertEqual(assistant.inventory["GoldCrowns"], 5)
+        self.assertEqual(assistant.state["CurrentSection"], 20)
+
+    def test_book8_levitron_escape_route_persists_source_flag(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 8}, "CurrentSection": 267})
+            assistant.follow_route(350)
+        self.assertTrue(assistant.automation_flags["book8LevitronEscapeRoute"])
+
+    def test_book8_grey_ring_exchange_uses_the_source_eligible_items(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 8}, "Inventory": {"SpecialItems": ["Lodestone", "Shield"]}, "CurrentSection": 242})
+            candidates = assistant.current_loss_choices_payload()[0]["Candidates"]
+            assistant.apply_section_loss("grey-ring-exchange", "special", "Lodestone")
+
+        self.assertEqual([candidate["Item"] for candidate in candidates], ["Lodestone"])
+        self.assertNotIn("Lodestone", assistant.inventory["SpecialItems"])
+        self.assertIn("Grey Crystal Ring", assistant.inventory["SpecialItems"])
+
+    def test_book8_riddle_penalty_removes_the_fourth_special_item(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 8}, "Inventory": {"SpecialItems": ["One", "Two", "Three", "Four"]}, "CurrentSection": 269})
+            assistant.apply_section_automation(force=True, visit_changed=True)
+
+        self.assertEqual(assistant.inventory["SpecialItems"], ["One", "Two", "Three"])
+
+    def test_book7_tainted_water_clears_food_then_offers_two_item_losses(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 7}, "Inventory": {"BackpackItems": ["Meal", "Rope", "Special Rations", "Lantern", "Knife"]}, "CurrentSection": 158})
+            assistant.apply_section_automation(force=True, visit_changed=True)
+            assistant.apply_section_loss("tainted-water-loss-one", "backpack", "Rope")
+            assistant.apply_section_loss("tainted-water-loss-two", "backpack", "Lantern")
+
+        self.assertEqual(assistant.inventory["BackpackItems"], ["Knife"])
+
+    def test_book7_all_gear_confiscation_stashes_and_restores_pocket_items(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 7}, "Inventory": {"Weapons": ["Sword"], "BackpackItems": ["Rope"], "SpecialItems": ["Shield"], "PocketSpecialItems": ["Power-key"], "HerbPouchItems": ["Aloe"], "GoldCrowns": 11}, "CurrentSection": 335})
+            assistant.apply_section_automation(force=True, visit_changed=True)
+            assistant.apply_automation_action({"type": "gear", "available": True})
+
+        self.assertEqual(assistant.inventory["Weapons"], ["Sword"])
+        self.assertEqual(assistant.inventory["BackpackItems"], ["Rope"])
+        self.assertEqual(assistant.inventory["SpecialItems"], ["Shield"])
+        self.assertEqual(assistant.inventory["PocketSpecialItems"], ["Power-key"])
+        self.assertEqual(assistant.inventory["HerbPouchItems"], ["Aloe"])
+        self.assertEqual(assistant.inventory["GoldCrowns"], 11)
+
+    def test_book7_story_route_persists_source_flags(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 7}, "CurrentSection": 138})
+            assistant.follow_route(118)
+        self.assertTrue(assistant.automation_flags["book7ZahdaBlueBeamPursuit"])
+        self.assertTrue(assistant.automation_flags["book7BlueBeamRoute"])
+
+    def test_book7_source_entry_effect_loses_quiver_arrows(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 7}, "Inventory": {"QuiverArrows": 6}, "CurrentSection": 7})
+            assistant.apply_section_automation(force=True, visit_changed=True)
+        self.assertEqual(assistant.inventory["QuiverArrows"], 0)
+
+    def test_book7_curing_body_loot_filters_blue_pills(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 7, "MagnakaiDisciplines": ["Curing"]}, "CurrentSection": 227})
+            options = {item["id"] for item in assistant.flow_loot_options()}
+        self.assertIn("sabito", options)
+        self.assertNotIn("blue-pills", options)
+
+    def test_book6_warhammer_roll_uses_source_item_and_discipline_modifiers(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 6, "MagnakaiDisciplines": ["Weaponmastery", "Huntmastery"]}, "Inventory": {"BackpackItems": ["Rope", "Rope"]}, "CurrentSection": 101})
+            result = assistant.roll_current_section(raw_roll=0)
+        self.assertEqual(result["Total"], 5)
+
+    def test_book6_rats_remove_all_meals_and_special_rations(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 6}, "Inventory": {"BackpackItems": ["Meal", "Rope", "Special Rations", "Meal"]}, "CurrentSection": 35})
+            assistant.apply_section_automation(force=True, visit_changed=True)
+        self.assertEqual(assistant.inventory["BackpackItems"], ["Rope"])
+
+    def test_book6_living_strands_offer_special_weapon_fallback(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 6}, "Inventory": {"SpecialItems": ["Sommerswerd", "Shield"]}, "CurrentSection": 4})
+            choice = assistant.current_loss_choices_payload()[0]
+        self.assertEqual([candidate["Item"] for candidate in choice["Candidates"]], ["Sommerswerd"])
+
+    def test_completed_book6_continues_through_engine_to_book7(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
+            assistant.state["Character"].update({"BookNumber": 6, "MagnakaiDisciplines": ["Curing", "Nexus", "Weaponmastery"], "WeaponmasteryWeapons": ["Sword", "Bow", "Axe"]})
+            assistant.state["Automation"]["Ending"] = {"BookNumber": 6, "Type": "success"}
+            assistant.continue_completed_book(book6_magnakai_disciplines="Divination", book6_weaponmastery_weapons="Mace", book6_gold_roll=0)
+        self.assertEqual(assistant.character["BookNumber"], 7)
+
+    def test_magnakai_combat_catalogue_loads_source_encounters(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            self.assertGreaterEqual(len(assistant.section_flows["6"]), 70)
+            self.assertGreaterEqual(len(assistant.section_flows["7"]), 78)
+            self.assertGreaterEqual(len(assistant.section_flows["8"]), 67)
+            assistant.state["Character"].update({"BookNumber": 6, "MagnakaiDisciplines": ["Animal Control"]})
+            assistant.set_section(71)
+            assistant.start_section_combat()
+
+        self.assertEqual(assistant.combat["EnemyName"], "Redbeard")
+        self.assertEqual(assistant.combat["EnemyCombatSkill"], 19)
+        self.assertEqual(assistant.combat["EnemyEnduranceMax"], 28)
+        self.assertEqual(assistant.combat["Modifier"], 2)
+        self.assertEqual(assistant.combat["VictoryRoute"], 237)
+
+    def test_magnakai_v1_entry_rule_manifest_remains_covered(self) -> None:
+        expected = {
+            6: {2, 4, 8, 10, 16, 17, 27, 35, 37, 40, 44, 48, 49, 50, 51, 54, 62, 65, 76, 85, 88, 96, 98, 106, 109, 111, 112, 113, 123, 124, 137, 139, 141, 145, 146, 153, 157, 158, 160, 164, 165, 169, 171, 172, 174, 187, 190, 191, 197, 200, 205, 207, 209, 211, 212, 214, 220, 222, 223, 232, 245, 246, 248, 252, 253, 266, 273, 275, 276, 278, 282, 293, 295, 297, 301, 304, 306, 307, 310, 313, 315, 316, 318, 322, 328, 348},
+            7: {1, 5, 7, 10, 15, 18, 31, 32, 42, 43, 44, 58, 59, 60, 73, 80, 88, 103, 104, 105, 107, 108, 112, 120, 122, 134, 148, 154, 155, 158, 170, 186, 190, 198, 199, 219, 220, 222, 227, 238, 262, 264, 265, 271, 284, 297, 301, 304, 305, 311, 313, 324, 333, 335, 340, 344},
+            8: {1, 7, 15, 16, 34, 39, 40, 59, 87, 100, 104, 105, 115, 129, 139, 146, 150, 152, 156, 159, 170, 175, 201, 202, 226, 228, 230, 242, 258, 269, 274, 294, 306, 312, 325, 337},
+        }
+        root = Path(lonewolf_redux.__file__).resolve().parent / "data"
+        for book_number, sections in expected.items():
+            simple = json.loads((root / f"book{book_number}-simple-automations.json").read_text(encoding="utf-8"))[str(book_number)]
+            flows = json.loads((root / f"book{book_number}-section-flows.json").read_text(encoding="utf-8"))[str(book_number)]
+            covered = {int(section) for section in simple} | {int(section) for section in flows}
+            self.assertTrue(sections.issubset(covered), f"Book {book_number} missing {sorted(sections - covered)}")
+
+    def test_magnakai_combat_and_rnt_catalogue_totals_remain_source_complete(self) -> None:
+        expected_combat = {6: 28, 7: 39, 8: 37}
+        expected_rnt = {6: 22, 7: 22, 8: 16}
+        root = Path(lonewolf_redux.__file__).resolve().parent / "data"
+        for book_number in expected_combat:
+            flows = json.loads((root / f"book{book_number}-section-flows.json").read_text(encoding="utf-8"))[str(book_number)]
+            combat_count = sum(len(entry.get("combat", [])) for entry in flows.values() if isinstance(entry, dict))
+            rnt_count = sum(
+                1
+                for entry in flows.values()
+                if isinstance(entry, dict) and ("roll" in entry or "stagedRoll" in entry)
+            )
+            self.assertEqual(combat_count, expected_combat[book_number])
+            self.assertEqual(rnt_count, expected_rnt[book_number])
+
+    def test_magnakai_combat_restrictions_and_conditional_damage_match_source(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state["Character"].update({"BookNumber": 6, "MagnakaiDisciplines": ["Curing"]})
+            assistant.state["Inventory"]["Weapons"] = ["Bow", "Sword"]
+            assistant.set_section(47)
+            assistant.start_section_combat()
+            self.assertEqual(assistant.combat_active_weapon(), "Sword")
+
+            assistant.state["Character"]["BookNumber"] = 7
+            assistant.set_section(76)
+            assistant.start_section_combat()
+            self.assertEqual(assistant.combat["PlayerLossMultiplier"], 3)
+            assistant.set_section(301)
+            assistant.start_section_combat()
+            self.assertEqual(assistant.combat["PlayerLossMultiplier"], 1)
+            assistant.state["Character"]["MagnakaiDisciplines"] = []
+            assistant.start_section_combat()
+
+        self.assertEqual(assistant.combat["PlayerLossMultiplier"], 2)
+
+    def test_magnakai_combat_threshold_route_stops_before_enemy_death(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state["Character"]["BookNumber"] = 6
+            assistant.set_section(78)
+            assistant.start_section_combat()
+            assistant.combat["EnemyEnduranceCurrent"] = 11
+            assistant.combat["Log"] = [{"Round": 1, "PlayerLoss": 0, "EnemyLoss": 19}]
+            self.assertTrue(assistant.route_after_combat_round())
+
+        self.assertFalse(assistant.combat["Active"])
+        self.assertEqual(assistant.state["CurrentSection"], 180)
+
+    def test_magnakai_temporary_unarmed_and_de_weaponskill_rules(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state["Character"].update({"BookNumber": 6, "WeaponskillWeapon": "Sword"})
+            assistant.state.setdefault("Conditions", {})["BookSixDEWeaponskillOption"] = 1
+            assistant.state["Inventory"]["Weapons"] = ["Sword"]
+            assistant.start_combat(["combat", "start", "Test", "10", "10"])
+            modifier, notes = assistant.combat_weapon_modifier_and_notes()
+            self.assertEqual(modifier, 2)
+            self.assertIn("Weaponskill (Sword): +2 CS", notes)
+
+            assistant.state["Character"]["BookNumber"] = 7
+            assistant.set_section(219)
+            assistant.start_section_combat()
+            self.assertEqual(assistant.combat_active_weapon(), "")
+            assistant.combat["Log"] = [{"Round": 1}, {"Round": 2}]
+
+        self.assertEqual(assistant.combat_active_weapon(), "Sword")
+
+    def test_book6_tournament_uses_target_points_without_harming_endurance(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state["Character"].update({"BookNumber": 6, "EnduranceCurrent": 17, "EnduranceMax": 20})
+            assistant.state["Automation"]["Flags"]["book6KalteBowPenalty"] = True
+            assistant.set_section(26)
+            assistant.start_section_combat()
+            self.assertEqual(assistant.combat_active_weapon(), "Bow")
+            self.assertTrue(assistant.combat["UsePlayerTargetEndurance"])
+            self.assertEqual(assistant.combat["PlayerTargetEnduranceCurrent"], 50)
+            self.assertEqual(assistant.combat["Modifier"], -4)
+
+            assistant.combat["PlayerTargetEnduranceCurrent"] = 0
+            assistant.combat["Log"] = [{"Round": 1, "PlayerLoss": 50, "EnemyLoss": 0}]
+            self.assertTrue(assistant.route_after_combat_round())
+
+        self.assertEqual(assistant.state["CurrentSection"], 183)
+        self.assertEqual(assistant.character["EnduranceCurrent"], 17)
+
+    def test_book6_de_curing_options_control_healing_rules(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state["Character"].update({"BookNumber": 6, "MagnakaiDisciplines": ["Curing"]})
+            assistant.state["CurrentBookStats"] = {}
+            assistant.state.setdefault("Conditions", {})["BookSixDECuringOption"] = 1
+            amount, note = assistant.apply_healing_cap(16)
+            self.assertEqual(amount, 15)
+            self.assertIn("Curing cap", note)
+
+            assistant.state["Character"]["MagnakaiDisciplines"] = []
+            assistant.state["Character"]["KaiDisciplines"] = ["Healing"]
+            assistant.state["Conditions"]["BookSixDECuringOption"] = 0
+            self.assertFalse(assistant.current_healing_payload()["Available"])
+
+            assistant.state["Conditions"]["BookSixDECuringOption"] = 2
+            healing = assistant.current_healing_payload()
+            self.assertTrue(healing["Available"])
+            self.assertIn("Healing restores 1 END", healing["Summary"])
+
+
 class CampaignEntryPointTests(unittest.TestCase):
     @staticmethod
     def source_text(name: str) -> str:
@@ -71,12 +927,59 @@ class CampaignEntryPointTests(unittest.TestCase):
         self.assertIn('assistant.html?campaign=new&book=1', index_html)
         self.assertIn('campaignStartLink = book.number === 1', index_html)
 
+    def test_book_six_and_seven_are_exposed_as_playable_testing_books(self) -> None:
+        index_html = self.source_text("index.html")
+        library_html = self.source_text("library.html")
+        assistant_html = self.source_text("assistant.html")
+        self.assertIn("testingBook(6, 'The Kingdoms of Terror'", index_html)
+        self.assertIn("testingBook(7, 'Castle of Death'", index_html)
+        self.assertIn("Playable testing build", index_html)
+        self.assertIn("Open Test Reader", index_html)
+        self.assertIn('assistant.html?browse=1&amp;book=6', library_html)
+        self.assertIn('assistant.html?browse=1&amp;book=7', library_html)
+        self.assertIn('data-book="6">Book 6</button>', assistant_html)
+        self.assertIn('data-book="7">Book 7</button>', assistant_html)
+
+    def test_reader_toolbar_switches_to_the_magnakai_series(self) -> None:
+        assistant_html = self.source_text("assistant.html")
+        self.assertIn('data-reader-series="kai"', assistant_html)
+        self.assertIn('data-reader-series="magnakai"', assistant_html)
+        self.assertIn('Book 8 is not in testing yet.', assistant_html)
+        self.assertIn('Book 12 is not in testing yet.', assistant_html)
+        self.assertIn("const readerSeries = book.number >= 6 ? 'magnakai' : 'kai';", assistant_html)
+
+    def test_home_current_section_uses_live_state_and_only_resumes(self) -> None:
+        index_html = self.source_text("index.html")
+        self.assertIn("fetch('/api/state?ts=' + Date.now()", index_html)
+        self.assertIn("window.location.href = 'assistant.html?resume=1';", index_html)
+        self.assertNotIn('assistant.html?book=${book.number}&section=${section}', index_html)
+
     def test_assistant_honors_campaign_start_without_mutating_until_begin(self) -> None:
         assistant_html = self.source_text("assistant.html")
         self.assertIn("pageParams.get('campaign') === 'new'", assistant_html)
         self.assertIn('function shouldShowBook1Creation()', assistant_html)
         self.assertIn('function confirmCampaignReplacement()', assistant_html)
         self.assertIn('clearCampaignStartRequest();', assistant_html)
+
+    def test_active_game_modes_are_visible_and_editable_during_play(self) -> None:
+        assistant_html = self.source_text("assistant.html")
+        server_source = self.source_text("app_server.py")
+        self.assertIn('<div class="quick-title">Game Modes</div>', assistant_html)
+        self.assertIn('id="runConfigurationForm"', assistant_html)
+        self.assertIn("action: 'set_run_configuration'", assistant_html)
+        self.assertIn('if action == "set_run_configuration":', server_source)
+
+    def test_book6_optional_rules_explain_their_effects(self) -> None:
+        assistant_html = self.source_text("assistant.html")
+        self.assertIn("Optional Book 6 rules carried over from the original assistant.", assistant_html)
+        self.assertIn("Curing cap limits Curing and Healing to 15 END restored in Book 6.", assistant_html)
+        self.assertIn("lets you drink a potion instead of attacking in combat", assistant_html)
+        self.assertIn("gain +2 Combat Skill in Book 6", assistant_html)
+        self.assertIn("function syncBook6HerbPouchChoice", assistant_html)
+        self.assertIn("Herb Pouch requires the Herb Pouch Curing Option", assistant_html)
+        self.assertIn("function syncBook6SetupRequirements", assistant_html)
+        self.assertIn("data-book6-exchange-status", assistant_html)
+        self.assertIn("Choose ${requiredExchanges} Weapon Exchange", assistant_html)
 
     def test_campaign_entry_keeps_setup_visible_and_protects_existing_campaigns(self) -> None:
         assistant_html = self.source_text("assistant.html")
@@ -88,6 +991,217 @@ class CampaignEntryPointTests(unittest.TestCase):
         cancel_start = assistant_html.index('if (button.dataset.creationCancel !== undefined)')
         cancel_end = assistant_html.index('if (button.dataset.campaignCancel !== undefined)', cancel_start)
         self.assertNotIn('clearCampaignStartRequest', assistant_html[cancel_start:cancel_end])
+
+    def test_completion_ui_contains_magnakai_campaign_handoffs(self) -> None:
+        assistant_html = self.source_text("assistant.html")
+        self.assertIn("[2, 3, 4, 5, 6, 7, 8]", assistant_html)
+        self.assertIn("Choose exactly 3 Magnakai Disciplines", assistant_html)
+        self.assertIn("New Magnakai Discipline", assistant_html)
+        self.assertIn("Continue to Book ${escapeHtml(nextBook)}", assistant_html)
+
+    def test_cli_new_creates_a_fresh_book6_magnakai_campaign(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            responses = [
+                "", "n", "",  # Normal, no permadeath, automatic CRT
+                "6", "CLI Six",
+                "3", "3", "8",  # Curing, Invisibility, Nexus
+                "0", "0",  # Book 6 DE options
+                "1", "1", "2", "3", "4", "6", "6",
+            ]
+            with mock.patch("builtins.input", side_effect=responses), \
+                 mock.patch.object(assistant, "write_current_position"), \
+                 mock.patch.object(assistant, "show_sheet"), \
+                 redirect_stdout(io.StringIO()):
+                assistant.start_new_game()
+
+        self.assertEqual(assistant.character["Name"], "CLI Six")
+        self.assertEqual(assistant.character["BookNumber"], 6)
+        self.assertEqual(assistant.character["MagnakaiRank"], 3)
+        self.assertIn("Map of the Stornlands", assistant.inventory["SpecialItems"])
+        self.assertEqual(len(assistant.character["Book6Setup"]["EquipmentChoices"]), 7)
+
+
+class RunFeatureParityTests(unittest.TestCase):
+    def assistant(self, temp_dir: str) -> lonewolf_redux.LoneWolfReduxAssistant:
+        base = Path(temp_dir)
+        return lonewolf_redux.LoneWolfReduxAssistant(
+            save_dir=base / "saves",
+            data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+            state_data_dir=base / "state",
+            books_dir=base / "books",
+        )
+
+    def test_v1_run_metadata_migrates_without_claiming_to_validate_its_signature(self) -> None:
+        migrated = lonewolf_redux.normalize_state({
+            "Run": {
+                "Id": "v1-run",
+                "Difficulty": "Hard",
+                "Permadeath": True,
+                "IntegrityState": "Clean",
+                "Signature": "v1-signature",
+            },
+            "Settings": {"CombatMode": "ManualCRT"},
+        })
+        run = migrated["Run"]
+        self.assertEqual(run["Difficulty"], "Hard")
+        self.assertTrue(run["Permadeath"])
+        self.assertEqual(run["CombatMode"], "ManualCRT")
+        self.assertEqual(run["LegacySignature"], "v1-signature")
+        self.assertEqual(run["SignatureVersion"], lonewolf_redux.RUN_SIGNATURE_VERSION)
+        self.assertEqual(run["Signature"], "")
+
+    def test_difficulty_rules_cover_loss_healing_and_book_transition(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            assistant = self.assistant(temp_dir)
+            assistant.set_run_configuration("Story", True, "DataFile")
+            self.assertFalse(assistant.permadeath_enabled())
+            self.assertIn("Story", assistant.change_endurance(-5))
+            self.assertEqual(assistant.character["EnduranceCurrent"], 20)
+
+            assistant.set_run_configuration("Easy", False, "DataFile")
+            assistant.change_endurance(-5)
+            self.assertEqual(assistant.character["EnduranceCurrent"], 17)
+            self.assertEqual(assistant.restore_endurance_for_book_transition(), "Easy mode restored END 17->20 for the next book.")
+
+            assistant.set_run_configuration("Hard", False, "DataFile")
+            self.assertEqual(assistant.apply_healing_cap(11), (10, "Healing is capped at 10 END per book in this difficulty."))
+            self.assertEqual(assistant.apply_healing_cap(1), (0, "Healing is capped at 10 END per book in this difficulty."))
+
+    def test_in_place_game_mode_changes_preserve_the_active_run(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            assistant = self.assistant(temp_dir)
+            assistant.set_run_configuration("Normal", False, "DataFile")
+            run_id = assistant.run_state["Id"]
+            started_on = assistant.run_state["StartedOn"]
+
+            assistant.update_run_configuration("Hard", True, "ManualCRT")
+            self.assertEqual(assistant.run_state["Id"], run_id)
+            self.assertEqual(assistant.run_state["StartedOn"], started_on)
+            self.assertEqual(assistant.difficulty(), "Hard")
+            self.assertTrue(assistant.permadeath_enabled())
+            self.assertEqual(assistant.combat_mode(), "ManualCRT")
+
+            assistant.update_run_configuration("Story", True)
+            self.assertFalse(assistant.permadeath_enabled())
+
+    def test_permadeath_and_achievement_gates_are_enforced(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            assistant = self.assistant(temp_dir)
+            assistant.set_run_configuration("Hard", True, "DataFile")
+            assistant.save_section_checkpoint("ready")
+            assistant.register_death("instant", "fixture")
+            self.assertEqual(assistant.run_state["Status"], "Dead")
+            self.assertFalse(assistant.death_recovery_payload()["CanRepeat"])
+            with redirect_stdout(io.StringIO()):
+                assistant.restore_death_checkpoint("repeat")
+            self.assertTrue(assistant.death_active())
+
+            assistant.set_run_configuration("Story", False, "DataFile")
+            combat_definition = next(item for item in lonewolf_redux.LONE_WOLF_ACHIEVEMENTS if item["Id"] == "lw1_first_blood")
+            self.assertFalse(assistant.achievement_available(combat_definition)[0])
+            assistant.set_run_configuration("Hard", True, "DataFile")
+            challenge_definition = next(item for item in lonewolf_redux.LONE_WOLF_ACHIEVEMENTS if item["Id"] == "only_one_life")
+            self.assertTrue(assistant.achievement_available(challenge_definition)[0])
+
+    def test_signed_run_detects_edits_and_manual_crt_records_player_result(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            assistant = self.assistant(temp_dir)
+            assistant.set_run_configuration("Normal", False, "ManualCRT")
+            path = Path(temp_dir) / "run.json"
+            assistant.save_game(str(path), quiet=True)
+            saved = json.loads(path.read_text(encoding="utf-8"))
+            saved["Inventory"]["GoldCrowns"] = 49
+            path.write_text(json.dumps(saved), encoding="utf-8")
+            self.assertTrue(assistant.load_game(str(path), quiet=True))
+            self.assertEqual(assistant.run_state["IntegrityState"], "Tampered")
+
+            assistant.start_combat(["combat", "start", "Test", "10", "10"])
+            with redirect_stdout(io.StringIO()):
+                assistant.combat_round(["combat", "manual"], manual_losses=(3, 2))
+            round_entry = assistant.combat["Log"][-1]
+            self.assertEqual(round_entry["CRTColumn"], "Manual")
+            self.assertEqual(round_entry["EnemyLoss"], 3)
+            self.assertEqual(round_entry["PlayerLoss"], 2)
+
+    def test_sommerswerd_rules_follow_hard_and_veteran_requirements(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            assistant = self.assistant(temp_dir)
+            assistant.inventory["SpecialItems"] = ["Sommerswerd"]
+            assistant.start_combat(["combat", "start", "Test", "10", "10"])
+            assistant.set_combat_weapon("Sommerswerd", save=False)
+            assistant.set_run_configuration("Hard", False, "DataFile")
+            modifier, _ = assistant.combat_weapon_modifier_and_notes()
+            self.assertEqual(modifier, 4)
+            assistant.set_run_configuration("Veteran", False, "DataFile")
+            modifier, notes = assistant.combat_weapon_modifier_and_notes()
+            self.assertEqual(modifier, 0)
+            self.assertIn("Veteran: Sommerswerd power needs text permission", notes)
+            assistant.combat["SommerswerdAllowed"] = True
+            modifier, _ = assistant.combat_weapon_modifier_and_notes()
+            self.assertEqual(modifier, 4)
+
+    def test_next_book_opens_before_setup_and_temporary_gear_does_not_cross_the_boundary(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            assistant = self.assistant(temp_dir)
+            assistant.ensure_book_completed(1)
+            self.assertEqual(assistant.open_next_book(), 2)
+            self.assertEqual(assistant.character["BookNumber"], 1)
+            self.assertTrue(assistant.pending_book_setup_payload()["Active"])
+            self.assertEqual(assistant.pending_book_setup_payload()["NextBookNumber"], 2)
+
+            state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 5},
+                "Inventory": {"Weapons": [], "BackpackItems": [], "SpecialItems": []},
+                "Automation": {
+                    "Flags": {"weaponsAvailable": False, "backpackAvailable": False, "backpackItemsAvailable": False},
+                    "Stored": {"confiscatedEquipment": {"Weapons": ["Sword"], "BackpackItems": ["Rope"]}},
+                },
+            })
+            prepared = lonewolf_redux.prepare_book6_state(
+                state,
+                magnakai_disciplines=["Curing", "Nexus", "Weaponmastery"],
+                weaponmastery_weapons=["Sword", "Axe", "Bow"],
+                equipment_choices=["sword", "warhammer", "laumspur", "tinderbox", "kai-shield", "helmet", "torch"],
+            )
+            self.assertEqual(prepared["Automation"]["Stored"], {})
+            self.assertTrue(prepared["Automation"]["Flags"]["weaponsAvailable"])
+            self.assertTrue(prepared["Automation"]["Flags"]["backpackAvailable"])
+            self.assertNotIn("Rope", prepared["Inventory"]["BackpackItems"])
+
+            state["Inventory"]["Weapons"] = ["Sword", "Warhammer"]
+            state["Automation"]["Flags"]["weaponsAvailable"] = True
+            with self.assertRaisesRegex(ValueError, "Taking Bow needs a Weapon exchange"):
+                lonewolf_redux.prepare_book6_state(
+                    state,
+                    magnakai_disciplines=["Curing", "Nexus", "Weaponmastery"],
+                    weaponmastery_weapons=["Sword", "Axe", "Bow"],
+                    equipment_choices=["bow"],
+                )
+
+            with self.assertRaisesRegex(ValueError, "Herb Pouch requires DE Curing option 3"):
+                lonewolf_redux.prepare_book6_state(
+                    state,
+                    magnakai_disciplines=["Curing", "Nexus", "Weaponmastery"],
+                    weaponmastery_weapons=["Sword", "Axe", "Bow"],
+                    equipment_choices=["sword", "warhammer", "laumspur", "tinderbox", "kai-shield", "helmet", "herb-pouch"],
+                )
+
+    def test_inventory_order_is_saved_and_sommerswerd_is_the_first_combat_weapon(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            assistant = self.assistant(temp_dir)
+            assistant.inventory["Weapons"] = ["Axe", "Sword"]
+            assistant.inventory["SpecialItems"] = ["Shield", "Sommerswerd"]
+            with redirect_stdout(io.StringIO()):
+                self.assertTrue(assistant.reorder_inventory("weapon", 1, 0))
+            self.assertEqual(assistant.inventory["Weapons"], ["Sword", "Axe"])
+            self.assertEqual(assistant.available_combat_weapons()[0], "Sommerswerd")
 
 
 class CardSizingTests(unittest.TestCase):

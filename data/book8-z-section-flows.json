@@ -1,0 +1,31 @@
+{
+  "8": {
+    "17": {
+      "roll": {
+        "summary": "Cabin infection resistance check.",
+        "modifiers": [
+          {
+            "label": "Lore-circle of Fire",
+            "value": 3,
+            "condition": {"type": "lore_circle", "name": "Fire"}
+          },
+          {
+            "label": "Lore-circle of Light",
+            "value": 3,
+            "condition": {
+              "type": "all",
+              "conditions": [
+                {"type": "lore_circle", "name": "Light"},
+                {"type": "no_lore_circle", "name": "Fire"}
+              ]
+            }
+          }
+        ],
+        "outcomes": [
+          {"min": 0, "max": 7, "route": 6, "label": "Infection route"},
+          {"min": 8, "max": 99, "route": 77, "label": "Resist infection"}
+        ]
+      }
+    }
+  }
+}

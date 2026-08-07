@@ -4,7 +4,18 @@ Lone Wolf Action Assistant is a standalone Windows desktop play aid for the *Lon
 
 Version: **3.1.7**
 
-Current game support: **Book 1 playable release candidate; Books 2–5 playable helper/onboarding builds.**
+Current game support: **Books 1–8 are playable V3 paths. Books 6–8 support both
+fresh Magnakai setup and campaign continuation, with V1-derived automation and
+source-parity tests for their recorded rules.**
+
+Runs support V1-compatible **Story, Easy, Normal, Hard, and Veteran** rules,
+optional permadeath, tamper-evident saves, difficulty-aware achievements, and
+either automatic or manual Combat Results Table resolution. These run rules are
+separate from the browser's Auto, Manual, and CLI interaction modes.
+
+When a book is completed, V3 opens the next book's **Story So Far** page before
+showing its Action Chart setup. Temporary confiscated or safekept gear does not
+cross a book boundary unless it was returned by that book's own text first.
 
 ## Book files are not included
 
@@ -20,6 +31,9 @@ Expected folder names include:
 03tcok
 04tcod
 05sots
+06tkot
+07cd
+08tjoh
 ```
 
 Each valid folder must contain at least `title.htm` and `sect1.htm`.
@@ -60,6 +74,8 @@ installer\output\Lone Wolf Action Assistant Setup.exe
 ```
 
 See [Building](docs/BUILDING.md) for prerequisites, tests, and release checks.
+See [Canonical Release](docs/CANONICAL_RELEASE.md) for the V1/V2 retirement and
+compatibility policy.
 
 ## Player guide
 

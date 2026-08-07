@@ -617,6 +617,15 @@
       enabled: false,
       footer: 'Coming'
     });
+    const testingBook = (number, title, folder, sections, coverFile) => ({
+      number,
+      title,
+      folder,
+      sections,
+      cover: coverUrl(coverFile),
+      testing: true,
+      footer: 'Testing'
+    });
 
     const seriesNames = {
       kai: 'Kai Series',
@@ -670,6 +679,24 @@
         status: 'Playable helper build',
         summary: 'The Kai series closes under desert heat and Darklord pressure. Shadow on the Sand is a major rules and story handoff book, with campaign carry-forward choices that matter later.',
         tags: ['Fantasy', 'Gamebook', 'Vassagonia', 'Darklords', 'Kai Finale']
+      },
+      6: {
+        series: 'magnakai',
+        authors: 'Joe Dever',
+        illustrator: 'Various illustrators',
+        published: '1986',
+        status: 'Playable testing build',
+        summary: 'Lone Wolf begins Magnakai training while investigating a new Darklord threat. Book 6 is available for reader and assistant testing, including the Book 5 campaign handoff, Magnakai disciplines, equipment issue, and Book 6 rules.',
+        tags: ['Fantasy', 'Gamebook', 'Magnakai', 'Testing', 'Campaign Handoff']
+      },
+      7: {
+        series: 'magnakai',
+        authors: 'Joe Dever',
+        illustrator: 'Various illustrators',
+        published: '1986',
+        status: 'Playable testing build',
+        summary: 'The Magnakai journey continues into the haunted stronghold of Nadziranim. Book 7 is available for reader and assistant testing, including its Book 6 handoff, new discipline choice, equipment issue, and section automation.',
+        tags: ['Fantasy', 'Gamebook', 'Magnakai', 'Testing', 'Campaign Handoff']
       },
       default: {
         authors: 'Joe Dever',
@@ -730,8 +757,8 @@
     ];
 
     const magnakaiBooks = [
-      comingBook(6, 'The Kingdoms of Terror', '06tkot', 350, 'lw06.jpg'),
-      comingBook(7, 'Castle of Death', '07cd', 350, 'lw07.jpg'),
+      testingBook(6, 'The Kingdoms of Terror', '06tkot', 350, 'lw06.jpg'),
+      testingBook(7, 'Castle of Death', '07cd', 350, 'lw07.jpg'),
       comingBook(8, 'The Jungle of Horrors', '08tjoh', 350, 'lw08.jpg'),
       comingBook(9, 'The Cauldron of Fear', '09tcof', 350, 'lw09.jpg'),
       comingBook(10, 'The Dungeons of Torgar', '10tdot', 350, 'lw10.jpg'),
@@ -762,7 +789,7 @@
       comingBook(29, 'The Storms of Chai', '29tsoc', 350, 'lw29.jpg')
     ];
 
-    const books = kaiBooks;
+    const books = [...kaiBooks, ...magnakaiBooks];
     const allBookCards = [...kaiBooks, ...magnakaiBooks, ...grandMasterBooks, ...newOrderBooks];
     const bookByNumber = new Map(allBookCards.map((book) => [book.number, book]));
     const readBooksStorageKey = 'lonewolf_redux.library.readBooks.v1';
@@ -913,13 +940,13 @@
       const byline = `${detail.authors}${detail.illustrator ? `, ${detail.illustrator} (Illustrator)` : ''}`;
       const actionLink = book.enabled === false
         ? '<button type="button" disabled>Coming</button>'
-        : `<a href="assistant.html?browse=1&book=${book.number}" title="Read this book without changing your current save.">Browse Book</a>`;
+        : `<a href="assistant.html?browse=1&book=${book.number}" title="Read this book without changing your current save.">${book.testing ? 'Open Test Reader' : 'Browse Book'}</a>`;
       const campaignStartLink = book.number === 1 && book.enabled !== false
         ? '<a href="assistant.html?campaign=new&book=1" title="Create a new Book 1 character before beginning Flight from the Dark.">Start New Campaign</a>'
         : '';
       const currentSectionButton = book.enabled === false
         ? ''
-        : '<button type="button" data-open-current-section>Open Current Section</button>';
+        : '<button type="button" data-open-current-section>Resume Current Campaign</button>';
       const read = isBookRead(book.number);
       bookDetailsContent.innerHTML = `
         <aside class="book-dialog-cover">
@@ -968,6 +995,17 @@
 
     async function getCurrentPosition() {
       try {
+        const response = await fetch('/api/state?ts=' + Date.now(), { cache: 'no-store' });
+        if (response.ok) {
+          const payload = await response.json();
+          const state = payload?.state || {};
+          const book = Number(state?.Character?.BookNumber);
+          const section = Number(state?.CurrentSection);
+          if (Number.isInteger(book) && Number.isInteger(section)) return { book, section };
+        }
+      } catch {}
+
+      try {
         const response = await fetch('current-position.json?ts=' + Date.now(), { cache: 'no-store' });
         if (!response.ok) return null;
         return await response.json();
@@ -984,16 +1022,16 @@
     async function openCurrentSection() {
       const position = await getCurrentPosition();
       if (!position) {
-        window.location.href = 'assistant.html';
+        window.location.href = 'assistant.html?resume=1';
         return;
       }
       const book = books.find((item) => item.number === Number(position.book));
       const section = Number(position.section);
       if (!book || section < 1 || section > book.sections) {
-        window.location.href = 'assistant.html';
+        window.location.href = 'assistant.html?resume=1';
         return;
       }
-      window.location.href = `assistant.html?book=${book.number}&section=${section}`;
+      window.location.href = 'assistant.html?resume=1';
     }
 
     document.getElementById('currentBtn').addEventListener('click', openCurrentSection);

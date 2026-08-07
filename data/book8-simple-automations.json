@@ -1,0 +1,229 @@
+{
+  "8": {
+    "1": {"summary": "Book 8 starting pass.", "actions": [{"type": "add_item", "container": "pocket", "name": "Pass"}]},
+    "15": {"summary": "Fireseed injury.", "actions": [{"type": "stat", "stat": "end", "delta": -2}]},
+    "16": {"summary": "Count Conundrum payment.", "actions": [{"type": "stat", "stat": "gold", "delta": 5}]},
+    "34": {"summary": "Meal spent.", "actions": [{"type": "remove_item", "name": "Meal", "containers": ["backpack"]}]},
+    "39": {"summary": "Helghast fireball.", "actions": [{"type": "stat", "stat": "end", "delta": -8}]},
+    "40": {"summary": "Bowyer's arrow wound.", "actions": [{"type": "stat", "stat": "end", "delta": -2}]},
+    "59": {"summary": "Count Conundrum payment.", "actions": [{"type": "stat", "stat": "gold", "delta": 10}]},
+    "87": {"summary": "Silver Bow of Duadon destroyed.", "actions": [{"type": "remove_item", "name": "Silver Bow of Duadon", "containers": ["special"]}]},
+    "100": {"summary": "Ohrido Lorestone recovery.", "actions": [{"type": "stat", "stat": "end", "mode": "restore_max"}]},
+    "104": {"summary": "Bor Brew aftermath.", "actions": [{"type": "stat", "stat": "end", "delta": -2}]},
+    "105": {"summary": "Danarg meal requirement.", "actions": [{"type": "meal", "loss": 3}]},
+    "115": {"summary": "Crossbow wound.", "actions": [{"type": "stat", "stat": "end", "delta": -8}]},
+    "129": {"summary": "Taan-spider meal requirement.", "actions": [{"type": "meal", "loss": 3}]},
+    "139": {"summary": "Grey Crystal Ring found.", "actions": [{"type": "add_item", "container": "special", "name": "Grey Crystal Ring"}]},
+    "146": {"summary": "Blood loss.", "actions": [{"type": "stat", "stat": "end", "delta": -5}]},
+    "150": {"summary": "Noon meal requirement.", "actions": [{"type": "meal", "loss": 3}]},
+    "152": {"summary": "Ridge-road meal requirement.", "actions": [{"type": "meal", "loss": 3}]},
+    "156": {"summary": "Korovax wound.", "actions": [{"type": "stat", "stat": "end", "delta": -6}]},
+    "159": {"summary": "Kezoor's sorcery.", "actions": [{"type": "stat", "stat": "end", "delta": -5}]},
+    "170": {"summary": "Long-ride meal requirement.", "actions": [{"type": "meal", "loss": 3}]},
+    "175": {"summary": "Mire meal requirement.", "actions": [{"type": "meal", "loss": 3}]},
+    "202": {"summary": "Lodestone found.", "actions": [{"type": "add_item", "container": "special", "name": "Lodestone"}]},
+    "226": {"summary": "Cold night and meal requirement.", "actions": [{"type": "stat", "stat": "end", "delta": -3}, {"type": "meal", "loss": 3}]},
+    "230": {"summary": "Psychic assault.", "actions": [{"type": "stat", "stat": "end", "delta": -8}]},
+    "258": {"summary": "Exploding fireball injury.", "actions": [{"type": "stat", "stat": "end", "delta": -8}]},
+    "269": {"summary": "Riddle penalty.", "actions": [{"type": "flag", "key": "book8RiddleHasFourSpecials", "value": true, "condition": {"type": "item_count_gte", "name": "", "containers": ["special"], "value": 4}}, {"type": "remove_item_at", "container": "special", "index": 3, "condition": {"type": "flag", "key": "book8RiddleHasFourSpecials", "value": true}}, {"type": "remove_item_at", "container": "special", "index": -1, "condition": {"type": "all", "conditions": [{"type": "no_flag", "key": "book8RiddleHasFourSpecials", "value": true}, {"type": "item_count_gte", "name": "", "containers": ["special"], "value": 1}]}}, {"type": "remove_item_at", "container": "backpack", "index": 0, "condition": {"type": "all", "conditions": [{"type": "no_flag", "key": "book8RiddleHasFourSpecials", "value": true}, {"type": "item_count_lt", "name": "", "containers": ["special"], "value": 1}, {"type": "item_count_gte", "name": "", "containers": ["backpack"], "value": 1}]}}]},
+    "294": {"summary": "Meal given to Paido.", "actions": [{"type": "remove_item", "name": "Meal", "containers": ["backpack"]}]},
+    "21": {
+      "actions": [
+        {
+          "type": "ending",
+          "ending": "death",
+          "cause": "Creature venom swiftly kills you."
+        }
+      ]
+    },
+    "51": {
+      "actions": [
+        {
+          "type": "ending",
+          "ending": "death",
+          "cause": "The cabin disease overwhelms you."
+        }
+      ]
+    },
+    "57": {
+      "actions": [
+        {
+          "type": "ending",
+          "ending": "death",
+          "cause": "The Levitron fall kills you."
+        }
+      ]
+    },
+    "69": {
+      "actions": [
+        {
+          "type": "ending",
+          "ending": "death",
+          "cause": "Danarg poison claims your life."
+        }
+      ]
+    },
+    "75": {
+      "actions": [
+        {
+          "type": "ending",
+          "ending": "death",
+          "cause": "The Helghast fireball kills you."
+        }
+      ]
+    },
+    "121": {
+      "actions": [
+        {
+          "type": "ending",
+          "ending": "death",
+          "cause": "The swamp trap drags you under."
+        }
+      ]
+    },
+    "134": {
+      "actions": [
+        {
+          "type": "ending",
+          "ending": "death",
+          "cause": "The Danarg closes around you forever."
+        }
+      ]
+    },
+    "154": {
+      "actions": [
+        {
+          "type": "ending",
+          "ending": "death",
+          "cause": "The bowyer's shot kills you."
+        }
+      ]
+    },
+    "158": {
+      "actions": [
+        {
+          "type": "ending",
+          "ending": "death",
+          "cause": "The Levitron is destroyed."
+        }
+      ]
+    },
+    "165": {
+      "actions": [
+        {
+          "type": "ending",
+          "ending": "death",
+          "cause": "The swamp horror kills you."
+        }
+      ]
+    },
+    "200": {
+      "actions": [
+        {
+          "type": "ending",
+          "ending": "death",
+          "cause": "Delaying too long dooms the Levitron."
+        }
+      ]
+    },
+    "222": {
+      "actions": [
+        {
+          "type": "ending",
+          "ending": "death",
+          "cause": "The poisoned blade ends your quest."
+        }
+      ]
+    },
+    "223": {
+      "actions": [
+        {
+          "type": "ending",
+          "ending": "death",
+          "cause": "The monks overwhelm you."
+        }
+      ]
+    },
+    "237": {
+      "actions": [
+        {
+          "type": "ending",
+          "ending": "death",
+          "cause": "Your quest fails in the swamp."
+        }
+      ]
+    },
+    "263": {
+      "actions": [
+        {
+          "type": "ending",
+          "ending": "death",
+          "cause": "The Danarg claims another victim."
+        }
+      ]
+    },
+    "274": {
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": 3
+        }
+      ]
+    },
+    "281": {
+      "actions": [
+        {
+          "type": "ending",
+          "ending": "death",
+          "cause": "The jungle poison kills you instantly."
+        }
+      ]
+    },
+    "295": {
+      "actions": [
+        {
+          "type": "ending",
+          "ending": "death",
+          "cause": "The swamp swallows you."
+        }
+      ]
+    },
+    "312": {
+      "actions": [
+        {
+          "type": "add_item",
+          "container": "pocket",
+          "name": "Giak Scroll"
+        }
+      ]
+    },
+    "322": {
+      "actions": [
+        {
+          "type": "ending",
+          "ending": "death",
+          "cause": "Your final mistake ends the quest."
+        }
+      ]
+    },
+    "325": {
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -3
+        }
+      ]
+    },
+    "337": {
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -3
+        }
+      ]
+    }
+  }
+}

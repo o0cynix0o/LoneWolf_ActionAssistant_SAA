@@ -314,11 +314,13 @@ def state_payload(message: str = "", achievement_unlocks: list[dict] | None = No
         if isinstance(checkpoint, dict):
             checkpoint.pop("Snapshot", None)
     return {
-        "books": lonewolf_redux.BOOKS,
+        "books": lonewolf_redux.BOOK_CATALOG,
         "state": state,
+        "run": ASSISTANT.run_payload(),
         "sectionFlow": ASSISTANT.current_section_flow_payload(),
         "death": ASSISTANT.death_recovery_payload(),
         "bookComplete": ASSISTANT.book_completion_payload(),
+        "pendingBookSetup": ASSISTANT.pending_book_setup_payload(),
         "achievements": ASSISTANT.achievement_payload(),
         "achievementUnlocks": achievement_unlocks or [],
         "saves": public_save_entries(),
@@ -336,7 +338,7 @@ def state_payload(message: str = "", achievement_unlocks: list[dict] | None = No
 
 def book_files_payload() -> dict:
     books = []
-    for number, meta in sorted(lonewolf_redux.BOOKS.items()):
+    for number, meta in sorted(lonewolf_redux.BOOK_CATALOG.items()):
         folder = str(meta.get("Folder") or "")
         root = PATHS.books_lw / folder
         title_file = root / "title.htm"
@@ -406,7 +408,22 @@ def apply_new_game(payload: dict) -> str:
     elif not isinstance(disciplines, list):
         disciplines = lonewolf_redux.KAI_DISCIPLINES[:5]
 
-    if book_number == 5:
+    if book_number in {6, 7, 8}:
+        ASSISTANT.state = lonewolf_redux.create_magnakai_character_state(
+            book_number=book_number,
+            name=name,
+            magnakai_disciplines=payload.get("magnakaiDisciplines"),
+            weaponmastery_weapons=payload.get("weaponmasteryWeapons"),
+            section=int(payload.get("section") or 1),
+            combat_skill_roll=payload.get("combatSkillRoll"),
+            endurance_roll=payload.get("enduranceRoll"),
+            gold_roll=payload.get("goldRoll"),
+            equipment_choices=payload.get("equipmentChoices") or payload.get("armouryChoices"),
+            weapon_exchanges=payload.get("weaponExchanges"),
+            de_curing_option=int(payload.get("deCuringOption") or 0),
+            de_weaponskill_option=int(payload.get("deWeaponskillOption") or 0),
+        )
+    elif book_number == 5:
         ASSISTANT.state = lonewolf_redux.create_book5_character_state(
             name=name,
             kai_disciplines=disciplines,
@@ -466,6 +483,11 @@ def apply_new_game(payload: dict) -> str:
             starting_find_roll=payload.get("startingFindRoll"),
             weaponskill_roll=payload.get("weaponskillRoll"),
         )
+    ASSISTANT.set_run_configuration(
+        payload.get("difficulty") or "Normal",
+        truthy(payload.get("permadeath")),
+        payload.get("combatMode") or "DataFile",
+    )
     ASSISTANT.record_section_visit()
     ASSISTANT.save_section_checkpoint("ready")
     ASSISTANT.write_current_position()
@@ -553,6 +575,28 @@ def handle_action(payload: dict) -> str:
 
     if action == "new":
         return apply_new_game(payload)
+    if action == "set_run_configuration":
+        permadeath = truthy(payload.get("permadeath")) if "permadeath" in payload else None
+        ASSISTANT.update_run_configuration(
+            difficulty=payload.get("difficulty"),
+            permadeath=permadeath,
+            combat_mode=payload.get("combatMode"),
+        )
+        ASSISTANT.autosave()
+        return (
+            f"Game modes set to {ASSISTANT.difficulty()} difficulty, "
+            f"{'permadeath on' if ASSISTANT.permadeath_enabled() else 'permadeath off'}, "
+            f"and {ASSISTANT.combat_mode()} combat."
+        )
+    if action == "set_combat_mode":
+        mode = payload.get("combatMode") or "DataFile"
+        ASSISTANT.set_combat_mode(mode)
+        ASSISTANT.autosave()
+        return f"Combat mode set to {ASSISTANT.combat_mode()}."
+    if action == "set_sommerswerd_allowed":
+        ASSISTANT.combat["SommerswerdAllowed"] = truthy(payload.get("allowed"))
+        ASSISTANT.autosave()
+        return "Sommerswerd text permission recorded." if ASSISTANT.combat["SommerswerdAllowed"] else "Sommerswerd text permission cleared."
     if action == "set_position":
         book = payload.get("book")
         section = int(payload.get("section") or 1)
@@ -577,6 +621,8 @@ def handle_action(payload: dict) -> str:
         return capture_output(lambda: ASSISTANT.follow_route(int(payload.get("section") or 1)))
     if action == "flow_loot":
         return capture_output(lambda: ASSISTANT.apply_flow_loot(str(payload.get("id") or "")))
+    if action == "shop_sale":
+        return capture_output(lambda: ASSISTANT.apply_shop_sale(str(payload.get("id") or "")))
     if action == "cartwheel":
         raw = payload.get("raw")
         raw_roll = int(raw) if str(raw or "").strip() else None
@@ -630,6 +676,14 @@ def handle_action(payload: dict) -> str:
             return capture_output(lambda: ASSISTANT.adjust_gold_crowns(token))
     if action == "add_item":
         return capture_output(lambda: ASSISTANT.add_item(["add", str(payload.get("type") or ""), str(payload.get("item") or "")]))
+    if action == "reorder_inventory":
+        return capture_output(
+            lambda: ASSISTANT.reorder_inventory(
+                str(payload.get("type") or ""),
+                int(payload.get("from") or 0),
+                int(payload.get("to") or 0),
+            )
+        )
     if action == "drop_item":
         return capture_output(lambda: ASSISTANT.drop_item(["drop", str(payload.get("type") or ""), str(payload.get("item") or "")]))
     if action == "use_item":
@@ -673,6 +727,8 @@ def handle_action(payload: dict) -> str:
             summary = ASSISTANT.ensure_book_completed(save=True)
             print(f"Book {summary['BookNumber']} complete: {summary['BookTitle']}.")
         return capture_output(complete)
+    if action == "open_next_book":
+        return capture_output(lambda: ASSISTANT.open_next_book())
     if action == "continue_book":
         return capture_output(
             lambda: ASSISTANT.continue_completed_book(
@@ -691,6 +747,13 @@ def handle_action(payload: dict) -> str:
                 book5_equipment_choices=payload.get("equipmentChoices") or payload.get("armouryChoices"),
                 book5_weapon_exchanges=payload.get("weaponExchanges"),
                 book5_safekeeping_special_items=payload.get("safekeepingSpecialItems"),
+                book6_magnakai_disciplines=payload.get("magnakaiDiscipline"),
+                book6_weaponmastery_weapons=payload.get("weaponmasteryWeapon"),
+                book6_gold_roll=payload.get("goldRoll"),
+                book6_equipment_choices=payload.get("equipmentChoices") or payload.get("armouryChoices"),
+                book6_weapon_exchanges=payload.get("weaponExchanges"),
+                book6_de_curing_option=int(payload.get("deCuringOption") or 0),
+                book6_de_weaponskill_option=int(payload.get("deWeaponskillOption") or 0),
             )
         )
     if action == "repeat_book":
@@ -720,6 +783,23 @@ def handle_action(payload: dict) -> str:
         if payload.get("roll") not in (None, ""):
             tokens.append(str(payload.get("roll")))
         return capture_output(lambda: ASSISTANT.combat_round(tokens, evade=bool(payload.get("evade"))))
+    if action == "combat_manual_round":
+        if "activeWeapon" in payload:
+            ASSISTANT.set_combat_weapon(str(payload.get("activeWeapon") or ""), save=False)
+        try:
+            manual_losses = (
+                max(0, int(payload.get("enemyLoss") or 0)),
+                max(0, int(payload.get("playerLoss") or 0)),
+            )
+        except (TypeError, ValueError):
+            return "Manual CRT losses must be whole numbers."
+        if truthy(payload.get("evade")):
+            return capture_output(
+                lambda: ASSISTANT.evade_combat(["combat", "evade"], manual_losses=manual_losses)
+            )
+        return capture_output(
+            lambda: ASSISTANT.combat_round(["combat", "manual"], manual_losses=manual_losses)
+        )
     if action == "combat_auto":
         return capture_output(lambda: ASSISTANT.resolve_combat_to_outcome())
     if action == "combat_evade":

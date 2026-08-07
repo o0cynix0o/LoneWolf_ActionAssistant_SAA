@@ -125,6 +125,19 @@
       font-size: 0.76rem;
       line-height: 1;
     }
+    .toolbar-book-series {
+      display: contents;
+    }
+    .toolbar-book-series[hidden] {
+      display: none;
+    }
+    .toolbar .book-button:disabled {
+      border-color: #3d4240;
+      background: #1a1f1f;
+      color: #7d8988;
+      cursor: not-allowed;
+      opacity: 0.72;
+    }
     .reader-title {
       margin-left: auto;
       color: #d8d0b8;
@@ -983,6 +996,18 @@
       height: 16px;
       padding: 0;
     }
+    .check-option.unavailable {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+    .setup-requirement {
+      padding: 0.45rem 0.55rem;
+      border: 1px solid #72612f;
+      border-radius: 4px;
+      background: #1a1810;
+      color: #ffe08a;
+      font-size: 0.82rem;
+    }
     .creation-wizard {
       display: grid;
       gap: 0.7rem;
@@ -1155,6 +1180,21 @@
     .item-row span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .item-row span.wrap { overflow: visible; text-overflow: clip; white-space: normal; }
     .item-row small { color: #aeb091; }
+    .inventory-drag-handle {
+      min-width: 30px;
+      padding: 0.3rem 0.35rem;
+      color: #f0ca68;
+      font-size: 1rem;
+      line-height: 1;
+    }
+    .inventory-reorder-controls { display: inline-flex; gap: 0.2rem; }
+    .power-row.known-power {
+      border-color: var(--lw-border-strong);
+      background: var(--lw-panel-2);
+      box-shadow: inset 3px 0 0 var(--lw-accent);
+    }
+    .power-row.known-power > span { color: var(--lw-text); font-weight: 700; }
+    .power-row.known-power > small { color: var(--lw-accent); font-weight: 700; }
     .item-note {
       border: 1px solid rgba(var(--accent-rgb), .45);
       border-radius: 999px;
@@ -1530,11 +1570,22 @@
   <main class="workspace">
     <section class="reader-pane" aria-label="Book reader">
       <div class="toolbar">
-        <button class="book-button" type="button" data-book="1">Book 1</button>
-        <button class="book-button" type="button" data-book="2">Book 2</button>
-        <button class="book-button" type="button" data-book="3">Book 3</button>
-        <button class="book-button" type="button" data-book="4">Book 4</button>
-        <button class="book-button" type="button" data-book="5">Book 5</button>
+        <div class="toolbar-book-series" data-reader-series="kai" aria-label="Kai series books">
+          <button class="book-button" type="button" data-book="1">Book 1</button>
+          <button class="book-button" type="button" data-book="2">Book 2</button>
+          <button class="book-button" type="button" data-book="3">Book 3</button>
+          <button class="book-button" type="button" data-book="4">Book 4</button>
+          <button class="book-button" type="button" data-book="5">Book 5</button>
+        </div>
+        <div class="toolbar-book-series" data-reader-series="magnakai" aria-label="Magnakai series books" hidden>
+          <button class="book-button" type="button" data-book="6">Book 6</button>
+          <button class="book-button" type="button" data-book="7">Book 7</button>
+          <button class="book-button" type="button" disabled title="Book 8 is not in testing yet.">Book 8</button>
+          <button class="book-button" type="button" disabled title="Book 9 is not in testing yet.">Book 9</button>
+          <button class="book-button" type="button" disabled title="Book 10 is not in testing yet.">Book 10</button>
+          <button class="book-button" type="button" disabled title="Book 11 is not in testing yet.">Book 11</button>
+          <button class="book-button" type="button" disabled title="Book 12 is not in testing yet.">Book 12</button>
+        </div>
         <button type="button" id="currentBtn">Current</button>
         <button type="button" id="titleBtn">Title</button>
         <span class="reader-title" id="readerTitle">Loading...</span>
@@ -1585,7 +1636,10 @@
       { number: 2, title: 'Fire on the Water', folder: '02fotw', sections: 350 },
       { number: 3, title: 'The Caverns of Kalte', folder: '03tcok', sections: 350 },
       { number: 4, title: 'The Chasm of Doom', folder: '04tcod', sections: 350 },
-      { number: 5, title: 'Shadow on the Sand', folder: '05sots', sections: 400 }
+      { number: 5, title: 'Shadow on the Sand', folder: '05sots', sections: 400 },
+      { number: 6, title: 'The Kingdoms of Terror', folder: '06tkot', sections: 350 },
+      { number: 7, title: 'Castle of Death', folder: '07cd', sections: 350 },
+      { number: 8, title: 'The Jungle of Horrors', folder: '08tjoh', sections: 350 }
     ];
     const book2Armoury = [
       ['sword', 'Sword'],
@@ -1632,7 +1686,22 @@
       ['mace', 'Mace'],
       ['shield', 'Shield']
     ];
+    const book6Equipment = [
+      ['sword', 'Sword'], ['laumspur', 'Potion of Laumspur'], ['warhammer', 'Warhammer'],
+      ['quiver', 'Quiver with 6 Arrows'], ['bow', 'Bow'], ['rations', '5 Special Rations'],
+      ['quarterstaff', 'Quarterstaff'], ['padded', 'Padded Leather Waistcoat'], ['axe', 'Axe'],
+      ['dagger', 'Dagger'], ['tinderbox', 'Tinderbox'], ['rope', 'Rope'],
+      ['kai_shield', 'Kai Shield'], ['helmet', 'Helmet'], ['torch', 'Torch'], ['blanket', 'Blanket'],
+      ['herb_pouch', 'Herb Pouch (DE Curing option 3)']
+    ];
+    const book7Equipment = [
+      ['sword', 'Sword'], ['bow', 'Bow'], ['quiver', 'Quiver with 6 Arrows'], ['rope', 'Rope'],
+      ['laumspur', 'Potion of Laumspur'], ['lantern', 'Lantern'], ['mace', 'Mace'],
+      ['meals', '3 Meals'], ['dagger', 'Dagger'], ['fireseeds', '3 Fireseeds']
+    ];
     const kaiDisciplines = ['Camouflage', 'Hunting', 'Sixth Sense', 'Tracking', 'Healing', 'Weaponskill', 'Mindshield', 'Mindblast', 'Animal Kinship', 'Mind Over Matter'];
+    const magnakaiDisciplines = ['Weaponmastery', 'Animal Control', 'Curing', 'Invisibility', 'Huntmastery', 'Pathsmanship', 'Divination', 'Psi-surge', 'Psi-screen', 'Nexus'];
+    const weaponmasteryWeapons = ['Dagger', 'Spear', 'Mace', 'Warhammer', 'Sword', 'Axe', 'Short Sword', 'Quarterstaff', 'Broadsword', 'Bow'];
     const views = [
       ['sheet', 'Sheet'],
       ['inventory', 'Inventory'],
@@ -1665,6 +1734,7 @@
     let activeSection = null;
     let book1Creation = null;
     let activeCardMenu = '';
+    let inventoryMoveSelection = null;
     let cardDragState = null;
     let cardResizeState = null;
     let suppressCardHandleClick = false;
@@ -2717,7 +2787,7 @@
       };
     }
 
-    function bookUrl(bookNumber, section) {
+    function bookUrl(bookNumber, section, frontMatter = '') {
       const book = bookByNumber(bookNumber);
       if (!hasInstalledBookFiles(book.number)) {
         return `install-books.html?book=${book.number}`;
@@ -2725,6 +2795,7 @@
       if (Number.isInteger(section) && section >= 1 && section <= book.sections) {
         return `books/lw/${book.folder}/sect${section}.htm`;
       }
+      if (frontMatter) return `books/lw/${book.folder}/${frontMatter}`;
       return `books/lw/${book.folder}/title.htm`;
     }
 
@@ -2746,10 +2817,22 @@
       renderReaderTitle();
     }
 
+    function loadStorySoFar(bookNumber) {
+      const book = bookByNumber(bookNumber);
+      activeBook = book.number;
+      activeSection = null;
+      bookFrame.src = bookUrl(activeBook, null, 'tssf.htm');
+      renderReaderTitle();
+    }
+
     function renderReaderTitle() {
       const book = bookByNumber(activeBook);
       const title = activeSection ? `${book.number}. ${book.title} - Section ${activeSection}` : `${book.number}. ${book.title}`;
       readerTitle.textContent = browseMode ? `${title} - Reading Only` : title;
+      const readerSeries = book.number >= 6 ? 'magnakai' : 'kai';
+      document.querySelectorAll('[data-reader-series]').forEach((group) => {
+        group.hidden = group.dataset.readerSeries !== readerSeries;
+      });
       document.querySelectorAll('.book-button').forEach((button) => {
         button.classList.toggle('active', Number(button.dataset.book) === activeBook);
       });
@@ -2831,6 +2914,22 @@
       render();
     }
 
+    async function submitBookTransition(payload, nextBook) {
+      try {
+        await action(payload);
+      } catch (error) {
+        setReceipt({
+          summary: `Book ${nextBook} setup needs attention.`,
+          title: 'Book Transition',
+          details: [
+            receiptDetail('Problem', text(error?.message, 'The transition could not be completed.')),
+            receiptDetail('Your Campaign', 'Your completed book and current Action Chart are unchanged.')
+          ]
+        });
+        render();
+      }
+    }
+
     function showAchievementUnlocks(unlocks) {
       const entries = arr(unlocks);
       if (!toastStack || !entries.length) return;
@@ -2876,6 +2975,12 @@
       if (currentDeath().Active) {
         renderDeathScreen();
         decorateInterfaceCards('death');
+        return;
+      }
+      if (app.pendingBookSetup?.Active) {
+        renderBookSetupScreen();
+        syncBook6SetupRequirements(view.querySelector('#continueBookForm'));
+        decorateInterfaceCards('book-setup');
         return;
       }
       if (currentBookComplete().Active) {
@@ -3091,6 +3196,7 @@
 
     function renderQuickPanel() {
       const inv = currentInventory();
+      const run = app.run || {};
       const automation = app.state.Automation || {};
       const ending = automation.Ending;
       const flags = automation.Flags || {};
@@ -3117,6 +3223,13 @@
           ${statButtons('gold', 'Gold', true)}
         </div>
         <div class="quick-column quick-card">
+          <div class="quick-title">Game Modes</div>
+          <div class="quick-note">${escapeHtml(text(run.Difficulty, 'Normal'))} difficulty</div>
+          <div class="quick-note">${run.Permadeath ? 'Permadeath on' : 'Permadeath off'}</div>
+          <div class="quick-note">${text(run.CombatMode, 'DataFile') === 'ManualCRT' ? 'Manual CRT' : 'Automatic CRT'}</div>
+          <button type="button" data-settings-view>Change</button>
+        </div>
+        <div class="quick-column quick-card">
           <div class="quick-title">Add Item</div>
           <form id="quickItemForm" class="controls">
             <select name="type"><option value="weapon">Weapon</option><option value="backpack">Backpack</option><option value="special">Special</option></select>
@@ -3140,7 +3253,9 @@
       const summary = completion.Summary || {};
       const nextBook = Number(completion.NextBookNumber || 0);
       const nextTitle = text(completion.NextBookTitle, '');
-      const continueControls = completion.CanContinue && [2, 3, 4, 5].includes(nextBook) ? bookContinueForm(completion) : (
+      const continueControls = completion.CanContinue && [2, 3, 4, 5, 6, 7, 8].includes(nextBook) ? (
+        `<button type="button" data-open-next-book="${escapeHtml(nextBook)}">Open Book ${escapeHtml(nextBook)}</button>`
+      ) : (
         completion.CanContinue
           ? '<p class="muted">That next book is not enabled yet.</p>'
           : '<p class="muted">The supported campaign path is complete.</p>'
@@ -3191,6 +3306,8 @@
     }
 
     function equipmentOptionsForBook(bookNumber) {
+      if (Number(bookNumber) === 6) return book6Equipment;
+      if ([7, 8].includes(Number(bookNumber))) return book7Equipment;
       if (Number(bookNumber) === 5) return book5Equipment;
       if (Number(bookNumber) === 4) return book4Equipment;
       if (Number(bookNumber) === 3) return book3Equipment;
@@ -3198,6 +3315,8 @@
     }
 
     function equipmentChoiceRuleForBook(bookNumber) {
+      if (Number(bookNumber) === 6) return { min: 7, max: 7, exact: true };
+      if ([7, 8].includes(Number(bookNumber))) return { min: 5, max: 5, exact: true };
       if (Number(bookNumber) === 5) return { min: 0, max: 4, exact: false };
       if (Number(bookNumber) === 4) return { min: 6, max: 6, exact: true };
       return { min: 2, max: 2, exact: true };
@@ -3208,6 +3327,8 @@
     }
 
     function equipmentLabelForBook(bookNumber) {
+      if (Number(bookNumber) === 6) return 'Book 6 Field Issue - choose exactly 7';
+      if ([7, 8].includes(Number(bookNumber))) return `Book ${bookNumber} Field Issue - choose exactly 5`;
       if (Number(bookNumber) === 5) return 'Book 5 Field Issue - choose up to 4';
       if (Number(bookNumber) === 4) return `Book 4 Field Issue - choose ${equipmentChoiceCountForBook(bookNumber)}`;
       if (Number(bookNumber) === 3) return `Anskaven Equipment - choose ${equipmentChoiceCountForBook(bookNumber)}`;
@@ -3230,24 +3351,9 @@
         .concat(weapons.map((item) => `<option value="${escapeHtml(item)}">${escapeHtml(item)}</option>`))
         .join('');
       return `
-        <label class="field">Exchange Weapon 1<select name="weaponExchanges">${options}</select></label>
-        <label class="field">Exchange Weapon 2<select name="weaponExchanges">${options}</select></label>
-      `;
-    }
-
-    function safekeepingChoiceGrid(items) {
-      const specialItems = arr(items).map((item) => text(item)).filter(Boolean);
-      if (!specialItems.length) return '';
-      return `
-        <div class="check-field">
-          <span>Monastery Safekeeping - optional Special Items</span>
-          <div class="check-grid">${specialItems.map((item) => `
-            <label class="check-option">
-              <input type="checkbox" name="safekeepingSpecialItems" value="${escapeHtml(item)}">
-              <span>${escapeHtml(item)}</span>
-            </label>
-          `).join('')}</div>
-        </div>
+        <div class="setup-requirement" data-book6-exchange-status hidden></div>
+        <label class="field"><span data-book6-exchange-label>Weapon Exchange 1</span><select name="weaponExchanges">${options}</select></label>
+        <label class="field"><span data-book6-exchange-label>Weapon Exchange 2</span><select name="weaponExchanges">${options}</select></label>
       `;
     }
 
@@ -3255,8 +3361,49 @@
       const choices = arr(completion.KaiDisciplineChoices);
       const kaiOptions = choices.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('');
       const weapons = arr((completion.Summary || {}).Weapons);
-      const specialItems = arr((completion.Summary || {}).SpecialItems);
       const nextBook = Number(completion.NextBookNumber || 2);
+      if (nextBook === 6) {
+        const magnakaiChoices = arr(completion.MagnakaiDisciplineChoices);
+        const masteredWeapons = ['Dagger', 'Spear', 'Mace', 'Warhammer', 'Sword', 'Axe', 'Short Sword', 'Quarterstaff', 'Broadsword', 'Bow'];
+        const book6Equipment = [
+          ['sword', 'Sword'], ['laumspur', 'Potion of Laumspur'], ['warhammer', 'Warhammer'], ['quiver', 'Quiver with 6 Arrows'],
+          ['bow', 'Bow'], ['rations', '5 Special Rations'], ['quarterstaff', 'Quarterstaff'], ['padded-waistcoat', 'Padded Leather Waistcoat'],
+          ['axe', 'Axe'], ['dagger', 'Dagger'], ['tinderbox', 'Tinderbox'], ['rope', 'Rope'], ['kai-shield', 'Kai Shield'],
+          ['helmet', 'Helmet'], ['torch', 'Torch'], ['blanket', 'Blanket'], ['herb-pouch', 'Herb Pouch']
+        ];
+        return `
+          <form id="continueBookForm" class="grid" data-next-book="6">
+            <div class="check-field"><span>Choose exactly 3 Magnakai Disciplines</span><div class="check-grid">${magnakaiChoices.map((name) => `<label class="check-option"><input type="checkbox" name="magnakaiDiscipline" value="${escapeHtml(name)}"><span>${escapeHtml(name)}</span></label>`).join('')}</div></div>
+            <div class="check-field"><span>Weaponmastery - choose exactly 3 Weapons if selected</span><div class="check-grid">${masteredWeapons.map((name) => `<label class="check-option"><input type="checkbox" name="weaponmasteryWeapon" value="${escapeHtml(name)}"><span>${escapeHtml(name)}</span></label>`).join('')}</div></div>
+            <label class="field">Gold Roll<input name="goldRoll" type="number" min="0" max="9" placeholder="0-9"></label>
+            <label class="field" title="Optional Book 6 rules carried over from the original assistant. Standard uses normal Magnakai rules. Curing cap limits Curing and Healing to 15 END restored in Book 6. Healing instead lets a Kai Healing user use Healing rather than Curing, capped at 10 END restored. Herb Pouch unlocks the Herb Pouch field-issue item and lets you drink a potion instead of attacking in combat.">Book 6 Curing Option<select name="deCuringOption" title="Hover the Curing Option label for a description of every choice."><option value="0" title="Use the normal Magnakai Curing rules.">Standard</option><option value="1" title="With Curing, cap total END restored by Curing or Healing at 15 during Book 6.">Curing cap</option><option value="2" title="With Kai Healing but no Curing, use Healing during Book 6; cap total END restored at 10.">Healing instead</option><option value="3" title="With Curing, unlock a Herb Pouch as field issue. It allows a potion instead of attacking in combat; the enemy takes no damage that round.">Herb Pouch</option></select></label>
+            <label class="field" title="Optional Book 6 rule: with your recorded Weaponskill weapon equipped, gain +2 Combat Skill in Book 6. This bonus can stack with Weaponmastery.">Book 6 Weaponskill Option<select name="deWeaponskillOption" title="Hover the Weaponskill Option label for its full effect."><option value="0" title="Do not apply the optional Book 6 Weaponskill rule.">Standard</option><option value="1" title="Gain +2 Combat Skill while using your recorded Weaponskill weapon in Book 6. It can stack with Weaponmastery.">Weaponskill +2 CS</option></select></label>
+            <div class="check-field"><span>Book 6 Field Issue - choose up to 7</span><div class="check-grid">${book6Equipment.map(([id, label]) => {
+              const herbPouch = id === 'herb-pouch';
+              return `<label class="check-option${herbPouch ? ' unavailable' : ''}" ${herbPouch ? 'data-herb-pouch-option title="Requires the Herb Pouch Curing Option above."' : ''}><input type="checkbox" name="equipmentChoices" value="${escapeHtml(id)}" ${herbPouch ? 'data-herb-pouch-choice disabled' : ''}><span>${escapeHtml(label)}</span></label>`;
+            }).join('')}</div></div>
+            ${weaponExchangeFields(weapons)}
+            <button type="submit" data-book6-continue>Continue to Book 6</button>
+          </form>
+        `;
+      }
+      if (nextBook === 7 || nextBook === 8) {
+        const magnakaiChoices = arr(completion.MagnakaiDisciplineChoices);
+        const masteredWeapons = ['Dagger', 'Spear', 'Mace', 'Warhammer', 'Sword', 'Axe', 'Short Sword', 'Quarterstaff', 'Broadsword', 'Bow'];
+        const book7Equipment = [
+          ['sword', 'Sword'], ['bow', 'Bow'], ['quiver', 'Quiver with 6 Arrows'], ['rope', 'Rope'], ['laumspur', 'Potion of Laumspur'],
+          ['lantern', 'Lantern'], ['mace', 'Mace'], ['meals', '3 Meals'], ['dagger', 'Dagger'], ['fireseeds', '3 Fireseeds']
+        ];
+        return `
+          <form id="continueBookForm" class="grid" data-next-book="${escapeHtml(nextBook)}">
+            <label class="field">New Magnakai Discipline<select name="magnakaiDiscipline">${magnakaiChoices.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('')}</select></label>
+            <label class="field">Weaponmastery Weapon<select name="weaponmasteryWeapon"><option value="">Not choosing Weaponmastery</option>${masteredWeapons.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('')}</select></label>
+            <label class="field">Gold Roll<input name="goldRoll" type="number" min="0" max="9" placeholder="0-9"></label>
+            <div class="check-field"><span>Book ${escapeHtml(nextBook)} Field Issue - choose up to 5</span><div class="check-grid">${book7Equipment.map(([id, label]) => `<label class="check-option"><input type="checkbox" name="equipmentChoices" value="${escapeHtml(id)}"><span>${escapeHtml(label)}</span></label>`).join('')}</div></div>
+            <button type="submit">Continue to Book ${escapeHtml(nextBook)}</button>
+          </form>
+        `;
+      }
       const equipmentLabel = equipmentLabelForBook(nextBook);
       return `
         <form id="continueBookForm" class="grid" data-next-book="${escapeHtml(nextBook)}">
@@ -3268,7 +3415,6 @@
             <div class="check-grid">${equipmentChoiceGrid(nextBook)}</div>
           </div>
           ${weaponExchangeFields(weapons)}
-          ${nextBook === 5 ? safekeepingChoiceGrid(specialItems) : ''}
           <button type="submit">Continue to Book ${escapeHtml(nextBook)}</button>
         </form>
       `;
@@ -5067,9 +5213,47 @@
         disciplines: [],
         startingFind: null,
         weaponskillWeapon: '',
+        difficulty: 'Normal',
+        permadeath: false,
+        combatMode: 'DataFile',
         preview: null,
         busy: false
       };
+    }
+
+    function renderBookSetupScreen() {
+      const pending = app.pendingBookSetup || {};
+      const completion = currentBookComplete();
+      const nextBook = Number(pending.NextBookNumber || completion.NextBookNumber || 0);
+      const nextTitle = text(completion.NextBookTitle || bookByNumber(nextBook).title, 'Next Book');
+      view.innerHTML = `
+        <div class="panel">
+          <h2>Book ${escapeHtml(nextBook)}: ${escapeHtml(nextTitle)}</h2>
+          <div class="grid">
+            ${field('Previous Book', escapeHtml(text(pending.FromBookNumber, '?')))}
+            ${field('Opening', 'Story So Far')}
+          </div>
+        </div>
+        <div class="panel">
+          <h2>Action Chart Setup</h2>
+          ${bookContinueForm(completion)}
+        </div>
+      `;
+    }
+
+    function runConfigurationFields(creation) {
+      const difficulty = text(creation.difficulty || 'Normal');
+      const combatMode = text(creation.combatMode || 'DataFile');
+      return `
+        <label class="field">Difficulty<select name="difficulty">
+          ${['Story', 'Easy', 'Normal', 'Hard', 'Veteran'].map((name) => `<option value="${name}" ${difficulty === name ? 'selected' : ''}>${name}</option>`).join('')}
+        </select></label>
+        <label class="check-option"><input type="checkbox" name="permadeath" ${creation.permadeath ? 'checked' : ''}><span>Permadeath</span></label>
+        <label class="field">Combat Resolution<select name="combatMode">
+          <option value="DataFile" ${combatMode === 'DataFile' ? 'selected' : ''}>Automatic CRT</option>
+          <option value="ManualCRT" ${combatMode === 'ManualCRT' ? 'selected' : ''}>Manual CRT</option>
+        </select></label>
+      `;
     }
 
     function currentBook1Creation() {
@@ -5140,6 +5324,7 @@
               <h3>Quick Start</h3>
               <p>Generate a complete, valid Kai character — statistics, five distinct disciplines, equipment, and all starting results — then begin reading immediately.</p>
               <label class="field">Character Name<input name="name" value="${escapeHtml(creation.name)}" autocomplete="off"></label>
+              ${runConfigurationFields(creation)}
               <button type="submit" ${creation.busy ? 'disabled' : ''}>Generate Character &amp; Begin</button>
             </form>
             <section class="creation-mode" aria-label="Guided character creation">
@@ -5167,6 +5352,7 @@
         body = `
           <form id="guidedNameForm" class="grid">
             <label class="field">Character Name<input name="name" value="${escapeHtml(creation.name)}" autocomplete="off"></label>
+            ${runConfigurationFields(creation)}
             <div class="check-field">
               <span>Book 1: Flight from the Dark</span>
               <span class="creation-note">Your character will begin at Section 1 after the final review.</span>
@@ -5304,15 +5490,28 @@
         <div class="creation-wizard">
           <div class="creation-intro">
             <h3>Start with a Later Book</h3>
-            <p>Book 2-5 use their existing standalone setup rules. Return to Book 1 for the guided character-creation experience.</p>
+            <p>Choose a self-contained starting setup for any supported book. Return to Book 1 for the guided character-creation experience.</p>
           </div>
           <form id="newForm" class="grid">
             <label class="field">Name<input name="name" value="Lone Wolf"></label>
             <label class="field">Book<select name="bookNumber" data-new-book>${books.filter((b) => b.number >= 2).map((b) => `<option value="${b.number}">${b.number}. ${b.title}</option>`).join('')}</select></label>
+            ${runConfigurationFields({ difficulty: 'Normal', permadeath: false, combatMode: 'DataFile' })}
             <label class="field" data-book-setup>Book Setup Gold Roll<input name="goldRoll" type="number" min="0" max="9" placeholder="0-9"></label>
-            <div class="check-field">
+            <div class="check-field" data-kai-setup>
               <span data-discipline-help>Kai Disciplines - choose 5</span>
               <div class="check-grid">${disciplineChoices}</div>
+            </div>
+            <div class="check-field" data-magnakai-setup hidden>
+              <span data-magnakai-help>Magnakai Disciplines</span>
+              <div class="check-grid">${magnakaiDisciplines.map((name) => `<label class="check-option"><input type="checkbox" name="magnakaiDisciplines" value="${escapeHtml(name)}"><span>${escapeHtml(name)}</span></label>`).join('')}</div>
+            </div>
+            <div class="check-field" data-mastery-setup hidden>
+              <span data-mastery-help>Weaponmastery Weapons</span>
+              <div class="check-grid">${weaponmasteryWeapons.map((name) => `<label class="check-option"><input type="checkbox" name="weaponmasteryWeapons" value="${escapeHtml(name)}"><span>${escapeHtml(name)}</span></label>`).join('')}</div>
+            </div>
+            <div class="grid" data-book6-options hidden>
+              <label class="field" title="Optional Book 6 rules carried over from the original assistant. Standard uses normal Magnakai rules. Curing cap limits Curing and Healing to 15 END restored in Book 6. Healing instead lets a Kai Healing user use Healing rather than Curing, capped at 10 END restored. Herb Pouch unlocks the Herb Pouch field-issue item and lets you drink a potion instead of attacking in combat.">Book 6 Curing Option<select name="deCuringOption" title="Hover the Curing Option label for a description of every choice."><option value="0" title="Use the normal Magnakai Curing rules.">Standard</option><option value="1" title="With Curing, cap total END restored by Curing or Healing at 15 during Book 6.">Curing cap</option><option value="2" title="With Kai Healing but no Curing, use Healing during Book 6; cap total END restored at 10.">Healing instead</option><option value="3" title="With Curing, unlock a Herb Pouch as field issue. It allows a potion instead of attacking in combat; the enemy takes no damage that round.">Herb Pouch</option></select></label>
+              <label class="field" title="Optional Book 6 rule: with your recorded Weaponskill weapon equipped, gain +2 Combat Skill in Book 6. This bonus can stack with Weaponmastery.">Book 6 Weaponskill Option<select name="deWeaponskillOption" title="Hover the Weaponskill Option label for its full effect."><option value="0" title="Do not apply the optional Book 6 Weaponskill rule.">Standard</option><option value="1" title="Gain +2 Combat Skill while using your recorded Weaponskill weapon in Book 6. It can stack with Weaponmastery.">Weaponskill +2 CS</option></select></label>
             </div>
             <div class="check-field" data-book-setup>
               <span data-equipment-help>Royal Armoury - choose 2</span>
@@ -5335,11 +5534,21 @@
     }
 
     function adjustNewCharacterDisciplines(form) {
+      const bookNumber = Number(form?.querySelector('[data-new-book]')?.value || 1);
+      const isMagnakai = [6, 7, 8].includes(bookNumber);
+      const magnakaiCount = Math.max(3, bookNumber - 3);
       const help = form?.querySelector('[data-discipline-help]');
       if (help) help.textContent = 'Kai Disciplines - choose 5';
-      const bookNumber = Number(form?.querySelector('[data-new-book]')?.value || 1);
+      form?.querySelectorAll('[data-kai-setup]').forEach((item) => { item.hidden = isMagnakai; });
+      form?.querySelectorAll('[data-magnakai-setup]').forEach((item) => { item.hidden = !isMagnakai; });
+      form?.querySelectorAll('[data-mastery-setup]').forEach((item) => { item.hidden = !isMagnakai; });
+      form?.querySelectorAll('[data-book6-options]').forEach((item) => { item.hidden = bookNumber !== 6; });
+      const magnakaiHelp = form?.querySelector('[data-magnakai-help]');
+      if (magnakaiHelp) magnakaiHelp.textContent = `Magnakai Disciplines - choose exactly ${magnakaiCount}`;
+      const masteryHelp = form?.querySelector('[data-mastery-help]');
+      if (masteryHelp) masteryHelp.textContent = `Weaponmastery Weapons - choose exactly ${magnakaiCount} only when Weaponmastery is selected`;
       form?.querySelectorAll('[data-book-setup]').forEach((item) => {
-        item.hidden = ![2, 3, 4, 5].includes(bookNumber);
+        item.hidden = ![2, 3, 4, 5, 6, 7, 8].includes(bookNumber);
       });
       const equipmentHelp = form?.querySelector('[data-equipment-help]');
       if (equipmentHelp) equipmentHelp.textContent = equipmentLabelForBook(bookNumber);
@@ -5347,8 +5556,71 @@
       if (equipmentGrid) equipmentGrid.innerHTML = equipmentChoiceGrid(bookNumber);
       const boxes = Array.from(form?.querySelectorAll('input[name="kaiDisciplines"]') || []);
       const checked = boxes.filter((box) => box.checked);
-      if (checked.length <= 5) return;
-      checked.slice(5).forEach((box) => { box.checked = false; });
+      if (checked.length > 5) checked.slice(5).forEach((box) => { box.checked = false; });
+      const magnakaiBoxes = Array.from(form?.querySelectorAll('input[name="magnakaiDisciplines"]') || []);
+      const selectedMagnakai = magnakaiBoxes.filter((box) => box.checked);
+      if (selectedMagnakai.length > magnakaiCount) selectedMagnakai.slice(magnakaiCount).forEach((box) => { box.checked = false; });
+      const masteryBoxes = Array.from(form?.querySelectorAll('input[name="weaponmasteryWeapons"]') || []);
+      const selectedMastery = masteryBoxes.filter((box) => box.checked);
+      if (selectedMastery.length > magnakaiCount) selectedMastery.slice(magnakaiCount).forEach((box) => { box.checked = false; });
+    }
+
+    function syncBook6HerbPouchChoice(form) {
+      if (Number(form?.dataset.nextBook || 0) !== 6) return;
+      const choice = form.querySelector('[data-herb-pouch-choice]');
+      const option = form.querySelector('[data-herb-pouch-option]');
+      const curingOption = Number(form.querySelector('select[name="deCuringOption"]')?.value || 0);
+      if (!choice || !option) return;
+      const available = curingOption === 3;
+      choice.disabled = !available;
+      option.classList.toggle('unavailable', !available);
+      option.title = available
+        ? 'Available because the Herb Pouch Curing Option is selected.'
+        : 'Requires the Herb Pouch Curing Option above.';
+      if (!available) choice.checked = false;
+    }
+
+    function syncBook6SetupRequirements(form) {
+      if (Number(form?.dataset.nextBook || 0) !== 6) return;
+      syncBook6HerbPouchChoice(form);
+      const weaponChoices = new Set(['sword', 'warhammer', 'bow', 'quarterstaff', 'axe', 'dagger']);
+      const selectedWeapons = Array.from(form.querySelectorAll('input[name="equipmentChoices"]:checked'))
+        .map((input) => input.value)
+        .filter((choice) => weaponChoices.has(choice));
+      const currentWeapons = arr(currentInventory().Weapons).map((item) => text(item)).filter(Boolean);
+      const requiredExchanges = Math.max(0, currentWeapons.length + selectedWeapons.length - 2);
+      const exchangeSelects = Array.from(form.querySelectorAll('select[name="weaponExchanges"]'));
+      const chosenExchanges = exchangeSelects.map((select) => text(select.value)).filter(Boolean);
+      const validExchanges = chosenExchanges.length >= requiredExchanges
+        && new Set(chosenExchanges).size === chosenExchanges.length
+        && chosenExchanges.every((weapon) => currentWeapons.includes(weapon));
+      const status = form.querySelector('[data-book6-exchange-status]');
+      const labels = Array.from(form.querySelectorAll('[data-book6-exchange-label]'));
+      const continueButton = form.querySelector('[data-book6-continue]');
+
+      exchangeSelects.forEach((select, index) => {
+        const required = index < requiredExchanges;
+        select.required = required;
+        if (!required) select.value = '';
+      });
+      labels.forEach((label, index) => {
+        label.textContent = index < requiredExchanges
+          ? `Required Weapon Exchange ${index + 1}`
+          : `Weapon Exchange ${index + 1}`;
+      });
+      if (status) {
+        status.hidden = requiredExchanges === 0;
+        if (requiredExchanges) {
+          const added = selectedWeapons.map((choice) => choice === 'bow' ? 'Bow' : choice.replace(/(^|-)\w/g, (match) => match.replace('-', '').toUpperCase())).join(', ');
+          status.textContent = `${added} would exceed the two-weapon limit. Choose ${requiredExchanges} current weapon${requiredExchanges === 1 ? '' : 's'} to replace below.`;
+        }
+      }
+      if (continueButton) {
+        continueButton.disabled = requiredExchanges > 0 && !validExchanges;
+        continueButton.textContent = requiredExchanges > 0 && !validExchanges
+          ? `Choose ${requiredExchanges} Weapon Exchange${requiredExchanges === 1 ? '' : 's'} to Continue`
+          : 'Continue to Book 6';
+      }
     }
 
     async function requestBook1CreationDraft(payload) {
@@ -5440,11 +5712,14 @@
       }
     }
 
-    async function quickStartBook1(name) {
+    async function quickStartBook1(name, runConfiguration = {}) {
       const creation = currentBook1Creation();
       if (creation.busy) return;
       creation.busy = true;
       creation.name = text(name, 'Lone Wolf').trim() || 'Lone Wolf';
+      creation.difficulty = text(runConfiguration.difficulty || 'Normal');
+      creation.permadeath = Boolean(runConfiguration.permadeath);
+      creation.combatMode = text(runConfiguration.combatMode || 'DataFile');
       render();
       try {
         let draft = await requestBook1CreationDraft({ autoGenerate: true, rolls: {} });
@@ -5474,6 +5749,9 @@
           enduranceRoll: draft.enduranceRoll,
           goldRoll: draft.goldRoll,
           startingFindRoll: draft.startingFindRoll,
+          difficulty: creation.difficulty,
+          permadeath: creation.permadeath,
+          combatMode: creation.combatMode,
           ...(disciplines.includes('Weaponskill') ? { weaponskillRoll: draft.weaponskillRoll } : {})
         });
         book1Creation = null;
@@ -5515,6 +5793,9 @@
           enduranceRoll: creation.rolls.enduranceRoll,
           goldRoll: creation.rolls.goldRoll,
           startingFindRoll: creation.rolls.startingFindRoll,
+          difficulty: creation.difficulty,
+          permadeath: creation.permadeath,
+          combatMode: creation.combatMode,
           ...(creation.disciplines.includes('Weaponskill') ? { weaponskillRoll: creation.rolls.weaponskillRoll } : {})
         });
         book1Creation = null;
@@ -5574,6 +5855,14 @@
     function renderInventory() {
       const inv = currentInventory();
       const flags = app.state.Automation?.Flags || {};
+      const weapons = arr(inv.Weapons);
+      const specialItems = arr(inv.SpecialItems);
+      const hasSommerswerd = specialItems.some((item) => text(item).toLowerCase() === 'sommerswerd');
+      const displayWeapons = [
+        ...(hasSommerswerd ? [{ item: 'Sommerswerd', type: 'special', readOnly: true }] : []),
+        ...weapons.map((item, index) => ({ item, type: 'weapon', index, count: weapons.length }))
+      ];
+      const displaySpecialItems = specialItems.map((item, index) => ({ item, type: 'special', index, count: specialItems.length }));
       const backpackLabel = flags.backpackAvailable === false || flags.backpackItemsAvailable === false ? 'Unavailable' : `${itemSlotTotal(inv.BackpackItems)}/8`;
       view.innerHTML = `
         <div class="panel">
@@ -5590,9 +5879,9 @@
           ${statButtons('gold', 'Gold Crowns')}
         </div>
         ${storedGearPanel()}
-        ${itemList('Weapons', 'weapon', inv.Weapons)}
+        ${itemList('Weapons', 'weapon', displayWeapons)}
         ${itemList('Backpack', 'backpack', inv.BackpackItems)}
-        ${itemList('Special Items', 'special', inv.SpecialItems)}
+        ${itemList('Special Items', 'special', displaySpecialItems)}
         <div class="panel">
           <h2>Add Item</h2>
           <form id="itemForm" class="controls">
@@ -5699,6 +5988,13 @@
           ${modeActionButton(`data-flow-loot="${escapeHtml(text(loot.id))}"`, 'Apply', 'section loot')}
         </div>
       `).join('');
+      const shopRows = arr(flow.Shop?.Sales).map((sale) => `
+        <div class="item-row">
+          <small>Sell</small>
+          <span>${escapeHtml(text(sale.Label, 'Item'))} for ${escapeHtml(text(sale.Price, 0))} Gold</span>
+          ${modeActionButton(`data-shop-sale="${escapeHtml(text(sale.Id))}"`, 'Sell', 'section loot')}
+        </div>
+      `).join('');
       const healingRows = healing.Available ? `
         <div class="item-row">
           <small>${healing.Applied ? 'Applied' : (healing.Ready ? 'Ready' : 'Wait')}</small>
@@ -5749,6 +6045,7 @@
         </div>
         ${combatRows ? `<div class="panel"><h2>Section Combat</h2>${combatRows}</div>` : ''}
         ${lootRows ? `<div class="panel"><h2>Loot And Section Items</h2>${lootRows}</div>` : ''}
+        ${shopRows ? `<div class="panel"><h2>${escapeHtml(text(flow.Shop?.Title, 'Shop'))}</h2>${shopRows}</div>` : ''}
         ${healingRows ? `<div class="panel"><h2>Kai Healing</h2>${healingRows}</div>` : ''}
         ${lossRows ? `<div class="panel"><h2>Choose Inventory Change</h2>${lossRows}</div>` : ''}
         ${statusRows ? `<div class="panel"><h2>Status Flags</h2>${statusRows}</div>` : ''}
@@ -5758,7 +6055,9 @@
     function renderCombat() {
       const combat = currentCombat();
       const c = currentCharacter();
+      const run = app.run || {};
       const active = Boolean(combat.Active);
+      const manualCrt = text(run.CombatMode, 'DataFile') === 'ManualCRT';
       const rounds = arr(combat.Log).slice(-8);
       const history = arr(app.state.CombatHistory).slice(-5).reverse();
       const ratio = active && combat.CombatRatio !== null && combat.CombatRatio !== undefined ? formatSigned(combat.CombatRatio) : '(none)';
@@ -5773,6 +6072,9 @@
         ['Enemy END', enemyEnd],
         ['Weapon', text(combat.ActiveWeapon, 'Unarmed')],
         ['Modifier', formatSigned(combat.Modifier || 0)],
+        ['Difficulty', text(run.Difficulty, 'Normal')],
+        ['Resolution', manualCrt ? 'Manual CRT' : 'Automatic CRT'],
+        ['Permadeath', run.Permadeath ? 'On' : 'Off'],
         ['Evade', combat.CanEvade ? 'Available' : 'No'],
         ['Rounds', String(arr(combat.Log).length)]
       ];
@@ -5782,8 +6084,14 @@
           ${active ? `
             <form id="roundForm" class="controls combat-actions">
               <select name="activeWeapon" title="Active combat weapon">${combatWeaponOptions(combat)}</select>
-              <input name="roll" type="number" min="0" max="9" placeholder="Roll">
-              <button type="submit">Resolve Round</button>
+              ${manualCrt ? `
+                <input name="enemyLoss" type="number" min="0" placeholder="Enemy loss">
+                <input name="playerLoss" type="number" min="0" placeholder="Your loss">
+                <button type="submit">Record CRT Result</button>
+              ` : `
+                <input name="roll" type="number" min="0" max="9" placeholder="Roll">
+                <button type="submit">Resolve Round</button>
+              `}
               <button type="button" data-combat-auto ${manualDisabledAttributes('combat auto-resolve')} title="${isManualMode() ? 'Manual mode: click for combat round advice. No combat rounds will be resolved.' : 'Resolve the fight automatically using the current combat setup.'}">Auto Resolve</button>
               <button type="button" data-combat-evade ${combat.CanEvade ? '' : 'disabled'}>Evade</button>
               <button type="button" class="danger" data-combat-stop>Stop</button>
@@ -5802,6 +6110,22 @@
               <button type="submit">Start Combat</button>
             </form>
           `}
+        </div>
+        <div class="panel">
+          <h2>Run Rules</h2>
+          <form id="combatModeForm" class="controls">
+            <label class="field">Combat Resolution<select name="combatMode">
+              <option value="DataFile" ${manualCrt ? '' : 'selected'}>Automatic CRT</option>
+              <option value="ManualCRT" ${manualCrt ? 'selected' : ''}>Manual CRT</option>
+            </select></label>
+            <button type="submit">Set Resolution</button>
+          </form>
+          ${text(run.Difficulty) === 'Veteran' && (text(combat.ActiveWeapon) === 'Sommerswerd' || arr(currentInventory().Weapons).includes('Sommerswerd')) ? `
+            <form id="sommerswerdPermissionForm" class="controls">
+              <label class="check-option"><input name="allowed" type="checkbox" ${combat.SommerswerdAllowed ? 'checked' : ''}><span>Section explicitly allows Sommerswerd</span></label>
+              <button type="submit">Record Permission</button>
+            </form>
+          ` : ''}
         </div>
         ${active ? renderCombatDuelMeters(combat) : ''}
         <div class="panel">
@@ -5995,9 +6319,28 @@
 
     function renderSettings() {
       const settings = app.state.Settings || {};
+      const run = app.run || {};
       const paths = app.paths || {};
       const currentScope = cardScopeForView(activeView === 'settings' ? 'sheet' : activeView);
+      const difficulties = arr(run.Difficulties);
+      const currentDifficulty = text(run.Difficulty, 'Normal');
+      const currentCombatMode = text(run.CombatMode, 'DataFile');
+      const permadeathAllowed = currentDifficulty !== 'Story';
       view.innerHTML = `
+        <div class="panel">
+          <h2>Game Modes</h2>
+          <form id="runConfigurationForm" class="grid">
+            <label class="field">Difficulty<select name="difficulty" title="Changes the campaign's endurance-loss and achievement rules from this point forward.">
+              ${difficulties.map((definition) => `<option value="${escapeHtml(text(definition.Name))}" ${text(definition.Name) === currentDifficulty ? 'selected' : ''} title="${escapeHtml(text(definition.Description))}">${escapeHtml(text(definition.Name))}</option>`).join('')}
+            </select></label>
+            <label class="check-option" title="On defeat, permadeath ends the current run. Story difficulty always keeps this off."><input type="checkbox" name="permadeath" ${run.Permadeath ? 'checked' : ''} ${permadeathAllowed ? '' : 'disabled'}><span>Permadeath</span></label>
+            <label class="field">Combat Resolution<select name="combatMode" title="Automatic CRT applies combat results. Manual CRT gives you the table result to record yourself.">
+              <option value="DataFile" ${currentCombatMode === 'DataFile' ? 'selected' : ''}>Automatic CRT</option>
+              <option value="ManualCRT" ${currentCombatMode === 'ManualCRT' ? 'selected' : ''}>Manual CRT</option>
+            </select></label>
+            <button type="submit">Apply Game Modes</button>
+          </form>
+        </div>
         <div class="panel">
           <h2>Settings</h2>
           <div class="grid">
@@ -6222,7 +6565,21 @@
       return `<div class="controls stat-controls" style="margin-bottom:.45rem"><div class="stat-adjust-line"><span class="${labelClass}" ${labelStyle}>${label}</span><button data-adjust="${stat}:-1">-1</button><button data-adjust="${stat}:1">+1</button></div><div class="stat-set-line"><input data-set="${stat}" type="number" placeholder="Set"><button data-set-button="${stat}">Set</button></div></div>`;
     }
     function itemList(title, type, items) {
-      const rows = arr(items).map((item, index) => `<div class="item-row"><small>${index + 1}</small><span>${escapeHtml(item)}</span>${keyItemNote(item)}${itemActionButtons(type, item)}<button class="danger" data-drop="${type}:${encodeURIComponent(item)}">Drop</button></div>`).join('');
+      const rows = arr(items).map((entry, index) => {
+        const item = typeof entry === 'object' && entry !== null ? text(entry.item) : text(entry);
+        const itemType = typeof entry === 'object' && entry !== null ? text(entry.type, type) : type;
+        const sourceIndex = typeof entry === 'object' && entry !== null && Number.isInteger(entry.index) ? entry.index : index;
+        const itemCount = typeof entry === 'object' && entry !== null && Number.isInteger(entry.count) ? entry.count : arr(items).length;
+        const reorderable = !(typeof entry === 'object' && entry !== null && entry.readOnly);
+        const selected = reorderable && inventoryMoveSelection?.type === itemType && Number(inventoryMoveSelection.index) === sourceIndex;
+        const controls = selected ? `
+          <span class="inventory-reorder-controls">
+            <button type="button" data-inventory-move="${escapeHtml(itemType)}:${sourceIndex}:${sourceIndex - 1}" title="Move ${escapeHtml(item)} up" ${sourceIndex === 0 ? 'disabled' : ''}>&uarr;</button>
+            <button type="button" data-inventory-move="${escapeHtml(itemType)}:${sourceIndex}:${sourceIndex + 1}" title="Move ${escapeHtml(item)} down" ${sourceIndex === itemCount - 1 ? 'disabled' : ''}>&darr;</button>
+          </span>` : '';
+        const reorderButton = reorderable ? `<button class="inventory-drag-handle" type="button" data-inventory-select="${escapeHtml(itemType)}:${sourceIndex}" title="Reorder ${escapeHtml(item)}" aria-label="Reorder ${escapeHtml(item)}">&#9776;</button>` : '<span class="inventory-drag-handle" aria-hidden="true">&#9776;</span>';
+        return `<div class="item-row">${reorderButton}<small>${index + 1}</small><span>${escapeHtml(item)}</span>${keyItemNote(item)}${controls}${itemActionButtons(itemType, item)}<button class="danger" data-drop="${itemType}:${encodeURIComponent(item)}">Drop</button></div>`;
+      }).join('');
       return `<div class="panel"><h2>${title}</h2>${rows || '<div class="item-row"><span>Empty</span></div>'}</div>`;
     }
     function quickDropRows(inv) {
@@ -6287,7 +6644,7 @@
     function powerPanel(title, all, known) {
       return `<div class="panel"><h2>${title}</h2>${all.map((name) => {
         const has = arr(known).includes(name);
-        return `<div class="item-row"><span>${name}</span><small>${has ? 'Known' : 'Available'}</small></div>`;
+        return `<div class="item-row power-row ${has ? 'known-power' : ''}"><span>${name}</span><small>${has ? 'Known' : 'Available'}</small></div>`;
       }).join('')}</div>`;
     }
 
@@ -6309,6 +6666,18 @@
       if (button.dataset.creationMode) {
         if (button.dataset.creationMode === 'guided') resetBook1Creation('guided');
         render();
+        return;
+      }
+      if (button.dataset.inventorySelect) {
+        const [type, index] = button.dataset.inventorySelect.split(':');
+        inventoryMoveSelection = { type, index: Number(index) };
+        render();
+        return;
+      }
+      if (button.dataset.inventoryMove) {
+        const [type, from, to] = button.dataset.inventoryMove.split(':');
+        inventoryMoveSelection = null;
+        await action({ action: 'reorder_inventory', type, from: Number(from), to: Number(to) });
         return;
       }
       if (button.dataset.creationShowLegacy !== undefined) {
@@ -6550,6 +6919,11 @@
       }
       if (button.dataset.deathRecovery) await action({ action: 'death_recovery', mode: button.dataset.deathRecovery });
       if (button.dataset.completeBook !== undefined) await action({ action: 'complete_book' });
+      if (button.dataset.openNextBook) {
+        const nextBook = Number(button.dataset.openNextBook);
+        await action({ action: 'open_next_book' });
+        loadStorySoFar(nextBook);
+      }
       if (button.dataset.repeatBook !== undefined) await action({ action: 'repeat_book' });
       if (button.dataset.automationApply !== undefined) await action({ action: 'apply_automation' });
       if (button.dataset.roll !== undefined) {
@@ -6563,6 +6937,7 @@
         return;
       }
       if (button.dataset.flowLoot) await action({ action: 'flow_loot', id: button.dataset.flowLoot });
+      if (button.dataset.shopSale) await action({ action: 'shop_sale', id: button.dataset.shopSale });
       if (button.dataset.cartwheelPlay !== undefined) {
         const game = button.closest('[data-cartwheel-game]');
         await action({
@@ -6638,7 +7013,17 @@
       if (button.dataset.combatAuto !== undefined) await action({ action: 'combat_auto' });
       if (button.dataset.combatEvade !== undefined) {
         const form = document.getElementById('roundForm');
-        await action({ action: 'combat_evade', activeWeapon: form?.activeWeapon.value, roll: form?.roll.value });
+        if (text(app.run?.CombatMode, 'DataFile') === 'ManualCRT') {
+          await action({
+            action: 'combat_manual_round',
+            evade: true,
+            activeWeapon: form?.activeWeapon.value,
+            enemyLoss: form?.enemyLoss.value,
+            playerLoss: form?.playerLoss.value
+          });
+        } else {
+          await action({ action: 'combat_evade', activeWeapon: form?.activeWeapon.value, roll: form?.roll.value });
+        }
       }
     });
 
@@ -6701,7 +7086,15 @@
         render();
         return;
       }
-      if (event.target.matches?.('input[name="kaiDisciplines"], [data-new-book]')) {
+      if (event.target.matches?.('select[name="deCuringOption"]')) {
+        syncBook6SetupRequirements(event.target.closest('form'));
+        return;
+      }
+      if (event.target.matches?.('#continueBookForm input[name="equipmentChoices"], #continueBookForm select[name="weaponExchanges"]')) {
+        syncBook6SetupRequirements(event.target.closest('form'));
+        return;
+      }
+      if (event.target.matches?.('input[name="kaiDisciplines"], input[name="magnakaiDisciplines"], input[name="weaponmasteryWeapons"], [data-new-book]')) {
         adjustNewCharacterDisciplines(event.target.closest('form'));
       }
     });
@@ -6712,12 +7105,28 @@
       const formData = new FormData(form);
       const data = Object.fromEntries(formData.entries());
       if (form.id === 'quickStartForm') {
-        await quickStartBook1(data.name);
+        await quickStartBook1(data.name, {
+          difficulty: data.difficulty,
+          permadeath: formData.has('permadeath'),
+          combatMode: data.combatMode
+        });
+        return;
+      }
+      if (form.id === 'runConfigurationForm') {
+        await action({
+          action: 'set_run_configuration',
+          difficulty: data.difficulty,
+          permadeath: formData.has('permadeath'),
+          combatMode: data.combatMode
+        });
         return;
       }
       if (form.id === 'guidedNameForm') {
         const creation = currentBook1Creation();
         creation.name = text(data.name, 'Lone Wolf').trim() || 'Lone Wolf';
+        creation.difficulty = text(data.difficulty || 'Normal');
+        creation.permadeath = formData.has('permadeath');
+        creation.combatMode = text(data.combatMode || 'DataFile');
         creation.step = 2;
         render();
         return;
@@ -6771,6 +7180,66 @@
       if (form.id === 'continueBookForm') {
         const armourySelections = formData.getAll('armouryChoices');
         const nextBook = Number(form.dataset.nextBook || 0);
+        const magnakaiSelections = formData.getAll('magnakaiDiscipline');
+        const masterySelections = formData.getAll('weaponmasteryWeapon');
+        const equipmentSelections = formData.getAll('equipmentChoices');
+        if (nextBook === 6) {
+          const hasWeaponmastery = magnakaiSelections.includes('Weaponmastery');
+          if (magnakaiSelections.length !== 3 || (hasWeaponmastery && masterySelections.length !== 3) || (!hasWeaponmastery && masterySelections.length)) {
+            setReceipt({ summary: 'Book 6 - choose exactly 3 Magnakai Disciplines and, only for Weaponmastery, exactly 3 mastered Weapons.' });
+            return;
+          }
+          if (equipmentSelections.length > 7) {
+            setReceipt({ summary: 'Book 6 - choose up to 7 field-issue items.' });
+            return;
+          }
+          if (equipmentSelections.includes('herb-pouch') && Number(data.deCuringOption || 0) !== 3) {
+            setReceipt({
+              summary: 'Book 6 - Herb Pouch requires the Herb Pouch Curing Option.',
+              title: 'Book 6 Setup',
+              details: [receiptDetail('Fix', 'Choose Herb Pouch under Book 6 Curing Option, or remove Herb Pouch from the field issue.')]
+            });
+            return;
+          }
+          const book6WeaponChoices = new Set(['sword', 'warhammer', 'bow', 'quarterstaff', 'axe', 'dagger']);
+          const selectedWeapons = equipmentSelections.filter((choice) => book6WeaponChoices.has(choice));
+          const currentWeapons = arr(currentInventory().Weapons).map((item) => text(item)).filter(Boolean);
+          const requiredExchanges = Math.max(0, currentWeapons.length + selectedWeapons.length - 2);
+          const exchanges = formData.getAll('weaponExchanges').filter(Boolean);
+          if (exchanges.length < requiredExchanges || new Set(exchanges).size !== exchanges.length || exchanges.some((weapon) => !currentWeapons.includes(weapon))) {
+            setReceipt({
+              summary: 'Book 6 - choose the required weapon exchange before continuing.',
+              title: 'Book 6 Setup',
+              details: [receiptDetail('Needed', `${requiredExchanges} exchange${requiredExchanges === 1 ? '' : 's'} for the selected field-issue weapon${selectedWeapons.length === 1 ? '' : 's'}.`)]
+            });
+            return;
+          }
+          await submitBookTransition({
+            action: 'continue_book',
+            magnakaiDiscipline: magnakaiSelections,
+            weaponmasteryWeapon: masterySelections,
+            goldRoll: data.goldRoll,
+            equipmentChoices: equipmentSelections,
+            weaponExchanges: formData.getAll('weaponExchanges').filter(Boolean),
+            deCuringOption: Number(data.deCuringOption || 0),
+            deWeaponskillOption: Number(data.deWeaponskillOption || 0)
+          }, nextBook);
+          return;
+        }
+        if (nextBook === 7 || nextBook === 8) {
+          if (magnakaiSelections.length !== 1 || equipmentSelections.length > 5) {
+            setReceipt({ summary: `Book ${nextBook} - choose one new Magnakai Discipline and up to 5 field-issue items.` });
+            return;
+          }
+          await action({
+            action: 'continue_book',
+            magnakaiDiscipline: magnakaiSelections[0],
+            weaponmasteryWeapon: masterySelections[0] || '',
+            goldRoll: data.goldRoll,
+            equipmentChoices: equipmentSelections
+          });
+          return;
+        }
         const equipmentRule = equipmentChoiceRuleForBook(nextBook);
         if (
           [2, 3, 4, 5].includes(nextBook)
@@ -6796,8 +7265,7 @@
           goldRoll: data.goldRoll,
           armouryChoices: nextBook === 2 ? armourySelections : [],
           equipmentChoices: [3, 4, 5].includes(nextBook) ? armourySelections : [],
-          weaponExchanges: formData.getAll('weaponExchanges').filter(Boolean),
-          safekeepingSpecialItems: formData.getAll('safekeepingSpecialItems').filter(Boolean)
+          weaponExchanges: formData.getAll('weaponExchanges').filter(Boolean)
         });
       }
       if (form.id === 'combatForm') await action({
@@ -6812,21 +7280,44 @@
         victoryRoute: data.victoryRoute,
         evadeRoute: data.evadeRoute
       });
-      if (form.id === 'roundForm') await action({ action: 'combat_round', activeWeapon: data.activeWeapon, roll: data.roll });
+      if (form.id === 'roundForm') {
+        if (text(app.run?.CombatMode, 'DataFile') === 'ManualCRT') {
+          await action({ action: 'combat_manual_round', activeWeapon: data.activeWeapon, enemyLoss: data.enemyLoss, playerLoss: data.playerLoss });
+        } else {
+          await action({ action: 'combat_round', activeWeapon: data.activeWeapon, roll: data.roll });
+        }
+      }
+      if (form.id === 'combatModeForm') await action({ action: 'set_combat_mode', combatMode: data.combatMode });
+      if (form.id === 'sommerswerdPermissionForm') await action({ action: 'set_sommerswerd_allowed', allowed: formData.has('allowed') });
       if (form.id === 'newForm') {
         const bookNumber = Number(data.bookNumber || 1);
         const kaiSelections = formData.getAll('kaiDisciplines');
-        if (kaiSelections.length !== 5) {
+        const isMagnakai = [6, 7, 8].includes(bookNumber);
+        const magnakaiSelections = formData.getAll('magnakaiDisciplines');
+        const masterySelections = formData.getAll('weaponmasteryWeapons');
+        const magnakaiCount = Math.max(3, bookNumber - 3);
+        if (!isMagnakai && kaiSelections.length !== 5) {
           setReceipt({
             summary: 'Character - Choose exactly 5 Kai Disciplines.',
             details: [receiptDetail('Selected', `${kaiSelections.length}/5`)]
           });
           return;
         }
+        if (isMagnakai && (
+          magnakaiSelections.length !== magnakaiCount
+          || (magnakaiSelections.includes('Weaponmastery') && masterySelections.length !== magnakaiCount)
+          || (!magnakaiSelections.includes('Weaponmastery') && masterySelections.length)
+        )) {
+          setReceipt({
+            summary: `Book ${bookNumber} - choose exactly ${magnakaiCount} Magnakai Disciplines and Weaponmastery Weapons only when required.`,
+            details: [receiptDetail('Disciplines', `${magnakaiSelections.length}/${magnakaiCount}`), receiptDetail('Mastered Weapons', `${masterySelections.length}/${magnakaiCount}`)]
+          });
+          return;
+        }
         const armourySelections = formData.getAll('armouryChoices');
         const equipmentRule = equipmentChoiceRuleForBook(bookNumber);
         if (
-          [2, 3, 4, 5].includes(bookNumber)
+          [2, 3, 4, 5, 6, 7, 8].includes(bookNumber)
           && (
             armourySelections.length < equipmentRule.min
             || armourySelections.length > equipmentRule.max
@@ -6848,9 +7339,16 @@
           name: data.name,
           bookNumber,
           kaiDisciplines: kaiSelections,
+          magnakaiDisciplines: magnakaiSelections,
+          weaponmasteryWeapons: masterySelections,
           goldRoll: data.goldRoll,
+          difficulty: data.difficulty,
+          permadeath: formData.has('permadeath'),
+          combatMode: data.combatMode,
+          deCuringOption: data.deCuringOption,
+          deWeaponskillOption: data.deWeaponskillOption,
           armouryChoices: bookNumber === 2 ? armourySelections : [],
-          equipmentChoices: [3, 4, 5].includes(bookNumber) ? armourySelections : []
+          equipmentChoices: [3, 4, 5, 6, 7, 8].includes(bookNumber) ? armourySelections : []
         });
         book1Creation = null;
         clearCampaignStartRequest();

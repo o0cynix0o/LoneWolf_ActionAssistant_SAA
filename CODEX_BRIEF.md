@@ -1,8 +1,9 @@
 # CODEX BRIEF — Package Lone Wolf Action Assistant as a standalone Windows desktop app
 
 ## Repo / paths
-- **Current web app (source of truth):** `C:\Scripts\LoneWolf_ActionAssistant_Redux`
-- **New standalone app (build here):** `C:\Scripts\LoneWolf_ActionAssistant_SAA`
+- **Canonical application and release source:** `C:\Scripts\LoneWolf_ActionAssistant_SAA`
+- **Historical Python/web reference:** `C:\Scripts\LoneWolf_ActionAssistant_Redux`
+- **Historical PowerShell gameplay reference:** `C:\Scripts\Lone Wolf`
 - **Repo:** https://github.com/o0cynix0o/LoneWolf_ActionAssistant_SAA
 
 ## Goal
