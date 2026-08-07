@@ -1,12 +1,14 @@
-# Lone Wolf Action Assistant 3.2.0
+# Lone Wolf Action Assistant 3.3.0
 
 Lone Wolf Action Assistant is a standalone Windows desktop play aid for the *Lone Wolf* gamebooks. It preserves the established HTML interface and embedded command-line terminal while packaging the application, Python runtime, and dependencies into one fast-launch application folder with a single normal EXE to start it.
 
-Version: **3.2.0**
+Version: **3.3.0**
 
 Current game support: **Books 1–8 are playable V3 paths. Books 6–8 support both
 fresh Magnakai setup and campaign continuation, with V1-derived automation and
-source-parity tests for their recorded rules.**
+source-parity tests for their recorded rules. Books 9–12 can be imported and
+are source-baselined, but remain intentionally unavailable as playable paths
+until their rules automation review is complete.**
 
 Runs support V1-compatible **Story, Easy, Normal, Hard, and Veteran** rules,
 optional permadeath, tamper-evident saves, difficulty-aware achievements, and
@@ -34,6 +36,10 @@ Expected folder names include:
 06tkot
 07cd
 08tjoh
+09tcof
+10tdot
+11tpot
+12tmod
 ```
 
 Each valid folder must contain at least `title.htm` and `sect1.htm`.

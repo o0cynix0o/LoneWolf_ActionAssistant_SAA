@@ -143,10 +143,16 @@ BOOKS = {
     8: {"Title": "The Jungle of Horrors", "Folder": "08tjoh", "MaxSection": 350},
 }
 
-# BOOKS is the complete playable set.  Keep BOOK_CATALOG as the public lookup
-# used by save migration and reader metadata.
+# BOOKS contains only books whose creation, transfer, and section rules are safe
+# to expose as playable. BOOK_CATALOG also tracks imported, source-audited books.
+# Keeping that boundary explicit prevents an installed book from becoming a
+# misleading playable option before its automation review is complete.
 BOOK_CATALOG = {
     **BOOKS,
+    9: {"Title": "The Cauldron of Fear", "Folder": "09tcof", "MaxSection": 350},
+    10: {"Title": "The Dungeons of Torgar", "Folder": "10tdot", "MaxSection": 350},
+    11: {"Title": "The Prisoners of Time", "Folder": "11tpot", "MaxSection": 350},
+    12: {"Title": "The Masters of Darkness", "Folder": "12tmod", "MaxSection": 350},
 }
 
 
@@ -3661,7 +3667,7 @@ class LoneWolfReduxAssistant:
         if summary is None:
             summary = self.book_summary(book_number)
 
-        next_book = book_number + 1 if book_number < max(BOOK_CATALOG) else None
+        next_book = book_number + 1 if book_number < max(BOOKS) else None
         missing_kai = [item for item in KAI_DISCIPLINES if item not in as_list(self.character.get("KaiDisciplines"))]
         missing_magnakai = [
             item for item in MAGNAKAI_DISCIPLINES

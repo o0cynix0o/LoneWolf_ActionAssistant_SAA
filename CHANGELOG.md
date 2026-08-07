@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.3.0 - 2026-08-07
+
+- Completed the Book 8 source review and promoted The Jungle of Horrors to the playable testing path.
+- Added Book 8 mandatory section effects for the gate guard, disturbed rest, monastery meal, Fireseed blast, and needle-spine injuries.
+- Added the official Book 9-12 folder metadata, import validation, install-page links, and complete per-section source-link baselines.
+- Kept Books 9-12 deliberately unavailable as playable campaigns until their conditional routes, combat, equipment transfers, and automation are reviewed.
+
 ## 3.2.0 - 2026-08-07
 
 - Completed the source-first Books 2-7 section audit and recorded the coverage in `docs/BOOK2_TO_7_SECTION_AUDIT.md`.

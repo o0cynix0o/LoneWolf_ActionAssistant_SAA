@@ -361,7 +361,9 @@ def book_files_payload() -> dict:
 
 
 def book_folder_names() -> tuple[str, ...]:
-    return tuple(str(meta.get("Folder") or "") for meta in lonewolf_redux.BOOKS.values())
+    return tuple(
+        str(meta.get("Folder") or "") for meta in lonewolf_redux.BOOK_CATALOG.values()
+    )
 
 
 def handle_native_books(payload: dict) -> dict:

@@ -89,6 +89,46 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             ["06tkot", "07cd", "08tjoh"],
         )
 
+    def test_books9_to12_have_audited_import_metadata_and_source_baselines(self) -> None:
+        audited_books = {
+            9: "09tcof",
+            10: "10tdot",
+            11: "11tpot",
+            12: "12tmod",
+        }
+        self.assertTrue(set(audited_books).isdisjoint(lonewolf_redux.BOOKS))
+        self.assertEqual(
+            {number: lonewolf_redux.book_metadata(number)["Folder"] for number in audited_books},
+            audited_books,
+        )
+
+        root = Path(lonewolf_redux.__file__).resolve().parent
+        for book_number in audited_books:
+            flow_path = root / "data" / f"book{book_number}-section-flows.json"
+            automation_path = root / "data" / f"book{book_number}-simple-automations.json"
+            flows = json.loads(flow_path.read_text(encoding="utf-8"))[str(book_number)]
+            self.assertTrue(automation_path.is_file())
+            self.assertEqual(set(flows), {str(section) for section in range(1, 351)})
+            self.assertTrue(
+                all(flow["auditStatus"] == "source-link-baseline" for flow in flows.values())
+            )
+
+    def test_book8_completion_does_not_offer_an_unreviewed_book9_handoff(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            assistant.state["Character"]["BookNumber"] = 8
+            assistant.ensure_book_completed()
+
+        completion = assistant.book_completion_payload()
+        self.assertIsNone(completion["NextBookNumber"])
+        self.assertFalse(completion["CanContinue"])
+
     def test_book1_section320_applies_the_mandatory_kraan_claw_injury(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
@@ -170,6 +210,29 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
         self.assertEqual(after_first_lorestone, 30)
         self.assertEqual(assistant.character["EnduranceCurrent"], 30)
         self.assertIn("Lorestone of Herdos", assistant.inventory["SpecialItems"])
+
+    def test_book8_audit_effects_apply_the_source_mandatory_costs(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            assistant.state["Character"].update(
+                {"BookNumber": 8, "EnduranceCurrent": 25, "EnduranceMax": 30}
+            )
+            assistant.set_section(18)
+            assistant.apply_section_automation(force=True, visit_changed=True)
+            after_spear = assistant.character["EnduranceCurrent"]
+            assistant.inventory["PocketSpecialItems"] = ["Fireseed"]
+            assistant.set_section(81)
+            assistant.apply_section_automation(force=True, visit_changed=True)
+
+        self.assertEqual(after_spear, 23)
+        self.assertEqual(assistant.character["EnduranceCurrent"], 11)
+        self.assertNotIn("Fireseed", assistant.inventory["PocketSpecialItems"])
 
 
 class LegacySaveCompatibilityTests(unittest.TestCase):
@@ -1009,24 +1072,28 @@ class CampaignEntryPointTests(unittest.TestCase):
         self.assertIn('assistant.html?campaign=new&book=1', index_html)
         self.assertIn('campaignStartLink = book.number === 1', index_html)
 
-    def test_book_six_and_seven_are_exposed_as_playable_testing_books(self) -> None:
+    def test_books_six_to_eight_are_exposed_as_playable_testing_books(self) -> None:
         index_html = self.source_text("index.html")
         library_html = self.source_text("library.html")
         assistant_html = self.source_text("assistant.html")
         self.assertIn("testingBook(6, 'The Kingdoms of Terror'", index_html)
         self.assertIn("testingBook(7, 'Castle of Death'", index_html)
+        self.assertIn("testingBook(8, 'The Jungle of Horrors'", index_html)
         self.assertIn("Playable testing build", index_html)
         self.assertIn("Open Test Reader", index_html)
         self.assertIn('assistant.html?browse=1&amp;book=6', library_html)
         self.assertIn('assistant.html?browse=1&amp;book=7', library_html)
+        self.assertIn('assistant.html?browse=1&amp;book=8', library_html)
         self.assertIn('data-book="6">Book 6</button>', assistant_html)
         self.assertIn('data-book="7">Book 7</button>', assistant_html)
+        self.assertIn('data-book="8">Book 8</button>', assistant_html)
 
     def test_reader_toolbar_switches_to_the_magnakai_series(self) -> None:
         assistant_html = self.source_text("assistant.html")
         self.assertIn('data-reader-series="kai"', assistant_html)
         self.assertIn('data-reader-series="magnakai"', assistant_html)
-        self.assertIn('Book 8 is not in testing yet.', assistant_html)
+        self.assertNotIn('Book 8 is not in testing yet.', assistant_html)
+        self.assertIn('Book 9 is not in testing yet.', assistant_html)
         self.assertIn('Book 12 is not in testing yet.', assistant_html)
         self.assertIn("const readerSeries = book.number >= 6 ? 'magnakai' : 'kai';", assistant_html)
 
@@ -1425,7 +1492,7 @@ class CardLayoutInteractionTests(unittest.TestCase):
                     return cls.assistant_html[match.start():index + 1]
         raise AssertionError(f"JavaScript function {name!r} has no closing brace")
 
-    def test_release_metadata_is_3_2_0(self) -> None:
+    def test_release_metadata_is_3_3_0(self) -> None:
         readme = (self.root / "README.md").read_text(encoding="utf-8")
         building = (self.root / "docs" / "BUILDING.md").read_text(encoding="utf-8")
         user_guide = (self.root / "docs" / "USER_GUIDE.md").read_text(encoding="utf-8")
@@ -1435,16 +1502,16 @@ class CardLayoutInteractionTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         version_info = (self.root / "version_info.txt").read_text(encoding="utf-8")
 
-        self.assertIn("# Lone Wolf Action Assistant 3.2.0", readme)
-        self.assertIn("Version: **3.2.0**", readme)
-        self.assertIn("# Building Lone Wolf Action Assistant 3.2.0", building)
-        self.assertIn("# Lone Wolf Action Assistant 3.2.0", user_guide)
-        self.assertIn("## 3.2.0", changelog)
-        self.assertIn('#define AppVersion "3.2.0"', installer)
-        self.assertIn("filevers=(3, 1, 9, 0)", version_info)
-        self.assertIn("prodvers=(3, 1, 9, 0)", version_info)
-        self.assertIn("StringStruct(u'FileVersion', u'3.2.0')", version_info)
-        self.assertIn("StringStruct(u'ProductVersion', u'3.2.0')", version_info)
+        self.assertIn("# Lone Wolf Action Assistant 3.3.0", readme)
+        self.assertIn("Version: **3.3.0**", readme)
+        self.assertIn("# Building Lone Wolf Action Assistant 3.3.0", building)
+        self.assertIn("# Lone Wolf Action Assistant 3.3.0", user_guide)
+        self.assertIn("## 3.3.0", changelog)
+        self.assertIn('#define AppVersion "3.3.0"', installer)
+        self.assertIn("filevers=(3, 3, 0, 0)", version_info)
+        self.assertIn("prodvers=(3, 3, 0, 0)", version_info)
+        self.assertIn("StringStruct(u'FileVersion', u'3.3.0')", version_info)
+        self.assertIn("StringStruct(u'ProductVersion', u'3.3.0')", version_info)
 
     def test_movable_cards_get_a_dedicated_drag_handle(self) -> None:
         self.assertIn("data-card-drag-handle", self.assistant_html)

@@ -1,4 +1,4 @@
-# Lone Wolf Action Assistant 3.2.0
+# Lone Wolf Action Assistant 3.3.0
 
 ## Installation
 
@@ -36,6 +36,10 @@ A valid book folder includes at least `title.htm` and `sect1.htm`. The expected 
 books\lw\01fftd\title.htm
 books\lw\01fftd\sect1.htm
 ```
+
+Books 9-12 can be imported now and show as installed in the app. They remain
+unavailable as playable campaigns while their source rules, conditional choices,
+combat, and item transfers are reviewed section by section.
 
 Use **Open Managed Books Folder** when you need direct access to the selected storage location.
 
