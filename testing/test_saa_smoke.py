@@ -308,6 +308,75 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
         self.assertTrue(all(item["Applied"] for item in no_divination_loot))
         self.assertTrue(all(not item["Ready"] for item in divination_loot))
 
+    def test_later_magnakai_special_equipment_rules_apply_in_combat(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+
+            assistant.state["Character"].update(
+                {"BookNumber": 11, "CombatSkillCurrent": 20, "EnduranceCurrent": 30, "EnduranceMax": 30}
+            )
+            assistant.state["Inventory"]["Weapons"] = []
+            assistant.state["Inventory"]["SpecialItems"] = ["Ironheart Broadsword"]
+            assistant.set_section(204)
+            assistant.start_section_combat()
+            assistant.set_combat_weapon("Ironheart Broadsword", save=False)
+            ironheart_cs = assistant.combat_skill_for_round(1)
+
+            assistant.state["Character"].update(
+                {"BookNumber": 12, "CombatSkillCurrent": 20, "EnduranceCurrent": 30, "EnduranceMax": 30}
+            )
+            assistant.state["Inventory"]["Weapons"] = []
+            assistant.state["Inventory"]["SpecialItems"] = ["Helshezag"]
+            assistant.set_section(104)
+            assistant.start_section_combat()
+            assistant.set_combat_weapon("Helshezag", save=False)
+            helszag_cs = assistant.combat_skill_for_round(1)
+            assistant.combat_round(["combat", "manual"], manual_losses=(0, 0))
+            after_first_helshezag_round = (assistant.character["EnduranceCurrent"], assistant.character["EnduranceMax"])
+            assistant.combat_round(["combat", "manual"], manual_losses=(0, 0))
+            after_second_helshezag_round = (assistant.character["EnduranceCurrent"], assistant.character["EnduranceMax"])
+
+            assistant.state["Inventory"]["SpecialItems"] = []
+            assistant.state["Character"].update({"CombatSkillCurrent": 20, "EnduranceCurrent": 20, "EnduranceMax": 30})
+            assistant.set_section(159)
+            assistant.apply_flow_loot("159-bronin-vest")
+            assistant.apply_flow_loot("159-silver-bracers")
+            armour_stats = (
+                assistant.character["CombatSkillCurrent"],
+                assistant.character["EnduranceCurrent"],
+                assistant.character["EnduranceMax"],
+            )
+
+            assistant.state["Inventory"]["SpecialItems"] = ["Golden Amulet"]
+            assistant.set_section(121)
+            assistant.apply_section_automation(force=True, visit_changed=True)
+            amulet_removed = assistant.inventory["SpecialItems"]
+
+            assistant.state["Inventory"].update({"Weapons": ["Sword"], "SpecialItems": []})
+            assistant.set_section(247)
+            assistant.start_section_combat()
+            unarmed_first = assistant.combat_active_weapon()
+            assistant.combat_round(["combat", "manual"], manual_losses=(0, 0))
+            assistant.combat_round(["combat", "manual"], manual_losses=(0, 0))
+            weapon_after_two_rounds = assistant.combat_active_weapon()
+            can_evade_after_two_rounds = assistant.can_evade_combat_now()
+
+        self.assertEqual(ironheart_cs, 28)
+        self.assertEqual(helszag_cs, 25)
+        self.assertEqual(after_first_helshezag_round, (30, 30))
+        self.assertEqual(after_second_helshezag_round, (29, 29))
+        self.assertEqual(armour_stats, (25, 22, 32))
+        self.assertNotIn("Golden Amulet", amulet_removed)
+        self.assertEqual(unarmed_first, "")
+        self.assertEqual(weapon_after_two_rounds, "Sword")
+        self.assertTrue(can_evade_after_two_rounds)
+
     def test_later_magnakai_rnt_routes_and_effects_follow_source_modifiers(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
@@ -1180,7 +1249,7 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
             self.assertTrue(sections.issubset(covered), f"Book {book_number} missing {sorted(sections - covered)}")
 
     def test_magnakai_combat_and_rnt_catalogue_totals_remain_source_complete(self) -> None:
-        expected_combat = {6: 28, 7: 39, 8: 37, 9: 38, 10: 40, 11: 36, 12: 58}
+        expected_combat = {6: 28, 7: 39, 8: 37, 9: 38, 10: 40, 11: 37, 12: 59}
         expected_rnt = {6: 22, 7: 22, 8: 16, 9: 18, 10: 20, 11: 23, 12: 33}
         root = Path(lonewolf_redux.__file__).resolve().parent / "data"
         for book_number in expected_combat:
@@ -1745,7 +1814,7 @@ class CardLayoutInteractionTests(unittest.TestCase):
                     return cls.assistant_html[match.start():index + 1]
         raise AssertionError(f"JavaScript function {name!r} has no closing brace")
 
-    def test_release_metadata_is_3_4_4_internal_testing(self) -> None:
+    def test_release_metadata_is_3_4_5_internal_testing(self) -> None:
         readme = (self.root / "README.md").read_text(encoding="utf-8")
         building = (self.root / "docs" / "BUILDING.md").read_text(encoding="utf-8")
         user_guide = (self.root / "docs" / "USER_GUIDE.md").read_text(encoding="utf-8")
@@ -1755,16 +1824,16 @@ class CardLayoutInteractionTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         version_info = (self.root / "version_info.txt").read_text(encoding="utf-8")
 
-        self.assertIn("# Lone Wolf Action Assistant 3.4.4 Internal Testing", readme)
-        self.assertIn("Version: **3.4.4 Internal Testing**", readme)
-        self.assertIn("# Building Lone Wolf Action Assistant 3.4.4 Internal Testing", building)
-        self.assertIn("# Lone Wolf Action Assistant 3.4.4 Internal Testing", user_guide)
-        self.assertIn("## 3.4.4 - Internal Testing", changelog)
-        self.assertIn('#define AppVersion "3.4.4"', installer)
-        self.assertIn("filevers=(3, 4, 4, 0)", version_info)
-        self.assertIn("prodvers=(3, 4, 4, 0)", version_info)
-        self.assertIn("StringStruct(u'FileVersion', u'3.4.4')", version_info)
-        self.assertIn("StringStruct(u'ProductVersion', u'3.4.4')", version_info)
+        self.assertIn("# Lone Wolf Action Assistant 3.4.5 Internal Testing", readme)
+        self.assertIn("Version: **3.4.5 Internal Testing**", readme)
+        self.assertIn("# Building Lone Wolf Action Assistant 3.4.5 Internal Testing", building)
+        self.assertIn("# Lone Wolf Action Assistant 3.4.5 Internal Testing", user_guide)
+        self.assertIn("## 3.4.5 - Internal Testing", changelog)
+        self.assertIn('#define AppVersion "3.4.5"', installer)
+        self.assertIn("filevers=(3, 4, 5, 0)", version_info)
+        self.assertIn("prodvers=(3, 4, 5, 0)", version_info)
+        self.assertIn("StringStruct(u'FileVersion', u'3.4.5')", version_info)
+        self.assertIn("StringStruct(u'ProductVersion', u'3.4.5')", version_info)
 
     def test_movable_cards_get_a_dedicated_drag_handle(self) -> None:
         self.assertIn("data-card-drag-handle", self.assistant_html)

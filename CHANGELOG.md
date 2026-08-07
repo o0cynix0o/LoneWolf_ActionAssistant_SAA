@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.4.5 - Internal Testing
+
+- Added source-verified combat handling for the Ironheart Broadsword, Helshezag, the Bronin Vest, Silver Bracers, Silver Rod, Golden Amulet, and Korlinium-scabbard encounter.
+- Added the previously omitted Book 11 Section 204 and Book 12 Section 133 printed combats, correcting the audited Book 9-12 catalogue total to 174.
+- Helshezag now grants its printed Combat Skill bonus and applies its permanent one-ENDURANCE cost from the second combat round onward.
+
 ## 3.4.4 - Internal Testing
 
 - Added 34 source-verified optional item pickups, a prompted Book 9 Weapon loss, and 21 mandatory item gains or losses across Books 9-12.

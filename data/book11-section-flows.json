@@ -3765,7 +3765,22 @@
           "Section": 302
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book11-204",
+          "enemies": [
+            {
+              "name": "Chaos-master (badly wounded)",
+              "cs": 38,
+              "endurance": 54
+            }
+          ],
+          "enemyImmune": true,
+          "activeWeapon": "Ironheart Broadsword",
+          "victoryRoute": 302
+        }
+      ]
     },
     "205": {
       "auditStatus": "source-link-baseline",

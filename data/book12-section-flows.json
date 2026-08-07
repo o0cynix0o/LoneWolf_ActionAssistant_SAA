@@ -2796,7 +2796,22 @@
           "Section": 240
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-133",
+          "enemies": [
+            {
+              "name": "Darklord Kraagenskul (without Helshezag)",
+              "cs": 35,
+              "endurance": 38
+            }
+          ],
+          "enemyImmune": true,
+          "activeWeapon": "Helshezag",
+          "victoryRoute": 240
+        }
+      ]
     },
     "134": {
       "auditStatus": "source-link-baseline",
@@ -3267,6 +3282,22 @@
               "type": "add_item",
               "container": "special",
               "name": "Bronin Vest"
+            },
+            {
+              "type": "stat",
+              "stat": "cs",
+              "delta": 3,
+              "permanent": true
+            },
+            {
+              "type": "stat",
+              "stat": "end_max",
+              "delta": 1
+            },
+            {
+              "type": "stat",
+              "stat": "end",
+              "delta": 1
             }
           ]
         },
@@ -3278,6 +3309,22 @@
               "type": "add_item",
               "container": "special",
               "name": "Silver Bracers"
+            },
+            {
+              "type": "stat",
+              "stat": "cs",
+              "delta": 2,
+              "permanent": true
+            },
+            {
+              "type": "stat",
+              "stat": "end_max",
+              "delta": 1
+            },
+            {
+              "type": "stat",
+              "stat": "end",
+              "delta": 1
             }
           ]
         }
@@ -4929,7 +4976,20 @@
           "Section": 178
         }
       ],
-      "incomingRouteCount": 3
+      "incomingRouteCount": 3,
+      "loot": [
+        {
+          "id": "240-helshezag",
+          "label": "Keep Helshezag",
+          "actions": [
+            {
+              "type": "add_item",
+              "container": "special",
+              "name": "Helshezag"
+            }
+          ]
+        }
+      ]
     },
     "241": {
       "auditStatus": "source-link-baseline",
@@ -5098,6 +5158,10 @@
               "endurance": 22
             }
           ],
+          "forceUnarmedThroughRound": 2,
+          "canEvade": true,
+          "evadeAfterRounds": 2,
+          "evadeRoute": 96,
           "victoryRoute": 349
         }
       ]

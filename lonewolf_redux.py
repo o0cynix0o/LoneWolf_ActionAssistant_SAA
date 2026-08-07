@@ -6598,6 +6598,8 @@ class LoneWolfReduxAssistant:
             "sommerswerd": "Sommerswerd",
             "magic spear": "Magic Spear",
             "bone sword": "Bone Sword",
+            "ironheart broadsword": "Ironheart Broadsword",
+            "helshezag": "Helshezag",
         }
         for item in as_list(self.inventory.get("SpecialItems")):
             key = str(item).strip().lower()
@@ -6713,6 +6715,14 @@ class LoneWolfReduxAssistant:
             if int(self.character.get("BookNumber") or 0) == 3:
                 modifier += 1
                 notes.append("Bone Sword: +1 CS in Kalte")
+        elif active_key == "ironheart broadsword":
+            modifier += 8
+            notes.append("Ironheart Broadsword: +8 CS")
+        elif active_key == "helshezag":
+            enemy_name = str(self.combat.get("EnemyName") or "").lower()
+            bonus = 7 if "darklord" in enemy_name else 5
+            modifier += bonus
+            notes.append(f"Helshezag: +{bonus} CS")
         elif self.active_weapon_matches_weaponskill():
             modifier += 2
             notes.append(f"Weaponskill ({active}): +2 CS")
@@ -8973,6 +8983,22 @@ class LoneWolfReduxAssistant:
 
     def apply_combat_per_round_actions(self) -> list[str]:
         messages: list[str] = []
+        round_entry = as_list(self.combat.get("Log"))[-1] if as_list(self.combat.get("Log")) else {}
+        if (
+            isinstance(round_entry, dict)
+            and not bool(round_entry.get("Evade"))
+            and int(round_entry.get("Round") or 0) >= 2
+            and self.combat_active_weapon().lower() == "helshezag"
+        ):
+            before_max = int(self.character["EnduranceMax"])
+            before_current = self.effective_endurance_current()
+            self.character["EnduranceMax"] = max(1, before_max - 1)
+            self.set_effective_endurance(max(0, min(before_current - 1, self.character["EnduranceMax"])))
+            messages.append(
+                "Helshezag drains 1 permanent END: "
+                f"END {before_current}->{self.effective_endurance_current()}, "
+                f"max {before_max}->{self.character['EnduranceMax']}"
+            )
         for action in as_list(self.combat.get("PerRoundActions")):
             if isinstance(action, dict):
                 action_type = str(action.get("type") or "").lower()

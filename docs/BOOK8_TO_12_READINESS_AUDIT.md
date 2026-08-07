@@ -61,9 +61,9 @@ Huntmastery.
 
 ## Books 9-12: Base Combat Catalogue
 
-All 172 printed combat encounters now load the source Combat Skill and
-ENDURANCE values in the assistant. The catalogue also includes 141 plain
-victory routes and 9 plain evade routes. It intentionally does not infer the
+All 174 printed combat encounters now load the source Combat Skill and
+ENDURANCE values in the assistant. The catalogue also includes 145 plain
+victory routes and 10 plain evade routes. It intentionally does not infer the
 remaining special-fight mechanics, such as immunity, timed modifiers,
 alternate victory routes, round limits, or post-combat rewards.
 
@@ -71,8 +71,8 @@ alternate victory routes, round limits, or post-combat rewards.
 | --- | ---: | ---: | ---: |
 | 9 | 38 | 33 | 8 |
 | 10 | 40 | 29 | 0 |
-| 11 | 36 | 30 | 0 |
-| 12 | 58 | 51 | 1 |
+| 11 | 37 | 31 | 0 |
+| 12 | 59 | 52 | 2 |
 
 ## Books 9-12: Random Number Table Rules
 
@@ -107,7 +107,7 @@ selecting an item itself.
 | 9 | 4 | 1 | 7 |
 | 10 | 13 | 0 | 4 |
 | 11 | 11 | 0 | 4 |
-| 12 | 6 | 0 | 6 |
+| 12 | 7 | 0 | 7 |
 
 Examples include Book 9's Psychic Ring and Iron Key, Book 10's Bullwhip and
 Death Knight supplies, Book 11's Ironheart Broadsword and Obsidian Seal, and
@@ -118,9 +118,22 @@ loses them.
 The following cases remain reader-directed: losses tied to an exact Action
 Chart slot when the underlying list has changed, weapon destruction tied to
 the weapon actually used, quantity choices, confiscation and later recovery,
-and special item powers such as Helshezag, the Bronin Vest, and the Silver
-Bracers. Those require stateful equipment effects or route history, not a
-safe generic inventory mutation.
+and special item powers that depend on a specific route or item interaction.
+Those require more route-history detail than a safe generic inventory mutation.
+
+## Books 9-12: First Special-Equipment Rules Pass
+
+The assistant now treats Ironheart Broadsword and Helshezag as selectable
+combat weapons. Ironheart supplies its printed +8 COMBAT SKILL bonus; Helshezag
+supplies +5 normally, +7 against a Darklord, and applies its permanent
+one-ENDURANCE drain in every combat round after the first. Book 12's Bronin
+Vest and Silver Bracers apply their printed permanent stat increases when kept.
+
+The pass also records the Silver Rod's destruction in Book 11 Section 191,
+the Golden Amulet's loss in Book 12 Section 121, Helshezag as optional loot,
+and the Book 12 Section 247 two-round unarmed and third-round evasion rule.
+It adds the two printed special combats that the prior catalogue count missed:
+Book 11 Section 204 and Book 12 Section 133.
 
 ## Internal Testing Boundary
 
@@ -131,7 +144,7 @@ pass, which must map and test, for every required case:
 
 1. Magnakai advancement and each book's printed entry equipment rules.
 2. Conditional choices for disciplines, special items, prior events, and route state.
-3. Combat-result exceptions, stateful special-item powers, remaining conditional item changes, and the remaining conditional random-number effects.
+3. Remaining combat-result exceptions, route-specific special-item powers, conditional item changes, and the remaining conditional random-number effects.
 4. Book completion and the next-book transfer rules.
 
 This keeps the assistant honest: the campaign spine is testable now, while
