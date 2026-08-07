@@ -129,6 +129,17 @@ represented, and every book ending has a deterministic next step.
 **Exit criteria:** the complete supported campaign can be played, saved,
 loaded, and resumed without state loss or unexplained manual corrections.
 
+### Phase 5 Progress
+
+- Books 6-12 now have visible, state-backed achievements: one completion
+  achievement and one 90-unique-section exploration achievement per book.
+  They use the existing achievement eligibility pools, so Story-mode completion
+  and Normal-or-harder exploration progress remain consistent with Books 1-5.
+- Campaign verification now covers the Book 8-to-12 handoff through the final
+  supported ending, explicit capacity choices, source-specific combat routes,
+  RNT effects, automatic CRT and Manual CRT save/load/resume, signed-save
+  validation, inventory order, and death/permadeath recovery.
+
 ## Phase 6: Release Readiness
 
 **Goal:** deliver a reproducible public build only after the above phases.

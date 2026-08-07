@@ -341,6 +341,97 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
         self.assertFalse(completion["CanContinue"])
         self.assertEqual(assistant.run_state["Status"], "Completed")
 
+    def test_books6_to12_achievements_unlock_from_recorded_campaign_progress(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            assistant.set_run_configuration("Story", False, "DataFile")
+
+            for book_number in range(6, 13):
+                visited = list(range(1, 91))
+                assistant.state["Character"]["BookNumber"] = book_number
+                assistant.state["CurrentBookStats"] = {
+                    "BookNumber": book_number,
+                    "BookTitle": lonewolf_redux.BOOK_CATALOG[book_number]["Title"],
+                    "StartSection": 1,
+                    "LastSection": 90,
+                    "SectionsVisited": len(visited),
+                    "VisitedSections": visited,
+                }
+                assistant.ensure_book_completed(book_number)
+
+            story_unlocks = {entry["Id"] for entry in assistant.sync_achievements()}
+            assistant.set_run_configuration("Normal", False, "DataFile")
+            exploration_unlocks = {entry["Id"] for entry in assistant.sync_achievements()}
+            expected_story = {f"lw{book_number}_complete" for book_number in range(6, 13)}
+            expected_exploration = {f"lw{book_number}_long_road" for book_number in range(6, 13)}
+            payload = assistant.achievement_payload()
+
+        self.assertTrue(expected_story.issubset(story_unlocks))
+        self.assertTrue(expected_exploration.issubset(exploration_unlocks))
+        self.assertEqual(payload["SchemaVersion"], 2)
+        for book_number in range(6, 13):
+            self.assertEqual(payload["ByBook"][str(book_number)], {
+                "BookNumber": book_number,
+                "Total": 2,
+                "Unlocked": 2,
+            })
+
+    def test_later_magnakai_combat_survives_signed_save_load_in_both_crt_modes(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            root = Path(lonewolf_redux.__file__).resolve().parent
+            for combat_mode in ("DataFile", "ManualCRT"):
+                assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                    save_dir=base / combat_mode / "saves",
+                    data_dir=root / "data",
+                    state_data_dir=base / combat_mode / "state",
+                    books_dir=base / combat_mode / "books",
+                )
+                assistant.set_run_configuration("Normal", False, combat_mode)
+                assistant.state["Character"].update(
+                    {"BookNumber": 12, "CombatSkillCurrent": 30, "EnduranceCurrent": 100, "EnduranceMax": 100}
+                )
+                assistant.state["Inventory"].update(
+                    {"Weapons": ["Dagger", "Sword"], "SpecialItems": ["Sommerswerd", "Map of the Darklands"]}
+                )
+                assistant.set_section(104)
+                assistant.start_combat(["combat", "start", "Save Fixture", "30", "100"])
+                assistant.set_combat_weapon("Dagger", save=False)
+                if combat_mode == "ManualCRT":
+                    assistant.combat_round(["combat", "manual"], manual_losses=(1, 1))
+                else:
+                    assistant.combat_round(["combat", "round", "0"])
+
+                checkpoint = base / combat_mode / "active-combat.json"
+                assistant.save_game(str(checkpoint), quiet=True)
+                recorded_rounds = len(assistant.combat["Log"])
+
+                resumed = lonewolf_redux.LoneWolfReduxAssistant(
+                    save_dir=base / combat_mode / "resumed-saves",
+                    data_dir=root / "data",
+                    state_data_dir=base / combat_mode / "resumed-state",
+                    books_dir=base / combat_mode / "books",
+                )
+                self.assertTrue(resumed.load_game(str(checkpoint), quiet=True))
+                self.assertTrue(resumed.combat["Active"])
+                self.assertEqual(resumed.character["BookNumber"], 12)
+                self.assertEqual(resumed.state["CurrentSection"], 104)
+                self.assertEqual(resumed.inventory["Weapons"], ["Dagger", "Sword"])
+                self.assertEqual(resumed.inventory["SpecialItems"], ["Sommerswerd", "Map of the Darklands"])
+                self.assertEqual(len(resumed.combat["Log"]), recorded_rounds)
+
+                if combat_mode == "ManualCRT":
+                    resumed.combat_round(["combat", "manual"], manual_losses=(1, 1))
+                else:
+                    resumed.combat_round(["combat", "round", "0"])
+                self.assertEqual(len(resumed.combat["Log"]), recorded_rounds + 1)
+
     def test_later_magnakai_nonstandard_combat_presets_resolve_their_source_routes(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)

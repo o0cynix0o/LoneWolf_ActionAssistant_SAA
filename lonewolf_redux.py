@@ -46,7 +46,7 @@ SECTION_AUTOMATION_GLOB = "book*-simple-automations.json"
 SECTION_FLOW_GLOB = "book*-section-flows.json"
 SECTION_FLOW_OVERLAY_GLOB = "*-rnt-rules.json"
 ROUTE_CHECK_GLOB = "book*-route-checks.json"
-ACHIEVEMENT_SCHEMA_VERSION = 1
+ACHIEVEMENT_SCHEMA_VERSION = 2
 LEGACY_PLAYER_LOSS_KEYS = ("Gray" + "StarLoss",)
 RUN_SIGNATURE_VERSION = "v3-run-2"
 
@@ -747,12 +747,117 @@ LONE_WOLF_BOOK5_ACHIEVEMENTS = [
     },
 ]
 
+# The later Magnakai books have a complete and source-audited campaign spine,
+# but not every optional story branch has a dedicated state flag yet.  Keep
+# their achievements tied to progress the assistant can verify today.
+LONE_WOLF_MAGNAKAI_ACHIEVEMENTS = [
+    {
+        "Id": "lw6_complete",
+        "Name": "The Kingdoms of Terror",
+        "BookNumber": 6,
+        "Category": "Story",
+        "Description": "Complete Book 6.",
+    },
+    {
+        "Id": "lw6_long_road",
+        "Name": "Book 6 Wayfinder",
+        "BookNumber": 6,
+        "Category": "Exploration",
+        "Description": "Visit 90 or more unique Book 6 sections.",
+    },
+    {
+        "Id": "lw7_complete",
+        "Name": "Castle of Death",
+        "BookNumber": 7,
+        "Category": "Story",
+        "Description": "Complete Book 7.",
+    },
+    {
+        "Id": "lw7_long_road",
+        "Name": "Book 7 Wayfinder",
+        "BookNumber": 7,
+        "Category": "Exploration",
+        "Description": "Visit 90 or more unique Book 7 sections.",
+    },
+    {
+        "Id": "lw8_complete",
+        "Name": "The Jungle of Horrors",
+        "BookNumber": 8,
+        "Category": "Story",
+        "Description": "Complete Book 8.",
+    },
+    {
+        "Id": "lw8_long_road",
+        "Name": "Book 8 Wayfinder",
+        "BookNumber": 8,
+        "Category": "Exploration",
+        "Description": "Visit 90 or more unique Book 8 sections.",
+    },
+    {
+        "Id": "lw9_complete",
+        "Name": "The Cauldron of Fear",
+        "BookNumber": 9,
+        "Category": "Story",
+        "Description": "Complete Book 9.",
+    },
+    {
+        "Id": "lw9_long_road",
+        "Name": "Book 9 Wayfinder",
+        "BookNumber": 9,
+        "Category": "Exploration",
+        "Description": "Visit 90 or more unique Book 9 sections.",
+    },
+    {
+        "Id": "lw10_complete",
+        "Name": "The Dungeons of Torgar",
+        "BookNumber": 10,
+        "Category": "Story",
+        "Description": "Complete Book 10.",
+    },
+    {
+        "Id": "lw10_long_road",
+        "Name": "Book 10 Wayfinder",
+        "BookNumber": 10,
+        "Category": "Exploration",
+        "Description": "Visit 90 or more unique Book 10 sections.",
+    },
+    {
+        "Id": "lw11_complete",
+        "Name": "The Prisoners of Time",
+        "BookNumber": 11,
+        "Category": "Story",
+        "Description": "Complete Book 11.",
+    },
+    {
+        "Id": "lw11_long_road",
+        "Name": "Book 11 Wayfinder",
+        "BookNumber": 11,
+        "Category": "Exploration",
+        "Description": "Visit 90 or more unique Book 11 sections.",
+    },
+    {
+        "Id": "lw12_complete",
+        "Name": "The Masters of Darkness",
+        "BookNumber": 12,
+        "Category": "Story",
+        "Description": "Complete Book 12.",
+    },
+    {
+        "Id": "lw12_long_road",
+        "Name": "Book 12 Wayfinder",
+        "BookNumber": 12,
+        "Category": "Exploration",
+        "Description": "Visit 90 or more unique Book 12 sections.",
+    },
+]
+
 LONE_WOLF_ACHIEVEMENTS = (
     LONE_WOLF_BOOK1_ACHIEVEMENTS
     + LONE_WOLF_BOOK2_ACHIEVEMENTS
     + LONE_WOLF_BOOK3_ACHIEVEMENTS
     + LONE_WOLF_BOOK4_ACHIEVEMENTS
     + LONE_WOLF_BOOK5_ACHIEVEMENTS
+    + LONE_WOLF_MAGNAKAI_ACHIEVEMENTS
     + [
         {
             "Id": "veteran_of_sommerlund",
@@ -4238,6 +4343,16 @@ class LoneWolfReduxAssistant:
             )
         if achievement_id == "lw5_long_road":
             return max(len(sections), self.summary_metric_for_book(5, "UniqueSectionsVisited")) >= 100
+
+        magnakai_match = re.fullmatch(r"lw(6|7|8|9|10|11|12)_(complete|long_road)", achievement_id)
+        if magnakai_match:
+            achievement_book = int(magnakai_match.group(1))
+            if magnakai_match.group(2) == "complete":
+                return self.book_completed(achievement_book)
+            return max(
+                len(self.sections_for_book(achievement_book)),
+                self.summary_metric_for_book(achievement_book, "UniqueSectionsVisited"),
+            ) >= 90
 
         return False
 
