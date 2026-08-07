@@ -2037,6 +2037,7 @@ def prepare_book6_state(
     weapon_exchanges: Any = None,
     de_curing_option: int = 0,
     de_weaponskill_option: int = 0,
+    transition_drops: Any = None,
 ) -> dict[str, Any]:
     """Convert a completed Book 5 campaign into V1-equivalent Book 6 setup."""
     prepared = normalize_state(json_clone(state))
@@ -2067,7 +2068,9 @@ def prepare_book6_state(
     prepared["Combat"] = json_clone(default_state()["Combat"])
     prepared["Combat"]["StartedSection"] = 1
     discard_transition_stored_gear(prepared)
-    inventory["BackpackItems"] = []
+    transition_messages = apply_later_magnakai_transition_drops(
+        inventory, transition_drops
+    )
     inventory["HasBackpack"] = True
     inventory["HasHerbPouch"] = False
     inventory["HerbPouchItems"] = []
@@ -2082,7 +2085,7 @@ def prepare_book6_state(
         prepared["Conditions"] = conditions
     conditions["BookSixDECuringOption"] = de_curing_option
     conditions["BookSixDEWeaponskillOption"] = de_weaponskill_option
-    setup_messages = apply_book6_starting_equipment_to_state(
+    setup_messages = transition_messages + apply_book6_starting_equipment_to_state(
         prepared,
         equipment_choices,
         weapon_exchanges,
@@ -2100,6 +2103,7 @@ def prepare_book6_state(
         "EquipmentChoices": clean_book6_equipment_choices(
             equipment_choices, herb_pouch_available=de_curing_option == 3
         ),
+        "TransitionDrops": clean_later_magnakai_transition_drops(transition_drops),
         "Messages": setup_messages,
     }
     prepared["CurrentBookStats"] = {
@@ -2121,7 +2125,7 @@ def prepare_book6_state(
 
 def prepare_book7_state(
     state: dict[str, Any], *, magnakai_discipline: str, weaponmastery_weapon: str = "",
-    gold_roll: Any | None = None, equipment_choices: Any = None,
+    gold_roll: Any | None = None, equipment_choices: Any = None, transition_drops: Any = None,
 ) -> dict[str, Any]:
     """Convert a completed Book 6 campaign into V1-equivalent Book 7 setup."""
     prepared = normalize_state(json_clone(state))
@@ -2147,20 +2151,18 @@ def prepare_book7_state(
     character.update({"BookNumber": 7, "MagnakaiDisciplines": disciplines, "MagnakaiRank": 4, "WeaponmasteryWeapons": mastery})
     prepared["CurrentSection"] = 1
     discard_transition_stored_gear(prepared)
-    inventory["BackpackItems"] = []
+    transition_messages = apply_later_magnakai_transition_drops(
+        inventory, transition_drops
+    )
     inventory["PocketSpecialItems"] = as_list(inventory.get("PocketSpecialItems")) + ["Power-key"]
-    for key in choices:
-        option = BOOK7_EQUIPMENT_OPTIONS[key]
-        for container, item in option["Items"]:
-            target = "PocketSpecialItems" if container == "pocket" else {"weapon": "Weapons", "backpack": "BackpackItems", "special": "SpecialItems"}[container]
-            inventory[target] = as_list(inventory.get(target)) + [item] if container != "special" else add_unique_item(inventory.get(target), item)
-        if option.get("Arrows"):
-            inventory["QuiverArrows"] = max(int(inventory.get("QuiverArrows") or 0), int(option["Arrows"]))
+    setup_messages = transition_messages + _apply_magnakai_field_issue(
+        prepared, choices, book_number=7
+    )
     roll = coerce_random_digit(gold_roll)
     inventory["GoldCrowns"] = min(50, int(inventory.get("GoldCrowns") or 0) + 10 + roll)
     prepared["Combat"] = json_clone(default_state()["Combat"])
     prepared["CurrentBookStats"] = {"BookNumber": 7, "BookTitle": BOOK_CATALOG[7]["Title"], "StartSection": 1, "LastSection": 1, "SectionsVisited": 0, "VisitedSections": [], "Book7GoldRoll": roll}
-    character["Book7Setup"] = {"ContinuedFromBook": 6, "NewMagnakaiDiscipline": addition[0], "EquipmentChoices": choices}
+    character["Book7Setup"] = {"ContinuedFromBook": 6, "NewMagnakaiDiscipline": addition[0], "EquipmentChoices": choices, "TransitionDrops": clean_later_magnakai_transition_drops(transition_drops), "Messages": setup_messages}
     sync_magnakai_lore_circle_bonuses(prepared)
     prepared["CurrentBookStats"]["StartingEnduranceMax"] = int(character["EnduranceMax"])
     return normalize_state(prepared)
@@ -2168,7 +2170,7 @@ def prepare_book7_state(
 
 def prepare_book8_state(
     state: dict[str, Any], *, magnakai_discipline: str, weaponmastery_weapon: str = "",
-    gold_roll: Any | None = None, equipment_choices: Any = None,
+    gold_roll: Any | None = None, equipment_choices: Any = None, transition_drops: Any = None,
 ) -> dict[str, Any]:
     """Convert a completed Book 7 campaign into V1-equivalent Book 8 setup."""
     prepared = normalize_state(json_clone(state))
@@ -2192,20 +2194,18 @@ def prepare_book8_state(
     character.update({"BookNumber": 8, "MagnakaiDisciplines": disciplines, "MagnakaiRank": 5, "WeaponmasteryWeapons": mastery})
     prepared["CurrentSection"] = 1
     discard_transition_stored_gear(prepared)
-    inventory["BackpackItems"] = []
+    transition_messages = apply_later_magnakai_transition_drops(
+        inventory, transition_drops
+    )
     inventory["PocketSpecialItems"] = as_list(inventory.get("PocketSpecialItems")) + ["Pass"]
-    for key in choices:
-        option = BOOK7_EQUIPMENT_OPTIONS[key]
-        for container, item in option["Items"]:
-            target = "PocketSpecialItems" if container == "pocket" else {"weapon": "Weapons", "backpack": "BackpackItems", "special": "SpecialItems"}[container]
-            inventory[target] = as_list(inventory.get(target)) + [item] if container != "special" else add_unique_item(inventory.get(target), item)
-        if option.get("Arrows"):
-            inventory["QuiverArrows"] = max(int(inventory.get("QuiverArrows") or 0), int(option["Arrows"]))
+    setup_messages = transition_messages + _apply_magnakai_field_issue(
+        prepared, choices, book_number=8
+    )
     roll = coerce_random_digit(gold_roll)
     inventory["GoldCrowns"] = min(50, int(inventory.get("GoldCrowns") or 0) + 10 + roll)
     prepared["Combat"] = json_clone(default_state()["Combat"])
     prepared["CurrentBookStats"] = {"BookNumber": 8, "BookTitle": BOOK_CATALOG[8]["Title"], "StartSection": 1, "LastSection": 1, "SectionsVisited": 0, "VisitedSections": [], "Book8GoldRoll": roll}
-    character["Book8Setup"] = {"ContinuedFromBook": 7, "NewMagnakaiDiscipline": addition[0], "EquipmentChoices": choices}
+    character["Book8Setup"] = {"ContinuedFromBook": 7, "NewMagnakaiDiscipline": addition[0], "EquipmentChoices": choices, "TransitionDrops": clean_later_magnakai_transition_drops(transition_drops), "Messages": setup_messages}
     sync_magnakai_lore_circle_bonuses(prepared)
     prepared["CurrentBookStats"]["StartingEnduranceMax"] = int(character["EnduranceMax"])
     return normalize_state(prepared)
@@ -10350,6 +10350,7 @@ class LoneWolfReduxAssistant:
                 weapon_exchanges=book6_weapon_exchanges,
                 de_curing_option=book6_de_curing_option,
                 de_weaponskill_option=book6_de_weaponskill_option,
+                transition_drops=transition_drops,
             )
             return
         if next_book == 7:
@@ -10358,6 +10359,7 @@ class LoneWolfReduxAssistant:
                 weaponmastery_weapon=book6_weaponmastery_weapons,
                 gold_roll=book6_gold_roll,
                 equipment_choices=book6_equipment_choices,
+                transition_drops=transition_drops,
             )
             return
         if next_book == 8:
@@ -10376,6 +10378,7 @@ class LoneWolfReduxAssistant:
                 weaponmastery_weapon=book6_weaponmastery_weapons,
                 gold_roll=book6_gold_roll,
                 equipment_choices=book6_equipment_choices,
+                transition_drops=transition_drops,
             )
             return
         if next_book not in {2, 3, 4, 5}:
@@ -10418,6 +10421,10 @@ class LoneWolfReduxAssistant:
         self.automation["Journal"] = journal[-100:]
         self.automation["DeathHistory"] = death_history
 
+        transition_messages = apply_later_magnakai_transition_drops(
+            self.inventory, transition_drops
+        )
+        messages.extend(transition_messages)
         messages.append(f"Added Kai Discipline: {selected_discipline}")
         weaponskill_digit: int | None = None
         weaponskill_weapon = ""
@@ -10494,6 +10501,7 @@ class LoneWolfReduxAssistant:
             "GoldAfter": after_gold,
             setup_choice_key: choice_ids,
             setup_label_key: choice_labels,
+            "TransitionDrops": clean_later_magnakai_transition_drops(transition_drops),
         }
         if weaponskill_digit is not None:
             setup["WeaponskillRoll"] = weaponskill_digit
@@ -10572,6 +10580,7 @@ class LoneWolfReduxAssistant:
         weapon_exchanges: Any = None,
         de_curing_option: int = 0,
         de_weaponskill_option: int = 0,
+        transition_drops: Any = None,
     ) -> None:
         """Complete the Book 5-to-6 transition without exposing Book 6 prematurely."""
         completion = self.book_completion_payload()
@@ -10589,6 +10598,7 @@ class LoneWolfReduxAssistant:
             weapon_exchanges=weapon_exchanges,
             de_curing_option=de_curing_option,
             de_weaponskill_option=de_weaponskill_option,
+            transition_drops=transition_drops,
         )
         self.automation["Ending"] = None
         self.automation["PendingBookSetup"] = None
@@ -10599,13 +10609,13 @@ class LoneWolfReduxAssistant:
         self.autosave()
         print(f"Advanced to Book 6: {BOOK_CATALOG[6]['Title']}")
 
-    def continue_to_book7(self, *, magnakai_discipline: Any, weaponmastery_weapon: Any = "", gold_roll: int | None = None, equipment_choices: Any = None) -> None:
+    def continue_to_book7(self, *, magnakai_discipline: Any, weaponmastery_weapon: Any = "", gold_roll: int | None = None, equipment_choices: Any = None, transition_drops: Any = None) -> None:
         completion = self.book_completion_payload()
         summary = completion.get("Summary") if isinstance(completion.get("Summary"), dict) else {}
         if not completion.get("Active") or int(summary.get("BookNumber") or 0) != 6:
             raise ValueError("Book 7 setup requires a completed Book 6 campaign.")
         self.restore_endurance_for_book_transition()
-        self.state = prepare_book7_state(self.state, magnakai_discipline=str(magnakai_discipline or ""), weaponmastery_weapon=str(weaponmastery_weapon or ""), gold_roll=gold_roll, equipment_choices=equipment_choices)
+        self.state = prepare_book7_state(self.state, magnakai_discipline=str(magnakai_discipline or ""), weaponmastery_weapon=str(weaponmastery_weapon or ""), gold_roll=gold_roll, equipment_choices=equipment_choices, transition_drops=transition_drops)
         self.automation["Ending"] = None
         self.automation["PendingBookSetup"] = None
         self.record_section_visit()
@@ -10614,13 +10624,13 @@ class LoneWolfReduxAssistant:
         self.autosave()
         print(f"Advanced to Book 7: {BOOK_CATALOG[7]['Title']}")
 
-    def continue_to_book8(self, *, magnakai_discipline: Any, weaponmastery_weapon: Any = "", gold_roll: int | None = None, equipment_choices: Any = None) -> None:
+    def continue_to_book8(self, *, magnakai_discipline: Any, weaponmastery_weapon: Any = "", gold_roll: int | None = None, equipment_choices: Any = None, transition_drops: Any = None) -> None:
         completion = self.book_completion_payload()
         summary = completion.get("Summary") if isinstance(completion.get("Summary"), dict) else {}
         if not completion.get("Active") or int(summary.get("BookNumber") or 0) != 7:
             raise ValueError("Book 8 setup requires a completed Book 7 campaign.")
         self.restore_endurance_for_book_transition()
-        self.state = prepare_book8_state(self.state, magnakai_discipline=str(magnakai_discipline or ""), weaponmastery_weapon=str(weaponmastery_weapon or ""), gold_roll=gold_roll, equipment_choices=equipment_choices)
+        self.state = prepare_book8_state(self.state, magnakai_discipline=str(magnakai_discipline or ""), weaponmastery_weapon=str(weaponmastery_weapon or ""), gold_roll=gold_roll, equipment_choices=equipment_choices, transition_drops=transition_drops)
         self.automation["Ending"] = None
         self.automation["PendingBookSetup"] = None
         self.record_section_visit()

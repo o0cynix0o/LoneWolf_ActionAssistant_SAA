@@ -110,9 +110,10 @@ represented, and every book ending has a deterministic next step.
 - The campaign transition is covered end to end from Book 8 through Book 12.
   Book 12 closes the supported campaign without offering an invalid Book 13
   handoff.
-- A full Backpack or two carried Weapons can no longer dead-end a later-book
-  field issue. The handoff presents an explicit player-selected leave-behind
-  list and records those drops in the new book's setup history.
+- A full Backpack or two carried Weapons can no longer dead-end a field issue.
+  Every supported handoff presents an explicit player-selected leave-behind
+  list when capacity matters and records those drops in the new book's setup
+  history; no transition silently clears the Backpack.
 
 ## Phase 5: Campaign Verification
 

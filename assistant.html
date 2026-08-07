@@ -3378,6 +3378,17 @@
       `;
     }
 
+    function transitionBackpackDropFields(sourceBackpack) {
+      const items = arr(sourceBackpack).map((item) => text(item)).filter(Boolean);
+      if (!items.length) return '';
+      return `
+        <div class="check-field">
+          <span>Leave Backpack Items Behind Before Field Issue</span>
+          <div class="check-grid">${items.map((item, index) => `<label class="check-option"><input type="checkbox" name="transitionDrops" value="backpack:${escapeHtml(index)}"><span>${escapeHtml(item)}</span></label>`).join('')}</div>
+        </div>
+      `;
+    }
+
     function bookContinueForm(completion) {
       const choices = arr(completion.KaiDisciplineChoices);
       const kaiOptions = choices.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('');
@@ -3403,6 +3414,7 @@
               const herbPouch = id === 'herb-pouch';
               return `<label class="check-option${herbPouch ? ' unavailable' : ''}" ${herbPouch ? 'data-herb-pouch-option title="Requires the Herb Pouch Curing Option above."' : ''}><input type="checkbox" name="equipmentChoices" value="${escapeHtml(id)}" ${herbPouch ? 'data-herb-pouch-choice disabled' : ''}><span>${escapeHtml(label)}</span></label>`;
             }).join('')}</div></div>
+            ${transitionBackpackDropFields(summary.BackpackItems)}
             ${weaponExchangeFields(weapons)}
             <button type="submit" data-book6-continue>Continue to Book 6</button>
           </form>
@@ -3446,6 +3458,7 @@
             <span>${escapeHtml(equipmentLabel)}</span>
             <div class="check-grid">${equipmentChoiceGrid(nextBook)}</div>
           </div>
+          ${transitionBackpackDropFields(summary.BackpackItems)}
           ${weaponExchangeFields(weapons)}
           <button type="submit">Continue to Book ${escapeHtml(nextBook)}</button>
         </form>
@@ -7313,7 +7326,8 @@
             equipmentChoices: equipmentSelections,
             weaponExchanges: formData.getAll('weaponExchanges').filter(Boolean),
             deCuringOption: Number(data.deCuringOption || 0),
-            deWeaponskillOption: Number(data.deWeaponskillOption || 0)
+            deWeaponskillOption: Number(data.deWeaponskillOption || 0),
+            transitionDrops: formData.getAll('transitionDrops')
           }, nextBook);
           return;
         }
@@ -7358,7 +7372,8 @@
           goldRoll: data.goldRoll,
           armouryChoices: nextBook === 2 ? armourySelections : [],
           equipmentChoices: [3, 4, 5].includes(nextBook) ? armourySelections : [],
-          weaponExchanges: formData.getAll('weaponExchanges').filter(Boolean)
+          weaponExchanges: formData.getAll('weaponExchanges').filter(Boolean),
+          transitionDrops: formData.getAll('transitionDrops')
         });
       }
       if (form.id === 'combatForm') await action({

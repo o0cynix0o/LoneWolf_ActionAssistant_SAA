@@ -147,12 +147,12 @@ coverage for their route and timing behavior. This includes Book 9's eight
 evade routes, Book 11 Section 204's immunity and Ironheart Broadsword case,
 and Book 12's immediate-evade and forced-unarmed encounters.
 
-The Book 8-to-12 handoff is also exercised as one campaign flow. When a new
-field issue would exceed the two-Weapon or eight-item Backpack capacity, the
-transition setup lets the player explicitly leave selected carried items
-behind before the issue is applied. Those choices are recorded in the next
-book's setup rather than silently discarding equipment. Book 12 now resolves
-to the stable supported-campaign end state.
+The Book 8-to-12 handoff is also exercised as one campaign flow. Across every
+supported handoff, when a new field issue would exceed the two-Weapon or
+eight-item Backpack capacity, the transition setup lets the player explicitly
+leave selected carried items behind before the issue is applied. Those choices
+are recorded in the next book's setup; no transition silently clears the
+Backpack. Book 12 now resolves to the stable supported-campaign end state.
 
 ## Internal Testing Boundary
 

@@ -210,6 +210,81 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
         self.assertEqual(book11["Character"]["MagnakaiRank"], 8)
         self.assertEqual(book11["Character"]["Book11Setup"]["EquipmentChoices"], [])
 
+    def test_generic_campaign_dispatch_reaches_books8_and9(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state["Character"].update(
+                {
+                    "BookNumber": 7,
+                    "MagnakaiDisciplines": ["Animal Control", "Curing", "Invisibility", "Huntmastery"],
+                    "MagnakaiRank": 4,
+                    "WeaponmasteryWeapons": [],
+                }
+            )
+            assistant.ensure_book_completed()
+            assistant.continue_completed_book(
+                book6_magnakai_disciplines="Pathsmanship", book6_equipment_choices=[]
+            )
+            self.assertEqual(assistant.character["BookNumber"], 8)
+            assistant.ensure_book_completed()
+            assistant.continue_completed_book(
+                book6_magnakai_disciplines="Divination",
+                book6_gold_roll=0,
+                book6_equipment_choices=["quiver", "rope", "laumspur", "lantern", "meals"],
+            )
+            self.assertEqual(assistant.character["BookNumber"], 9)
+
+    def test_full_backpack_can_be_trimmed_during_a_book2_transition(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state["Character"]["BookNumber"] = 1
+            assistant.state["Inventory"]["BackpackItems"] = [f"Pack item {index}" for index in range(8)]
+            assistant.ensure_book_completed()
+            assistant.continue_completed_book(
+                kai_discipline="Camouflage",
+                book2_gold_roll=0,
+                book2_armoury_choices=["two-meals", "healing-potion"],
+                transition_drops=["backpack:0", "backpack:1", "backpack:2"],
+            )
+
+        self.assertEqual(assistant.character["BookNumber"], 2)
+        self.assertEqual(len(assistant.inventory["BackpackItems"]), 8)
+        self.assertEqual(assistant.character["Book2Setup"]["TransitionDrops"], [("backpack", 0), ("backpack", 1), ("backpack", 2)])
+
+    def test_books6_to8_keep_a_full_backpack_until_the_player_selects_drops(self) -> None:
+        state = lonewolf_redux.default_state()
+        state["Character"].update({"BookNumber": 5, "MagnakaiDisciplines": [], "WeaponmasteryWeapons": []})
+        state["Inventory"]["BackpackItems"] = [f"Pack item {index}" for index in range(8)]
+        book6 = lonewolf_redux.prepare_book6_state(
+            state,
+            magnakai_disciplines=["Animal Control", "Curing", "Invisibility"],
+            equipment_choices=["laumspur"],
+            transition_drops=["backpack:0"],
+        )
+        book7 = lonewolf_redux.prepare_book7_state(
+            book6, magnakai_discipline="Huntmastery", equipment_choices=["laumspur"],
+            transition_drops=["backpack:0"],
+        )
+        book8 = lonewolf_redux.prepare_book8_state(
+            book7, magnakai_discipline="Pathsmanship", equipment_choices=["laumspur"],
+            transition_drops=["backpack:0"],
+        )
+
+        self.assertEqual(len(book6["Inventory"]["BackpackItems"]), 8)
+        self.assertEqual(len(book7["Inventory"]["BackpackItems"]), 8)
+        self.assertEqual(len(book8["Inventory"]["BackpackItems"]), 8)
+        self.assertIn("Pack item 3", book8["Inventory"]["BackpackItems"])
+        self.assertNotIn("Pack item 0", book6["Inventory"]["BackpackItems"])
+        self.assertEqual(book8["Character"]["Book8Setup"]["TransitionDrops"], [("backpack", 0)])
+
     def test_later_magnakai_campaign_can_continue_through_book12_and_end_cleanly(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
@@ -707,7 +782,10 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
         self.assertEqual(result["Character"]["BookNumber"], 6)
         self.assertEqual(result["Character"]["MagnakaiRank"], 3)
         self.assertEqual(result["Character"]["MagnakaiDisciplines"], ["Weaponmastery", "Curing", "Nexus"])
-        self.assertEqual(result["Inventory"]["BackpackItems"], ["Special Rations"] * 5)
+        self.assertEqual(
+            result["Inventory"]["BackpackItems"],
+            ["Meal", "Potion"] + ["Special Rations"] * 5,
+        )
         self.assertEqual(result["Inventory"]["QuiverArrows"], 6)
         self.assertTrue(result["Inventory"]["HasHerbPouch"])
         self.assertIn("Map of the Stornlands", result["Inventory"]["SpecialItems"])
