@@ -40,11 +40,11 @@ the book's prose.
 The app now recognizes the folders `09tcof`, `10tdot`, `11tpot`, and `12tmod`.
 It validates and imports their official HTML ZIPs or extracted folders.
 
-## Playability Boundary
+## Internal Testing Boundary
 
-Books 9-12 are not in `BOOKS`, the playable catalog. They deliberately do not
-offer fresh-character creation, campaign continuation, or reader play buttons
-in this release. The baseline is a prerequisite for the next implementation
+Books 9-12 are now internal testing paths. They offer fresh Magnakai setup,
+campaign continuation, reader navigation, saves, inventory, and manual combat
+tools. Their section baselines are a prerequisite for the next implementation
 pass, which must map and test, for every required case:
 
 1. Magnakai advancement and each book's printed entry equipment rules.
@@ -52,6 +52,5 @@ pass, which must map and test, for every required case:
 3. Combat stats, combat-result exceptions, losses, gains, meals, and random-number effects.
 4. Book completion and the next-book transfer rules.
 
-This keeps the assistant honest: installed source files are ready for the
-mapping work, while the player cannot accidentally begin a campaign with rules
-that have not been verified.
+This keeps the assistant honest: the campaign spine is testable now, while
+unmapped per-section rules remain manual until they have been verified.

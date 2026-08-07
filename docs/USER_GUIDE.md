@@ -1,4 +1,4 @@
-# Lone Wolf Action Assistant 3.3.0
+# Lone Wolf Action Assistant 3.4.0 Internal Testing
 
 ## Installation
 
@@ -37,9 +37,9 @@ books\lw\01fftd\title.htm
 books\lw\01fftd\sect1.htm
 ```
 
-Books 9-12 can be imported now and show as installed in the app. They remain
-unavailable as playable campaigns while their source rules, conditional choices,
-combat, and item transfers are reviewed section by section.
+Books 9-12 can be imported and tested as campaigns now. Their source rules,
+conditional choices, combat, and item transfers are still being reviewed
+section by section, so use the manual tools when the assistant has no rule card.
 
 Use **Open Managed Books Folder** when you need direct access to the selected storage location.
 

@@ -1581,10 +1581,10 @@
           <button class="book-button" type="button" data-book="6">Book 6</button>
           <button class="book-button" type="button" data-book="7">Book 7</button>
           <button class="book-button" type="button" data-book="8">Book 8</button>
-          <button class="book-button" type="button" disabled title="Book 9 is not in testing yet.">Book 9</button>
-          <button class="book-button" type="button" disabled title="Book 10 is not in testing yet.">Book 10</button>
-          <button class="book-button" type="button" disabled title="Book 11 is not in testing yet.">Book 11</button>
-          <button class="book-button" type="button" disabled title="Book 12 is not in testing yet.">Book 12</button>
+          <button class="book-button" type="button" data-book="9">Book 9</button>
+          <button class="book-button" type="button" data-book="10">Book 10</button>
+          <button class="book-button" type="button" data-book="11">Book 11</button>
+          <button class="book-button" type="button" data-book="12">Book 12</button>
         </div>
         <button type="button" id="currentBtn">Current</button>
         <button type="button" id="titleBtn">Title</button>
@@ -1639,7 +1639,11 @@
       { number: 5, title: 'Shadow on the Sand', folder: '05sots', sections: 400 },
       { number: 6, title: 'The Kingdoms of Terror', folder: '06tkot', sections: 350 },
       { number: 7, title: 'Castle of Death', folder: '07cd', sections: 350 },
-      { number: 8, title: 'The Jungle of Horrors', folder: '08tjoh', sections: 350 }
+      { number: 8, title: 'The Jungle of Horrors', folder: '08tjoh', sections: 350 },
+      { number: 9, title: 'The Cauldron of Fear', folder: '09tcof', sections: 350 },
+      { number: 10, title: 'The Dungeons of Torgar', folder: '10tdot', sections: 350 },
+      { number: 11, title: 'The Prisoners of Time', folder: '11tpot', sections: 350 },
+      { number: 12, title: 'The Masters of Darkness', folder: '12tmod', sections: 350 }
     ];
     const book2Armoury = [
       ['sword', 'Sword'],
@@ -1698,6 +1702,17 @@
       ['sword', 'Sword'], ['bow', 'Bow'], ['quiver', 'Quiver with 6 Arrows'], ['rope', 'Rope'],
       ['laumspur', 'Potion of Laumspur'], ['lantern', 'Lantern'], ['mace', 'Mace'],
       ['meals', '3 Meals'], ['dagger', 'Dagger'], ['fireseeds', '3 Fireseeds']
+    ];
+    const book9Equipment = [...book7Equipment];
+    const book10Equipment = [
+      ['sword', 'Sword'], ['bow', 'Bow'], ['quiver', 'Quiver with 6 Arrows'], ['rope', 'Rope'],
+      ['laumspur', 'Potion of Laumspur'], ['lantern', 'Lantern'], ['mace', 'Mace'],
+      ['meals', '3 Meals'], ['dagger', 'Dagger'], ['alether', 'Potion of Alether']
+    ];
+    const book11Equipment = book10Equipment.filter(([id]) => id !== 'alether');
+    const book12Equipment = [
+      ...book11Equipment.filter(([id]) => id !== 'meals'),
+      ['meals', '4 Meals'], ['quarterstaff', 'Quarterstaff'], ['axe', 'Axe']
     ];
     const kaiDisciplines = ['Camouflage', 'Hunting', 'Sixth Sense', 'Tracking', 'Healing', 'Weaponskill', 'Mindshield', 'Mindblast', 'Animal Kinship', 'Mind Over Matter'];
     const magnakaiDisciplines = ['Weaponmastery', 'Animal Control', 'Curing', 'Invisibility', 'Huntmastery', 'Pathsmanship', 'Divination', 'Psi-surge', 'Psi-screen', 'Nexus'];
@@ -3253,7 +3268,7 @@
       const summary = completion.Summary || {};
       const nextBook = Number(completion.NextBookNumber || 0);
       const nextTitle = text(completion.NextBookTitle, '');
-      const continueControls = completion.CanContinue && [2, 3, 4, 5, 6, 7, 8].includes(nextBook) ? (
+      const continueControls = completion.CanContinue && nextBook >= 2 && nextBook <= 12 ? (
         `<button type="button" data-open-next-book="${escapeHtml(nextBook)}">Open Book ${escapeHtml(nextBook)}</button>`
       ) : (
         completion.CanContinue
@@ -3308,6 +3323,10 @@
     function equipmentOptionsForBook(bookNumber) {
       if (Number(bookNumber) === 6) return book6Equipment;
       if ([7, 8].includes(Number(bookNumber))) return book7Equipment;
+      if (Number(bookNumber) === 9) return book9Equipment;
+      if (Number(bookNumber) === 10) return book10Equipment;
+      if (Number(bookNumber) === 11) return book11Equipment;
+      if (Number(bookNumber) === 12) return book12Equipment;
       if (Number(bookNumber) === 5) return book5Equipment;
       if (Number(bookNumber) === 4) return book4Equipment;
       if (Number(bookNumber) === 3) return book3Equipment;
@@ -3316,7 +3335,8 @@
 
     function equipmentChoiceRuleForBook(bookNumber) {
       if (Number(bookNumber) === 6) return { min: 7, max: 7, exact: true };
-      if ([7, 8].includes(Number(bookNumber))) return { min: 5, max: 5, exact: true };
+      if ([7, 8, 9, 10].includes(Number(bookNumber))) return { min: 5, max: 5, exact: true };
+      if ([11, 12].includes(Number(bookNumber))) return { min: 6, max: 6, exact: true };
       if (Number(bookNumber) === 5) return { min: 0, max: 4, exact: false };
       if (Number(bookNumber) === 4) return { min: 6, max: 6, exact: true };
       return { min: 2, max: 2, exact: true };
@@ -3328,7 +3348,8 @@
 
     function equipmentLabelForBook(bookNumber) {
       if (Number(bookNumber) === 6) return 'Book 6 Field Issue - choose exactly 7';
-      if ([7, 8].includes(Number(bookNumber))) return `Book ${bookNumber} Field Issue - choose exactly 5`;
+      if ([7, 8, 9, 10].includes(Number(bookNumber))) return `Book ${bookNumber} Field Issue - choose exactly 5`;
+      if ([11, 12].includes(Number(bookNumber))) return `Book ${bookNumber} Field Issue - choose exactly 6`;
       if (Number(bookNumber) === 5) return 'Book 5 Field Issue - choose up to 4';
       if (Number(bookNumber) === 4) return `Book 4 Field Issue - choose ${equipmentChoiceCountForBook(bookNumber)}`;
       if (Number(bookNumber) === 3) return `Anskaven Equipment - choose ${equipmentChoiceCountForBook(bookNumber)}`;
@@ -3387,19 +3408,19 @@
           </form>
         `;
       }
-      if (nextBook === 7 || nextBook === 8) {
+      if ([7, 8, 9, 10, 11, 12].includes(nextBook)) {
         const magnakaiChoices = arr(completion.MagnakaiDisciplineChoices);
         const masteredWeapons = ['Dagger', 'Spear', 'Mace', 'Warhammer', 'Sword', 'Axe', 'Short Sword', 'Quarterstaff', 'Broadsword', 'Bow'];
-        const book7Equipment = [
-          ['sword', 'Sword'], ['bow', 'Bow'], ['quiver', 'Quiver with 6 Arrows'], ['rope', 'Rope'], ['laumspur', 'Potion of Laumspur'],
-          ['lantern', 'Lantern'], ['mace', 'Mace'], ['meals', '3 Meals'], ['dagger', 'Dagger'], ['fireseeds', '3 Fireseeds']
-        ];
+        const issueCount = nextBook === 11 ? 0 : equipmentChoiceCountForBook(nextBook);
+        const issueText = issueCount
+          ? `<div class="check-field"><span>Book ${escapeHtml(nextBook)} Field Issue - choose exactly ${escapeHtml(issueCount)}</span><div class="check-grid">${equipmentOptionsForBook(nextBook).map(([id, label]) => `<label class="check-option"><input type="checkbox" name="equipmentChoices" value="${escapeHtml(id)}"><span>${escapeHtml(label)}</span></label>`).join('')}</div></div>`
+          : '<p class="muted">Book 11 carries your existing equipment forward. There is no new field issue.</p>';
         return `
           <form id="continueBookForm" class="grid" data-next-book="${escapeHtml(nextBook)}">
             <label class="field">New Magnakai Discipline<select name="magnakaiDiscipline">${magnakaiChoices.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('')}</select></label>
             <label class="field">Weaponmastery Weapon<select name="weaponmasteryWeapon"><option value="">Not choosing Weaponmastery</option>${masteredWeapons.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('')}</select></label>
-            <label class="field">Gold Roll<input name="goldRoll" type="number" min="0" max="9" placeholder="0-9"></label>
-            <div class="check-field"><span>Book ${escapeHtml(nextBook)} Field Issue - choose up to 5</span><div class="check-grid">${book7Equipment.map(([id, label]) => `<label class="check-option"><input type="checkbox" name="equipmentChoices" value="${escapeHtml(id)}"><span>${escapeHtml(label)}</span></label>`).join('')}</div></div>
+            ${nextBook === 11 ? '' : '<label class="field">Gold Roll<input name="goldRoll" type="number" min="0" max="9" placeholder="0-9"></label>'}
+            ${issueText}
             <button type="submit">Continue to Book ${escapeHtml(nextBook)}</button>
           </form>
         `;
@@ -5535,7 +5556,7 @@
 
     function adjustNewCharacterDisciplines(form) {
       const bookNumber = Number(form?.querySelector('[data-new-book]')?.value || 1);
-      const isMagnakai = [6, 7, 8].includes(bookNumber);
+      const isMagnakai = bookNumber >= 6 && bookNumber <= 12;
       const magnakaiCount = Math.max(3, bookNumber - 3);
       const help = form?.querySelector('[data-discipline-help]');
       if (help) help.textContent = 'Kai Disciplines - choose 5';
@@ -5548,7 +5569,7 @@
       const masteryHelp = form?.querySelector('[data-mastery-help]');
       if (masteryHelp) masteryHelp.textContent = `Weaponmastery Weapons - choose exactly ${magnakaiCount} only when Weaponmastery is selected`;
       form?.querySelectorAll('[data-book-setup]').forEach((item) => {
-        item.hidden = ![2, 3, 4, 5, 6, 7, 8].includes(bookNumber);
+        item.hidden = ![2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].includes(bookNumber);
       });
       const equipmentHelp = form?.querySelector('[data-equipment-help]');
       if (equipmentHelp) equipmentHelp.textContent = equipmentLabelForBook(bookNumber);
@@ -7240,9 +7261,10 @@
           }, nextBook);
           return;
         }
-        if (nextBook === 7 || nextBook === 8) {
-          if (magnakaiSelections.length !== 1 || equipmentSelections.length > 5) {
-            setReceipt({ summary: `Book ${nextBook} - choose one new Magnakai Discipline and up to 5 field-issue items.` });
+        if ([7, 8, 9, 10, 11, 12].includes(nextBook)) {
+          const requiredIssueCount = nextBook === 11 ? 0 : equipmentChoiceCountForBook(nextBook);
+          if (magnakaiSelections.length !== 1 || equipmentSelections.length !== requiredIssueCount) {
+            setReceipt({ summary: `Book ${nextBook} - choose one new Magnakai Discipline and exactly ${requiredIssueCount} field-issue items.` });
             return;
           }
           await action({
@@ -7306,7 +7328,7 @@
       if (form.id === 'newForm') {
         const bookNumber = Number(data.bookNumber || 1);
         const kaiSelections = formData.getAll('kaiDisciplines');
-        const isMagnakai = [6, 7, 8].includes(bookNumber);
+        const isMagnakai = bookNumber >= 6 && bookNumber <= 12;
         const magnakaiSelections = formData.getAll('magnakaiDisciplines');
         const masterySelections = formData.getAll('weaponmasteryWeapons');
         const magnakaiCount = Math.max(3, bookNumber - 3);
@@ -7331,7 +7353,7 @@
         const armourySelections = formData.getAll('armouryChoices');
         const equipmentRule = equipmentChoiceRuleForBook(bookNumber);
         if (
-          [2, 3, 4, 5, 6, 7, 8].includes(bookNumber)
+          [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].includes(bookNumber)
           && (
             armourySelections.length < equipmentRule.min
             || armourySelections.length > equipmentRule.max
@@ -7362,7 +7384,7 @@
           deCuringOption: data.deCuringOption,
           deWeaponskillOption: data.deWeaponskillOption,
           armouryChoices: bookNumber === 2 ? armourySelections : [],
-          equipmentChoices: [3, 4, 5, 6, 7, 8].includes(bookNumber) ? armourySelections : []
+          equipmentChoices: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12].includes(bookNumber) ? armourySelections : []
         });
         book1Creation = null;
         clearCampaignStartRequest();

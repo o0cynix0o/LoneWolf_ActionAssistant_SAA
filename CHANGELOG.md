@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.4.0 - Internal Testing
+
+- Enabled Books 9-12 as internal testing campaigns with reader navigation, saves, manual tools, fresh Magnakai setup, and campaign handoffs.
+- Implemented Books 9 and 10 five-item entries, Book 11's retained-equipment continuation and six-item standalone setup, and Book 12's six-item entry with its cold-weather kit.
+- Kept the Books 9-12 source-link baseline data as the work queue for the remaining section automation pass.
+
 ## 3.3.0 - 2026-08-07
 
 - Completed the Book 8 source review and promoted The Jungle of Horrors to the playable testing path.

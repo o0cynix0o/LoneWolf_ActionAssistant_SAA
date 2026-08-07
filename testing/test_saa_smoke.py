@@ -63,7 +63,7 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
     """Protect the complete supported-book baseline and its automation data."""
 
     def test_supported_books_have_loaded_automation_and_flow_data(self) -> None:
-        expected_books = {1, 2, 3, 4, 5, 6, 7, 8}
+        expected_books = set(range(1, 13))
         self.assertEqual(set(lonewolf_redux.BOOKS), expected_books)
 
         root = Path(lonewolf_redux.__file__).resolve().parent
@@ -96,7 +96,7 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             11: "11tpot",
             12: "12tmod",
         }
-        self.assertTrue(set(audited_books).isdisjoint(lonewolf_redux.BOOKS))
+        self.assertTrue(set(audited_books).issubset(lonewolf_redux.BOOKS))
         self.assertEqual(
             {number: lonewolf_redux.book_metadata(number)["Folder"] for number in audited_books},
             audited_books,
@@ -113,7 +113,7 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
                 all(flow["auditStatus"] == "source-link-baseline" for flow in flows.values())
             )
 
-    def test_book8_completion_does_not_offer_an_unreviewed_book9_handoff(self) -> None:
+    def test_book8_completion_offers_the_book9_internal_testing_handoff(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
             assistant = lonewolf_redux.LoneWolfReduxAssistant(
@@ -126,8 +126,86 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             assistant.ensure_book_completed()
 
         completion = assistant.book_completion_payload()
-        self.assertIsNone(completion["NextBookNumber"])
-        self.assertFalse(completion["CanContinue"])
+        self.assertEqual(completion["NextBookNumber"], 9)
+        self.assertTrue(completion["CanContinue"])
+
+    def test_later_magnakai_standalone_setups_follow_the_printed_entry_choices(self) -> None:
+        mastered = ["Sword", "Bow", "Axe", "Mace", "Dagger", "Spear", "Quarterstaff", "Warhammer", "Broadsword"]
+        cases = {
+            9: ["sword", "bow", "quiver", "rope", "laumspur"],
+            10: ["sword", "bow", "quiver", "rope", "alether"],
+            11: ["sword", "bow", "quiver", "rope", "laumspur", "lantern"],
+            12: ["sword", "bow", "quiver", "rope", "laumspur", "lantern"],
+        }
+        states = {}
+        for book_number, choices in cases.items():
+            rank = book_number - 3
+            state = lonewolf_redux.create_magnakai_character_state(
+                book_number=book_number,
+                magnakai_disciplines=lonewolf_redux.MAGNAKAI_DISCIPLINES[:rank],
+                weaponmastery_weapons=mastered[:rank],
+                gold_roll=0,
+                equipment_choices=choices,
+            )
+            self.assertEqual(state["Character"]["MagnakaiRank"], rank)
+            self.assertEqual(state["CurrentSection"], 1)
+            self.assertEqual(state["Inventory"]["GoldCrowns"], 10)
+            states[book_number] = state
+
+        self.assertIn("Eruan Pathfinder Tunic", states[11]["Inventory"]["SpecialItems"])
+        self.assertIn("Kalkoth-hide Cape", states[12]["Inventory"]["SpecialItems"])
+
+    def test_later_magnakai_campaign_handoffs_add_only_the_printed_entry_support(self) -> None:
+        source = lonewolf_redux.default_state()
+        source["Character"].update(
+            {
+                "BookNumber": 8,
+                "MagnakaiDisciplines": [
+                    "Weaponmastery", "Animal Control", "Curing", "Invisibility", "Huntmastery",
+                ],
+                "MagnakaiRank": 5,
+                "WeaponmasteryWeapons": ["Sword", "Bow", "Axe", "Mace", "Dagger"],
+            }
+        )
+        source["Inventory"].update(
+            {
+                "GoldCrowns": 20,
+                "Weapons": [],
+                "SpecialItems": ["Campaign Keepsake"],
+                "BackpackItems": ["Meal"],
+            }
+        )
+        book9 = lonewolf_redux.prepare_later_magnakai_state(
+            source,
+            book_number=9,
+            magnakai_discipline="Pathsmanship",
+            weaponmastery_weapon="Spear",
+            gold_roll=0,
+            equipment_choices=["sword", "bow", "quiver", "rope", "fireseeds"],
+        )
+        book10 = lonewolf_redux.prepare_later_magnakai_state(
+            book9,
+            book_number=10,
+            magnakai_discipline="Divination",
+            weaponmastery_weapon="Quarterstaff",
+            gold_roll=0,
+            equipment_choices=["quiver", "rope", "laumspur", "lantern", "alether"],
+        )
+        book11 = lonewolf_redux.prepare_later_magnakai_state(
+            book10,
+            book_number=11,
+            magnakai_discipline="Psi-surge",
+            weaponmastery_weapon="Warhammer",
+            equipment_choices=[],
+        )
+
+        self.assertEqual(book9["Character"]["MagnakaiRank"], 6)
+        self.assertEqual(book9["Inventory"]["GoldCrowns"], 30)
+        self.assertIn("Campaign Keepsake", book9["Inventory"]["SpecialItems"])
+        self.assertIn("Map of the Republic of Anari", book9["Inventory"]["SpecialItems"])
+        self.assertEqual(book10["Inventory"]["GoldCrowns"], 40)
+        self.assertEqual(book11["Character"]["MagnakaiRank"], 8)
+        self.assertEqual(book11["Character"]["Book11Setup"]["EquipmentChoices"], [])
 
     def test_book1_section320_applies_the_mandatory_kraan_claw_injury(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -1072,29 +1150,35 @@ class CampaignEntryPointTests(unittest.TestCase):
         self.assertIn('assistant.html?campaign=new&book=1', index_html)
         self.assertIn('campaignStartLink = book.number === 1', index_html)
 
-    def test_books_six_to_eight_are_exposed_as_playable_testing_books(self) -> None:
+    def test_books_six_to_twelve_are_exposed_as_playable_testing_books(self) -> None:
         index_html = self.source_text("index.html")
         library_html = self.source_text("library.html")
         assistant_html = self.source_text("assistant.html")
         self.assertIn("testingBook(6, 'The Kingdoms of Terror'", index_html)
         self.assertIn("testingBook(7, 'Castle of Death'", index_html)
         self.assertIn("testingBook(8, 'The Jungle of Horrors'", index_html)
+        self.assertIn("testingBook(9, 'The Cauldron of Fear'", index_html)
+        self.assertIn("testingBook(12, 'The Masters of Darkness'", index_html)
         self.assertIn("Playable testing build", index_html)
         self.assertIn("Open Test Reader", index_html)
         self.assertIn('assistant.html?browse=1&amp;book=6', library_html)
         self.assertIn('assistant.html?browse=1&amp;book=7', library_html)
         self.assertIn('assistant.html?browse=1&amp;book=8', library_html)
+        self.assertIn('assistant.html?browse=1&amp;book=9', library_html)
+        self.assertIn('assistant.html?browse=1&amp;book=12', library_html)
         self.assertIn('data-book="6">Book 6</button>', assistant_html)
         self.assertIn('data-book="7">Book 7</button>', assistant_html)
         self.assertIn('data-book="8">Book 8</button>', assistant_html)
+        self.assertIn('data-book="9">Book 9</button>', assistant_html)
+        self.assertIn('data-book="12">Book 12</button>', assistant_html)
 
     def test_reader_toolbar_switches_to_the_magnakai_series(self) -> None:
         assistant_html = self.source_text("assistant.html")
         self.assertIn('data-reader-series="kai"', assistant_html)
         self.assertIn('data-reader-series="magnakai"', assistant_html)
         self.assertNotIn('Book 8 is not in testing yet.', assistant_html)
-        self.assertIn('Book 9 is not in testing yet.', assistant_html)
-        self.assertIn('Book 12 is not in testing yet.', assistant_html)
+        self.assertNotIn('Book 9 is not in testing yet.', assistant_html)
+        self.assertNotIn('Book 12 is not in testing yet.', assistant_html)
         self.assertIn("const readerSeries = book.number >= 6 ? 'magnakai' : 'kai';", assistant_html)
 
     def test_magnakai_sheet_leads_with_the_current_discipline_set(self) -> None:
@@ -1153,7 +1237,7 @@ class CampaignEntryPointTests(unittest.TestCase):
 
     def test_completion_ui_contains_magnakai_campaign_handoffs(self) -> None:
         assistant_html = self.source_text("assistant.html")
-        self.assertIn("[2, 3, 4, 5, 6, 7, 8]", assistant_html)
+        self.assertIn("nextBook >= 2 && nextBook <= 12", assistant_html)
         self.assertIn("Choose exactly 3 Magnakai Disciplines", assistant_html)
         self.assertIn("New Magnakai Discipline", assistant_html)
         self.assertIn("Continue to Book ${escapeHtml(nextBook)}", assistant_html)
@@ -1492,7 +1576,7 @@ class CardLayoutInteractionTests(unittest.TestCase):
                     return cls.assistant_html[match.start():index + 1]
         raise AssertionError(f"JavaScript function {name!r} has no closing brace")
 
-    def test_release_metadata_is_3_3_0(self) -> None:
+    def test_release_metadata_is_3_4_0_internal_testing(self) -> None:
         readme = (self.root / "README.md").read_text(encoding="utf-8")
         building = (self.root / "docs" / "BUILDING.md").read_text(encoding="utf-8")
         user_guide = (self.root / "docs" / "USER_GUIDE.md").read_text(encoding="utf-8")
@@ -1502,16 +1586,16 @@ class CardLayoutInteractionTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         version_info = (self.root / "version_info.txt").read_text(encoding="utf-8")
 
-        self.assertIn("# Lone Wolf Action Assistant 3.3.0", readme)
-        self.assertIn("Version: **3.3.0**", readme)
-        self.assertIn("# Building Lone Wolf Action Assistant 3.3.0", building)
-        self.assertIn("# Lone Wolf Action Assistant 3.3.0", user_guide)
-        self.assertIn("## 3.3.0", changelog)
-        self.assertIn('#define AppVersion "3.3.0"', installer)
-        self.assertIn("filevers=(3, 3, 0, 0)", version_info)
-        self.assertIn("prodvers=(3, 3, 0, 0)", version_info)
-        self.assertIn("StringStruct(u'FileVersion', u'3.3.0')", version_info)
-        self.assertIn("StringStruct(u'ProductVersion', u'3.3.0')", version_info)
+        self.assertIn("# Lone Wolf Action Assistant 3.4.0 Internal Testing", readme)
+        self.assertIn("Version: **3.4.0 Internal Testing**", readme)
+        self.assertIn("# Building Lone Wolf Action Assistant 3.4.0 Internal Testing", building)
+        self.assertIn("# Lone Wolf Action Assistant 3.4.0 Internal Testing", user_guide)
+        self.assertIn("## 3.4.0 - Internal Testing", changelog)
+        self.assertIn('#define AppVersion "3.4.0"', installer)
+        self.assertIn("filevers=(3, 4, 0, 0)", version_info)
+        self.assertIn("prodvers=(3, 4, 0, 0)", version_info)
+        self.assertIn("StringStruct(u'FileVersion', u'3.4.0')", version_info)
+        self.assertIn("StringStruct(u'ProductVersion', u'3.4.0')", version_info)
 
     def test_movable_cards_get_a_dedicated_drag_handle(self) -> None:
         self.assertIn("data-card-drag-handle", self.assistant_html)

@@ -141,18 +141,16 @@ BOOKS = {
     6: {"Title": "The Kingdoms of Terror", "Folder": "06tkot", "MaxSection": 350},
     7: {"Title": "Castle of Death", "Folder": "07cd", "MaxSection": 350},
     8: {"Title": "The Jungle of Horrors", "Folder": "08tjoh", "MaxSection": 350},
-}
-
-# BOOKS contains only books whose creation, transfer, and section rules are safe
-# to expose as playable. BOOK_CATALOG also tracks imported, source-audited books.
-# Keeping that boundary explicit prevents an installed book from becoming a
-# misleading playable option before its automation review is complete.
-BOOK_CATALOG = {
-    **BOOKS,
     9: {"Title": "The Cauldron of Fear", "Folder": "09tcof", "MaxSection": 350},
     10: {"Title": "The Dungeons of Torgar", "Folder": "10tdot", "MaxSection": 350},
     11: {"Title": "The Prisoners of Time", "Folder": "11tpot", "MaxSection": 350},
     12: {"Title": "The Masters of Darkness", "Folder": "12tmod", "MaxSection": 350},
+}
+
+# BOOKS is the internal testing catalog. Its public release status is controlled
+# by the home and reader UI, not by save or reader metadata.
+BOOK_CATALOG = {
+    **BOOKS,
 }
 
 
@@ -331,6 +329,48 @@ BOOK7_EQUIPMENT_OPTIONS = {
     "mace": {"Items": [("weapon", "Mace")]}, "meals": {"Items": [("backpack", "Meal")] * 3},
     "dagger": {"Items": [("weapon", "Dagger")]}, "fireseeds": {"Items": [("pocket", "Fireseed")] * 3},
 }
+
+BOOK9_EQUIPMENT_OPTIONS = {
+    **BOOK7_EQUIPMENT_OPTIONS,
+}
+
+BOOK10_EQUIPMENT_OPTIONS = {
+    key: value for key, value in BOOK7_EQUIPMENT_OPTIONS.items() if key != "fireseeds"
+} | {
+    "alether": {"Items": [("backpack", "Potion of Alether")]},
+}
+
+BOOK11_EQUIPMENT_OPTIONS = {
+    key: value for key, value in BOOK7_EQUIPMENT_OPTIONS.items() if key != "fireseeds"
+}
+
+BOOK12_EQUIPMENT_OPTIONS = {
+    key: value for key, value in BOOK11_EQUIPMENT_OPTIONS.items() if key != "meals"
+} | {
+    "meals": {"Items": [("backpack", "Meal")] * 4},
+    "quarterstaff": {"Items": [("weapon", "Quarterstaff")]},
+    "axe": {"Items": [("weapon", "Axe")]},
+}
+
+MAGNAKAI_FIELD_ISSUE_OPTIONS = {
+    7: BOOK7_EQUIPMENT_OPTIONS,
+    8: BOOK7_EQUIPMENT_OPTIONS,
+    9: BOOK9_EQUIPMENT_OPTIONS,
+    10: BOOK10_EQUIPMENT_OPTIONS,
+    11: BOOK11_EQUIPMENT_OPTIONS,
+    12: BOOK12_EQUIPMENT_OPTIONS,
+}
+
+
+def magnakai_field_issue_options(book_number: int) -> dict[str, dict[str, Any]]:
+    try:
+        return MAGNAKAI_FIELD_ISSUE_OPTIONS[int(book_number)]
+    except KeyError as exc:
+        raise ValueError(f"Book {book_number} has no Magnakai field issue.") from exc
+
+
+def magnakai_field_issue_count(book_number: int) -> int:
+    return 6 if int(book_number) in {11, 12} else 5
 
 KAI_RANKS = [
     (10, "Kai Master"),
@@ -2159,23 +2199,125 @@ def prepare_book8_state(
     return normalize_state(prepared)
 
 
-def _clean_magnakai_field_issue_choices(choices: Any) -> list[str]:
+def prepare_later_magnakai_state(
+    state: dict[str, Any],
+    *,
+    book_number: int,
+    magnakai_discipline: str,
+    weaponmastery_weapon: str = "",
+    gold_roll: Any | None = None,
+    equipment_choices: Any = None,
+) -> dict[str, Any]:
+    """Move a completed Book 8-11 campaign into its source-defined next setup."""
+    if book_number not in {9, 10, 11, 12}:
+        raise ValueError("Later Magnakai setup supports Books 9 through 12.")
+    prepared = normalize_state(json_clone(state))
+    character, inventory = prepared["Character"], prepared["Inventory"]
+    prior_book = book_number - 1
+    if int(character.get("BookNumber") or 0) != prior_book:
+        raise ValueError(f"Book {book_number} setup must continue a Book {prior_book} campaign.")
+
+    prior_rank = book_number - 4
+    rank = book_number - 3
+    owned = clean_magnakai_disciplines(character.get("MagnakaiDisciplines"))
+    addition = clean_magnakai_disciplines([magnakai_discipline])
+    if len(owned) != prior_rank or len(addition) != 1 or addition[0] in owned:
+        raise ValueError(f"Book {book_number} requires one new Magnakai Discipline.")
+    disciplines = owned + addition
+    mastery = clean_weaponmastery_weapons(character.get("WeaponmasteryWeapons"))
+    if "Weaponmastery" in disciplines:
+        extra = clean_weaponmastery_weapons([weaponmastery_weapon])
+        if len(mastery) != prior_rank or len(extra) != 1 or extra[0] in mastery:
+            raise ValueError(
+                f"Book {book_number} Weaponmastery requires one new mastered weapon."
+            )
+        mastery += extra
+    elif weaponmastery_weapon:
+        raise ValueError("Choose Weaponmastery before selecting a mastered weapon.")
+
+    field_issue_counts = {9: 5, 10: 5, 11: 0, 12: 6}
+    issue_count = field_issue_counts[book_number]
+    choices = _clean_magnakai_field_issue_choices(
+        equipment_choices, book_number=book_number
+    )
+    if len(choices) != issue_count:
+        raise ValueError(
+            f"Book {book_number} requires exactly {issue_count} field-issue choices."
+        )
+
+    character.update(
+        {
+            "BookNumber": book_number,
+            "MagnakaiDisciplines": disciplines,
+            "MagnakaiRank": rank,
+            "WeaponmasteryWeapons": mastery,
+        }
+    )
+    prepared["CurrentSection"] = 1
+    prepared["Combat"] = json_clone(default_state()["Combat"])
+    prepared["Combat"]["StartedSection"] = 1
+    discard_transition_stored_gear(prepared)
+
+    entry_specials = {
+        9: ["Map of the Republic of Anari"],
+        10: ["Map of Ghatan"],
+        12: ["Map of the Darklands", "Fur-lined Clothing", "Kalkoth-hide Cape"],
+    }
+    for item in entry_specials.get(book_number, []):
+        inventory["SpecialItems"] = add_unique_item(inventory.get("SpecialItems"), item)
+    if issue_count:
+        _apply_magnakai_field_issue(prepared, choices, book_number=book_number)
+        roll = coerce_random_digit(gold_roll)
+        inventory["GoldCrowns"] = min(50, int(inventory.get("GoldCrowns") or 0) + 10 + roll)
+    else:
+        roll = None
+
+    character[f"Book{book_number}Setup"] = {
+        "Mode": "campaign",
+        "ContinuedFromBook": prior_book,
+        "NewMagnakaiDiscipline": addition[0],
+        "WeaponmasteryWeapon": weaponmastery_weapon,
+        "GoldRoll": roll,
+        "EquipmentChoices": choices,
+    }
+    prepared["CurrentBookStats"] = {
+        "BookNumber": book_number,
+        "BookTitle": BOOK_CATALOG[book_number]["Title"],
+        "StartSection": 1,
+        "LastSection": 1,
+        "SectionsVisited": 0,
+        "VisitedSections": [],
+        "BookGoldRoll": roll,
+        "EquipmentChoices": choices,
+    }
+    sync_magnakai_lore_circle_bonuses(prepared)
+    prepared["CurrentBookStats"]["StartingEnduranceMax"] = int(character["EnduranceMax"])
+    return normalize_state(prepared)
+
+
+def _clean_magnakai_field_issue_choices(choices: Any, *, book_number: int = 7) -> list[str]:
     selected = [str(value).strip().lower() for value in as_list(choices) if str(value).strip()]
+    options = magnakai_field_issue_options(book_number)
+    count = magnakai_field_issue_count(book_number)
     if (
         len(set(selected)) != len(selected)
-        or len(selected) > 5
-        or any(choice not in BOOK7_EQUIPMENT_OPTIONS for choice in selected)
+        or len(selected) > count
+        or any(choice not in options for choice in selected)
     ):
-        raise ValueError("Books 7 and 8 allow up to five distinct starting equipment choices.")
+        raise ValueError(
+            f"Book {book_number} allows up to {count} distinct starting equipment choices."
+        )
     return selected
 
 
-def _apply_magnakai_field_issue(state: dict[str, Any], choices: list[str]) -> list[str]:
-    """Apply the shared Book 7/8 field issue to an otherwise empty inventory."""
+def _apply_magnakai_field_issue(
+    state: dict[str, Any], choices: list[str], *, book_number: int = 7
+) -> list[str]:
+    """Apply a source-defined Magnakai field issue to the current inventory."""
     inventory = state["Inventory"]
     messages: list[str] = []
     for choice in choices:
-        option = BOOK7_EQUIPMENT_OPTIONS[choice]
+        option = magnakai_field_issue_options(book_number)[choice]
         for container, item in option["Items"]:
             if container == "weapon":
                 weapons = as_list(inventory.get("Weapons"))
@@ -2214,9 +2356,9 @@ def create_magnakai_character_state(
     de_curing_option: int = 0,
     de_weaponskill_option: int = 0,
 ) -> dict[str, Any]:
-    """Create a fresh Book 6, 7, or 8 campaign using V1's standalone rules."""
-    if book_number not in {6, 7, 8}:
-        raise ValueError("Magnakai standalone creation supports Books 6, 7, and 8.")
+    """Create a fresh Magnakai campaign using its printed standalone setup."""
+    if book_number not in set(range(6, 13)):
+        raise ValueError("Magnakai standalone creation supports Books 6 through 12.")
     rank = book_number - 3
     disciplines = clean_magnakai_disciplines(magnakai_disciplines)
     if len(disciplines) != rank:
@@ -2293,13 +2435,34 @@ def create_magnakai_character_state(
             herb_pouch_available=de_curing_option == 3,
         )
     else:
-        inventory["PocketSpecialItems"] = ["Power-key" if book_number == 7 else "Pass"]
-        choice_ids = _clean_magnakai_field_issue_choices(equipment_choices)
-        if len(choice_ids) != 5:
+        if book_number == 7:
+            inventory["PocketSpecialItems"] = ["Power-key"]
+        elif book_number == 8:
+            inventory["PocketSpecialItems"] = ["Pass"]
+        elif book_number == 9:
+            inventory["SpecialItems"] = ["Map of the Republic of Anari"]
+        elif book_number == 10:
+            inventory["SpecialItems"] = ["Map of Ghatan"]
+        elif book_number == 11:
+            inventory["SpecialItems"] = ["Eruan Pathfinder Tunic"]
+            inventory["BackpackItems"] = ["Meal", "Meal"]
+        elif book_number == 12:
+            inventory["SpecialItems"] = [
+                "Map of the Darklands",
+                "Fur-lined Clothing",
+                "Kalkoth-hide Cape",
+            ]
+        choice_ids = _clean_magnakai_field_issue_choices(
+            equipment_choices, book_number=book_number
+        )
+        choice_count = magnakai_field_issue_count(book_number)
+        if len(choice_ids) != choice_count:
             raise ValueError(
-                f"Standalone Book {book_number} requires exactly five starting equipment choices."
+                f"Standalone Book {book_number} requires exactly {choice_count} starting equipment choices."
             )
-        setup_messages = _apply_magnakai_field_issue(state, choice_ids)
+        setup_messages = _apply_magnakai_field_issue(
+            state, choice_ids, book_number=book_number
+        )
 
     character[f"Book{book_number}Setup"] = {
         "Mode": "standalone",
@@ -7726,7 +7889,7 @@ class LoneWolfReduxAssistant:
         combat_mode = normalize_combat_mode(
             input("Combat resolution [DataFile/ManualCRT] [DataFile]: ").strip() or "DataFile"
         )
-        book_number = read_int("Book number", 1, 1, 8)
+        book_number = read_int("Book number", 1, 1, 12)
         print(f"New Lone Wolf Book {book_number} character")
         name = input("Name [Lone Wolf]: ").strip()
         character_name = name or "Lone Wolf"
@@ -7755,8 +7918,8 @@ class LoneWolfReduxAssistant:
                     equipment_options.pop("herb_pouch", None)
                 equipment_count = 7
             else:
-                equipment_options = BOOK7_EQUIPMENT_OPTIONS
-                equipment_count = 5
+                equipment_options = magnakai_field_issue_options(book_number)
+                equipment_count = magnakai_field_issue_count(book_number)
             equipment = self.select_starting_equipment(
                 equipment_options,
                 equipment_count,
@@ -9741,6 +9904,15 @@ class LoneWolfReduxAssistant:
                 equipment_choices=book6_equipment_choices,
             )
             return
+        if next_book in {9, 10, 11, 12}:
+            self.continue_to_later_magnakai(
+                book_number=next_book,
+                magnakai_discipline=book6_magnakai_disciplines,
+                weaponmastery_weapon=book6_weaponmastery_weapons,
+                gold_roll=book6_gold_roll,
+                equipment_choices=book6_equipment_choices,
+            )
+            return
         if next_book not in {2, 3, 4, 5}:
             print(f"Book {next_book} setup is not enabled yet.")
             return
@@ -9991,6 +10163,42 @@ class LoneWolfReduxAssistant:
         self.write_current_position()
         self.autosave()
         print(f"Advanced to Book 8: {BOOK_CATALOG[8]['Title']}")
+
+    def continue_to_later_magnakai(
+        self,
+        *,
+        book_number: int,
+        magnakai_discipline: Any,
+        weaponmastery_weapon: Any = "",
+        gold_roll: int | None = None,
+        equipment_choices: Any = None,
+    ) -> None:
+        completion = self.book_completion_payload()
+        summary = completion.get("Summary") if isinstance(completion.get("Summary"), dict) else {}
+        prior_book = int(book_number) - 1
+        if (
+            int(book_number) not in {9, 10, 11, 12}
+            or not completion.get("Active")
+            or int(summary.get("BookNumber") or 0) != prior_book
+        ):
+            raise ValueError(f"Book {book_number} setup requires a completed Book {prior_book} campaign.")
+        self.restore_endurance_for_book_transition()
+        self.state = prepare_later_magnakai_state(
+            self.state,
+            book_number=int(book_number),
+            magnakai_discipline=str(magnakai_discipline or ""),
+            weaponmastery_weapon=str(weaponmastery_weapon or ""),
+            gold_roll=gold_roll,
+            equipment_choices=equipment_choices,
+        )
+        self.automation["Ending"] = None
+        self.automation["PendingBookSetup"] = None
+        self.clear_death_state()
+        self.record_section_visit()
+        self.save_section_checkpoint("ready")
+        self.write_current_position()
+        self.autosave()
+        print(f"Advanced to Book {book_number}: {BOOK_CATALOG[int(book_number)]['Title']}")
 
     def book_start_checkpoint(self, book_number: int) -> dict[str, Any] | None:
         checkpoints = [

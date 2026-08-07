@@ -410,7 +410,7 @@ def apply_new_game(payload: dict) -> str:
     elif not isinstance(disciplines, list):
         disciplines = lonewolf_redux.KAI_DISCIPLINES[:5]
 
-    if book_number in {6, 7, 8}:
+    if book_number in {6, 7, 8, 9, 10, 11, 12}:
         ASSISTANT.state = lonewolf_redux.create_magnakai_character_state(
             book_number=book_number,
             name=name,
