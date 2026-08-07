@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.4.2 - Internal Testing
+
+- Added the complete source Combat Skill and ENDURANCE catalogue for all 172 Book 9-12 combat encounters.
+- Added 141 clear victory routes and 9 clear evade routes; fights with special outcome wording remain reader-directed until their individual rules are verified.
+
 ## 3.4.1 - Internal Testing
 
 - Added 117 source-verified mandatory section effects across Books 9-12: unavoidable ENDURANCE losses, required meals, full recovery events, and the Book 12 Bow loss.

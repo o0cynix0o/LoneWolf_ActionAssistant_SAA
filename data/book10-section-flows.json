@@ -28,7 +28,20 @@
           "Section": 332
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book10-2",
+          "enemies": [
+            {
+              "name": "Drakkarim Garrison",
+              "cs": 26,
+              "endurance": 39
+            }
+          ],
+          "victoryRoute": 332
+        }
+      ]
     },
     "3": {
       "auditStatus": "source-link-baseline",
@@ -356,7 +369,20 @@
           "Section": 239
         }
       ],
-      "incomingRouteCount": 3
+      "incomingRouteCount": 3,
+      "combat": [
+        {
+          "id": "book10-23",
+          "enemies": [
+            {
+              "name": "Partisan Horseman",
+              "cs": 17,
+              "endurance": 24
+            }
+          ],
+          "victoryRoute": 239
+        }
+      ]
     },
     "24": {
       "auditStatus": "source-link-baseline",
@@ -427,7 +453,19 @@
           "Section": 309
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book10-28",
+          "enemies": [
+            {
+              "name": "Ciquali",
+              "cs": 29,
+              "endurance": 36
+            }
+          ]
+        }
+      ]
     },
     "29": {
       "auditStatus": "source-link-baseline",
@@ -497,7 +535,20 @@
           "Section": 145
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book10-33",
+          "enemies": [
+            {
+              "name": "Halgar",
+              "cs": 24,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 145
+        }
+      ]
     },
     "34": {
       "auditStatus": "source-link-baseline",
@@ -612,7 +663,19 @@
           "Section": 10
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "book10-41",
+          "enemies": [
+            {
+              "name": "Roark",
+              "cs": 18,
+              "endurance": 20
+            }
+          ]
+        }
+      ]
     },
     "42": {
       "auditStatus": "source-link-baseline",
@@ -806,7 +869,20 @@
           "Section": 237
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book10-54",
+          "enemies": [
+            {
+              "name": "Lapillibore",
+              "cs": 16,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 237
+        }
+      ]
     },
     "55": {
       "auditStatus": "source-link-baseline",
@@ -1124,7 +1200,20 @@
           "Section": 34
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book10-76",
+          "enemies": [
+            {
+              "name": "Bhakish",
+              "cs": 21,
+              "endurance": 25
+            }
+          ],
+          "victoryRoute": 34
+        }
+      ]
     },
     "77": {
       "auditStatus": "source-link-baseline",
@@ -1206,7 +1295,20 @@
           "Section": 268
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book10-81",
+          "enemies": [
+            {
+              "name": "Akataz Pack",
+              "cs": 28,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 268
+        }
+      ]
     },
     "82": {
       "auditStatus": "source-link-baseline",
@@ -1622,7 +1724,20 @@
           "Section": 162
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book10-109",
+          "enemies": [
+            {
+              "name": "Elite Death Knights",
+              "cs": 38,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 162
+        }
+      ]
     },
     "110": {
       "auditStatus": "source-link-baseline",
@@ -1711,7 +1826,20 @@
           "Section": 297
         }
       ],
-      "incomingRouteCount": 5
+      "incomingRouteCount": 5,
+      "combat": [
+        {
+          "id": "book10-115",
+          "enemies": [
+            {
+              "name": "Drakkarim",
+              "cs": 22,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 297
+        }
+      ]
     },
     "116": {
       "auditStatus": "source-link-baseline",
@@ -1761,7 +1889,20 @@
           "Section": 239
         }
       ],
-      "incomingRouteCount": 3
+      "incomingRouteCount": 3,
+      "combat": [
+        {
+          "id": "book10-118",
+          "enemies": [
+            {
+              "name": "Partisan Horsemen",
+              "cs": 28,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 239
+        }
+      ]
     },
     "119": {
       "auditStatus": "source-link-baseline",
@@ -1775,7 +1916,20 @@
           "Section": 84
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book10-119",
+          "enemies": [
+            {
+              "name": "Krorn",
+              "cs": 20,
+              "endurance": 33
+            }
+          ],
+          "victoryRoute": 84
+        }
+      ]
     },
     "120": {
       "auditStatus": "source-link-baseline",
@@ -1885,7 +2039,19 @@
           "Section": 321
         }
       ],
-      "incomingRouteCount": 3
+      "incomingRouteCount": 3,
+      "combat": [
+        {
+          "id": "book10-126",
+          "enemies": [
+            {
+              "name": "Krorn Pack",
+              "cs": 23,
+              "endurance": 60
+            }
+          ]
+        }
+      ]
     },
     "127": {
       "auditStatus": "source-link-baseline",
@@ -1989,7 +2155,20 @@
           "Section": 170
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book10-132",
+          "enemies": [
+            {
+              "name": "Partisans",
+              "cs": 24,
+              "endurance": 36
+            }
+          ],
+          "victoryRoute": 170
+        }
+      ]
     },
     "133": {
       "auditStatus": "source-link-baseline",
@@ -2003,7 +2182,20 @@
           "Section": 156
         }
       ],
-      "incomingRouteCount": 3
+      "incomingRouteCount": 3,
+      "combat": [
+        {
+          "id": "book10-133",
+          "enemies": [
+            {
+              "name": "Cener Ghosts",
+              "cs": 32,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 156
+        }
+      ]
     },
     "134": {
       "auditStatus": "source-link-baseline",
@@ -2159,7 +2351,20 @@
           "Section": 56
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book10-143",
+          "enemies": [
+            {
+              "name": "Ziran",
+              "cs": 25,
+              "endurance": 33
+            }
+          ],
+          "victoryRoute": 56
+        }
+      ]
     },
     "144": {
       "auditStatus": "source-link-baseline",
@@ -2232,7 +2437,19 @@
           "Section": 206
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book10-148",
+          "enemies": [
+            {
+              "name": "Death Knight",
+              "cs": 24,
+              "endurance": 40
+            }
+          ]
+        }
+      ]
     },
     "149": {
       "auditStatus": "source-link-baseline",
@@ -2539,7 +2756,20 @@
           "Section": 156
         }
       ],
-      "incomingRouteCount": 3
+      "incomingRouteCount": 3,
+      "combat": [
+        {
+          "id": "book10-168",
+          "enemies": [
+            {
+              "name": "Cener Ghosts",
+              "cs": 24,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 156
+        }
+      ]
     },
     "169": {
       "auditStatus": "source-link-baseline",
@@ -2566,7 +2796,20 @@
           "Section": 239
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "book10-170",
+          "enemies": [
+            {
+              "name": "Partisan Horseman",
+              "cs": 17,
+              "endurance": 24
+            }
+          ],
+          "victoryRoute": 239
+        }
+      ]
     },
     "171": {
       "auditStatus": "source-link-baseline",
@@ -2593,7 +2836,20 @@
           "Section": 217
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book10-172",
+          "enemies": [
+            {
+              "name": "Gorodon",
+              "cs": 29,
+              "endurance": 36
+            }
+          ],
+          "victoryRoute": 217
+        }
+      ]
     },
     "173": {
       "auditStatus": "source-link-baseline",
@@ -2715,7 +2971,19 @@
           "Section": 261
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "book10-180",
+          "enemies": [
+            {
+              "name": "Death Knight",
+              "cs": 24,
+              "endurance": 38
+            }
+          ]
+        }
+      ]
     },
     "181": {
       "auditStatus": "source-link-baseline",
@@ -2833,7 +3101,19 @@
           "Section": 234
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book10-187",
+          "enemies": [
+            {
+              "name": "Taintor Wolf",
+              "cs": 27,
+              "endurance": 49
+            }
+          ]
+        }
+      ]
     },
     "188": {
       "auditStatus": "source-link-baseline",
@@ -3122,7 +3402,20 @@
           "Section": 145
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book10-208",
+          "enemies": [
+            {
+              "name": "Halgar",
+              "cs": 24,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 145
+        }
+      ]
     },
     "209": {
       "auditStatus": "source-link-baseline",
@@ -3170,7 +3463,20 @@
           "Section": 87
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "book10-211",
+          "enemies": [
+            {
+              "name": "Hammerlander",
+              "cs": 24,
+              "endurance": 31
+            }
+          ],
+          "victoryRoute": 87
+        }
+      ]
     },
     "212": {
       "auditStatus": "source-link-baseline",
@@ -3241,7 +3547,20 @@
           "Section": 170
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book10-216",
+          "enemies": [
+            {
+              "name": "Partisans",
+              "cs": 24,
+              "endurance": 36
+            }
+          ],
+          "victoryRoute": 170
+        }
+      ]
     },
     "217": {
       "auditStatus": "source-link-baseline",
@@ -3668,7 +3987,19 @@
           "Section": 309
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book10-245",
+          "enemies": [
+            {
+              "name": "Ciquali",
+              "cs": 21,
+              "endurance": 36
+            }
+          ]
+        }
+      ]
     },
     "246": {
       "auditStatus": "source-link-baseline",
@@ -3754,7 +4085,20 @@
           "Section": 271
         }
       ],
-      "incomingRouteCount": 4
+      "incomingRouteCount": 4,
+      "combat": [
+        {
+          "id": "book10-251",
+          "enemies": [
+            {
+              "name": "Zagganozod",
+              "cs": 24,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 271
+        }
+      ]
     },
     "252": {
       "auditStatus": "source-link-baseline",
@@ -3795,7 +4139,20 @@
           "Section": 220
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book10-254",
+          "enemies": [
+            {
+              "name": "Akataz",
+              "cs": 27,
+              "endurance": 43
+            }
+          ],
+          "victoryRoute": 220
+        }
+      ]
     },
     "255": {
       "auditStatus": "source-link-baseline",
@@ -4094,7 +4451,25 @@
           "Section": 68
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "book10-274",
+          "enemies": [
+            {
+              "name": "Pirsian Swordsman 1",
+              "cs": 18,
+              "endurance": 31
+            },
+            {
+              "name": "Pirsian Swordsman 2",
+              "cs": 17,
+              "endurance": 29
+            }
+          ],
+          "victoryRoute": 68
+        }
+      ]
     },
     "275": {
       "auditStatus": "source-link-baseline",
@@ -4273,7 +4648,19 @@
           "Section": 20
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "book10-286",
+          "enemies": [
+            {
+              "name": "Demonlord Tagazin",
+              "cs": 45,
+              "endurance": 65
+            }
+          ]
+        }
+      ]
     },
     "287": {
       "auditStatus": "source-link-baseline",
@@ -4300,7 +4687,20 @@
           "Section": 44
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "book10-288",
+          "enemies": [
+            {
+              "name": "Hammerlanders",
+              "cs": 29,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 44
+        }
+      ]
     },
     "289": {
       "auditStatus": "source-link-baseline",
@@ -4534,7 +4934,20 @@
           "Section": 72
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book10-304",
+          "enemies": [
+            {
+              "name": "Lapillibore",
+              "cs": 16,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 72
+        }
+      ]
     },
     "305": {
       "auditStatus": "source-link-baseline",
@@ -4632,7 +5045,20 @@
           "Section": 34
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book10-311",
+          "enemies": [
+            {
+              "name": "Bhakish",
+              "cs": 21,
+              "endurance": 28
+            }
+          ],
+          "victoryRoute": 34
+        }
+      ]
     },
     "312": {
       "auditStatus": "source-link-baseline",
@@ -4686,7 +5112,20 @@
           "Section": 84
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book10-315",
+          "enemies": [
+            {
+              "name": "Krorn",
+              "cs": 23,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 84
+        }
+      ]
     },
     "316": {
       "auditStatus": "source-link-baseline",
@@ -4736,7 +5175,20 @@
           "Section": 332
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book10-318",
+          "enemies": [
+            {
+              "name": "Drakkarim Garrison",
+              "cs": 26,
+              "endurance": 39
+            }
+          ],
+          "victoryRoute": 332
+        }
+      ]
     },
     "319": {
       "auditStatus": "source-link-baseline",
@@ -4766,7 +5218,19 @@
           "Section": 162
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book10-320",
+          "enemies": [
+            {
+              "name": "Elite Death Knights",
+              "cs": 42,
+              "endurance": 48
+            }
+          ]
+        }
+      ]
     },
     "321": {
       "auditStatus": "source-link-baseline",
@@ -5007,7 +5471,19 @@
           "Section": 234
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book10-336",
+          "enemies": [
+            {
+              "name": "Taintor Wolf",
+              "cs": 26,
+              "endurance": 46
+            }
+          ]
+        }
+      ]
     },
     "337": {
       "auditStatus": "source-link-baseline",
@@ -5111,7 +5587,20 @@
           "Section": 271
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book10-344",
+          "enemies": [
+            {
+              "name": "Zagganozod",
+              "cs": 20,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 271
+        }
+      ]
     },
     "345": {
       "auditStatus": "source-link-baseline",
@@ -5171,7 +5660,20 @@
           "Section": 177
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book10-348",
+          "enemies": [
+            {
+              "name": "Drakkarim Assault-captain",
+              "cs": 31,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 177
+        }
+      ]
     },
     "349": {
       "auditStatus": "source-link-baseline",
@@ -5188,7 +5690,19 @@
           "Section": 234
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book10-349",
+          "enemies": [
+            {
+              "name": "Taintor Wolf",
+              "cs": 25,
+              "endurance": 42
+            }
+          ]
+        }
+      ]
     },
     "350": {
       "auditStatus": "source-link-baseline",

@@ -139,7 +139,20 @@
           "Section": 114
         }
       ],
-      "incomingRouteCount": 4
+      "incomingRouteCount": 4,
+      "combat": [
+        {
+          "id": "book11-10",
+          "enemies": [
+            {
+              "name": "Agtah Pack",
+              "cs": 34,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 114
+        }
+      ]
     },
     "11": {
       "auditStatus": "source-link-baseline",
@@ -306,7 +319,19 @@
           "Section": 123
         }
       ],
-      "incomingRouteCount": 4
+      "incomingRouteCount": 4,
+      "combat": [
+        {
+          "id": "book11-22",
+          "enemies": [
+            {
+              "name": "Scarlet Warrior",
+              "cs": 29,
+              "endurance": 38
+            }
+          ]
+        }
+      ]
     },
     "23": {
       "auditStatus": "source-link-baseline",
@@ -451,7 +476,20 @@
           "Section": 245
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book11-31",
+          "enemies": [
+            {
+              "name": "Khozinda",
+              "cs": 32,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 245
+        }
+      ]
     },
     "32": {
       "auditStatus": "source-link-baseline",
@@ -504,7 +542,20 @@
           "Section": 133
         }
       ],
-      "incomingRouteCount": 3
+      "incomingRouteCount": 3,
+      "combat": [
+        {
+          "id": "book11-34",
+          "enemies": [
+            {
+              "name": "Octagtah",
+              "cs": 12,
+              "endurance": 43
+            }
+          ],
+          "victoryRoute": 133
+        }
+      ]
     },
     "35": {
       "auditStatus": "source-link-baseline",
@@ -547,7 +598,20 @@
           "Section": 254
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book11-37",
+          "enemies": [
+            {
+              "name": "Agtah Packleader",
+              "cs": 27,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 254
+        }
+      ]
     },
     "38": {
       "auditStatus": "source-link-baseline",
@@ -1015,7 +1079,20 @@
           "Section": 101
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book11-68",
+          "enemies": [
+            {
+              "name": "Agtah Scouts",
+              "cs": 26,
+              "endurance": 21
+            }
+          ],
+          "victoryRoute": 101
+        }
+      ]
     },
     "69": {
       "auditStatus": "source-link-baseline",
@@ -1074,7 +1151,20 @@
           "Section": 56
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book11-72",
+          "enemies": [
+            {
+              "name": "Wounded Yoacor",
+              "cs": 30,
+              "endurance": 37
+            }
+          ],
+          "victoryRoute": 56
+        }
+      ]
     },
     "73": {
       "auditStatus": "source-link-baseline",
@@ -1153,7 +1243,20 @@
           "Section": 201
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book11-77",
+          "enemies": [
+            {
+              "name": "Agtah",
+              "cs": 26,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 201
+        }
+      ]
     },
     "78": {
       "auditStatus": "source-link-baseline",
@@ -1264,7 +1367,20 @@
           "Section": 120
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book11-84",
+          "enemies": [
+            {
+              "name": "Villains of Sommerlund",
+              "cs": 38,
+              "endurance": 46
+            }
+          ],
+          "victoryRoute": 120
+        }
+      ]
     },
     "85": {
       "auditStatus": "source-link-baseline",
@@ -1459,7 +1575,19 @@
           "Section": 123
         }
       ],
-      "incomingRouteCount": 3
+      "incomingRouteCount": 3,
+      "combat": [
+        {
+          "id": "book11-97",
+          "enemies": [
+            {
+              "name": "Scarlet Warrior",
+              "cs": 27,
+              "endurance": 34
+            }
+          ]
+        }
+      ]
     },
     "98": {
       "auditStatus": "source-link-baseline",
@@ -1534,7 +1662,20 @@
           "Section": 71
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book11-103",
+          "enemies": [
+            {
+              "name": "Amphibian Agtah",
+              "cs": 30,
+              "endurance": 56
+            }
+          ],
+          "victoryRoute": 71
+        }
+      ]
     },
     "104": {
       "auditStatus": "source-link-baseline",
@@ -1557,7 +1698,20 @@
           "Section": 245
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book11-105",
+          "enemies": [
+            {
+              "name": "Khozinda",
+              "cs": 32,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 245
+        }
+      ]
     },
     "106": {
       "auditStatus": "source-link-baseline",
@@ -1597,7 +1751,20 @@
           "Section": 203
         }
       ],
-      "incomingRouteCount": 3
+      "incomingRouteCount": 3,
+      "combat": [
+        {
+          "id": "book11-108",
+          "enemies": [
+            {
+              "name": "Ookor",
+              "cs": 21,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 203
+        }
+      ]
     },
     "109": {
       "auditStatus": "source-link-baseline",
@@ -1866,7 +2033,20 @@
           "Section": 162
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book11-127",
+          "enemies": [
+            {
+              "name": "Tazgar Worm",
+              "cs": 22,
+              "endurance": 28
+            }
+          ],
+          "victoryRoute": 162
+        }
+      ]
     },
     "128": {
       "auditStatus": "source-link-baseline",
@@ -1880,7 +2060,20 @@
           "Section": 289
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "book11-128",
+          "enemies": [
+            {
+              "name": "Agtah",
+              "cs": 21,
+              "endurance": 27
+            }
+          ],
+          "victoryRoute": 289
+        }
+      ]
     },
     "129": {
       "auditStatus": "source-link-baseline",
@@ -2283,7 +2476,20 @@
           "Section": 289
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book11-155",
+          "enemies": [
+            {
+              "name": "Agtah",
+              "cs": 21,
+              "endurance": 27
+            }
+          ],
+          "victoryRoute": 289
+        }
+      ]
     },
     "156": {
       "auditStatus": "source-link-baseline",
@@ -2769,7 +2975,20 @@
           "Section": 71
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book11-187",
+          "enemies": [
+            {
+              "name": "Chaos-rats",
+              "cs": 26,
+              "endurance": 62
+            }
+          ],
+          "victoryRoute": 71
+        }
+      ]
     },
     "188": {
       "auditStatus": "source-link-baseline",
@@ -2883,7 +3102,20 @@
           "Section": 203
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book11-194",
+          "enemies": [
+            {
+              "name": "Ookor",
+              "cs": 21,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 203
+        }
+      ]
     },
     "195": {
       "auditStatus": "source-link-baseline",
@@ -2955,7 +3187,20 @@
           "Section": 245
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book11-199",
+          "enemies": [
+            {
+              "name": "Khozinda",
+              "cs": 32,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 245
+        }
+      ]
     },
     "200": {
       "auditStatus": "source-link-baseline",
@@ -2992,7 +3237,19 @@
           "Section": 37
         }
       ],
-      "incomingRouteCount": 4
+      "incomingRouteCount": 4,
+      "combat": [
+        {
+          "id": "book11-201",
+          "enemies": [
+            {
+              "name": "Agtah-hound",
+              "cs": 20,
+              "endurance": 25
+            }
+          ]
+        }
+      ]
     },
     "202": {
       "auditStatus": "source-link-baseline",
@@ -3065,7 +3322,19 @@
           "Section": 123
         }
       ],
-      "incomingRouteCount": 3
+      "incomingRouteCount": 3,
+      "combat": [
+        {
+          "id": "book11-206",
+          "enemies": [
+            {
+              "name": "Scarlet Warrior",
+              "cs": 25,
+              "endurance": 30
+            }
+          ]
+        }
+      ]
     },
     "207": {
       "auditStatus": "source-link-baseline",
@@ -3263,7 +3532,20 @@
           "Section": 162
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book11-220",
+          "enemies": [
+            {
+              "name": "Tazgar Worm",
+              "cs": 24,
+              "endurance": 34
+            }
+          ],
+          "victoryRoute": 162
+        }
+      ]
     },
     "221": {
       "auditStatus": "source-link-baseline",
@@ -3338,7 +3620,20 @@
           "Section": 56
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book11-225",
+          "enemies": [
+            {
+              "name": "Yoacor",
+              "cs": 30,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 56
+        }
+      ]
     },
     "226": {
       "auditStatus": "source-link-baseline",
@@ -3352,7 +3647,20 @@
           "Section": 201
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book11-226",
+          "enemies": [
+            {
+              "name": "Agtah",
+              "cs": 25,
+              "endurance": 33
+            }
+          ],
+          "victoryRoute": 201
+        }
+      ]
     },
     "227": {
       "auditStatus": "source-link-baseline",
@@ -3366,7 +3674,20 @@
           "Section": 265
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "book11-227",
+          "enemies": [
+            {
+              "name": "Giant Guakor Lizard",
+              "cs": 23,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 265
+        }
+      ]
     },
     "228": {
       "auditStatus": "source-link-baseline",
@@ -3542,7 +3863,20 @@
           "Section": 203
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book11-240",
+          "enemies": [
+            {
+              "name": "Ookor",
+              "cs": 21,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 203
+        }
+      ]
     },
     "241": {
       "auditStatus": "source-link-baseline",
@@ -3783,7 +4117,20 @@
           "Section": 203
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book11-256",
+          "enemies": [
+            {
+              "name": "Ookor",
+              "cs": 21,
+              "endurance": 43
+            }
+          ],
+          "victoryRoute": 203
+        }
+      ]
     },
     "257": {
       "auditStatus": "source-link-baseline",
@@ -3797,7 +4144,20 @@
           "Section": 162
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book11-257",
+          "enemies": [
+            {
+              "name": "Tazgar Worm",
+              "cs": 24,
+              "endurance": 34
+            }
+          ],
+          "victoryRoute": 162
+        }
+      ]
     },
     "258": {
       "auditStatus": "source-link-baseline",
@@ -3828,7 +4188,20 @@
           "Section": 195
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book11-259",
+          "enemies": [
+            {
+              "name": "Sandai Temple Guards",
+              "cs": 28,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 195
+        }
+      ]
     },
     "260": {
       "auditStatus": "source-link-baseline",
@@ -3994,7 +4367,20 @@
           "Section": 149
         }
       ],
-      "incomingRouteCount": 3
+      "incomingRouteCount": 3,
+      "combat": [
+        {
+          "id": "book11-270",
+          "enemies": [
+            {
+              "name": "Shadow Reavers",
+              "cs": 25,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 149
+        }
+      ]
     },
     "271": {
       "auditStatus": "source-link-baseline",
@@ -4045,7 +4431,20 @@
           "Section": 201
         }
       ],
-      "incomingRouteCount": 3
+      "incomingRouteCount": 3,
+      "combat": [
+        {
+          "id": "book11-273",
+          "enemies": [
+            {
+              "name": "Striped Agtah",
+              "cs": 24,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 201
+        }
+      ]
     },
     "274": {
       "auditStatus": "source-link-baseline",
@@ -4062,7 +4461,19 @@
           "Section": 123
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book11-274",
+          "enemies": [
+            {
+              "name": "Scarlet Warrior",
+              "cs": 29,
+              "endurance": 38
+            }
+          ]
+        }
+      ]
     },
     "275": {
       "auditStatus": "source-link-baseline",
@@ -4431,7 +4842,20 @@
           "Section": 133
         }
       ],
-      "incomingRouteCount": 6
+      "incomingRouteCount": 6,
+      "combat": [
+        {
+          "id": "book11-298",
+          "enemies": [
+            {
+              "name": "Octagtah",
+              "cs": 12,
+              "endurance": 43
+            }
+          ],
+          "victoryRoute": 133
+        }
+      ]
     },
     "299": {
       "auditStatus": "source-link-baseline",
@@ -4734,7 +5158,20 @@
           "Section": 201
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book11-319",
+          "enemies": [
+            {
+              "name": "Agtah",
+              "cs": 21,
+              "endurance": 31
+            }
+          ],
+          "victoryRoute": 201
+        }
+      ]
     },
     "320": {
       "auditStatus": "source-link-baseline",
@@ -4844,7 +5281,19 @@
           "Section": 70
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book11-327",
+          "enemies": [
+            {
+              "name": "Haagadar Sewer Snake",
+              "cs": 25,
+              "endurance": 41
+            }
+          ]
+        }
+      ]
     },
     "328": {
       "auditStatus": "source-link-baseline",
@@ -4867,7 +5316,20 @@
           "Section": 265
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "book11-329",
+          "enemies": [
+            {
+              "name": "Zhengha",
+              "cs": 35,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 265
+        }
+      ]
     },
     "330": {
       "auditStatus": "source-link-baseline",

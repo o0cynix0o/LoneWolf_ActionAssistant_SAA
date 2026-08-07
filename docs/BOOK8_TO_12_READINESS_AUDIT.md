@@ -59,6 +59,21 @@ permits it. Book 11 Section 74 is explicitly mapped as an exception: the
 printed rule requires a Meal or the ENDURANCE loss even when the player has
 Huntmastery.
 
+## Books 9-12: Base Combat Catalogue
+
+All 172 printed combat encounters now load the source Combat Skill and
+ENDURANCE values in the assistant. The catalogue also includes 141 plain
+victory routes and 9 plain evade routes. It intentionally does not infer the
+remaining special-fight mechanics, such as immunity, timed modifiers,
+alternate victory routes, round limits, or post-combat rewards.
+
+| Book | Combat encounters | Clear victory routes | Clear evade routes |
+| --- | ---: | ---: | ---: |
+| 9 | 38 | 33 | 8 |
+| 10 | 40 | 29 | 0 |
+| 11 | 36 | 30 | 0 |
+| 12 | 58 | 51 | 1 |
+
 ## Internal Testing Boundary
 
 Books 9-12 are now internal testing paths. They offer fresh Magnakai setup,
@@ -68,7 +83,7 @@ pass, which must map and test, for every required case:
 
 1. Magnakai advancement and each book's printed entry equipment rules.
 2. Conditional choices for disciplines, special items, prior events, and route state.
-3. Combat stats, combat-result exceptions, item losses and gains, and random-number effects.
+3. Combat-result exceptions, item losses and gains, and random-number effects.
 4. Book completion and the next-book transfer rules.
 
 This keeps the assistant honest: the campaign spine is testable now, while

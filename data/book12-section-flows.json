@@ -25,7 +25,20 @@
           "Section": 153
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-2",
+          "enemies": [
+            {
+              "name": "Egorgh",
+              "cs": 22,
+              "endurance": 27
+            }
+          ],
+          "victoryRoute": 153
+        }
+      ]
     },
     "3": {
       "auditStatus": "source-link-baseline",
@@ -51,7 +64,20 @@
           "Section": 91
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "book12-4",
+          "enemies": [
+            {
+              "name": "Drakkarim Marine",
+              "cs": 19,
+              "endurance": 23
+            }
+          ],
+          "victoryRoute": 91
+        }
+      ]
     },
     "5": {
       "auditStatus": "source-link-baseline",
@@ -68,7 +94,19 @@
           "Section": 148
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-5",
+          "enemies": [
+            {
+              "name": "Drakkarim Marine Officer",
+              "cs": 27,
+              "endurance": 38
+            }
+          ]
+        }
+      ]
     },
     "6": {
       "auditStatus": "source-link-baseline",
@@ -98,7 +136,20 @@
           "Section": 294
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "book12-7",
+          "enemies": [
+            {
+              "name": "Drakkarim Marine",
+              "cs": 23,
+              "endurance": 27
+            }
+          ],
+          "victoryRoute": 294
+        }
+      ]
     },
     "8": {
       "auditStatus": "source-link-baseline",
@@ -115,7 +166,19 @@
           "Section": 252
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-8",
+          "enemies": [
+            {
+              "name": "Giaks",
+              "cs": 19,
+              "endurance": 27
+            }
+          ]
+        }
+      ]
     },
     "9": {
       "auditStatus": "source-link-baseline",
@@ -221,7 +284,20 @@
           "Section": 308
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "book12-15",
+          "enemies": [
+            {
+              "name": "Vladoka",
+              "cs": 28,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 308
+        }
+      ]
     },
     "16": {
       "auditStatus": "source-link-baseline",
@@ -235,7 +311,20 @@
           "Section": 243
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "book12-16",
+          "enemies": [
+            {
+              "name": "Drakkarim Sailor",
+              "cs": 19,
+              "endurance": 24
+            }
+          ],
+          "victoryRoute": 243
+        }
+      ]
     },
     "17": {
       "auditStatus": "source-link-baseline",
@@ -325,7 +414,20 @@
           "Section": 349
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-22",
+          "enemies": [
+            {
+              "name": "Giak Sentries",
+              "cs": 17,
+              "endurance": 22
+            }
+          ],
+          "victoryRoute": 349
+        }
+      ]
     },
     "23": {
       "auditStatus": "source-link-baseline",
@@ -339,7 +441,20 @@
           "Section": 312
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-23",
+          "enemies": [
+            {
+              "name": "Plaak",
+              "cs": 30,
+              "endurance": 10
+            }
+          ],
+          "victoryRoute": 312
+        }
+      ]
     },
     "24": {
       "auditStatus": "source-link-baseline",
@@ -396,7 +511,20 @@
           "Section": 322
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-27",
+          "enemies": [
+            {
+              "name": "Aarnak Giaks",
+              "cs": 23,
+              "endurance": 27
+            }
+          ],
+          "victoryRoute": 322
+        }
+      ]
     },
     "28": {
       "auditStatus": "source-link-baseline",
@@ -515,7 +643,20 @@
           "Section": 66
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-35",
+          "enemies": [
+            {
+              "name": "Xargath",
+              "cs": 10,
+              "endurance": 100
+            }
+          ],
+          "victoryRoute": 66
+        }
+      ]
     },
     "36": {
       "auditStatus": "source-link-baseline",
@@ -567,7 +708,20 @@
           "Section": 28
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-39",
+          "enemies": [
+            {
+              "name": "Drakkarim Assault Squad",
+              "cs": 33,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 28
+        }
+      ]
     },
     "40": {
       "auditStatus": "source-link-baseline",
@@ -642,7 +796,20 @@
           "Section": 182
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-45",
+          "enemies": [
+            {
+              "name": "Drakkarim Escorts",
+              "cs": 26,
+              "endurance": 34
+            }
+          ],
+          "victoryRoute": 182
+        }
+      ]
     },
     "46": {
       "auditStatus": "source-link-baseline",
@@ -793,7 +960,20 @@
           "Section": 343
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-55",
+          "enemies": [
+            {
+              "name": "Ictakko",
+              "cs": 25,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 343
+        }
+      ]
     },
     "56": {
       "auditStatus": "source-link-baseline",
@@ -827,7 +1007,19 @@
           "Section": 195
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-57",
+          "enemies": [
+            {
+              "name": "Crypt Spawn Flood",
+              "cs": 30,
+              "endurance": 36
+            }
+          ]
+        }
+      ]
     },
     "58": {
       "auditStatus": "source-link-baseline",
@@ -841,7 +1033,20 @@
           "Section": 243
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "book12-58",
+          "enemies": [
+            {
+              "name": "Drakkarim Sailor",
+              "cs": 19,
+              "endurance": 24
+            }
+          ],
+          "victoryRoute": 243
+        }
+      ]
     },
     "59": {
       "auditStatus": "source-link-baseline",
@@ -978,7 +1183,19 @@
           "Section": 121
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-67",
+          "enemies": [
+            {
+              "name": "Minions of Taktaal",
+              "cs": 28,
+              "endurance": 28
+            }
+          ]
+        }
+      ]
     },
     "68": {
       "auditStatus": "source-link-baseline",
@@ -995,7 +1212,20 @@
           "Section": 51
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-68",
+          "enemies": [
+            {
+              "name": "Ironclad Bo\u2019sun",
+              "cs": 20,
+              "endurance": 26
+            }
+          ],
+          "victoryRoute": 51
+        }
+      ]
     },
     "69": {
       "auditStatus": "source-link-baseline",
@@ -1207,7 +1437,20 @@
           "Section": 228
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-83",
+          "enemies": [
+            {
+              "name": "Minions of Taktaal",
+              "cs": 24,
+              "endurance": 28
+            }
+          ],
+          "victoryRoute": 228
+        }
+      ]
     },
     "84": {
       "auditStatus": "source-link-baseline",
@@ -1279,7 +1522,20 @@
           "Section": 350
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-88",
+          "enemies": [
+            {
+              "name": "Darklord Gnaag",
+              "cs": 50,
+              "endurance": 70
+            }
+          ],
+          "victoryRoute": 350
+        }
+      ]
     },
     "89": {
       "auditStatus": "source-link-baseline",
@@ -1453,7 +1709,20 @@
           "Section": 248
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-100",
+          "enemies": [
+            {
+              "name": "Drakkarim Marine",
+              "cs": 23,
+              "endurance": 27
+            }
+          ],
+          "victoryRoute": 248
+        }
+      ]
     },
     "101": {
       "auditStatus": "source-link-baseline",
@@ -1484,7 +1753,20 @@
           "Section": 306
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "book12-102",
+          "enemies": [
+            {
+              "name": "Mind Reaper",
+              "cs": 30,
+              "endurance": 36
+            }
+          ],
+          "victoryRoute": 306
+        }
+      ]
     },
     "103": {
       "auditStatus": "source-link-baseline",
@@ -1517,7 +1799,20 @@
           "Section": 164
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-104",
+          "enemies": [
+            {
+              "name": "Minions of Taktaal",
+              "cs": 31,
+              "endurance": 43
+            }
+          ],
+          "victoryRoute": 164
+        }
+      ]
     },
     "105": {
       "auditStatus": "source-link-baseline",
@@ -1573,7 +1868,20 @@
           "Section": 52
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-108",
+          "enemies": [
+            {
+              "name": "Aarnak Giak Sentry",
+              "cs": 17,
+              "endurance": 20
+            }
+          ],
+          "victoryRoute": 52
+        }
+      ]
     },
     "109": {
       "auditStatus": "source-link-baseline",
@@ -1587,7 +1895,20 @@
           "Section": 255
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-109",
+          "enemies": [
+            {
+              "name": "Crypt Spawn Flood",
+              "cs": 30,
+              "endurance": 36
+            }
+          ],
+          "victoryRoute": 255
+        }
+      ]
     },
     "110": {
       "auditStatus": "source-link-baseline",
@@ -1662,7 +1983,20 @@
           "Section": 306
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-114",
+          "enemies": [
+            {
+              "name": "Mind Reaper",
+              "cs": 24,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 306
+        }
+      ]
     },
     "115": {
       "auditStatus": "source-link-baseline",
@@ -1990,7 +2324,20 @@
           "Section": 218
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-136",
+          "enemies": [
+            {
+              "name": "Plaak",
+              "cs": 30,
+              "endurance": 10
+            }
+          ],
+          "victoryRoute": 218
+        }
+      ]
     },
     "137": {
       "auditStatus": "source-link-baseline",
@@ -2167,7 +2514,20 @@
           "Section": 28
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-148",
+          "enemies": [
+            {
+              "name": "Drakkarim Marines",
+              "cs": 29,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 28
+        }
+      ]
     },
     "149": {
       "auditStatus": "source-link-baseline",
@@ -2315,7 +2675,20 @@
           "Section": 139
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-158",
+          "enemies": [
+            {
+              "name": "Death Knight Sentinel",
+              "cs": 28,
+              "endurance": 29
+            }
+          ],
+          "victoryRoute": 139
+        }
+      ]
     },
     "159": {
       "auditStatus": "source-link-baseline",
@@ -2342,7 +2715,20 @@
           "Section": 246
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-160",
+          "enemies": [
+            {
+              "name": "Ligan",
+              "cs": 25,
+              "endurance": 26
+            }
+          ],
+          "victoryRoute": 246
+        }
+      ]
     },
     "161": {
       "auditStatus": "source-link-baseline",
@@ -2356,7 +2742,20 @@
           "Section": 349
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-161",
+          "enemies": [
+            {
+              "name": "Giak Archers",
+              "cs": 14,
+              "endurance": 22
+            }
+          ],
+          "victoryRoute": 349
+        }
+      ]
     },
     "162": {
       "auditStatus": "source-link-baseline",
@@ -2504,7 +2903,20 @@
           "Section": 280
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-170",
+          "enemies": [
+            {
+              "name": "Helgedad Ghouls",
+              "cs": 23,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 280
+        }
+      ]
     },
     "171": {
       "auditStatus": "source-link-baseline",
@@ -2518,7 +2930,20 @@
           "Section": 240
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-171",
+          "enemies": [
+            {
+              "name": "Darklord Kraagensk\u00fbl",
+              "cs": 45,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 240
+        }
+      ]
     },
     "172": {
       "auditStatus": "source-link-baseline",
@@ -2575,7 +3000,20 @@
           "Section": 79
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "book12-175",
+          "enemies": [
+            {
+              "name": "Drakkar",
+              "cs": 19,
+              "endurance": 26
+            }
+          ],
+          "victoryRoute": 79
+        }
+      ]
     },
     "176": {
       "auditStatus": "source-link-baseline",
@@ -2684,7 +3122,20 @@
           "Section": 335
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "book12-182",
+          "enemies": [
+            {
+              "name": "Giak Wagon-guard",
+              "cs": 16,
+              "endurance": 19
+            }
+          ],
+          "victoryRoute": 335
+        }
+      ]
     },
     "183": {
       "auditStatus": "source-link-baseline",
@@ -2791,7 +3242,20 @@
           "Section": 139
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-189",
+          "enemies": [
+            {
+              "name": "Death Knight Sentinel",
+              "cs": 28,
+              "endurance": 29
+            }
+          ],
+          "victoryRoute": 139
+        }
+      ]
     },
     "190": {
       "auditStatus": "source-link-baseline",
@@ -2839,7 +3303,20 @@
           "Section": 299
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-192",
+          "enemies": [
+            {
+              "name": "Xargath",
+              "cs": 32,
+              "endurance": 100
+            }
+          ],
+          "victoryRoute": 299
+        }
+      ]
     },
     "193": {
       "auditStatus": "source-link-baseline",
@@ -2870,7 +3347,20 @@
           "Section": 243
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "book12-194",
+          "enemies": [
+            {
+              "name": "Drakkarim Sailor",
+              "cs": 19,
+              "endurance": 24
+            }
+          ],
+          "victoryRoute": 243
+        }
+      ]
     },
     "195": {
       "auditStatus": "source-link-baseline",
@@ -2884,7 +3374,20 @@
           "Section": 318
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-195",
+          "enemies": [
+            {
+              "name": "Darklord Kraagensk\u00fbl",
+              "cs": 45,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 318
+        }
+      ]
     },
     "196": {
       "auditStatus": "source-link-baseline",
@@ -2931,7 +3434,20 @@
           "Section": 253
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-198",
+          "enemies": [
+            {
+              "name": "Drakkar",
+              "cs": 21,
+              "endurance": 26
+            }
+          ],
+          "victoryRoute": 253
+        }
+      ]
     },
     "199": {
       "auditStatus": "source-link-baseline",
@@ -3035,7 +3551,20 @@
           "Section": 312
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "book12-205",
+          "enemies": [
+            {
+              "name": "Plaak",
+              "cs": 30,
+              "endurance": 10
+            }
+          ],
+          "victoryRoute": 312
+        }
+      ]
     },
     "206": {
       "auditStatus": "source-link-baseline",
@@ -3152,7 +3681,20 @@
           "Section": 232
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "book12-213",
+          "enemies": [
+            {
+              "name": "Drakkarim Marine Officer",
+              "cs": 27,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 232
+        }
+      ]
     },
     "214": {
       "auditStatus": "source-link-baseline",
@@ -3315,7 +3857,22 @@
           "Section": 91
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "book12-224",
+          "enemies": [
+            {
+              "name": "Drakkarim Marine",
+              "cs": 19,
+              "endurance": 23
+            }
+          ],
+          "victoryRoute": 91,
+          "canEvade": true,
+          "evadeRoute": 58
+        }
+      ]
     },
     "225": {
       "auditStatus": "source-link-baseline",
@@ -3342,7 +3899,20 @@
           "Section": 343
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-226",
+          "enemies": [
+            {
+              "name": "Ictakko",
+              "cs": 25,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 343
+        }
+      ]
     },
     "227": {
       "auditStatus": "source-link-baseline",
@@ -3409,7 +3979,20 @@
           "Section": 182
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-231",
+          "enemies": [
+            {
+              "name": "Drakkarim Escorts",
+              "cs": 23,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 182
+        }
+      ]
     },
     "232": {
       "auditStatus": "source-link-baseline",
@@ -3527,7 +4110,19 @@
           "Section": 155
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-239",
+          "enemies": [
+            {
+              "name": "Drakkarim Gunner",
+              "cs": 19,
+              "endurance": 25
+            }
+          ]
+        }
+      ]
     },
     "240": {
       "auditStatus": "source-link-baseline",
@@ -3655,7 +4250,20 @@
           "Section": 349
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-247",
+          "enemies": [
+            {
+              "name": "Giak Sentries",
+              "cs": 17,
+              "endurance": 22
+            }
+          ],
+          "victoryRoute": 349
+        }
+      ]
     },
     "248": {
       "auditStatus": "source-link-baseline",
@@ -3672,7 +4280,20 @@
           "Section": 290
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-248",
+          "enemies": [
+            {
+              "name": "Drakkarim Marine Sergeant",
+              "cs": 26,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 290
+        }
+      ]
     },
     "249": {
       "auditStatus": "source-link-baseline",
@@ -3838,7 +4459,19 @@
           "Section": 155
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-259",
+          "enemies": [
+            {
+              "name": "Drakkarim Gunner",
+              "cs": 19,
+              "endurance": 25
+            }
+          ]
+        }
+      ]
     },
     "260": {
       "auditStatus": "source-link-baseline",
@@ -3914,7 +4547,20 @@
           "Section": 153
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-264",
+          "enemies": [
+            {
+              "name": "Egorgh",
+              "cs": 24,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 153
+        }
+      ]
     },
     "265": {
       "auditStatus": "source-link-baseline",
@@ -3974,7 +4620,20 @@
           "Section": 14
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "book12-268",
+          "enemies": [
+            {
+              "name": "Sea-scavenger",
+              "cs": 22,
+              "endurance": 10
+            }
+          ],
+          "victoryRoute": 14
+        }
+      ]
     },
     "269": {
       "auditStatus": "source-link-baseline",
@@ -4311,7 +4970,19 @@
           "Section": 199
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-291",
+          "enemies": [
+            {
+              "name": "Imperial Sector Guards",
+              "cs": 30,
+              "endurance": 38
+            }
+          ]
+        }
+      ]
     },
     "292": {
       "auditStatus": "source-link-baseline",
@@ -4325,7 +4996,20 @@
           "Section": 272
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-292",
+          "enemies": [
+            {
+              "name": "Drakkarim Gunners",
+              "cs": 21,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 272
+        }
+      ]
     },
     "293": {
       "auditStatus": "source-link-baseline",
@@ -4548,7 +5232,20 @@
           "Section": 153
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "book12-307",
+          "enemies": [
+            {
+              "name": "Egorgh",
+              "cs": 25,
+              "endurance": 34
+            }
+          ],
+          "victoryRoute": 153
+        }
+      ]
     },
     "308": {
       "auditStatus": "source-link-baseline",
@@ -4991,7 +5688,20 @@
           "Section": 14
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-337",
+          "enemies": [
+            {
+              "name": "Sea-scavenger",
+              "cs": 22,
+              "endurance": 10
+            }
+          ],
+          "victoryRoute": 14
+        }
+      ]
     },
     "338": {
       "auditStatus": "source-link-baseline",
@@ -5056,7 +5766,20 @@
           "Section": 106
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-342",
+          "enemies": [
+            {
+              "name": "Xaghash",
+              "cs": 32,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 106
+        }
+      ]
     },
     "343": {
       "auditStatus": "source-link-baseline",
@@ -5122,7 +5845,20 @@
           "Section": 28
         }
       ],
-      "incomingRouteCount": 2
+      "incomingRouteCount": 2,
+      "combat": [
+        {
+          "id": "book12-347",
+          "enemies": [
+            {
+              "name": "Drakkarim Marines",
+              "cs": 29,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 28
+        }
+      ]
     },
     "348": {
       "auditStatus": "source-link-baseline",
@@ -5136,7 +5872,20 @@
           "Section": 246
         }
       ],
-      "incomingRouteCount": 1
+      "incomingRouteCount": 1,
+      "combat": [
+        {
+          "id": "book12-348",
+          "enemies": [
+            {
+              "name": "Ligan",
+              "cs": 25,
+              "endurance": 26
+            }
+          ],
+          "victoryRoute": 246
+        }
+      ]
     },
     "349": {
       "auditStatus": "source-link-baseline",

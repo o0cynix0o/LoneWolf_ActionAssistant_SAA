@@ -1047,6 +1047,37 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
         self.assertEqual(assistant.combat["Modifier"], 2)
         self.assertEqual(assistant.combat["VictoryRoute"], 237)
 
+    def test_later_magnakai_combat_catalogue_starts_source_encounters(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            assistant.state["Character"]["BookNumber"] = 9
+            assistant.set_section(10)
+            assistant.start_section_combat()
+            book9 = {
+                "name": assistant.combat["EnemyName"],
+                "cs": assistant.combat["EnemyCombatSkill"],
+                "endurance": assistant.combat["EnemyEnduranceMax"],
+                "route": assistant.combat["VictoryRoute"],
+            }
+
+            assistant.state["Character"]["BookNumber"] = 12
+            assistant.set_section(171)
+            assistant.start_section_combat()
+            book12 = {
+                "cs": assistant.combat["EnemyCombatSkill"],
+                "endurance": assistant.combat["EnemyEnduranceMax"],
+                "route": assistant.combat["VictoryRoute"],
+            }
+
+        self.assertEqual(book9, {"name": "Zakhan Kimah", "cs": 30, "endurance": 38, "route": 350})
+        self.assertEqual(book12, {"cs": 45, "endurance": 48, "route": 240})
+
     def test_magnakai_v1_entry_rule_manifest_remains_covered(self) -> None:
         expected = {
             6: {2, 4, 8, 10, 16, 17, 27, 35, 37, 40, 44, 48, 49, 50, 51, 54, 62, 65, 76, 85, 88, 96, 98, 106, 109, 111, 112, 113, 123, 124, 137, 139, 141, 145, 146, 153, 157, 158, 160, 164, 165, 169, 171, 172, 174, 187, 190, 191, 197, 200, 205, 207, 209, 211, 212, 214, 220, 222, 223, 232, 245, 246, 248, 252, 253, 266, 273, 275, 276, 278, 282, 293, 295, 297, 301, 304, 306, 307, 310, 313, 315, 316, 318, 322, 328, 348},
@@ -1061,8 +1092,8 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
             self.assertTrue(sections.issubset(covered), f"Book {book_number} missing {sorted(sections - covered)}")
 
     def test_magnakai_combat_and_rnt_catalogue_totals_remain_source_complete(self) -> None:
-        expected_combat = {6: 28, 7: 39, 8: 37}
-        expected_rnt = {6: 22, 7: 22, 8: 16}
+        expected_combat = {6: 28, 7: 39, 8: 37, 9: 38, 10: 40, 11: 36, 12: 58}
+        expected_rnt = {6: 22, 7: 22, 8: 16, 9: 0, 10: 0, 11: 0, 12: 0}
         root = Path(lonewolf_redux.__file__).resolve().parent / "data"
         for book_number in expected_combat:
             flows = json.loads((root / f"book{book_number}-section-flows.json").read_text(encoding="utf-8"))[str(book_number)]
@@ -1626,7 +1657,7 @@ class CardLayoutInteractionTests(unittest.TestCase):
                     return cls.assistant_html[match.start():index + 1]
         raise AssertionError(f"JavaScript function {name!r} has no closing brace")
 
-    def test_release_metadata_is_3_4_1_internal_testing(self) -> None:
+    def test_release_metadata_is_3_4_2_internal_testing(self) -> None:
         readme = (self.root / "README.md").read_text(encoding="utf-8")
         building = (self.root / "docs" / "BUILDING.md").read_text(encoding="utf-8")
         user_guide = (self.root / "docs" / "USER_GUIDE.md").read_text(encoding="utf-8")
@@ -1636,16 +1667,16 @@ class CardLayoutInteractionTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         version_info = (self.root / "version_info.txt").read_text(encoding="utf-8")
 
-        self.assertIn("# Lone Wolf Action Assistant 3.4.1 Internal Testing", readme)
-        self.assertIn("Version: **3.4.1 Internal Testing**", readme)
-        self.assertIn("# Building Lone Wolf Action Assistant 3.4.1 Internal Testing", building)
-        self.assertIn("# Lone Wolf Action Assistant 3.4.1 Internal Testing", user_guide)
-        self.assertIn("## 3.4.1 - Internal Testing", changelog)
-        self.assertIn('#define AppVersion "3.4.1"', installer)
-        self.assertIn("filevers=(3, 4, 1, 0)", version_info)
-        self.assertIn("prodvers=(3, 4, 1, 0)", version_info)
-        self.assertIn("StringStruct(u'FileVersion', u'3.4.1')", version_info)
-        self.assertIn("StringStruct(u'ProductVersion', u'3.4.1')", version_info)
+        self.assertIn("# Lone Wolf Action Assistant 3.4.2 Internal Testing", readme)
+        self.assertIn("Version: **3.4.2 Internal Testing**", readme)
+        self.assertIn("# Building Lone Wolf Action Assistant 3.4.2 Internal Testing", building)
+        self.assertIn("# Lone Wolf Action Assistant 3.4.2 Internal Testing", user_guide)
+        self.assertIn("## 3.4.2 - Internal Testing", changelog)
+        self.assertIn('#define AppVersion "3.4.2"', installer)
+        self.assertIn("filevers=(3, 4, 2, 0)", version_info)
+        self.assertIn("prodvers=(3, 4, 2, 0)", version_info)
+        self.assertIn("StringStruct(u'FileVersion', u'3.4.2')", version_info)
+        self.assertIn("StringStruct(u'ProductVersion', u'3.4.2')", version_info)
 
     def test_movable_cards_get_a_dedicated_drag_handle(self) -> None:
         self.assertIn("data-card-drag-handle", self.assistant_html)
