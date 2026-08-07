@@ -1163,6 +1163,13 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
             assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 12, "MagnakaiDisciplines": ["Weaponmastery", "Huntmastery"], "WeaponmasteryWeapons": ["Bow"], "MagnakaiRank": 9}, "CurrentSection": 324})
             self.assertEqual(assistant.roll_current_section(raw_roll=4)["Route"], 287)
 
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 9}, "Inventory": {"SpecialItems": ["First", "Second"], "BackpackItems": ["Rope"]}, "CurrentSection": 201})
+            self.assertEqual(assistant.roll_current_section(raw_roll=7)["Outcome"], "Second Special Item stolen")
+            self.assertEqual(assistant.inventory["SpecialItems"], ["First"])
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 9}, "Inventory": {"SpecialItems": ["Only Special"], "BackpackItems": ["Rope"]}, "CurrentSection": 201})
+            self.assertEqual(assistant.roll_current_section(raw_roll=0)["Outcome"], "First Backpack Item stolen")
+            self.assertEqual(assistant.inventory["BackpackItems"], [])
+
     def test_book8_source_entry_effect_restores_endurance(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
@@ -1360,7 +1367,7 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
 
     def test_magnakai_combat_and_rnt_catalogue_totals_remain_source_complete(self) -> None:
         expected_combat = {6: 28, 7: 39, 8: 37, 9: 38, 10: 40, 11: 37, 12: 59}
-        expected_rnt = {6: 22, 7: 22, 8: 16, 9: 19, 10: 25, 11: 29, 12: 39}
+        expected_rnt = {6: 22, 7: 22, 8: 16, 9: 20, 10: 25, 11: 29, 12: 39}
         root = Path(lonewolf_redux.__file__).resolve().parent / "data"
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
