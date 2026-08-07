@@ -5899,9 +5899,23 @@
 
     function renderDisciplines() {
       const c = currentCharacter();
+      const isMagnakai = Number(c.BookNumber) >= 6;
+      const magnakaiKnown = arr(c.MagnakaiDisciplines);
+      const masteredWeapons = arr(c.WeaponmasteryWeapons);
       const needsWeaponskill = arr(c.KaiDisciplines).includes('Weaponskill') && !text(c.WeaponskillWeapon);
       view.innerHTML = `
-        ${powerPanel('Kai Disciplines', kaiDisciplines, c.KaiDisciplines)}
+        ${isMagnakai ? `
+          <div class="panel">
+            <h2>Magnakai Action Chart</h2>
+            <div class="grid">
+              ${field('Magnakai Rank', c.MagnakaiRank || magnakaiKnown.length || 'None')}
+              ${field('Known Disciplines', `${magnakaiKnown.length}/10`)}
+              ${field('Weaponmastery Weapons', masteredWeapons.length ? list(masteredWeapons) : 'None')}
+            </div>
+          </div>
+          ${powerPanel('Magnakai Disciplines', magnakaiDisciplines, magnakaiKnown)}
+        ` : ''}
+        ${powerPanel(isMagnakai ? 'Kai Disciplines (Legacy)' : 'Kai Disciplines', kaiDisciplines, c.KaiDisciplines)}
         ${needsWeaponskill ? `
           <div class="panel">
             <h2>Weaponskill Setup</h2>

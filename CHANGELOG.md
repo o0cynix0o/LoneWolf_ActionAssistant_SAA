@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.1.8 - 2026-08-07
+
+- Fixed the Book 6+ Disciplines tab to lead with the Magnakai Action Chart and the current Magnakai Disciplines.
+- Kept the original Kai Disciplines visible below as legacy disciplines, with Weaponmastery weapons and Magnakai rank shown clearly.
+
 ## 3.1.7 — Unreleased
 
 - Added internal session-scoped QA and diagnostic support for playtesting.
