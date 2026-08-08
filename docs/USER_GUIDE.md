@@ -1,4 +1,4 @@
-# Lone Wolf Action Assistant 3.4.5 Internal Testing
+# Lone Wolf Action Assistant 3.4.6 Internal Testing
 
 ## Installation
 
@@ -37,9 +37,9 @@ books\lw\01fftd\title.htm
 books\lw\01fftd\sect1.htm
 ```
 
-Books 9-12 can be imported and tested as campaigns now. Their source rules,
-conditional choices, combat, and item transfers are still being reviewed
-section by section, so use the manual tools when the assistant has no rule card.
+Books 1-12 can be imported and played as campaigns. Books 9-12 have completed
+their first source and campaign pass; use the manual tools whenever the book
+calls for a choice or result the assistant has not presented as a rule card.
 
 Use **Open Managed Books Folder** when you need direct access to the selected storage location.
 

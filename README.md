@@ -1,15 +1,15 @@
-# Lone Wolf Action Assistant 3.4.5 Internal Testing
+# Lone Wolf Action Assistant 3.4.6 Internal Testing
 
 Lone Wolf Action Assistant is a standalone Windows desktop play aid for the *Lone Wolf* gamebooks. It preserves the established HTML interface and embedded command-line terminal while packaging the application, Python runtime, and dependencies into one fast-launch application folder with a single normal EXE to start it.
 
-Version: **3.4.5 Internal Testing**
+Version: **3.4.6 Internal Testing**
 
-Current game support: **Books 1–8 are playable V3 paths. Books 6–8 support both
-fresh Magnakai setup and campaign continuation, with V1-derived automation and
-source-parity tests for their recorded rules. Books 9–12 are internal testing
-paths with printed entry setup, campaign handoffs, reader navigation, saves,
-inventory, manual combat tools, source-verified item events, and the first
-special-equipment combat rules; their section automation review is ongoing.**
+Current game support: **Books 1–12 are playable internal-testing paths. Books
+6–12 support both fresh Magnakai setup and campaign continuation. The assistant
+records source-verified route gates, section effects, combat exceptions, item
+events, Random Number Table results, achievements, and each book's ending.
+Books 9–12 have completed their first full source and campaign pass, but still
+need broader player testing before a public release.**
 
 Runs support V1-compatible **Story, Easy, Normal, Hard, and Veteran** rules,
 optional permadeath, tamper-evident saves, difficulty-aware achievements, and

@@ -1,5 +1,17 @@
 # Changelog
 
+## 3.4.6 - Internal Testing
+
+- Completed an isolated source-link campaign from Book 1 through Book 12,
+  including Book 6 and Book 10 save/reload checkpoints, the Book 8 Psi-surge
+  Vordak encounter, and the stable Book 12 ending.
+- Added Book 7-12 final-section completion rules and story achievements so each
+  completed Magnakai book records its campaign handoff correctly.
+- Blocked section routes that are only available after the current combat has
+  resolved, preventing fights such as Book 1 Section 255 from being bypassed.
+- Updated the player and build documentation to show Books 1-12 as playable
+  internal-testing campaigns.
+
 ## 3.4.5 - Internal Testing
 
 - Added source-verified combat handling for the Ironheart Broadsword, Helshezag, the Bronin Vest, Silver Bracers, Silver Rod, Golden Amulet, and Korlinium-scabbard encounter.

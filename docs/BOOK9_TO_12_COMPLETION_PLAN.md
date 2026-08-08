@@ -139,6 +139,10 @@ loaded, and resumed without state loss or unexplained manual corrections.
   supported ending, explicit capacity choices, source-specific combat routes,
   RNT effects, automatic CRT and Manual CRT save/load/resume, signed-save
   validation, inventory order, and death/permadeath recovery.
+- A complete isolated Book 1-to-12 Story campaign now follows installed Project
+  Aon section links, resolves encountered combat, saves and reloads at Books 6
+  and 10, records the Book 1-12 completion achievements, and reaches Book 12
+  Section 350 with a Completed run state.
 
 ## Phase 6: Release Readiness
 
