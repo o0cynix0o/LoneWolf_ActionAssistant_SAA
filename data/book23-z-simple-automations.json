@@ -1,0 +1,11 @@
+{
+  "23": {
+    "65": {"summary": "Take the Riverboat Ticket.", "actions": [{"type": "add_item", "container": "pocket", "name": "Riverboat Ticket"}]},
+    "75": {"summary": "Take Sadanzo's Scroll.", "actions": [{"type": "add_item", "container": "pocket", "name": "Sadanzo's Scroll"}]},
+    "145": {"summary": "Take the Tehda Key from the saddlebag.", "actions": [{"type": "add_item", "container": "pocket", "name": "Tehda Key"}]},
+    "181": {"summary": "Take the Riverboat Ticket.", "actions": [{"type": "add_item", "container": "pocket", "name": "Riverboat Ticket"}]},
+    "224": {"summary": "Remove the second recorded Backpack Item.", "actions": [{"type": "remove_item_at", "container": "backpack", "index": 1}]},
+    "309": {"summary": "Take the Riverboat Ticket.", "actions": [{"type": "add_item", "container": "pocket", "name": "Riverboat Ticket"}]},
+    "320": {"summary": "Take the Riverboat Ticket.", "actions": [{"type": "add_item", "container": "pocket", "name": "Riverboat Ticket"}]}
+  }
+}

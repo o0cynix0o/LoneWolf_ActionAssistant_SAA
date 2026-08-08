@@ -31,6 +31,17 @@ per-section automation pass recorded in the companion backlog.
 Book 28 is intentionally a 300-section book. The ledger generator validates
 each book's actual contiguous source range and does not assume 350 sections.
 
+## Phase 2 Coverage
+
+Books 21-23 now have source-verified Random Number Table coverage, including
+conditional modifiers, mandatory effects, and player-selected optional spends.
+Every source combat block is represented by an encounter preset with its
+printed statistics and relevant timing, escape, or victory routing rules.
+The clearest inventory changes are automated too: fixed losses follow the
+printed list position, while optional rewards and purchases remain explicit
+loot choices. New Order completion and exploration achievements are evaluated
+for Books 21-29.
+
 ## Audit Artefacts
 
 - `data/new-order-source-audit.json`: source-derived candidate sections.

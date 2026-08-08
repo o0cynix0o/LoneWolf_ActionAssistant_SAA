@@ -864,6 +864,52 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
         self.assertTrue(expected_complete.issubset(story_unlocked))
         self.assertTrue(expected_long_road.issubset(exploration_unlocked))
 
+    def test_book21_source_item_effects_keep_forced_losses_and_optional_loot_distinct(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 21},
+                "Inventory": {"BackpackItems": ["Rope", "Torch", "Tinderbox"]},
+            })
+            assistant.set_section(30)
+            self.assertEqual(assistant.inventory["BackpackItems"], ["Torch", "Tinderbox"])
+            assistant.set_section(233)
+            self.assertEqual(assistant.inventory["BackpackItems"], ["Torch"])
+
+            assistant.set_section(102)
+            self.assertNotIn("Temujun's Ring", assistant.inventory["PocketSpecialItems"])
+            assistant.apply_flow_loot("temujun-ring")
+            self.assertIn("Temujun's Ring", assistant.inventory["PocketSpecialItems"])
+
+    def test_books22_and23_source_item_choices_and_forced_changes_apply(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 22},
+                "Inventory": {"GoldCrowns": 10, "BackpackItems": ["Rope", "Torch", "Tinderbox"]},
+            })
+            assistant.set_section(21)
+            assistant.apply_flow_loot("nhang-doll-10")
+            self.assertEqual(assistant.inventory["GoldCrowns"], 0)
+            self.assertIn("Nhang Doll", assistant.inventory["BackpackItems"])
+            assistant.set_section(167)
+            self.assertTrue({"Pouch of Seota Dust", "Talisman of Defiance", "Eye of Lhaz"}.issubset(assistant.inventory["PocketSpecialItems"]))
+
+            assistant.state["Character"]["BookNumber"] = 23
+            assistant.set_section(65)
+            self.assertIn("Riverboat Ticket", assistant.inventory["PocketSpecialItems"])
+            assistant.set_section(4)
+            assistant.apply_flow_loot("cache-gold")
+            self.assertEqual(assistant.inventory["GoldCrowns"], 10)
+
     def test_books6_to20_achievements_unlock_from_recorded_campaign_progress(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)

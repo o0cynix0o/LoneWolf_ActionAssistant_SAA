@@ -1,0 +1,8 @@
+{
+  "21": {
+    "30": {"summary": "The thief takes the first recorded Backpack Item.", "actions": [{"type": "remove_item_at", "container": "backpack", "index": 0}]},
+    "56": {"summary": "The thief takes the first recorded Backpack Item.", "actions": [{"type": "remove_item_at", "container": "backpack", "index": 0}]},
+    "233": {"summary": "The escape destroys the last recorded Backpack Item.", "actions": [{"type": "remove_item_at", "container": "backpack", "index": -1}]},
+    "318": {"summary": "The thief keeps the first recorded Backpack Item.", "actions": [{"type": "remove_item_at", "container": "backpack", "index": 0}]}
+  }
+}

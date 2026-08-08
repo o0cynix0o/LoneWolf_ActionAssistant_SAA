@@ -1,0 +1,9 @@
+{
+  "22": {
+    "84": {"summary": "Gregor Luggs gives you the Silver Clasp.", "actions": [{"type": "add_item", "container": "pocket", "name": "Silver Clasp"}]},
+    "109": {"summary": "Captain Leonghi gives you his letter of introduction.", "actions": [{"type": "add_item", "container": "pocket", "name": "Leonghi's Scroll"}]},
+    "167": {"summary": "The people of Kitaezi present their three gifts.", "actions": [{"type": "add_item", "container": "pocket", "name": "Pouch of Seota Dust"}, {"type": "add_item", "container": "pocket", "name": "Talisman of Defiance"}, {"type": "add_item", "container": "pocket", "name": "Eye of Lhaz"}]},
+    "275": {"summary": "The chart maker keeps Leonghi's Scroll.", "actions": [{"type": "remove_item", "containers": ["pocket"], "name": "Leonghi's Scroll"}]},
+    "304": {"summary": "The underwater battle loses the third recorded Backpack Item.", "actions": [{"type": "remove_item_at", "container": "backpack", "index": 2}]}
+  }
+}

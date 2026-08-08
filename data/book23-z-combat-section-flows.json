@@ -1,5 +1,6 @@
 {
   "23": {
+    "4": {"loot": [{"id": "jewelled-knife", "label": "Keep the Jewelled Knife", "actions": [{"type": "add_item", "container": "backpack", "name": "Jewelled Knife"}]}, {"id": "silver-signet-ring", "label": "Keep the Silver Signet Ring", "actions": [{"type": "add_item", "container": "backpack", "name": "Silver Signet Ring"}]}, {"id": "cache-gold", "label": "Take 10 Gold Crowns", "actions": [{"type": "stat", "stat": "gold", "delta": 10}]}]},
     "10": {"combat": [{"id": "book23-10", "enemies": [{"name": "Bavazanur (Winged Agarashi - wounded)", "cs": 38, "endurance": 30}], "modifier": 5, "victoryRoute": 129}]},
     "25": {"combat": [{"id": "book23-25", "enemies": [{"name": "Hunting party", "cs": 47, "endurance": 40}], "timedModifiers": [{"modifier": 5, "startRound": 4, "endRound": 99}], "victoryRoute": 186}]},
     "34": {"combat": [{"id": "book23-34", "enemies": [{"name": "Cavalian Bandits", "cs": 40, "endurance": 36}], "modifier": 5, "winWithinRounds": 3, "winWithinRoute": 215, "tooLateRoute": 103}]},
@@ -8,7 +9,9 @@
     "103": {"combat": [{"id": "book23-103", "enemies": [{"name": "Peutrimax (with magical sword)", "cs": 53, "endurance": 38}], "modifier": 5, "victoryRoute": 176}]},
     "107": {"combat": [{"id": "book23-107", "enemies": [{"name": "Tehda Stables Guard", "cs": 24, "endurance": 24}], "timedModifiers": [{"modifier": -5, "startRound": 1, "endRound": 1}], "victoryRoute": 316}]},
     "128": {"combat": [{"id": "book23-128", "enemies": [{"name": "Cavalian Bandits", "cs": 40, "endurance": 36}], "modifier": 5, "winWithinRounds": 5, "winWithinRoute": 215, "tooLateRoute": 103}]},
+    "132": {"loot": [{"id": "tehda-key", "label": "Keep the Tehda Key", "actions": [{"type": "add_item", "container": "pocket", "name": "Tehda Key"}]}]},
     "159": {"combat": [{"id": "book23-159", "enemies": [{"name": "Sadanzo's knights", "cs": 45, "endurance": 38}], "modifier": 5, "victoryRoute": 108}]},
+    "185": {"loot": [{"id": "stone-dagger", "label": "Keep the Stone Dagger", "actions": [{"type": "add_item", "container": "special", "name": "Stone Dagger"}]}]},
     "203": {"combat": [{"id": "book23-203", "enemies": [{"name": "Knight Bachelor and 6 Citadel Gaolers", "cs": 43, "endurance": 38}], "victoryRoute": 324}]},
     "216": {"combat": [{"id": "book23-216", "enemies": [{"name": "Tehda Stables Guard", "cs": 24, "endurance": 24}], "forceUnarmed": true, "victoryRoute": 316}]},
     "217": {"combat": [{"id": "book23-217", "enemies": [{"name": "Sadanzo's sorcerous blades", "cs": 40, "endurance": 20}], "victoryRoute": 106}]},
