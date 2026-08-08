@@ -437,6 +437,19 @@ def apply_new_game(payload: dict) -> str:
             gold_roll=payload.get("goldRoll"),
             equipment_choices=payload.get("equipmentChoices") or payload.get("armouryChoices"),
         )
+    elif book_number in set(range(21, 30)):
+        ASSISTANT.state = lonewolf_redux.create_new_order_character_state(
+            book_number=book_number,
+            name=name,
+            new_order_disciplines=payload.get("newOrderDisciplines"),
+            grand_weaponmastery_weapons=payload.get("grandWeaponmasteryWeapons"),
+            kai_weapon_roll=payload.get("kaiWeaponRoll"),
+            section=int(payload.get("section") or 1),
+            combat_skill_roll=payload.get("combatSkillRoll"),
+            endurance_roll=payload.get("enduranceRoll"),
+            gold_roll=payload.get("goldRoll"),
+            equipment_choices=payload.get("equipmentChoices") or payload.get("armouryChoices"),
+        )
     elif book_number == 5:
         ASSISTANT.state = lonewolf_redux.create_book5_character_state(
             name=name,
@@ -784,6 +797,7 @@ def handle_action(payload: dict) -> str:
                 book6_de_weaponskill_option=int(payload.get("deWeaponskillOption") or 0),
                 grand_master_disciplines=payload.get("grandMasterDiscipline"),
                 grand_weaponmastery_weapons=payload.get("grandWeaponmasteryWeapon"),
+                new_order_disciplines=payload.get("newOrderDiscipline"),
                 transition_drops=payload.get("transitionDrops"),
             )
         )

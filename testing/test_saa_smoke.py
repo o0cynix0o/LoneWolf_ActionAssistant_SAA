@@ -63,7 +63,7 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
     """Protect the complete supported-book baseline and its automation data."""
 
     def test_supported_books_have_loaded_automation_and_flow_data(self) -> None:
-        expected_books = set(range(1, 21))
+        expected_books = set(range(1, 30))
         self.assertEqual(set(lonewolf_redux.BOOKS), expected_books)
 
         root = Path(lonewolf_redux.__file__).resolve().parent
@@ -218,6 +218,7 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
                 save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
                 state_data_dir=base / "state", books_dir=base / "books",
             )
+
             assistant.state["Character"].update(
                 {
                     "BookNumber": 7,
@@ -238,6 +239,36 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
                 book6_equipment_choices=["quiver", "rope", "laumspur", "lantern", "meals"],
             )
             self.assertEqual(assistant.character["BookNumber"], 9)
+
+    def test_new_order_standalone_and_continuation_preserve_the_action_chart(self) -> None:
+        state = lonewolf_redux.create_new_order_character_state(
+            book_number=21,
+            new_order_disciplines=[
+                "Grand Weaponmastery", "Animal Mastery", "Deliverance", "Astrology", "Herbmastery"
+            ],
+            grand_weaponmastery_weapons=["Sword"],
+            kai_weapon_roll=3,
+            combat_skill_roll=0,
+            endurance_roll=0,
+            gold_roll=0,
+            equipment_choices=["quarterstaff", "quiver", "flute", "meals", "rope"],
+        )
+        self.assertEqual(state["RuleSet"], "New Order")
+        self.assertEqual(state["Character"]["KaiWeapon"]["Name"], "Sunstrike")
+        self.assertEqual(state["Character"]["NewOrderRank"], 5)
+
+        advanced = lonewolf_redux.prepare_new_order_state(
+            state,
+            book_number=22,
+            new_order_disciplines=["Elementalism"],
+            grand_weaponmastery_weapons=["Axe"],
+            gold_roll=0,
+            equipment_choices=["bow", "quiver", "flute", "meals", "laumspur"],
+        )
+        self.assertEqual(advanced["Character"]["BookNumber"], 22)
+        self.assertEqual(advanced["Character"]["NewOrderRank"], 6)
+        self.assertEqual(advanced["Character"]["GrandWeaponmasteryWeapons"], ["Sword", "Axe"])
+        self.assertEqual(advanced["Inventory"]["GoldCrowns"], 40)
 
     def test_full_backpack_can_be_trimmed_during_a_book2_transition(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -2229,14 +2260,17 @@ class CampaignEntryPointTests(unittest.TestCase):
         self.assertIn('data-book="9">Book 9</button>', assistant_html)
         self.assertIn('data-book="12">Book 12</button>', assistant_html)
 
-    def test_reader_toolbar_switches_to_the_magnakai_series(self) -> None:
+    def test_reader_toolbar_switches_to_the_active_series(self) -> None:
         assistant_html = self.source_text("assistant.html")
         self.assertIn('data-reader-series="kai"', assistant_html)
         self.assertIn('data-reader-series="magnakai"', assistant_html)
+        self.assertIn('data-reader-series="grand-master"', assistant_html)
+        self.assertIn('data-reader-series="new-order"', assistant_html)
         self.assertNotIn('Book 8 is not in testing yet.', assistant_html)
         self.assertNotIn('Book 9 is not in testing yet.', assistant_html)
         self.assertNotIn('Book 12 is not in testing yet.', assistant_html)
-        self.assertIn("const readerSeries = book.number >= 6 ? 'magnakai' : 'kai';", assistant_html)
+        self.assertIn("? 'new-order'", assistant_html)
+        self.assertIn("? 'grand-master'", assistant_html)
 
     def test_magnakai_sheet_leads_with_the_current_discipline_set(self) -> None:
         assistant_html = self.source_text("assistant.html")
@@ -2295,9 +2329,10 @@ class CampaignEntryPointTests(unittest.TestCase):
     def test_completion_ui_contains_magnakai_campaign_handoffs(self) -> None:
         assistant_html = self.source_text("assistant.html")
         server_source = self.source_text("app_server.py")
-        self.assertIn("nextBook >= 2 && nextBook <= 20", assistant_html)
+        self.assertIn("nextBook >= 22 && nextBook <= 29", assistant_html)
         self.assertIn("Choose exactly 3 Magnakai Disciplines", assistant_html)
         self.assertIn("Grand Master Discipline", assistant_html)
+        self.assertIn("New New Order Discipline", assistant_html)
         self.assertIn("New Magnakai Discipline", assistant_html)
         self.assertIn("Continue to Book ${escapeHtml(nextBook)}", assistant_html)
         self.assertIn("Leave Behind Before Field Issue", assistant_html)

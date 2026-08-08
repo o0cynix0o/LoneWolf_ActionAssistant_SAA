@@ -154,6 +154,15 @@ BOOKS = {
     18: {"Title": "Dawn of the Dragons", "Folder": "18dotd", "MaxSection": 350},
     19: {"Title": "Wolf's Bane", "Folder": "19wb", "MaxSection": 350},
     20: {"Title": "The Curse of Naar", "Folder": "20tcon", "MaxSection": 350},
+    21: {"Title": "Voyage of the Moonstone", "Folder": "21votm", "MaxSection": 350},
+    22: {"Title": "The Buccaneers of Shadaki", "Folder": "22tbos", "MaxSection": 350},
+    23: {"Title": "Mydnight's Hero", "Folder": "23mh", "MaxSection": 350},
+    24: {"Title": "Rune War", "Folder": "24rw", "MaxSection": 350},
+    25: {"Title": "Trail of the Wolf", "Folder": "25totw", "MaxSection": 350},
+    26: {"Title": "The Fall of Blood Mountain", "Folder": "26tfobm", "MaxSection": 350},
+    27: {"Title": "Vampirium", "Folder": "27v", "MaxSection": 350},
+    28: {"Title": "The Hunger of Sejanoz", "Folder": "28thos", "MaxSection": 300},
+    29: {"Title": "The Storms of Chai", "Folder": "29tsoc", "MaxSection": 350},
 }
 
 # BOOKS is the internal testing catalog. Its public release status is controlled
@@ -206,6 +215,15 @@ GRAND_MASTER_DISCIPLINES = [
     "Telegnosis",
     "Magi-magic",
     "Kai-alchemy",
+]
+
+# The New Order retains the twelve Grand Master Disciplines and adds four
+# disciplines established by Kai Supreme Master Lone Wolf.
+NEW_ORDER_DISCIPLINES = GRAND_MASTER_DISCIPLINES + [
+    "Astrology",
+    "Herbmastery",
+    "Elementalism",
+    "Bardsmanship",
 ]
 
 WEAPONMASTERY_WEAPONS = [
@@ -462,6 +480,76 @@ GRAND_MASTER_ENTRY_MAPS = {
     19: "Map of Sommerlund and the Wildlands",
     20: "Map of the Planes of Existence",
 }
+
+NEW_ORDER_ENTRY_MAPS = {
+    21: "Map of the Sea Route to Elzian",
+    22: "Map of Southeastern Magnamund",
+    23: "Map of Central Southern Magnamund",
+    24: "Map of the Central Stornlands",
+    25: "Map of Gazad Helkona",
+    26: "Map of Bor and the Surrounding Territories",
+    27: "Map of Bhanar and the Chai Borderlands",
+    28: "Map of the Great Lissan Plain",
+    29: "Map of the Khea-Khanate of Chai",
+}
+
+NEW_ORDER_EQUIPMENT_OPTIONS = {
+    21: {
+        "quarterstaff": {"Items": [("weapon", "Quarterstaff")]},
+        "bow": {"Items": [("weapon", "Bow")]},
+        "quiver": {"Items": [("special", "Quiver")], "Arrows": 6},
+        "flute": {"Items": [("backpack", "Flute")]},
+        "dagger": {"Items": [("weapon", "Dagger")]},
+        "sword": {"Items": [("weapon", "Sword")]},
+        "meals": {"Items": [("backpack", "Meal")] * 2},
+        "rope": {"Items": [("backpack", "Rope")]},
+        "laumspur": {"Items": [("backpack", "Potion of Laumspur")]},
+        "axe": {"Items": [("weapon", "Axe")]},
+    },
+    24: {
+        "axe": {"Items": [("weapon", "Axe")]},
+        "sword": {"Items": [("weapon", "Sword")]},
+        "quiver": {"Items": [("special", "Quiver")], "Arrows": 6},
+        "lute": {"Items": [("backpack", "Lute")]},
+        "dagger": {"Items": [("weapon", "Dagger")]},
+        "bow": {"Items": [("weapon", "Bow")]},
+        "meals": {"Items": [("backpack", "Meal")] * 2},
+        "rope": {"Items": [("backpack", "Rope")]},
+        "laumspur": {"Items": [("backpack", "Potion of Laumspur")]},
+        "broadsword": {"Items": [("weapon", "Broadsword")]},
+    },
+    26: {
+        "broadsword": {"Items": [("weapon", "Broadsword")]},
+        "sword": {"Items": [("weapon", "Sword")]},
+        "quiver": {"Items": [("special", "Quiver")], "Arrows": 6},
+        "flute": {"Items": [("backpack", "Flute")]},
+        "dagger": {"Items": [("weapon", "Dagger")]},
+        "axe": {"Items": [("weapon", "Axe")]},
+        "bow": {"Items": [("weapon", "Bow")]},
+        "meals": {"Items": [("backpack", "Meal")] * 2},
+        "rope": {"Items": [("backpack", "Rope")]},
+        "laumspur": {"Items": [("backpack", "Potion of Laumspur")]},
+    },
+}
+NEW_ORDER_EQUIPMENT_OPTIONS[22] = dict(NEW_ORDER_EQUIPMENT_OPTIONS[21])
+NEW_ORDER_EQUIPMENT_OPTIONS[23] = dict(NEW_ORDER_EQUIPMENT_OPTIONS[21])
+NEW_ORDER_EQUIPMENT_OPTIONS[25] = dict(NEW_ORDER_EQUIPMENT_OPTIONS[24])
+NEW_ORDER_EQUIPMENT_OPTIONS[27] = dict(NEW_ORDER_EQUIPMENT_OPTIONS[26])
+NEW_ORDER_EQUIPMENT_OPTIONS[28] = dict(NEW_ORDER_EQUIPMENT_OPTIONS[26])
+NEW_ORDER_EQUIPMENT_OPTIONS[29] = dict(NEW_ORDER_EQUIPMENT_OPTIONS[26])
+
+KAI_WEAPONS = [
+    {"Roll": 0, "Type": "Axe", "Name": "Spawnsmite", "Bonus": 5},
+    {"Roll": 1, "Type": "Axe", "Name": "Alema", "Bonus": 5},
+    {"Roll": 2, "Type": "Axe", "Name": "Magnara", "Bonus": 5},
+    {"Roll": 3, "Type": "Sword", "Name": "Sunstrike", "Bonus": 5},
+    {"Roll": 4, "Type": "Sword", "Name": "Kaistar", "Bonus": 5},
+    {"Roll": 5, "Type": "Sword", "Name": "Valiance", "Bonus": 5},
+    {"Roll": 6, "Type": "Sword", "Name": "Ulnarias", "Bonus": 5},
+    {"Roll": 7, "Type": "Broadsword", "Name": "Raumas", "Bonus": 5},
+    {"Roll": 8, "Type": "Broadsword", "Name": "Illuminatus", "Bonus": 5},
+    {"Roll": 9, "Type": "Broadsword", "Name": "Firefall", "Bonus": 5},
+]
 GRAND_MASTER_CARRYOVER_SPECIAL_ITEMS = {
     "Crystal Star Pendant", "Sommerswerd", "Silver Helm", "Dagger of Vashna",
     "Silver Bracers", "Jewelled Mace", "Silver Bow of Duadon", "Helshezag",
@@ -994,6 +1082,27 @@ LONE_WOLF_GRAND_MASTER_ACHIEVEMENTS = [
     )
 ]
 
+LONE_WOLF_NEW_ORDER_ACHIEVEMENTS = [
+    achievement
+    for book_number in range(21, 30)
+    for achievement in (
+        {
+            "Id": f"lw{book_number}_complete",
+            "Name": BOOK_CATALOG[book_number]["Title"],
+            "BookNumber": book_number,
+            "Category": "Story",
+            "Description": f"Complete Book {book_number}.",
+        },
+        {
+            "Id": f"lw{book_number}_long_road",
+            "Name": f"Book {book_number} Wayfinder",
+            "BookNumber": book_number,
+            "Category": "Exploration",
+            "Description": f"Visit 75 or more unique Book {book_number} sections.",
+        },
+    )
+]
+
 LONE_WOLF_ACHIEVEMENTS = (
     LONE_WOLF_BOOK1_ACHIEVEMENTS
     + LONE_WOLF_BOOK2_ACHIEVEMENTS
@@ -1002,6 +1111,7 @@ LONE_WOLF_ACHIEVEMENTS = (
     + LONE_WOLF_BOOK5_ACHIEVEMENTS
     + LONE_WOLF_MAGNAKAI_ACHIEVEMENTS
     + LONE_WOLF_GRAND_MASTER_ACHIEVEMENTS
+    + LONE_WOLF_NEW_ORDER_ACHIEVEMENTS
     + [
         {
             "Id": "veteran_of_sommerlund",
@@ -1170,6 +1280,9 @@ def default_state() -> dict[str, Any]:
             "GrandMasterDisciplines": [],
             "GrandMasterRank": 0,
             "GrandWeaponmasteryWeapons": [],
+            "NewOrderDisciplines": [],
+            "NewOrderRank": 0,
+            "KaiWeapon": {},
             "LoreCirclesCompleted": [],
             "ImprovedDisciplines": [],
             "LegacyKaiComplete": False,
@@ -1465,6 +1578,13 @@ def normalize_state(state: dict[str, Any]) -> dict[str, Any]:
     state["Character"]["GrandWeaponmasteryWeapons"] = clean_grand_weaponmastery_weapons(
         state["Character"].get("GrandWeaponmasteryWeapons")
     )
+    state["Character"]["NewOrderDisciplines"] = clean_new_order_disciplines(
+        state["Character"].get("NewOrderDisciplines")
+    )
+    state["Character"]["NewOrderRank"] = max(
+        0, int(state["Character"].get("NewOrderRank") or 0)
+    )
+    state["Character"]["KaiWeapon"] = clean_kai_weapon(state["Character"].get("KaiWeapon"))
     state["Character"]["GrandMasterRank"] = max(
         0, int(state["Character"].get("GrandMasterRank") or 0)
     )
@@ -1717,6 +1837,24 @@ def clean_grand_master_disciplines(values: Any) -> list[str]:
         if match and match not in selected:
             selected.append(match)
     return selected
+
+
+def clean_new_order_disciplines(values: Any) -> list[str]:
+    selected: list[str] = []
+    for item in as_list(values):
+        name = str(item or "").strip()
+        match = next((known for known in NEW_ORDER_DISCIPLINES if known.lower() == name.lower()), "")
+        if match and match not in selected:
+            selected.append(match)
+    return selected
+
+
+def clean_kai_weapon(value: Any) -> dict[str, Any]:
+    if not isinstance(value, dict):
+        return {}
+    name = str(value.get("Name") or "").strip()
+    match = next((item for item in KAI_WEAPONS if item["Name"].lower() == name.lower()), None)
+    return dict(match) if match else {}
 
 
 def clean_grand_weaponmastery_weapons(values: Any) -> list[str]:
@@ -2967,6 +3105,234 @@ def prepare_grand_master_state(
     return normalize_state(prepared)
 
 
+def clean_new_order_equipment_choices(values: Any, *, book_number: int) -> list[str]:
+    selected = [str(value).strip().lower() for value in as_list(values) if str(value).strip()]
+    options = NEW_ORDER_EQUIPMENT_OPTIONS[int(book_number)]
+    if len(selected) != 5 or len(set(selected)) != len(selected) or any(item not in options for item in selected):
+        raise ValueError(f"Book {book_number} requires exactly five distinct New Order equipment choices.")
+    weapon_choices = sum(
+        1
+        for choice in selected
+        for container, _item in options[choice]["Items"]
+        if container == "weapon"
+    )
+    if weapon_choices > 2:
+        raise ValueError("New Order equipment allows no more than two Weapons.")
+    return selected
+
+
+def apply_new_order_equipment(
+    state: dict[str, Any], choices: list[str], *, book_number: int
+) -> list[str]:
+    inventory = state["Inventory"]
+    messages: list[str] = []
+    for choice in choices:
+        option = NEW_ORDER_EQUIPMENT_OPTIONS[book_number][choice]
+        for container, item in option["Items"]:
+            if container == "weapon":
+                weapons = as_list(inventory.get("Weapons"))
+                if len(weapons) >= 2:
+                    raise ValueError(f"Taking {item} exceeds the two-Weapon limit.")
+                inventory["Weapons"] = weapons + [item]
+            elif container == "backpack":
+                backpack = as_list(inventory.get("BackpackItems"))
+                if item_slot_total(backpack) + item_slot_cost(item) > backpack_capacity(inventory):
+                    raise ValueError(
+                        f"Taking {item} exceeds the {backpack_capacity(inventory)}-item Backpack limit."
+                    )
+                inventory["BackpackItems"] = backpack + [item]
+            else:
+                inventory["SpecialItems"] = add_unique_item(inventory.get("SpecialItems"), item)
+        if option.get("Arrows"):
+            inventory["QuiverArrows"] = max(int(inventory.get("QuiverArrows") or 0), int(option["Arrows"]))
+        messages.append(f"Equipment choice: {choice}")
+    return messages
+
+
+def kai_weapon_for_roll(value: Any) -> dict[str, Any]:
+    roll = coerce_random_digit(value)
+    return dict(KAI_WEAPONS[roll])
+
+
+def configure_new_order_character(
+    state: dict[str, Any], *, book_number: int, disciplines: list[str], mastery: list[str], kai_weapon: dict[str, Any]
+) -> None:
+    character = state["Character"]
+    character.update(
+        {
+            "BookNumber": book_number,
+            "KaiDisciplines": list(KAI_DISCIPLINES),
+            "LegacyKaiComplete": True,
+            "MagnakaiDisciplines": list(MAGNAKAI_DISCIPLINES),
+            "MagnakaiRank": len(MAGNAKAI_DISCIPLINES),
+            "WeaponmasteryWeapons": list(WEAPONMASTERY_WEAPONS),
+            "GrandMasterDisciplines": [item for item in disciplines if item in GRAND_MASTER_DISCIPLINES],
+            "GrandMasterRank": len([item for item in disciplines if item in GRAND_MASTER_DISCIPLINES]),
+            "GrandWeaponmasteryWeapons": mastery,
+            "NewOrderDisciplines": disciplines,
+            "NewOrderRank": len(disciplines),
+            "KaiWeapon": kai_weapon,
+        }
+    )
+    state["RuleSet"] = "New Order"
+
+
+def create_new_order_character_state(
+    *,
+    book_number: int,
+    name: str = "Lone Wolf",
+    new_order_disciplines: Any = None,
+    grand_weaponmastery_weapons: Any = None,
+    kai_weapon_roll: Any | None = None,
+    section: int = 1,
+    combat_skill_roll: Any | None = None,
+    endurance_roll: Any | None = None,
+    gold_roll: Any | None = None,
+    equipment_choices: Any = None,
+) -> dict[str, Any]:
+    """Create a standalone New Order Action Chart from its printed setup."""
+    if book_number not in set(range(21, 30)):
+        raise ValueError("New Order standalone creation supports Books 21 through 29.")
+    expected_disciplines = 5 + (book_number - 21)
+    disciplines = clean_new_order_disciplines(new_order_disciplines)
+    if len(disciplines) != expected_disciplines:
+        raise ValueError(f"Book {book_number} requires exactly {expected_disciplines} New Order Disciplines.")
+    mastery = clean_grand_weaponmastery_weapons(grand_weaponmastery_weapons)
+    expected_mastery = 1 + (book_number - 21)
+    if "Grand Weaponmastery" in disciplines and len(mastery) != expected_mastery:
+        raise ValueError(f"Book {book_number} Grand Weaponmastery requires exactly {expected_mastery} mastered weapons.")
+    if "Grand Weaponmastery" not in disciplines and mastery:
+        raise ValueError("Choose Grand Weaponmastery before selecting mastered weapons.")
+
+    cs_roll = coerce_random_digit(combat_skill_roll)
+    end_roll = coerce_random_digit(endurance_roll)
+    gold_digit = coerce_random_digit(gold_roll)
+    kai_weapon = kai_weapon_for_roll(kai_weapon_roll)
+    choices = clean_new_order_equipment_choices(equipment_choices, book_number=book_number)
+    state = normalize_state(default_state())
+    state["CurrentSection"] = max(1, min(BOOKS[book_number]["MaxSection"], int(section or 1)))
+    state["SectionHistory"] = []
+    character, inventory = state["Character"], state["Inventory"]
+    character.update(
+        {
+            "Name": str(name or "Lone Wolf").strip() or "Lone Wolf",
+            "CombatSkillBase": 25 + cs_roll,
+            "CombatSkillCurrent": 25 + cs_roll,
+            "EnduranceBase": 30 + end_roll,
+            "EnduranceMax": 30 + end_roll,
+            "EnduranceCurrent": 30 + end_roll,
+        }
+    )
+    configure_new_order_character(
+        state, book_number=book_number, disciplines=disciplines, mastery=mastery, kai_weapon=kai_weapon
+    )
+    inventory.update(
+        {
+            "Weapons": [], "BackpackItems": [],
+            "SpecialItems": [NEW_ORDER_ENTRY_MAPS[book_number], f"Kai Weapon: {kai_weapon['Name']}"],
+            "PocketSpecialItems": [], "GoldCrowns": 20 + gold_digit,
+            "HasBackpack": True, "BackpackCapacity": 10, "HasHerbPouch": False,
+            "HerbPouchItems": [], "QuiverArrows": 0,
+        }
+    )
+    messages = apply_new_order_equipment(state, choices, book_number=book_number)
+    character[f"Book{book_number}Setup"] = {
+        "Mode": "standalone", "NewOrderDisciplines": disciplines,
+        "GrandWeaponmasteryWeapons": mastery, "KaiWeapon": kai_weapon,
+        "GoldRoll": gold_digit, "EquipmentChoices": choices, "Messages": messages,
+    }
+    character["CreationRolls"] = {
+        "CombatSkill": cs_roll, "Endurance": end_roll,
+        f"Book{book_number}Gold": gold_digit, f"Book{book_number}KaiWeapon": kai_weapon["Roll"],
+    }
+    state["Combat"] = json_clone(default_state()["Combat"])
+    state["Combat"]["StartedSection"] = int(state["CurrentSection"])
+    state["CurrentBookStats"] = {
+        "BookNumber": book_number, "BookTitle": BOOKS[book_number]["Title"],
+        "StartSection": int(state["CurrentSection"]), "LastSection": int(state["CurrentSection"]),
+        "SectionsVisited": 0, "VisitedSections": [], "StartingEnduranceMax": int(character["EnduranceMax"]),
+        "StartingGoldCrowns": int(inventory["GoldCrowns"]), f"Book{book_number}GoldRoll": gold_digit,
+        f"Book{book_number}KaiWeapon": kai_weapon["Name"], f"Book{book_number}EquipmentChoices": list(choices),
+    }
+    return normalize_state(state)
+
+
+def prepare_new_order_state(
+    state: dict[str, Any],
+    *,
+    book_number: int,
+    new_order_disciplines: Any,
+    grand_weaponmastery_weapons: Any = None,
+    gold_roll: Any | None = None,
+    equipment_choices: Any = None,
+    transition_drops: Any = None,
+) -> dict[str, Any]:
+    """Continue a completed New Order adventure into its next printed setup."""
+    if book_number not in set(range(22, 30)):
+        raise ValueError("New Order continuation supports Books 22 through 29.")
+    prepared = normalize_state(json_clone(state))
+    character, inventory = prepared["Character"], prepared["Inventory"]
+    prior_book = book_number - 1
+    if int(character.get("BookNumber") or 0) != prior_book:
+        raise ValueError(f"Book {book_number} setup must continue a Book {prior_book} campaign.")
+
+    expected_disciplines = 5 + (book_number - 21)
+    owned = clean_new_order_disciplines(character.get("NewOrderDisciplines"))
+    selected = clean_new_order_disciplines(new_order_disciplines)
+    if len(owned) != expected_disciplines - 1 or len(selected) != 1 or selected[0] in owned:
+        raise ValueError(f"Book {book_number} requires one new New Order Discipline.")
+    disciplines = owned + selected
+    had_mastery = "Grand Weaponmastery" in owned
+    mastery = clean_grand_weaponmastery_weapons(character.get("GrandWeaponmasteryWeapons"))
+    chosen_mastery = clean_grand_weaponmastery_weapons(grand_weaponmastery_weapons)
+    expected_mastery = 1 + (book_number - 21)
+    if "Grand Weaponmastery" in disciplines:
+        if not had_mastery:
+            if mastery or len(chosen_mastery) != expected_mastery:
+                raise ValueError(
+                    f"Book {book_number} Grand Weaponmastery requires exactly {expected_mastery} mastered weapons."
+                )
+            mastery = chosen_mastery
+        elif len(mastery) != expected_mastery - 1 or len(chosen_mastery) != 1 or chosen_mastery[0] in mastery:
+            raise ValueError("Grand Weaponmastery requires one new mastered weapon at this rank.")
+        else:
+            mastery += chosen_mastery
+    elif chosen_mastery:
+        raise ValueError("Choose Grand Weaponmastery before selecting mastered weapons.")
+
+    choices = clean_new_order_equipment_choices(equipment_choices, book_number=book_number)
+    prepared["CurrentSection"] = 1
+    prepared["Combat"] = json_clone(default_state()["Combat"])
+    prepared["Combat"]["StartedSection"] = 1
+    discard_transition_stored_gear(prepared)
+    messages = apply_later_magnakai_transition_drops(inventory, transition_drops)
+    inventory["BackpackCapacity"] = 10
+    inventory["PocketSpecialItems"] = []
+    inventory["SpecialItems"] = add_unique_item(inventory.get("SpecialItems"), NEW_ORDER_ENTRY_MAPS[book_number])
+    gold_digit = coerce_random_digit(gold_roll)
+    inventory["GoldCrowns"] = min(50, int(inventory.get("GoldCrowns") or 0) + 20 + gold_digit)
+    kai_weapon = clean_kai_weapon(character.get("KaiWeapon"))
+    if not kai_weapon:
+        raise ValueError("This New Order campaign is missing its Kai Weapon.")
+    configure_new_order_character(
+        prepared, book_number=book_number, disciplines=disciplines, mastery=mastery, kai_weapon=kai_weapon
+    )
+    messages.extend(apply_new_order_equipment(prepared, choices, book_number=book_number))
+    character[f"Book{book_number}Setup"] = {
+        "Mode": "campaign", "ContinuedFromBook": prior_book,
+        "NewOrderDisciplines": disciplines, "GrandWeaponmasteryWeapons": mastery,
+        "GoldRoll": gold_digit, "EquipmentChoices": choices,
+        "TransitionDrops": clean_later_magnakai_transition_drops(transition_drops), "Messages": messages,
+    }
+    prepared["CurrentBookStats"] = {
+        "BookNumber": book_number, "BookTitle": BOOK_CATALOG[book_number]["Title"],
+        "StartSection": 1, "LastSection": 1, "SectionsVisited": 0, "VisitedSections": [],
+        "BookGoldRoll": gold_digit, "EquipmentChoices": choices,
+        "StartingEnduranceMax": int(character["EnduranceMax"]),
+    }
+    return normalize_state(prepared)
+
+
 def create_magnakai_character_state(
     *,
     book_number: int,
@@ -4162,17 +4528,22 @@ class LoneWolfReduxAssistant:
     def effective_disciplines(self) -> list[str]:
         is_magnakai = int(self.character.get("BookNumber") or 0) >= 6
         is_grand_master = int(self.character.get("BookNumber") or 0) >= 13
+        is_new_order = int(self.character.get("BookNumber") or 0) >= 21
         known = clean_kai_disciplines(self.character.get("KaiDisciplines"))
         if is_magnakai:
             known.extend(clean_magnakai_disciplines(self.character.get("MagnakaiDisciplines")))
         if is_grand_master:
             known.extend(clean_grand_master_disciplines(self.character.get("GrandMasterDisciplines")))
+        if is_new_order:
+            known.extend(clean_new_order_disciplines(self.character.get("NewOrderDisciplines")))
         if self.cheat_active("all_disciplines"):
             known.extend(KAI_DISCIPLINES)
             if is_magnakai:
                 known.extend(MAGNAKAI_DISCIPLINES)
             if is_grand_master:
                 known.extend(GRAND_MASTER_DISCIPLINES)
+            if is_new_order:
+                known.extend(NEW_ORDER_DISCIPLINES)
         return list(dict.fromkeys(known))
 
     def cheat_resource_snapshot(self) -> dict[str, int]:
@@ -4463,7 +4834,9 @@ class LoneWolfReduxAssistant:
         if summary is None:
             summary = self.book_summary(book_number)
 
-        next_book = book_number + 1 if book_number < max(BOOKS) else None
+        # The New Order follows a different Kai Grand Master; Book 20 does not
+        # hand the original campaign directly into Book 21.
+        next_book = book_number + 1 if book_number < max(BOOKS) and book_number != 20 else None
         missing_kai = [item for item in KAI_DISCIPLINES if item not in as_list(self.character.get("KaiDisciplines"))]
         missing_magnakai = [
             item for item in MAGNAKAI_DISCIPLINES
@@ -4472,6 +4845,10 @@ class LoneWolfReduxAssistant:
         missing_grand_master = [
             item for item in GRAND_MASTER_DISCIPLINES
             if item not in clean_grand_master_disciplines(self.character.get("GrandMasterDisciplines"))
+        ]
+        missing_new_order = [
+            item for item in NEW_ORDER_DISCIPLINES
+            if item not in clean_new_order_disciplines(self.character.get("NewOrderDisciplines"))
         ]
         return {
             "Active": True,
@@ -4482,6 +4859,7 @@ class LoneWolfReduxAssistant:
             "KaiDisciplineChoices": missing_kai,
             "MagnakaiDisciplineChoices": missing_magnakai,
             "GrandMasterDisciplineChoices": missing_grand_master,
+            "NewOrderDisciplineChoices": missing_new_order,
         }
 
     def pending_book_setup_payload(self) -> dict[str, Any]:
@@ -7677,6 +8055,9 @@ class LoneWolfReduxAssistant:
             name = special_weapon_items.get(key)
             if name and name not in weapons:
                 weapons.append(name)
+        kai_weapon = clean_kai_weapon(self.character.get("KaiWeapon"))
+        if kai_weapon and kai_weapon["Name"] not in weapons:
+            weapons.append(kai_weapon["Name"])
         return weapons
 
     def default_combat_weapon(self) -> str:
@@ -7800,6 +8181,10 @@ class LoneWolfReduxAssistant:
             bonus = 7 if "darklord" in enemy_name else 5
             modifier += bonus
             notes.append(f"Helshezag: +{bonus} CS")
+        kai_weapon = clean_kai_weapon(self.character.get("KaiWeapon"))
+        if kai_weapon and active_key == kai_weapon["Name"].lower():
+            modifier += int(kai_weapon["Bonus"])
+            notes.append(f"Kai Weapon ({kai_weapon['Name']}): +{kai_weapon['Bonus']} CS")
         elif self.active_weapon_matches_weaponskill():
             modifier += 2
             notes.append(f"Weaponskill ({active}): +2 CS")
@@ -7809,9 +8194,10 @@ class LoneWolfReduxAssistant:
         grand_mastered_weapons = clean_grand_weaponmastery_weapons(
             self.character.get("GrandWeaponmasteryWeapons")
         )
-        if "Grand Weaponmastery" in self.effective_disciplines() and active in grand_mastered_weapons:
+        grand_mastery_weapon = kai_weapon["Type"] if kai_weapon and active_key == kai_weapon["Name"].lower() else active
+        if "Grand Weaponmastery" in self.effective_disciplines() and grand_mastery_weapon in grand_mastered_weapons:
             modifier += 5
-            notes.append(f"Grand Weaponmastery ({active}): +5 CS")
+            notes.append(f"Grand Weaponmastery ({grand_mastery_weapon}): +5 CS")
         elif "Weaponmastery" in self.effective_disciplines() and active in mastered_weapons:
             modifier += 3
             notes.append(f"Weaponmastery ({active}): +3 CS")
@@ -10986,8 +11372,10 @@ class LoneWolfReduxAssistant:
         summary = self.ensure_book_completed(save=True)
         next_book = int(summary["BookNumber"]) + 1
         print(f"Book {summary['BookNumber']} complete: {summary['BookTitle']}.")
-        if next_book in BOOKS:
+        if next_book in BOOKS and int(summary["BookNumber"]) != 20:
             print(f"Use continue when ready to set up Book {next_book}: {BOOKS[next_book]['Title']}.")
+        elif int(summary["BookNumber"]) == 20:
+            print("The Grand Master campaign is complete. Start Book 21 as a new New Order Kai Grand Master.")
         else:
             print("No later supported book is enabled yet.")
 
@@ -11018,6 +11406,7 @@ class LoneWolfReduxAssistant:
         book6_de_weaponskill_option: int = 0,
         grand_master_disciplines: Any = None,
         grand_weaponmastery_weapons: Any = None,
+        new_order_disciplines: Any = None,
         transition_drops: Any = None,
     ) -> None:
         completion = self.book_completion_payload()
@@ -11072,6 +11461,16 @@ class LoneWolfReduxAssistant:
             self.continue_to_grand_master(
                 book_number=next_book,
                 grand_master_disciplines=grand_master_disciplines,
+                grand_weaponmastery_weapons=grand_weaponmastery_weapons,
+                gold_roll=book6_gold_roll,
+                equipment_choices=book6_equipment_choices,
+                transition_drops=transition_drops,
+            )
+            return
+        if next_book in set(range(22, 30)):
+            self.continue_to_new_order(
+                book_number=next_book,
+                new_order_disciplines=new_order_disciplines,
                 grand_weaponmastery_weapons=grand_weaponmastery_weapons,
                 gold_roll=book6_gold_roll,
                 equipment_choices=book6_equipment_choices,
@@ -11404,6 +11803,48 @@ class LoneWolfReduxAssistant:
             self.state,
             book_number=int(book_number),
             grand_master_disciplines=grand_master_disciplines,
+            grand_weaponmastery_weapons=grand_weaponmastery_weapons,
+            gold_roll=gold_roll,
+            equipment_choices=equipment_choices,
+            transition_drops=transition_drops,
+        )
+        self.automation["Ending"] = None
+        self.automation["PendingBookSetup"] = None
+        self.clear_death_state()
+        self.record_section_visit()
+        self.save_section_checkpoint("ready")
+        self.write_current_position()
+        self.autosave()
+        print(f"Advanced to Book {book_number}: {BOOK_CATALOG[int(book_number)]['Title']}")
+        setup = self.character.get(f"Book{book_number}Setup")
+        if isinstance(setup, dict):
+            for message in as_list(setup.get("Messages")):
+                print(str(message))
+
+    def continue_to_new_order(
+        self,
+        *,
+        book_number: int,
+        new_order_disciplines: Any,
+        grand_weaponmastery_weapons: Any = None,
+        gold_roll: int | None = None,
+        equipment_choices: Any = None,
+        transition_drops: Any = None,
+    ) -> None:
+        completion = self.book_completion_payload()
+        summary = completion.get("Summary") if isinstance(completion.get("Summary"), dict) else {}
+        prior_book = int(book_number) - 1
+        if (
+            int(book_number) not in set(range(22, 30))
+            or not completion.get("Active")
+            or int(summary.get("BookNumber") or 0) != prior_book
+        ):
+            raise ValueError(f"Book {book_number} setup requires a completed Book {prior_book} campaign.")
+        self.restore_endurance_for_book_transition()
+        self.state = prepare_new_order_state(
+            self.state,
+            book_number=int(book_number),
+            new_order_disciplines=new_order_disciplines,
             grand_weaponmastery_weapons=grand_weaponmastery_weapons,
             gold_roll=gold_roll,
             equipment_choices=equipment_choices,

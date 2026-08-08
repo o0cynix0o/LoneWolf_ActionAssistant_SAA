@@ -744,6 +744,15 @@
       18: { series: 'grandMaster', authors: 'Joe Dever', illustrator: 'Brian Williams', published: '1992', status: 'Internal testing build', summary: 'Book 18 supports Grand Master continuation, reader navigation, saves, and source-led route testing.', tags: ['Fantasy', 'Gamebook', 'Grand Master', 'Internal Testing'] },
       19: { series: 'grandMaster', authors: 'Joe Dever', illustrator: 'Brian Williams', published: '1993', status: 'Internal testing build', summary: 'Book 19 supports Grand Master continuation, reader navigation, saves, and source-led route testing.', tags: ['Fantasy', 'Gamebook', 'Grand Master', 'Internal Testing'] },
       20: { series: 'grandMaster', authors: 'Joe Dever', illustrator: 'Brian Williams', published: '1993', status: 'Internal testing build', summary: 'Book 20 supports Grand Master continuation, reader navigation, saves, and source-led route testing.', tags: ['Fantasy', 'Gamebook', 'Grand Master', 'Internal Testing'] },
+      21: { series: 'newOrder', authors: 'Joe Dever and Trevor Newton', illustrator: 'Trevor Newton', published: '1994', status: 'Internal testing build', summary: 'Book 21 supports a standalone New Order Kai Grand Master Action Chart, Kai Weapon, reader navigation, saves, and source-led route testing.', tags: ['Fantasy', 'Gamebook', 'New Order', 'Internal Testing'] },
+      22: { series: 'newOrder', authors: 'Joe Dever', illustrator: 'Brian Williams', published: '1994', status: 'Internal testing build', summary: 'Book 22 supports New Order continuation, reader navigation, saves, and source-led route testing.', tags: ['Fantasy', 'Gamebook', 'New Order', 'Internal Testing'] },
+      23: { series: 'newOrder', authors: 'Joe Dever', illustrator: 'Brian Williams', published: '1995', status: 'Internal testing build', summary: 'Book 23 supports New Order continuation, reader navigation, saves, and source-led route testing.', tags: ['Fantasy', 'Gamebook', 'New Order', 'Internal Testing'] },
+      24: { series: 'newOrder', authors: 'Joe Dever', illustrator: 'Brian Williams', published: '1995', status: 'Internal testing build', summary: 'Book 24 supports New Order continuation, reader navigation, saves, and source-led route testing.', tags: ['Fantasy', 'Gamebook', 'New Order', 'Internal Testing'] },
+      25: { series: 'newOrder', authors: 'Joe Dever', illustrator: 'Brian Williams', published: '1996', status: 'Internal testing build', summary: 'Book 25 supports New Order continuation, reader navigation, saves, and source-led route testing.', tags: ['Fantasy', 'Gamebook', 'New Order', 'Internal Testing'] },
+      26: { series: 'newOrder', authors: 'Joe Dever', illustrator: 'Brian Williams', published: '1997', status: 'Internal testing build', summary: 'Book 26 supports New Order continuation, reader navigation, saves, and source-led route testing.', tags: ['Fantasy', 'Gamebook', 'New Order', 'Internal Testing'] },
+      27: { series: 'newOrder', authors: 'Joe Dever', illustrator: 'Brian Williams', published: '1997', status: 'Internal testing build', summary: 'Book 27 supports New Order continuation, reader navigation, saves, and source-led route testing.', tags: ['Fantasy', 'Gamebook', 'New Order', 'Internal Testing'] },
+      28: { series: 'newOrder', authors: 'Joe Dever', illustrator: 'Brian Williams', published: '1998', status: 'Internal testing build', summary: 'Book 28 supports New Order continuation, reader navigation, saves, and source-led route testing. Its source edition has 300 sections.', tags: ['Fantasy', 'Gamebook', 'New Order', 'Internal Testing'] },
+      29: { series: 'newOrder', authors: 'Joe Dever', illustrator: 'Brian Williams', published: '1998', status: 'Internal testing build', summary: 'Book 29 supports New Order continuation, reader navigation, saves, and source-led route testing.', tags: ['Fantasy', 'Gamebook', 'New Order', 'Internal Testing'] },
       default: {
         authors: 'Joe Dever',
         illustrator: 'Various illustrators',
@@ -824,18 +833,18 @@
     ];
 
     const newOrderBooks = [
-      comingBook(21, 'Voyage of the Moonstone', '21votm', 350, 'lw21.jpg'),
-      comingBook(22, 'The Buccaneers of Shadaki', '22tbos', 350, 'lw22.jpg'),
-      comingBook(23, "Mydnight's Hero", '23mh', 350, 'lw23.jpg'),
-      comingBook(24, 'Rune War', '24rw', 350, 'lw24.jpg'),
-      comingBook(25, 'Trail of the Wolf', '25totw', 350, 'lw25.jpg'),
-      comingBook(26, 'The Fall of Blood Mountain', '26tfobm', 350, 'lw26.jpg'),
-      comingBook(27, 'Vampirium', '27v', 350, 'lw27.jpg'),
-      comingBook(28, 'The Hunger of Sejanoz', '28thos', 350, 'lw28.jpg'),
-      comingBook(29, 'The Storms of Chai', '29tsoc', 350, 'lw29.jpg')
+      testingBook(21, 'Voyage of the Moonstone', '21votm', 350, 'lw21.jpg'),
+      testingBook(22, 'The Buccaneers of Shadaki', '22tbos', 350, 'lw22.jpg'),
+      testingBook(23, "Mydnight's Hero", '23mh', 350, 'lw23.jpg'),
+      testingBook(24, 'Rune War', '24rw', 350, 'lw24.jpg'),
+      testingBook(25, 'Trail of the Wolf', '25totw', 350, 'lw25.jpg'),
+      testingBook(26, 'The Fall of Blood Mountain', '26tfobm', 350, 'lw26.jpg'),
+      testingBook(27, 'Vampirium', '27v', 350, 'lw27.jpg'),
+      testingBook(28, 'The Hunger of Sejanoz', '28thos', 300, 'lw28.jpg'),
+      testingBook(29, 'The Storms of Chai', '29tsoc', 350, 'lw29.jpg')
     ];
 
-    const books = [...kaiBooks, ...magnakaiBooks, ...grandMasterBooks];
+    const books = [...kaiBooks, ...magnakaiBooks, ...grandMasterBooks, ...newOrderBooks];
     const allBookCards = [...kaiBooks, ...magnakaiBooks, ...grandMasterBooks, ...newOrderBooks];
     const bookByNumber = new Map(allBookCards.map((book) => [book.number, book]));
     const readBooksStorageKey = 'lonewolf_redux.library.readBooks.v1';

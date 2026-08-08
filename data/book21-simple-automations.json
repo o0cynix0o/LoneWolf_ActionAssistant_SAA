@@ -1,0 +1,14 @@
+{
+  "21": {
+    "1": {
+      "summary": "Moonstone received for the Elzian mission.",
+      "actions": [
+        {
+          "type": "add_item",
+          "container": "special",
+          "name": "Moonstone"
+        }
+      ]
+    }
+  }
+}
