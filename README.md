@@ -12,12 +12,18 @@ Version: **3.4.7 Internal Testing**
 
 ## What You Can Play
 
-Books 1-12 are playable internal-testing campaigns:
+Books 1-20 are playable internal-testing campaigns:
 
 | Series | Books | Support |
 | --- | --- | --- |
 | Kai | 1-5 | Character creation, campaign handoff, reader routes, inventory, combat, rolls, endings, saves, and achievements |
 | Magnakai | 6-12 | Fresh Magnakai setup or campaign handoff, disciplines, reader routes, inventory, combat, rolls, endings, saves, and achievements |
+| Grand Master | 13-20 | Fresh Grand Master setup or Book 12 campaign handoff, Grand Master disciplines, expanded Backpack, reader routes, inventory, combat, saves, and campaign achievements. Book 13's RNT checks are automated; remaining numbered rules are reader-directed until their source verification pass is complete. |
+
+New Order Books 21-29 have a committed source-audit baseline but are not yet
+exposed as playable books. Their dedicated Action Chart and rules pass are the
+next implementation phase. Books 30-32 are not present in the local source
+set and are therefore not included.
 
 The assistant records source-verified route gates, section effects, combat
 exceptions, item events, Random Number Table results, achievements, and book
@@ -38,7 +44,8 @@ The importer expects a valid folder containing at least `title.htm` and
 
 ```text
 01fftd  02fotw  03tcok  04tcod  05sots  06tkot
-07cd    08tjoh  09tcof  10tdot  11tpot  12tmod
+07cd    08tjoh  09tcof  10tdot  11tpot  12tmod  13tplor 14tcok
+15tdc   16tlov  17tdoi  18dotd  19wb    20tcon
 ```
 
 ## Play Your Way
@@ -65,6 +72,8 @@ remains when the book text returns or preserves it.
 - [Book support matrix](https://github.com/o0cynix0o/LoneWolf_ActionAssistant_SAA/wiki/Book-Support-Matrix)
 - [Strategy guides](https://github.com/o0cynix0o/LoneWolf_ActionAssistant_SAA/wiki/Strategy-Guide)
 - [Campaign testing report](docs/DEEP_CAMPAIGN_TEST_REPORT.md)
+- [Grand Master readiness audit](docs/GRAND_MASTER_READINESS_AUDIT.md)
+- [New Order readiness audit](docs/NEW_ORDER_READINESS_AUDIT.md)
 
 ## Storage And Privacy
 
