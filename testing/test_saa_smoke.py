@@ -742,6 +742,29 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             assistant.roll_current_section(1)
             self.assertEqual(assistant.character["EnduranceCurrent"], 25)
 
+    def test_book22_rnt_rules_apply_parity_and_combined_source_effects(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {
+                    "BookNumber": 22, "EnduranceCurrent": 30, "EnduranceMax": 30,
+                    "GrandMasterDisciplines": ["Grand Huntmastery", "Grand Nexus", "Assimilance"],
+                },
+            })
+            assistant.set_section(12)
+            assistant.roll_current_section(0)
+            self.assertEqual(assistant.character["EnduranceCurrent"], 25)
+            assistant.set_section(40)
+            self.assertEqual(assistant.roll_current_section(3)["Route"], 135)
+            self.assertEqual(assistant.character["EnduranceCurrent"], 23)
+            assistant.set_section(202)
+            assistant.roll_current_section(1)
+            self.assertEqual(assistant.character["EnduranceCurrent"], 16)
+
     def test_books6_to20_achievements_unlock_from_recorded_campaign_progress(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
