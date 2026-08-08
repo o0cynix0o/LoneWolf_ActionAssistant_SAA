@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.4.8 - Internal Testing
+
+- Added Books 13-20 as Grand Master internal-testing campaigns, including
+  fresh starts, Book 12 handoff, Grand Master disciplines, explicit overflow
+  choices, campaign achievements, and the full Book 13 RNT pass.
+- Added complete source-link and rule-signal ledgers for all Grand Master
+  sections and the locally available New Order Books 21-29.
+- Documented the reusable series-onboarding workflow and corrected Book 28's
+  actual 300-section range in the audit tools.
+
 ## 3.4.7 - Internal Testing
 
 - Completed a deep Books 1-12 campaign, route, random-number, and combat
