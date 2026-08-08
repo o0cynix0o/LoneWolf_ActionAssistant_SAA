@@ -1,4 +1,4 @@
-# Lone Wolf Action Assistant 3.4.8 Internal Testing
+# Lone Wolf Action Assistant 3.4.9 Internal Testing
 
 Lone Wolf Action Assistant is a standalone Windows desktop play aid for the
 *Lone Wolf* gamebooks. It is a digital Action Chart, reader companion, and
@@ -8,7 +8,7 @@ server yourself.
 
 **Internal-testing release:** [download the current Windows installer](https://github.com/o0cynix0o/LoneWolf_ActionAssistant_SAA/releases/latest).
 
-Version: **3.4.8 Internal Testing**
+Version: **3.4.9 Internal Testing**
 
 ## What You Can Play
 
@@ -19,7 +19,7 @@ Books 1-20 are playable internal-testing campaigns:
 | Kai | 1-5 | Character creation, campaign handoff, reader routes, inventory, combat, rolls, endings, saves, and achievements |
 | Magnakai | 6-12 | Fresh Magnakai setup or campaign handoff, disciplines, reader routes, inventory, combat, rolls, endings, saves, and achievements |
 | Grand Master | 13-20 | Fresh Grand Master setup or Book 12 campaign handoff, Grand Master disciplines, expanded Backpack, reader routes, inventory, combat, saves, and campaign achievements. Books 13-14 have executable RNT coverage; remaining numbered rules are reader-directed until their source verification pass is complete. |
-| New Order | 21-29 | Fresh New Order setup and Book-to-book continuation, 16 disciplines, Kai Weapon, equipment, reader routes, inventory, combat, saves, and campaign achievements. The import/play foundation is complete; source-verified section automation is being expanded book by book. |
+| New Order | 21-29 | Fresh New Order setup and Book-to-book continuation, 16 disciplines, Kai Weapon, equipment, reader routes, inventory, source-verified RNT and combat catalogues, saves, and campaign achievements. |
 
 Books 30-32 do not have Project Aon-style HTML editions. They require a
 separate licensed-source and conversion path before this HTML-based importer

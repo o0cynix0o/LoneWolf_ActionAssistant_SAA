@@ -835,7 +835,7 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             self.assertEqual(assistant.combat_skill_for_round(1), 20)
             self.assertEqual(assistant.combat_skill_for_round(4), 25)
 
-    def test_new_order_books21_to23_unlock_campaign_achievements(self) -> None:
+    def test_new_order_books21_to29_unlock_campaign_achievements(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
             assistant = lonewolf_redux.LoneWolfReduxAssistant(
@@ -843,7 +843,7 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
                 state_data_dir=base / "state", books_dir=base / "books",
             )
             assistant.set_run_configuration("Story", False, "DataFile")
-            for book_number in range(21, 24):
+            for book_number in range(21, 30):
                 assistant.state["Character"]["BookNumber"] = book_number
                 assistant.state["CurrentBookStats"] = {
                     "BookNumber": book_number,
@@ -859,8 +859,8 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             assistant.set_run_configuration("Normal", False, "DataFile")
             exploration_unlocked = {entry["Id"] for entry in assistant.sync_achievements()}
 
-        expected_complete = {f"lw{book_number}_complete" for book_number in range(21, 24)}
-        expected_long_road = {f"lw{book_number}_long_road" for book_number in range(21, 24)}
+        expected_complete = {f"lw{book_number}_complete" for book_number in range(21, 30)}
+        expected_long_road = {f"lw{book_number}_long_road" for book_number in range(21, 30)}
         self.assertTrue(expected_complete.issubset(story_unlocked))
         self.assertTrue(expected_long_road.issubset(exploration_unlocked))
 

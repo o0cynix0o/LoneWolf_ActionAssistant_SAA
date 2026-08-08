@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.4.9 - Internal Testing
+
+- Completed the source-verified RNT and combat catalogue pass for New Order
+  Books 21-29, including rank-aware modifiers, timed fights, and printed
+  route outcomes through Book 29.
+- Added full-series New Order achievement regression coverage and release
+  validation for the completed 21-29 testing campaign.
+
 ## 3.4.8 - Internal Testing
 
 - Added Books 13-20 as Grand Master internal-testing campaigns, including
