@@ -6437,6 +6437,8 @@ class LoneWolfReduxAssistant:
                     value = max(0, int(self.character.get("GrandMasterRank") or 0) - 6)
                 elif value_from in {"grand_master_rank_above_seven", "grand_master_disciplines_above_seven"}:
                     value = max(0, int(self.character.get("GrandMasterRank") or 0) - 7)
+                elif value_from in {"roll_selection", "roll_selection_number"}:
+                    value = self.current_roll_selection_number(str(modifier.get("selectionId") or ""))
                 else:
                     value = 0
             else:
@@ -6787,6 +6789,10 @@ class LoneWolfReduxAssistant:
                 if resolved_action.get("maxDelta") is not None:
                     delta = min(delta, int(resolved_action.get("maxDelta") or 0))
                 resolved_action["delta"] = delta
+            elif delta_from in {"roll_selection", "roll_selection_number"}:
+                delta = self.current_roll_selection_number(str(resolved_action.get("selectionId") or ""))
+                delta *= int(resolved_action.get("multiplier") or 1)
+                resolved_action["delta"] = delta
             message = self.apply_automation_action(resolved_action)
             if message:
                 messages.append(message)
@@ -6870,6 +6876,13 @@ class LoneWolfReduxAssistant:
         if not selection_id:
             return None
         choices = [str(choice) for choice in as_list(selection.get("choices")) if str(choice).strip()]
+        numeric_range = selection.get("numericRange") if isinstance(selection.get("numericRange"), dict) else None
+        if numeric_range is not None:
+            lower = max(0, int(numeric_range.get("min") or 0))
+            upper = int(numeric_range.get("max") or lower)
+            if str(numeric_range.get("maxFrom") or "").lower() in {"end", "endurance", "endurance_current"}:
+                upper = int(self.character.get("EnduranceCurrent") or 0)
+            choices = [str(value) for value in range(lower, max(lower, upper) + 1)]
         if str(selection.get("source") or "").lower() == "weapons":
             choices = self.available_combat_weapons(include_jewelled_dagger=True)
         if str(selection.get("source") or "").lower() == "weapons_and_special":
@@ -6893,6 +6906,15 @@ class LoneWolfReduxAssistant:
             "Selected": selected,
             "Required": bool(selection.get("required", True)),
         }
+
+    def current_roll_selection_number(self, selection_id: str) -> int:
+        payload = self.current_roll_selection_payload()
+        if payload is None or str(payload.get("Id") or "") != str(selection_id):
+            return 0
+        try:
+            return max(0, int(str(payload.get("Selected") or "0")))
+        except (TypeError, ValueError):
+            return 0
 
     def set_roll_selection(self, selection_id: str, value: str) -> None:
         payload = self.current_roll_selection_payload()

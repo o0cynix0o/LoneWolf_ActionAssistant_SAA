@@ -722,6 +722,26 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             assistant.set_section(120)
             self.assertEqual(assistant.roll_current_section(4)["Route"], 59)
 
+    def test_book21_optional_endurance_roll_bonus_is_player_selected_and_paid_once(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 21, "EnduranceCurrent": 30, "EnduranceMax": 30},
+                "CurrentSection": 51,
+            })
+            blocked = assistant.roll_current_section(1)
+            self.assertTrue(blocked["Blocked"])
+            assistant.set_roll_selection("book21-51-endurance", "5")
+            result = assistant.roll_current_section(1)
+            self.assertEqual((result["Total"], result["Route"]), (6, 15))
+            self.assertEqual(assistant.character["EnduranceCurrent"], 25)
+            assistant.roll_current_section(1)
+            self.assertEqual(assistant.character["EnduranceCurrent"], 25)
+
     def test_books6_to20_achievements_unlock_from_recorded_campaign_progress(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
