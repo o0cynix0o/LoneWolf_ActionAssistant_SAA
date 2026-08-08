@@ -69,7 +69,10 @@ an audit queue, not a claim that every signalled section is already automated.
 
 The campaign shell, reader navigation, import path, entry rules, saves,
 inventory, and complete section-route ledgers are ready for internal testing.
-The next rules pass must inspect each numbered candidate and add only effects
+Book 13's 35 source RNT checks have completed the first executable-rule pass,
+including Grand Weaponmastery, discipline, ENDURANCE, item/weapon-selection,
+and dynamic ENDURANCE-loss modifiers. The remaining rules pass must inspect
+each numbered candidate and add only effects
 whose trigger, result, and destination are unambiguous: RNT ranges and
 modifiers, mandatory END changes and meals, combat records, item changes,
 conditional gates, route-state flags, and achievements. Until a candidate has

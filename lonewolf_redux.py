@@ -5679,6 +5679,10 @@ class LoneWolfReduxAssistant:
             return int(self.character.get("MagnakaiRank") or 0) >= int(condition.get("value") or 0)
         if kind in {"magnakai_rank_lt", "magnakai_rank_below"}:
             return int(self.character.get("MagnakaiRank") or 0) < int(condition.get("value") or 0)
+        if kind in {"grand_master_rank_gte", "grand_master_rank"}:
+            return int(self.character.get("GrandMasterRank") or 0) >= int(condition.get("value") or 0)
+        if kind in {"grand_master_rank_lt", "grand_master_rank_below"}:
+            return int(self.character.get("GrandMasterRank") or 0) < int(condition.get("value") or 0)
         if kind in {"lore_circle", "lore_circle_completed"}:
             target = lore_circle_key(condition.get("name") or condition.get("value"))
             return bool(target) and any(
@@ -5710,6 +5714,25 @@ class LoneWolfReduxAssistant:
                     str(weapon).strip().lower() == target
                     for weapon in clean_weaponmastery_weapons(self.character.get("WeaponmasteryWeapons"))
                 )
+            )
+        if kind in {"grand_weaponmastery_weapon", "grand_weaponmastery_has_weapon"}:
+            target = str(condition.get("name") or condition.get("value") or "").strip().lower()
+            return (
+                "Grand Weaponmastery" in self.effective_disciplines()
+                and bool(target)
+                and any(
+                    str(weapon).strip().lower() == target
+                    for weapon in clean_grand_weaponmastery_weapons(
+                        self.character.get("GrandWeaponmasteryWeapons")
+                    )
+                )
+            )
+        if kind in {"no_grand_weaponmastery_weapon", "grand_weaponmastery_missing_weapon"}:
+            return not self.evaluate_flow_condition(
+                {
+                    "type": "grand_weaponmastery_weapon",
+                    "name": condition.get("name") or condition.get("value"),
+                }
             )
         if kind == "item":
             return self.has_item(

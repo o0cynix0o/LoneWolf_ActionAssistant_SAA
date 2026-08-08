@@ -423,6 +423,47 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
         self.assertEqual(book14_state["Character"]["GrandWeaponmasteryWeapons"], ["Sword", "Bow", "Axe"])
         self.assertEqual(book14_state["Inventory"]["Weapons"], ["Sword", "Dagger"])
 
+    def test_book13_rnt_rules_apply_grand_master_modifiers_and_roll_effects(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            assistant.state["Character"].update(
+                {
+                    "BookNumber": 13,
+                    "GrandMasterDisciplines": [
+                        "Grand Weaponmastery",
+                        "Grand Huntmastery",
+                        "Kai-surge",
+                        "Kai-alchemy",
+                    ],
+                    "GrandWeaponmasteryWeapons": ["Bow", "Sword"],
+                    "EnduranceCurrent": 30,
+                    "EnduranceMax": 30,
+                }
+            )
+            assistant.state["Inventory"].update(
+                {"Weapons": ["Bow"], "SpecialItems": ["Sommerswerd"]}
+            )
+
+            assistant.set_section(104)
+            bow_result = assistant.roll_current_section(3)
+            self.assertEqual((bow_result["Total"], bow_result["Route"]), (6, 235))
+
+            assistant.set_section(52)
+            oxygen_result = assistant.roll_current_section(5)
+            self.assertEqual((oxygen_result["Total"], oxygen_result["Route"]), (6, 246))
+            self.assertEqual(assistant.character["EnduranceCurrent"], 24)
+
+            assistant.set_section(81)
+            assistant.set_roll_selection("book13-81-weapon", "Sommerswerd")
+            weapon_result = assistant.roll_current_section(1)
+            self.assertEqual((weapon_result["Total"], weapon_result["Route"]), (5, 248))
+
     def test_books6_to12_achievements_unlock_from_recorded_campaign_progress(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
