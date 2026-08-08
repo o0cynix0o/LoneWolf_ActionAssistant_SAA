@@ -18,12 +18,10 @@ Books 1-20 are playable internal-testing campaigns:
 | --- | --- | --- |
 | Kai | 1-5 | Character creation, campaign handoff, reader routes, inventory, combat, rolls, endings, saves, and achievements |
 | Magnakai | 6-12 | Fresh Magnakai setup or campaign handoff, disciplines, reader routes, inventory, combat, rolls, endings, saves, and achievements |
-| Grand Master | 13-20 | Fresh Grand Master setup or Book 12 campaign handoff, Grand Master disciplines, expanded Backpack, reader routes, inventory, combat, saves, and campaign achievements. Book 13's RNT checks are automated; remaining numbered rules are reader-directed until their source verification pass is complete. |
+| Grand Master | 13-20 | Fresh Grand Master setup or Book 12 campaign handoff, Grand Master disciplines, expanded Backpack, reader routes, inventory, combat, saves, and campaign achievements. Books 13-14 have executable RNT coverage; remaining numbered rules are reader-directed until their source verification pass is complete. |
+| New Order | 21-29 | Fresh New Order setup and Book-to-book continuation, 16 disciplines, Kai Weapon, equipment, reader routes, inventory, combat, saves, and campaign achievements. The import/play foundation is complete; source-verified section automation is being expanded book by book. |
 
-New Order Books 21-29 have a committed source-audit baseline but are not yet
-exposed as playable books. Their dedicated Action Chart and rules pass are the
-next implementation phase. Books 30-32 are not present in the local source
-set because they do not have Project Aon-style HTML editions. They require a
+Books 30-32 do not have Project Aon-style HTML editions. They require a
 separate licensed-source and conversion path before this HTML-based importer
 can audit or support them.
 
@@ -48,6 +46,7 @@ The importer expects a valid folder containing at least `title.htm` and
 01fftd  02fotw  03tcok  04tcod  05sots  06tkot
 07cd    08tjoh  09tcof  10tdot  11tpot  12tmod  13tplor 14tcok
 15tdc   16tlov  17tdoi  18dotd  19wb    20tcon
+21votm  22tbos  23mh    24rw    25totw  26tfobm 27v 28thos 29tsoc
 ```
 
 ## Play Your Way
