@@ -521,6 +521,14 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             self.assertEqual(assistant.character["EnduranceCurrent"], 29)
             assistant.set_section(73)
             self.assertEqual(assistant.roll_current_section(4)["Route"], 231)
+            assistant.set_section(74)
+            self.assertEqual(assistant.roll_current_section(0)["Route"], 344)
+            assistant.set_section(75)
+            self.assertEqual(assistant.roll_current_section(0)["Route"], 161)
+            assistant.set_section(136)
+            self.assertEqual(assistant.roll_current_section(0)["Route"], 16)
+            assistant.set_section(164)
+            self.assertEqual(assistant.roll_current_section(1)["Route"], 198)
 
     def test_books6_to20_achievements_unlock_from_recorded_campaign_progress(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
