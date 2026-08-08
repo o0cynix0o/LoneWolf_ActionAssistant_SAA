@@ -6405,6 +6405,10 @@ class LoneWolfReduxAssistant:
                     "Applies": applies,
                 }
             )
+        if roll.get("minTotal") is not None:
+            total = max(int(roll.get("minTotal") or 0), total)
+        if roll.get("maxTotal") is not None:
+            total = min(int(roll.get("maxTotal") or 0), total)
         route = None
         label = ""
         matched_actions: list[dict[str, Any]] = []
