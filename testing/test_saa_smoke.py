@@ -667,6 +667,38 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             self.assertEqual(result["Route"], 265)
             self.assertEqual(assistant.character["EnduranceCurrent"], 20)
 
+    def test_book18_rnt_rules_apply_rank_items_and_source_injuries(self) -> None:
+        state = lonewolf_redux.create_grand_master_character_state(
+            book_number=18,
+            grand_master_disciplines=[
+                "Animal Mastery", "Grand Huntmastery", "Assimilance", "Grand Pathsmanship",
+                "Kai-screen", "Telegnosis", "Kai-alchemy", "Deliverance", "Grand Nexus",
+            ],
+            grand_weaponmastery_weapons=[],
+            combat_skill_roll=0,
+            endurance_roll=0,
+            gold_roll=0,
+            equipment_choices=["sword", "bow", "quiver", "rope"],
+        )
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state = state
+            assistant.set_section(41)
+            self.assertEqual(assistant.roll_current_section(0)["Route"], 230)
+            assistant.inventory["BackpackItems"].append("Sabito")
+            assistant.set_section(163)
+            self.assertEqual(assistant.roll_current_section(1)["Route"], 116)
+            assistant.set_section(128)
+            assistant.roll_current_section(0)
+            self.assertEqual(assistant.character["EnduranceCurrent"], 30)
+            assistant.set_section(296)
+            assistant.roll_current_section(0)
+            self.assertEqual(assistant.character["EnduranceCurrent"], 20)
+
     def test_books6_to20_achievements_unlock_from_recorded_campaign_progress(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)

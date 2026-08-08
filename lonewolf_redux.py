@@ -6426,6 +6426,8 @@ class LoneWolfReduxAssistant:
                     value = max(0, int(self.character.get("GrandMasterRank") or 0) - 5)
                 elif value_from in {"grand_master_rank_above_six", "grand_master_disciplines_above_six"}:
                     value = max(0, int(self.character.get("GrandMasterRank") or 0) - 6)
+                elif value_from in {"grand_master_rank_above_seven", "grand_master_disciplines_above_seven"}:
+                    value = max(0, int(self.character.get("GrandMasterRank") or 0) - 7)
                 else:
                     value = 0
             else:
