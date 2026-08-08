@@ -1,0 +1,11 @@
+{
+  "8": {
+    "89": {"sourceRoutes": [{"Section": 266, "Actions": [{"type": "pay_gold", "amount": 10}]}, {"Section": 348}]},
+    "126": {"sourceRoutes": [{"Section": 16, "Actions": [{"type": "flag", "key": "book8ConundrumSolved", "value": true}]}, {"Section": 141}]},
+    "141": {"sourceRoutes": [{"Section": 59, "Actions": [{"type": "flag", "key": "book8ConundrumSolved", "value": true}]}, {"Section": 338}]},
+    "244": {"sourceRoutes": [{"Section": 20, "Actions": [{"type": "pay_gold", "amount": 20}]}, {"Section": 37}, {"Section": 89}]},
+    "299": {"sourceRoutes": [{"Section": 266, "Actions": [{"type": "pay_gold", "amount": 10}]}, {"Section": 348}]},
+    "316": {"sourceRoutes": [{"Section": 139, "Actions": [{"type": "pay_gold", "amount": 30}]}, {"Section": 242}, {"Section": 204}]},
+    "338": {"sourceRoutes": [{"Section": 7, "Actions": [{"type": "flag", "key": "book8ConundrumSolved", "value": true}, {"type": "flag", "key": "book8SilverBoxRoute", "value": true}]}, {"Section": 133}]}
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "7": {
+    "100": {
+      "sourceRoutes": [
+        {"Section": 34, "Actions": [{"type": "flag", "key": "book7ZakhanRiddleSolved", "value": true}]},
+        {"Section": 270}
+      ]
+    },
+    "315": {
+      "sourceRoutes": [
+        {"Section": 122, "Actions": [{"type": "flag", "key": "book7LowerLevelSafeEscape", "value": true}, {"type": "flag", "key": "book7OutThroughTheAshRoute", "value": true}]},
+        {"Section": 309},
+        {"Section": 254}
+      ]
+    },
+    "338": {
+      "sourceRoutes": [
+        {"Section": 315}
+      ]
+    }
+  }
+}

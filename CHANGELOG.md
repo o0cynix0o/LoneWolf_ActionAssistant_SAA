@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.4.7 - Internal Testing
+
+- Completed a deep Books 1-12 campaign, route, random-number, and combat
+  verification pass; see `docs/DEEP_CAMPAIGN_TEST_REPORT.md` for coverage.
+- Added source-verified terminal deaths for Books 9-12 and restored omitted
+  player choices in Books 7 and 8.
+- Completed Book 6-7 RNT routing, including Book 6's archery tournament, and
+  corrected source-inaccurate roll modifiers.
+- Corrected the Book 8 Section 287 Vordak combat so it has no false time limit
+  and routes to Section 79 after both enemies are defeated.
+
 ## 3.4.6 - Internal Testing
 
 - Completed an isolated source-link campaign from Book 1 through Book 12,

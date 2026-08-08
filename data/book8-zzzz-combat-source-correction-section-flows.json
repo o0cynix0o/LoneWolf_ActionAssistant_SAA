@@ -1,0 +1,24 @@
+{
+  "8": {
+    "287": {
+      "combat": [
+        {
+          "id": "book8-287",
+          "enemies": [
+            {"name": "Vordak 1", "cs": 22, "endurance": 28},
+            {"name": "Vordak 2", "cs": 21, "endurance": 26}
+          ],
+          "enemyImmuneUnlessPower": "Psi-surge",
+          "victoryRoute": 79,
+          "conditionalModifiers": [
+            {
+              "modifier": -2,
+              "label": "No Psi-screen",
+              "condition": {"type": "no_power", "name": "Psi-screen"}
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

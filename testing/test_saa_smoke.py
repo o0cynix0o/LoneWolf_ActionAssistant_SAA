@@ -1291,6 +1291,201 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
 
         self.assertEqual(completed, [True] * 6)
 
+    def test_books9_to12_source_terminal_deaths_lock_permadeath_runs(self) -> None:
+        terminal_sections = {
+            9: [4, 20, 44, 73, 112, 125, 152, 195, 211, 340],
+            10: [10, 17, 24, 55, 63, 74, 91, 95, 189, 207, 214, 243, 264, 343, 347],
+            11: [11, 46, 57, 98, 99, 104, 111, 214, 236, 239, 324, 328],
+            12: [3, 19, 38, 40, 62, 69, 72, 73, 90, 122, 132, 199, 208, 250, 277, 318, 331, 340, 341, 345],
+        }
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            for difficulty in ("Easy", "Normal", "Hard", "Veteran"):
+                for book_number, sections in terminal_sections.items():
+                    for section in sections:
+                        assistant.state = lonewolf_redux.normalize_state(
+                            {"Character": {"BookNumber": book_number}, "CurrentSection": section}
+                        )
+                        assistant.set_run_configuration(difficulty, True, "DataFile")
+                        assistant.apply_section_automation(force=True, visit_changed=True)
+                        recovery = assistant.death_recovery_payload()
+                        self.assertTrue(assistant.death_active(), (difficulty, book_number, section))
+                        self.assertEqual(assistant.run_state["Status"], "Dead")
+                        self.assertFalse(recovery["CanRepeat"])
+                        self.assertFalse(recovery["CanRewind"])
+
+    def test_book7_and_8_source_choice_overlays_keep_all_explicit_routes(self) -> None:
+        expected_routes = {
+            7: {
+                100: {34, 270},
+                315: {122, 254, 309},
+                338: {315},
+            },
+            8: {
+                89: {266, 348},
+                126: {16, 141},
+                141: {59, 338},
+                244: {20, 37, 89},
+                299: {266, 348},
+                316: {139, 204, 242},
+                338: {7, 133},
+            },
+        }
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            for book_number, sections in expected_routes.items():
+                for section, expected in sections.items():
+                    entry = assistant.section_flow_entry(book_number, section)
+                    actual = {
+                        route["Section"]
+                        for route in assistant.flow_source_route_payload(entry)
+                    }
+                    self.assertEqual(actual, expected, (book_number, section))
+
+    def test_book6_and_7_source_roll_overlays_follow_printed_boundaries(self) -> None:
+        cases = [
+            (6, 95, 3, 155), (6, 95, 4, 12),
+            (6, 101, 4, 348), (6, 101, 5, 207),
+            (6, 170, 5, 23), (6, 170, 6, 265),
+            (6, 178, 7, 296), (6, 178, 8, 303),
+            (6, 243, 3, 155), (6, 243, 4, 292), (6, 243, 9, 264),
+            (6, 268, 5, 155), (6, 268, 6, 236), (6, 268, 9, 75),
+            (7, 35, 4, 97), (7, 35, 5, 246),
+            (7, 39, 4, 344), (7, 39, 5, 58),
+            (7, 55, 2, 189), (7, 55, 3, 62),
+            (7, 116, 2, 77), (7, 116, 3, 198), (7, 116, 7, 235),
+            (7, 128, 1, 77), (7, 128, 2, 198),
+            (7, 166, 2, 275), (7, 166, 3, 222), (7, 166, 8, 311),
+            (7, 175, 8, 19), (7, 185, 8, 241), (7, 185, 9, 106),
+            (7, 255, 2, 154), (7, 255, 3, 208), (7, 255, 9, 52),
+            (7, 327, 4, 184), (7, 327, 5, 4),
+            (7, 343, 7, 69), (7, 343, 8, 197),
+        ]
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            for book_number, section, raw_roll, expected_route in cases:
+                assistant.state = lonewolf_redux.normalize_state(
+                    {"Character": {"BookNumber": book_number, "EnduranceCurrent": 19, "EnduranceMax": 19}, "CurrentSection": section}
+                )
+                result = assistant.evaluate_roll_flow(
+                    assistant.current_section_flow_entry() or {}, raw_roll
+                )
+                self.assertEqual(
+                    result["Route"], expected_route,
+                    (book_number, section, raw_roll),
+                )
+
+            assistant.state = lonewolf_redux.normalize_state(
+                {"Character": {"BookNumber": 6, "MagnakaiDisciplines": ["Huntmastery"]}, "CurrentSection": 101}
+            )
+            self.assertEqual(assistant.evaluate_roll_flow(assistant.current_section_flow_entry() or {}, 2)["Route"], 207)
+
+            assistant.state = lonewolf_redux.normalize_state(
+                {"Character": {"BookNumber": 6, "SpecialItems": ["Silver Bow of Duadon"]}, "CurrentSection": 178}
+            )
+            self.assertEqual(assistant.evaluate_roll_flow(assistant.current_section_flow_entry() or {}, 7)["Route"], 296)
+
+            assistant.state = lonewolf_redux.normalize_state(
+                {"Character": {"BookNumber": 7, "MagnakaiDisciplines": ["Nexus"]}, "CurrentSection": 175}
+            )
+            self.assertEqual(assistant.evaluate_roll_flow(assistant.current_section_flow_entry() or {}, 6)["Route"], 314)
+
+            assistant.state = lonewolf_redux.normalize_state(
+                {"Character": {"BookNumber": 7}, "CurrentSection": 175}
+            )
+            self.assertEqual(assistant.evaluate_roll_flow(assistant.current_section_flow_entry() or {}, 6)["Route"], 19)
+
+    def test_every_configured_random_number_table_roll_has_a_defined_outcome(self) -> None:
+        profiles = ({}, {"KaiDisciplines": lonewolf_redux.KAI_DISCIPLINES, "MagnakaiDisciplines": lonewolf_redux.MAGNAKAI_DISCIPLINES, "WeaponmasteryWeapons": ["Bow", "Sword"], "Weapons": ["Sommerswerd", "Bow", "Sword"], "BackpackItems": ["Rope", "Lantern"], "SpecialItems": ["Silver Bow of Duadon"], "MagnakaiRank": 20})
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            for profile in profiles:
+                for raw_book_number, sections in assistant.section_flows.items():
+                    if not str(raw_book_number).isdigit() or not isinstance(sections, dict):
+                        continue
+                    for raw_section, flow in sections.items():
+                        if not str(raw_section).isdigit() or not isinstance(flow, dict) or not isinstance(flow.get("roll"), dict):
+                            continue
+                        book_number, section = int(raw_book_number), int(raw_section)
+                        character = {"BookNumber": book_number, "EnduranceCurrent": 50, "EnduranceMax": 50, "CombatSkillCurrent": 50, "CombatSkillMax": 50}
+                        character.update(profile)
+                        assistant.state = lonewolf_redux.normalize_state({"Character": character, "CurrentSection": section})
+                        for raw_roll in range(10):
+                            result = assistant.evaluate_roll_flow(flow, raw_roll)
+                            self.assertTrue(
+                                result.get("Route") is not None or result.get("Actions") or result.get("Outcome"),
+                                (book_number, section, raw_roll),
+                            )
+
+    def test_book6_archery_tournament_routes_its_completed_total(self) -> None:
+        cases = [
+            ([], (0, 0, 7), 103),
+            ([], (0, 0, 8), 26),
+            (["Weaponmastery"], (0, 0, 4), 103),
+            (["Weaponmastery"], (0, 0, 5), 26),
+        ]
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            for disciplines, rolls, expected_route in cases:
+                assistant.state = lonewolf_redux.normalize_state(
+                    {"Character": {"BookNumber": 6, "MagnakaiDisciplines": disciplines, "WeaponmasteryWeapons": ["Bow"]}, "CurrentSection": 340}
+                )
+                results = [assistant.roll_current_section(raw_roll) for raw_roll in rolls]
+                self.assertEqual(results[-1]["Route"], expected_route, (disciplines, rolls))
+
+    def test_book8_section287_vordaks_have_no_source_timer_and_route_on_victory(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            assistant.autosave = lambda: None
+            assistant.state = lonewolf_redux.normalize_state(
+                {"Character": {"BookNumber": 8, "MagnakaiDisciplines": ["Psi-surge"]}, "CurrentSection": 287}
+            )
+            assistant.start_section_combat("book8-287")
+            self.assertEqual(len(assistant.combat["EnemyQueue"]), 2)
+            self.assertEqual(assistant.combat["RoundLimit"], 0)
+            self.assertEqual(assistant.combat["VictoryRoute"], 79)
+            assistant.combat_round(["combat", "manual"], manual_losses=(999, 0))
+            self.assertTrue(assistant.combat["Active"])
+            assistant.combat_round(["combat", "manual"], manual_losses=(999, 0))
+            self.assertFalse(assistant.combat["Active"])
+            self.assertEqual(assistant.state["CurrentSection"], 79)
+
     def test_book8_giak_scroll_is_added_to_pocket_items(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
@@ -1567,13 +1762,13 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
         self.assertIn("sabito", options)
         self.assertNotIn("blue-pills", options)
 
-    def test_book6_warhammer_roll_uses_source_item_and_discipline_modifiers(self) -> None:
+    def test_book6_warhammer_roll_uses_only_the_printed_huntmastery_bonus(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
             assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
             assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 6, "MagnakaiDisciplines": ["Weaponmastery", "Huntmastery"]}, "Inventory": {"BackpackItems": ["Rope", "Rope"]}, "CurrentSection": 101})
             result = assistant.roll_current_section(raw_roll=0)
-        self.assertEqual(result["Total"], 5)
+        self.assertEqual(result["Total"], 3)
 
     def test_book6_rats_remove_all_meals_and_special_rations(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -2319,7 +2514,7 @@ class CardLayoutInteractionTests(unittest.TestCase):
                     return cls.assistant_html[match.start():index + 1]
         raise AssertionError(f"JavaScript function {name!r} has no closing brace")
 
-    def test_release_metadata_is_3_4_5_internal_testing(self) -> None:
+    def test_release_metadata_is_3_4_7_internal_testing(self) -> None:
         readme = (self.root / "README.md").read_text(encoding="utf-8")
         building = (self.root / "docs" / "BUILDING.md").read_text(encoding="utf-8")
         user_guide = (self.root / "docs" / "USER_GUIDE.md").read_text(encoding="utf-8")
@@ -2329,16 +2524,16 @@ class CardLayoutInteractionTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         version_info = (self.root / "version_info.txt").read_text(encoding="utf-8")
 
-        self.assertIn("# Lone Wolf Action Assistant 3.4.5 Internal Testing", readme)
-        self.assertIn("Version: **3.4.5 Internal Testing**", readme)
-        self.assertIn("# Building Lone Wolf Action Assistant 3.4.5 Internal Testing", building)
-        self.assertIn("# Lone Wolf Action Assistant 3.4.5 Internal Testing", user_guide)
-        self.assertIn("## 3.4.5 - Internal Testing", changelog)
-        self.assertIn('#define AppVersion "3.4.5"', installer)
-        self.assertIn("filevers=(3, 4, 5, 0)", version_info)
-        self.assertIn("prodvers=(3, 4, 5, 0)", version_info)
-        self.assertIn("StringStruct(u'FileVersion', u'3.4.5')", version_info)
-        self.assertIn("StringStruct(u'ProductVersion', u'3.4.5')", version_info)
+        self.assertIn("# Lone Wolf Action Assistant 3.4.7 Internal Testing", readme)
+        self.assertIn("Version: **3.4.7 Internal Testing**", readme)
+        self.assertIn("# Building Lone Wolf Action Assistant 3.4.7 Internal Testing", building)
+        self.assertIn("# Lone Wolf Action Assistant 3.4.7 Internal Testing", user_guide)
+        self.assertIn("## 3.4.7 - Internal Testing", changelog)
+        self.assertIn('#define AppVersion "3.4.7"', installer)
+        self.assertIn("filevers=(3, 4, 7, 0)", version_info)
+        self.assertIn("prodvers=(3, 4, 7, 0)", version_info)
+        self.assertIn("StringStruct(u'FileVersion', u'3.4.7')", version_info)
+        self.assertIn("StringStruct(u'ProductVersion', u'3.4.7')", version_info)
 
     def test_movable_cards_get_a_dedicated_drag_handle(self) -> None:
         self.assertIn("data-card-drag-handle", self.assistant_html)
