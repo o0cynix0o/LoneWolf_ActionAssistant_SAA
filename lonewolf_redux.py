@@ -6181,6 +6181,9 @@ class LoneWolfReduxAssistant:
                 and isinstance(stored, dict)
                 and int(last_roll.get("Total") or 0) > int(stored.get(str(condition.get("key") or "")) or 0)
             )
+        if kind in {"last_roll_total_lte", "last_roll_lte"}:
+            last_roll = self.automation.get("LastRoll")
+            return isinstance(last_roll, dict) and int(last_roll.get("Total") or 0) <= int(condition.get("value") or 0)
         if kind in {"gold_gte", "gold_at_least"}:
             return int(self.inventory.get("GoldCrowns") or 0) >= int(condition.get("value") or 0)
         if kind in {"gold_lt", "gold_below"}:
