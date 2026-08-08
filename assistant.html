@@ -6301,7 +6301,7 @@
         `).join('');
         return `
           <div class="item-row">
-            <small>${choice.Applied ? 'Applied' : (choice.Ready ? 'Choose' : 'Wait')}</small>
+            <small>${choice.Applied ? 'Applied' : (choice.Ready ? `${text(choice.Remaining, 1)} left` : 'Wait')}</small>
             <span class="wrap">${escapeHtml(text(choice.Label, 'Loss choice'))}: ${escapeHtml(text(choice.Summary || choice.BlockedReason, 'Choose an item to lose'))}</span>
           </div>
           ${candidateRows || `<p class="muted">${escapeHtml(text(choice.BlockedReason, 'No eligible carried item.'))}</p>`}

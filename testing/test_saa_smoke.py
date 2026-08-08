@@ -615,6 +615,44 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             assistant.set_section(23)
             self.assertEqual(assistant.roll_current_section(5)["Route"], 125)
 
+    def test_book16_roll_driven_backpack_losses_remain_player_selected(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 16, "EnduranceCurrent": 30, "EnduranceMax": 30},
+                "Inventory": {"GoldCrowns": 20, "BackpackItems": ["Rope", "Torch", "Meal"]},
+                "CurrentSection": 38,
+            })
+            choice = assistant.current_loss_choices_payload()[0]
+            self.assertFalse(choice["Ready"])
+            self.assertIn("Roll this section", choice["BlockedReason"])
+            assistant.roll_current_section(2)
+            choice = assistant.current_loss_choices_payload()[0]
+            self.assertEqual((choice["RequiredCount"], choice["Remaining"]), (2, 2))
+            assistant.apply_section_loss("book16-38-backpack", "backpack", "Rope")
+            self.assertEqual(assistant.current_loss_choices_payload()[0]["Remaining"], 1)
+            assistant.apply_section_loss("book16-38-backpack", "backpack", "Torch")
+            self.assertTrue(assistant.current_loss_choices_payload()[0]["Applied"])
+            self.assertEqual(assistant.inventory["BackpackItems"], ["Meal"])
+
+    def test_book16_arrow_volley_empties_the_quiver_at_the_source_threshold(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 16}, "Inventory": {"QuiverArrows": 4}, "CurrentSection": 330,
+            })
+            result = assistant.roll_current_section(4)
+            self.assertEqual(result["Route"], 268)
+            self.assertEqual(assistant.inventory["QuiverArrows"], 0)
+
     def test_books6_to20_achievements_unlock_from_recorded_campaign_progress(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)

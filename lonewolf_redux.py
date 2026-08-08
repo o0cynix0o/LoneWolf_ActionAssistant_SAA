@@ -1234,6 +1234,7 @@ def default_automation() -> dict[str, Any]:
         "AppliedRollEffects": [],
         "AppliedHealing": [],
         "AppliedLossChoices": [],
+        "LossChoiceSelections": {},
         "AppliedRouteActions": [],
         "AppliedLoot": [],
         "ItemHistory": [],
@@ -1476,7 +1477,7 @@ def run_signature_payload(state: dict[str, Any]) -> dict[str, Any]:
             key: automation.get(key)
             for key in (
                 "AppliedVisitEffects", "Journal", "Flags", "Stored", "LastRoll", "AppliedRollEffects",
-                "AppliedHealing", "AppliedLossChoices", "AppliedRouteActions", "AppliedLoot", "ItemHistory",
+                "AppliedHealing", "AppliedLossChoices", "LossChoiceSelections", "AppliedRouteActions", "AppliedLoot", "ItemHistory",
                 "StagedRolls", "SectionSelections", "DiceGames", "PendingAdgana", "Ending", "DeathState", "DeathHistory",
             )
         },
@@ -1688,6 +1689,8 @@ def normalize_state(state: dict[str, Any]) -> dict[str, Any]:
         ("Automation", "SectionCheckpoints"),
     ]:
         state[path[0]][path[1]] = as_list(state[path[0]].get(path[1]))
+    if not isinstance(state["Automation"].get("LossChoiceSelections"), dict):
+        state["Automation"]["LossChoiceSelections"] = {}
 
     state["CombatHistory"] = as_list(state.get("CombatHistory"))
     for round_entry in as_list(state["Combat"].get("Log")):
@@ -6250,6 +6253,8 @@ class LoneWolfReduxAssistant:
             return self.effective_combat_skill()
         if key in {"gold", "goldcrowns", "crowns"}:
             return int(self.inventory.get("GoldCrowns") or 0)
+        if key in {"arrows", "quiverarrows", "quiver"}:
+            return int(self.inventory.get("QuiverArrows") or 0)
         return 0
 
     def evaluate_route_check_formula(self, formula: dict[str, Any] | None) -> int | None:
@@ -7635,12 +7640,31 @@ class LoneWolfReduxAssistant:
     def loss_choice_payload(self, choice: dict[str, Any]) -> dict[str, Any]:
         choice_id = str(choice.get("id") or "")
         applied_key = f"{self.current_visit_key()}:{choice_id}"
-        applied = applied_key in as_list(self.automation.get("AppliedLossChoices"))
+        required_count = max(1, int(choice.get("count") or 1))
+        requires_roll = bool(choice.get("countFromLastRoll"))
+        last_roll = self.automation.get("LastRoll")
+        roll_ready = True
+        if requires_roll:
+            roll_ready = isinstance(last_roll, dict) and (
+                int(last_roll.get("BookNumber") or 0) == int(self.character.get("BookNumber") or 0)
+                and int(last_roll.get("Section") or 0) == int(self.state.get("CurrentSection") or 0)
+            )
+            if roll_ready:
+                required_count = max(0, int(last_roll.get("Total") or 0))
+        selections_store = self.automation.get("LossChoiceSelections")
+        selections = as_list(selections_store.get(applied_key)) if isinstance(selections_store, dict) else []
+        applied_count = len(selections)
+        legacy_applied = applied_key in as_list(self.automation.get("AppliedLossChoices"))
+        applied = legacy_applied or (roll_ready and applied_count >= required_count)
+        if legacy_applied and applied_count == 0:
+            applied_count = required_count
         candidates, source = self.loss_choice_candidates(choice)
         replacement = choice.get("replacement") if isinstance(choice.get("replacement"), dict) else {}
         choice_kind = "exchange" if replacement else "loss"
         blocked_reason = ""
-        if applied:
+        if not roll_ready:
+            blocked_reason = "Roll this section before choosing the lost item(s)."
+        elif applied:
             blocked_reason = "Loss choice already applied for this section visit."
         elif not candidates:
             blocked_reason = f"No eligible carried item is available for this {choice_kind}."
@@ -7653,6 +7677,9 @@ class LoneWolfReduxAssistant:
             "Applied": applied,
             "BlockedReason": blocked_reason,
             "Source": source,
+            "RequiredCount": required_count,
+            "AppliedCount": applied_count,
+            "Remaining": max(0, required_count - applied_count),
             "Candidates": candidates,
             "Replacement": {
                 "Container": str(replacement.get("container") or ""),
@@ -7715,10 +7742,19 @@ class LoneWolfReduxAssistant:
             else:
                 messages.append(f"could not add {replacement_name}")
 
-        applied = as_list(self.automation.get("AppliedLossChoices"))
         applied_key = f"{self.current_visit_key()}:{choice_id}"
-        applied.append(applied_key)
-        self.automation["AppliedLossChoices"] = applied[-500:]
+        selections_store = self.automation.get("LossChoiceSelections")
+        if not isinstance(selections_store, dict):
+            selections_store = {}
+            self.automation["LossChoiceSelections"] = selections_store
+        selected = as_list(selections_store.get(applied_key))
+        selected.append({"Type": str(candidate["Type"]), "Item": str(removed)})
+        selections_store[applied_key] = selected[-50:]
+        required_count = int(payload.get("RequiredCount") or 1)
+        if len(selected) >= required_count:
+            applied = as_list(self.automation.get("AppliedLossChoices"))
+            applied.append(applied_key)
+            self.automation["AppliedLossChoices"] = applied[-500:]
         journal = as_list(self.automation.get("Journal"))
         journal.append(
             {
