@@ -1,0 +1,5149 @@
+{
+  "18": {
+    "1": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 175
+        }
+      ],
+      "incomingRouteCount": 0
+    },
+    "2": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "source_link"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 308
+        },
+        {
+          "Section": 194
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "3": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 283
+        },
+        {
+          "Section": 317
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "4": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 58
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "5": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 327
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "6": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 69
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "7": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 304
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "8": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 94
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "9": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 89
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "10": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number",
+        "endurance",
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 258
+        },
+        {
+          "Section": 134
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "11": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 140
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "12": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 220
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "13": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 255
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "14": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance",
+        "meal",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 343
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "15": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 221
+        },
+        {
+          "Section": 99
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "16": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 278
+        },
+        {
+          "Section": 183
+        },
+        {
+          "Section": 107
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "17": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 150
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "18": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 80
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "19": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number",
+        "endurance",
+        "meal"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 81
+        },
+        {
+          "Section": 229
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "20": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 268
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "21": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 3
+    },
+    "22": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 310
+        },
+        {
+          "Section": 105
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "23": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 113
+        },
+        {
+          "Section": 128
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "24": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 69
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "25": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 221
+        },
+        {
+          "Section": 99
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "26": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 199
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "27": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "endurance"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 185
+        },
+        {
+          "Section": 57
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "28": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "conditional",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 319
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "29": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 108
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "30": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "endurance"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 232
+        },
+        {
+          "Section": 177
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "31": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 60
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "32": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 86
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "33": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "endurance"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 85
+        },
+        {
+          "Section": 160
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "34": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 316
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "35": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 126
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "36": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 244
+        }
+      ],
+      "incomingRouteCount": 4
+    },
+    "37": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 215
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "38": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "source_link"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 186
+        },
+        {
+          "Section": 217
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "39": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat_or_stat",
+        "endurance",
+        "conditional"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 146
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "40": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 291
+        },
+        {
+          "Section": 127
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "41": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number",
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 21
+        },
+        {
+          "Section": 230
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "42": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "meal",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 231
+        },
+        {
+          "Section": 56
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "43": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance",
+        "meal"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 313
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "44": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 252
+        },
+        {
+          "Section": 124
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "45": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 246
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "46": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 316
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "47": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 220
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "48": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 238
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "49": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 40
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "50": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "endurance"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 335
+        },
+        {
+          "Section": 290
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "51": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 180
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "52": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 93
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "53": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "54": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 350
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "55": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 311
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "56": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 284
+        },
+        {
+          "Section": 62
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "57": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 324
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "58": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 49
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "59": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "endurance",
+        "meal"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 152
+        },
+        {
+          "Section": 330
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "60": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 44
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "61": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 154
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "62": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "source_link"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 112
+        },
+        {
+          "Section": 338
+        },
+        {
+          "Section": 90
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "63": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "endurance"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 182
+        },
+        {
+          "Section": 109
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "64": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 4,
+      "sourceRoutes": [
+        {
+          "Section": 321
+        },
+        {
+          "Section": 208
+        },
+        {
+          "Section": 18
+        },
+        {
+          "Section": 131
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "65": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number",
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 53
+        },
+        {
+          "Section": 298
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "66": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 43
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "67": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 200
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "68": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 86
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "69": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 187
+        },
+        {
+          "Section": 305
+        }
+      ],
+      "incomingRouteCount": 4
+    },
+    "70": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 163
+        },
+        {
+          "Section": 125
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "71": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 235
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "72": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 219
+        },
+        {
+          "Section": 301
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "73": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 295
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "74": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "source_link"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 211
+        },
+        {
+          "Section": 31
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "75": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 234
+        },
+        {
+          "Section": 259
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "76": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 316
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "77": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "source_link"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 339
+        },
+        {
+          "Section": 36
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "78": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 165
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "79": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 326
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "80": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 196
+        },
+        {
+          "Section": 122
+        }
+      ],
+      "incomingRouteCount": 4
+    },
+    "81": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "source_link"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 293
+        },
+        {
+          "Section": 241
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "82": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 206
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "83": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "endurance",
+        "meal"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 318
+        },
+        {
+          "Section": 42
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "84": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 130
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "85": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance",
+        "meal",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 343
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "86": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 161
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "87": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 92
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "88": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 64
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "89": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 150
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "90": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 348
+        },
+        {
+          "Section": 184
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "91": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 15
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "92": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance",
+        "meal",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 138
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "93": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number",
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 21
+        },
+        {
+          "Section": 230
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "94": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 203
+        },
+        {
+          "Section": 151
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "95": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 326
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "96": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 51
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "97": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 77
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "98": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat_or_stat",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 288
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "99": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 275
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "100": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 323
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "101": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 219
+        },
+        {
+          "Section": 301
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "102": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 24
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "103": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 176
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "104": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 188
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "105": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 235
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "106": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 150
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "107": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 285
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "108": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 247
+        },
+        {
+          "Section": 88
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "109": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "meal",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 340
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "110": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance",
+        "meal",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 343
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "111": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 210
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "112": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 348
+        },
+        {
+          "Section": 184
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "113": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 193
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "114": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 192
+        },
+        {
+          "Section": 78
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "115": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 304
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "116": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 47
+        },
+        {
+          "Section": 156
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "117": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "118": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 11
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "119": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 92
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "120": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 101
+        },
+        {
+          "Section": 72
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "121": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 204
+        },
+        {
+          "Section": 84
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "122": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 46
+        },
+        {
+          "Section": 153
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "123": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 135
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "124": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 8
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "125": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 47
+        },
+        {
+          "Section": 156
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "126": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 190
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "127": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 272
+        },
+        {
+          "Section": 29
+        },
+        {
+          "Section": 141
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "128": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "random_number",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 193
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "129": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 215
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "130": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 157
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "131": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 80
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "132": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 79
+        },
+        {
+          "Section": 254
+        },
+        {
+          "Section": 95
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "133": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 220
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "134": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 350
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "135": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 59
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "136": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 94
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "137": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 93
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "138": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 103
+        },
+        {
+          "Section": 302
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "139": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 108
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "140": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 120
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "141": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 139
+        },
+        {
+          "Section": 233
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "142": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 166
+        },
+        {
+          "Section": 216
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "143": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number",
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 223
+        },
+        {
+          "Section": 329
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "144": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 45
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "145": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 228
+        },
+        {
+          "Section": 162
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "146": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 83
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "147": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 200
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "148": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 309
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "149": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 150
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "150": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 202
+        }
+      ],
+      "incomingRouteCount": 5
+    },
+    "151": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 235
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "152": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "source_link"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 91
+        },
+        {
+          "Section": 25
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "153": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number",
+        "endurance"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 34
+        },
+        {
+          "Section": 213
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "154": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance",
+        "meal",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 16
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "155": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 222
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "156": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 341
+        },
+        {
+          "Section": 142
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "157": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "source_link"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 289
+        },
+        {
+          "Section": 307
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "158": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 178
+        },
+        {
+          "Section": 4
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "159": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number",
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 21
+        },
+        {
+          "Section": 230
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "160": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number",
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 224
+        },
+        {
+          "Section": 14
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "161": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance",
+        "meal"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 75
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "162": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 117
+        },
+        {
+          "Section": 6
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "163": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number",
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 65
+        },
+        {
+          "Section": 116
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "164": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 255
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "165": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 282
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "166": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 220
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "167": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 333
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "168": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 268
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "169": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 3
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "170": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 19
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "171": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 245
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "172": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 89
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "173": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 344
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "174": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance",
+        "meal",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 343
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "175": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 292
+        },
+        {
+          "Section": 48
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "176": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 240
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "177": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "source_link"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 339
+        },
+        {
+          "Section": 36
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "178": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 49
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "179": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 144
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "180": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 256
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "181": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 320
+        },
+        {
+          "Section": 207
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "182": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 340
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "183": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 285
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "184": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 100
+        }
+      ],
+      "incomingRouteCount": 4
+    },
+    "185": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "source_link"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 277
+        },
+        {
+          "Section": 133
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "186": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 262
+        },
+        {
+          "Section": 143
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "187": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 276
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "188": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 315
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "189": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 110
+        },
+        {
+          "Section": 174
+        },
+        {
+          "Section": 33
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "190": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "source_link"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 319
+        },
+        {
+          "Section": 28
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "191": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance",
+        "meal"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 313
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "192": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 282
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "193": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 283
+        },
+        {
+          "Section": 317
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "194": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 348
+        },
+        {
+          "Section": 184
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "195": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 179
+        },
+        {
+          "Section": 214
+        },
+        {
+          "Section": 266
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "196": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 297
+        },
+        {
+          "Section": 334
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "197": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "source_link"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 185
+        },
+        {
+          "Section": 57
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "198": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 154
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "199": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 31
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "200": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 129
+        },
+        {
+          "Section": 37
+        },
+        {
+          "Section": 303
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "201": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 135
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "202": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "meal",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 97
+        },
+        {
+          "Section": 30
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "203": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 274
+        },
+        {
+          "Section": 71
+        },
+        {
+          "Section": 22
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "204": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 130
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "205": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 39
+        },
+        {
+          "Section": 253
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "206": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 337
+        },
+        {
+          "Section": 35
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "207": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number",
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 248
+        },
+        {
+          "Section": 197
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "208": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 80
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "209": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 270
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "210": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "endurance",
+        "meal",
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 61
+        },
+        {
+          "Section": 198
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "211": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 26
+        },
+        {
+          "Section": 294
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "212": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "source_link"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 349
+        },
+        {
+          "Section": 3
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "213": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 316
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "214": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 304
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "215": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 250
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "216": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 295
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "217": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 66
+        },
+        {
+          "Section": 296
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "218": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "219": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "endurance"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 269
+        },
+        {
+          "Section": 41
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "220": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 260
+        },
+        {
+          "Section": 189
+        }
+      ],
+      "incomingRouteCount": 6
+    },
+    "221": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 275
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "222": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "source_link"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 308
+        },
+        {
+          "Section": 194
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "223": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "224": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "225": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 167
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "226": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 250
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "227": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 177
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "228": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 69
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "229": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance",
+        "meal"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 340
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "230": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 322
+        },
+        {
+          "Section": 281
+        },
+        {
+          "Section": 195
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "231": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 56
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "232": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 4,
+      "sourceRoutes": [
+        {
+          "Section": 5
+        },
+        {
+          "Section": 227
+        },
+        {
+          "Section": 264
+        },
+        {
+          "Section": 251
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "233": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "endurance",
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 247
+        },
+        {
+          "Section": 88
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "234": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 104
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "235": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "source_link"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 171
+        },
+        {
+          "Section": 280
+        }
+      ],
+      "incomingRouteCount": 5
+    },
+    "236": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 300
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "237": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 20
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "238": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "source_link"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 132
+        },
+        {
+          "Section": 111
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "239": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 288
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "240": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 279
+        },
+        {
+          "Section": 205
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "241": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance",
+        "meal"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 340
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "242": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 316
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "243": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 167
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "244": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance",
+        "meal"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 138
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "245": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 280
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "246": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 161
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "247": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 64
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "248": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number",
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 332
+        },
+        {
+          "Section": 27
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "249": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "source_link"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 201
+        },
+        {
+          "Section": 123
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "250": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 96
+        },
+        {
+          "Section": 328
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "251": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "252": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 312
+        },
+        {
+          "Section": 286
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "253": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat_or_stat",
+        "endurance",
+        "conditional"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 146
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "254": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 326
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "255": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "source_link"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 271
+        },
+        {
+          "Section": 38
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "256": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "source_link"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 114
+        },
+        {
+          "Section": 158
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "257": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 150
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "258": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "259": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 104
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "260": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance",
+        "meal",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 343
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "261": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 309
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "262": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 191
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "263": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 250
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "264": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 177
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "265": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 344
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "266": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 86
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "267": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 17
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "268": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 100
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "269": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 159
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "270": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "meal",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 236
+        },
+        {
+          "Section": 50
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "271": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "source_link"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 70
+        },
+        {
+          "Section": 181
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "272": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 108
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "273": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 93
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "274": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 235
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "275": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 299
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "276": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 54
+        },
+        {
+          "Section": 10
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "277": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 133
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "278": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat_or_stat",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 285
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "279": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 39
+        },
+        {
+          "Section": 253
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "280": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 147
+        },
+        {
+          "Section": 67
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "281": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 7
+        },
+        {
+          "Section": 68
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "282": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 40
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "283": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 209
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "284": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "source_link"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 168
+        },
+        {
+          "Section": 237
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "285": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 4,
+      "sourceRoutes": [
+        {
+          "Section": 82
+        },
+        {
+          "Section": 225
+        },
+        {
+          "Section": 243
+        },
+        {
+          "Section": 55
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "286": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 136
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "287": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 106
+        },
+        {
+          "Section": 345
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "288": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 69
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "289": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 164
+        },
+        {
+          "Section": 13
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "290": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 300
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "291": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 139
+        },
+        {
+          "Section": 233
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "292": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 238
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "293": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 336
+        },
+        {
+          "Section": 63
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "294": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 31
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "295": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 220
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "296": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "random_number",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 43
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "297": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number",
+        "conditional"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 242
+        },
+        {
+          "Section": 173
+        },
+        {
+          "Section": 102
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "298": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "endurance",
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 47
+        },
+        {
+          "Section": 156
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "299": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "source_link"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 170
+        },
+        {
+          "Section": 19
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "300": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 5,
+      "sourceRoutes": [
+        {
+          "Section": 267
+        },
+        {
+          "Section": 9
+        },
+        {
+          "Section": 172
+        },
+        {
+          "Section": 306
+        },
+        {
+          "Section": 287
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "301": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 273
+        },
+        {
+          "Section": 52
+        },
+        {
+          "Section": 137
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "302": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 176
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "303": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "endurance"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 263
+        },
+        {
+          "Section": 226
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "304": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 347
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "305": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 276
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "306": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 89
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "307": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "source_link"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 271
+        },
+        {
+          "Section": 38
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "308": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 348
+        },
+        {
+          "Section": 184
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "309": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 342
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "310": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 235
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "311": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 333
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "312": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 136
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "313": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 169
+        },
+        {
+          "Section": 212
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "314": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 346
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "315": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 249
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "316": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 98
+        },
+        {
+          "Section": 239
+        }
+      ],
+      "incomingRouteCount": 5
+    },
+    "317": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 209
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "318": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 42
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "319": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "source_link"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 118
+        },
+        {
+          "Section": 11
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "320": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "source_link"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 185
+        },
+        {
+          "Section": 57
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "321": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 80
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "322": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 115
+        },
+        {
+          "Section": 32
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "323": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 74
+        },
+        {
+          "Section": 331
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "324": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 220
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "325": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "random_number",
+        "endurance",
+        "conditional"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 193
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "326": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 148
+        },
+        {
+          "Section": 261
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "327": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "source_link"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 339
+        },
+        {
+          "Section": 36
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "328": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number",
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 314
+        },
+        {
+          "Section": 51
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "329": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 191
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "330": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 221
+        },
+        {
+          "Section": 99
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "331": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 74
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "332": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 1
+    },
+    "333": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 206
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "334": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 76
+        },
+        {
+          "Section": 265
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "335": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 300
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "336": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "endurance"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 182
+        },
+        {
+          "Section": 109
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "337": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 126
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "338": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 2
+        },
+        {
+          "Section": 155
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "339": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 36
+        }
+      ],
+      "incomingRouteCount": 3
+    },
+    "340": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 121
+        }
+      ],
+      "incomingRouteCount": 4
+    },
+    "341": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number",
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 73
+        },
+        {
+          "Section": 12
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "342": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 210
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "343": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "random_number",
+        "conditional"
+      ],
+      "sourceRouteCount": 3,
+      "sourceRoutes": [
+        {
+          "Section": 218
+        },
+        {
+          "Section": 87
+        },
+        {
+          "Section": 119
+        }
+      ],
+      "incomingRouteCount": 5
+    },
+    "344": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "combat_or_stat",
+        "endurance",
+        "conditional",
+        "inventory_or_gold"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 145
+        }
+      ],
+      "incomingRouteCount": 2
+    },
+    "345": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "endurance",
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 149
+        },
+        {
+          "Section": 257
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "346": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route",
+        "endurance"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 180
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "347": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 246
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "348": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "single_route"
+      ],
+      "sourceRouteCount": 1,
+      "sourceRoutes": [
+        {
+          "Section": 100
+        }
+      ],
+      "incomingRouteCount": 4
+    },
+    "349": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "conditional"
+      ],
+      "sourceRouteCount": 2,
+      "sourceRoutes": [
+        {
+          "Section": 325
+        },
+        {
+          "Section": 23
+        }
+      ],
+      "incomingRouteCount": 1
+    },
+    "350": {
+      "auditStatus": "source-link-baseline",
+      "classification": [
+        "terminal"
+      ],
+      "sourceRouteCount": 0,
+      "sourceRoutes": [],
+      "incomingRouteCount": 2
+    }
+  }
+}

@@ -146,6 +146,14 @@ BOOKS = {
     10: {"Title": "The Dungeons of Torgar", "Folder": "10tdot", "MaxSection": 350},
     11: {"Title": "The Prisoners of Time", "Folder": "11tpot", "MaxSection": 350},
     12: {"Title": "The Masters of Darkness", "Folder": "12tmod", "MaxSection": 350},
+    13: {"Title": "The Plague Lords of Ruel", "Folder": "13tplor", "MaxSection": 350},
+    14: {"Title": "The Captives of Kaag", "Folder": "14tcok", "MaxSection": 350},
+    15: {"Title": "The Darke Crusade", "Folder": "15tdc", "MaxSection": 350},
+    16: {"Title": "The Legacy of Vashna", "Folder": "16tlov", "MaxSection": 350},
+    17: {"Title": "The Deathlord of Ixia", "Folder": "17tdoi", "MaxSection": 350},
+    18: {"Title": "Dawn of the Dragons", "Folder": "18dotd", "MaxSection": 350},
+    19: {"Title": "Wolf's Bane", "Folder": "19wb", "MaxSection": 350},
+    20: {"Title": "The Curse of Naar", "Folder": "20tcon", "MaxSection": 350},
 }
 
 # BOOKS is the internal testing catalog. Its public release status is controlled
@@ -185,6 +193,21 @@ MAGNAKAI_DISCIPLINES = [
     "Divination",
 ]
 
+GRAND_MASTER_DISCIPLINES = [
+    "Grand Weaponmastery",
+    "Animal Mastery",
+    "Deliverance",
+    "Assimilance",
+    "Grand Huntmastery",
+    "Grand Pathsmanship",
+    "Kai-surge",
+    "Kai-screen",
+    "Grand Nexus",
+    "Telegnosis",
+    "Magi-magic",
+    "Kai-alchemy",
+]
+
 WEAPONMASTERY_WEAPONS = [
     "Dagger",
     "Spear",
@@ -197,6 +220,8 @@ WEAPONMASTERY_WEAPONS = [
     "Broadsword",
     "Bow",
 ]
+
+GRAND_WEAPONMASTERY_WEAPONS = list(WEAPONMASTERY_WEAPONS)
 
 WEAPONSKILL_MAP = {
     0: "Dagger",
@@ -362,6 +387,87 @@ MAGNAKAI_FIELD_ISSUE_OPTIONS = {
     12: BOOK12_EQUIPMENT_OPTIONS,
 }
 
+GRAND_MASTER_EQUIPMENT_OPTIONS = {
+    13: {
+        "sword": {"Items": [("weapon", "Sword")]},
+        "bow": {"Items": [("weapon", "Bow")]},
+        "quiver": {"Items": [("special", "Quiver")], "Arrows": 6},
+        "axe": {"Items": [("weapon", "Axe")]},
+        "meals": {"Items": [("backpack", "Meal")] * 4},
+        "rope": {"Items": [("backpack", "Rope")]},
+        "laumspur": {"Items": [("backpack", "Potion of Laumspur")]},
+        "spear": {"Items": [("weapon", "Spear")]},
+        "dagger": {"Items": [("weapon", "Dagger")]},
+    },
+    14: {},
+    15: {},
+    16: {
+        "sword": {"Items": [("weapon", "Sword")]},
+        "bow": {"Items": [("weapon", "Bow")]},
+        "quiver": {"Items": [("special", "Quiver")], "Arrows": 6},
+        "axe": {"Items": [("weapon", "Axe")]},
+        "meals": {"Items": [("backpack", "Meal")] * 2},
+        "rope": {"Items": [("backpack", "Rope")]},
+        "laumspur": {"Items": [("backpack", "Potion of Laumspur")]},
+        "quarterstaff": {"Items": [("weapon", "Quarterstaff")]},
+        "dagger": {"Items": [("weapon", "Dagger")]},
+    },
+    17: {
+        "broadsword": {"Items": [("weapon", "Broadsword")]},
+        "bow": {"Items": [("weapon", "Bow")]},
+        "quiver": {"Items": [("special", "Quiver")], "Arrows": 6},
+        "dagger": {"Items": [("weapon", "Dagger")]},
+        "sword": {"Items": [("weapon", "Sword")]},
+        "meals": {"Items": [("backpack", "Meal")] * 2},
+        "rope": {"Items": [("backpack", "Rope")]},
+        "laumspur": {"Items": [("backpack", "Potion of Laumspur")]},
+        "axe": {"Items": [("weapon", "Axe")]},
+    },
+    18: {
+        "quarterstaff": {"Items": [("weapon", "Quarterstaff")]},
+        "bow": {"Items": [("weapon", "Bow")]},
+        "quiver": {"Items": [("special", "Quiver")], "Arrows": 6},
+        "dagger": {"Items": [("weapon", "Dagger")]},
+        "sword": {"Items": [("weapon", "Sword")]},
+        "meals": {"Items": [("backpack", "Meal")] * 2},
+        "rope": {"Items": [("backpack", "Rope")]},
+        "laumspur": {"Items": [("backpack", "Potion of Laumspur")]},
+        "axe": {"Items": [("weapon", "Axe")]},
+    },
+    19: {},
+    20: {
+        "quarterstaff": {"Items": [("weapon", "Quarterstaff")]},
+        "broadsword": {"Items": [("weapon", "Broadsword")]},
+        "bow": {"Items": [("weapon", "Bow")]},
+        "quiver": {"Items": [("special", "Quiver")], "Arrows": 6},
+        "dagger": {"Items": [("weapon", "Dagger")]},
+        "sword": {"Items": [("weapon", "Sword")]},
+        "meals": {"Items": [("backpack", "Meal")] * 2},
+        "rope": {"Items": [("backpack", "Rope")]},
+        "laumspur": {"Items": [("backpack", "Potion of Laumspur")]},
+        "axe": {"Items": [("weapon", "Axe")]},
+    },
+}
+GRAND_MASTER_EQUIPMENT_OPTIONS[14] = dict(GRAND_MASTER_EQUIPMENT_OPTIONS[13])
+GRAND_MASTER_EQUIPMENT_OPTIONS[15] = dict(GRAND_MASTER_EQUIPMENT_OPTIONS[13])
+GRAND_MASTER_EQUIPMENT_OPTIONS[19] = dict(GRAND_MASTER_EQUIPMENT_OPTIONS[17])
+
+GRAND_MASTER_ENTRY_MAPS = {
+    13: "Map of the Dark Realm of Ruel",
+    14: "Map of the Darklands",
+    15: "Map of the Western Tentarias",
+    16: "Map of the Maakengorge",
+    17: "Map of Ixia and the Hardlands",
+    18: "Map of Northern Magnamund",
+    19: "Map of Sommerlund and the Wildlands",
+    20: "Map of the Planes of Existence",
+}
+GRAND_MASTER_CARRYOVER_SPECIAL_ITEMS = {
+    "Crystal Star Pendant", "Sommerswerd", "Silver Helm", "Dagger of Vashna",
+    "Silver Bracers", "Jewelled Mace", "Silver Bow of Duadon", "Helshezag",
+    "Kagonite Chainmail", "Korlinium Scabbard",
+}
+
 
 def magnakai_field_issue_options(book_number: int) -> dict[str, dict[str, Any]]:
     try:
@@ -372,6 +478,20 @@ def magnakai_field_issue_options(book_number: int) -> dict[str, dict[str, Any]]:
 
 def magnakai_field_issue_count(book_number: int) -> int:
     return 6 if int(book_number) in {11, 12} else 5
+
+
+def grand_master_field_issue_options(book_number: int) -> dict[str, dict[str, Any]]:
+    try:
+        return GRAND_MASTER_EQUIPMENT_OPTIONS[int(book_number)]
+    except KeyError as exc:
+        raise ValueError(f"Book {book_number} has no Grand Master field issue.") from exc
+
+
+def grand_master_field_issue_count(book_number: int) -> int:
+    number = int(book_number)
+    if number not in set(range(13, 21)):
+        raise ValueError(f"Book {book_number} has no Grand Master field issue.")
+    return 5 if number <= 15 else 4
 
 KAI_RANKS = [
     (10, "Kai Master"),
@@ -947,6 +1067,7 @@ def default_inventory() -> dict[str, Any]:
         "SpecialItems": ["Map of Sommerlund"],
         "GoldCrowns": 0,
         "HasBackpack": True,
+        "BackpackCapacity": 8,
         "QuiverArrows": 0,
         "HasHerbPouch": False,
         "HerbPouchItems": [],
@@ -1022,6 +1143,9 @@ def default_state() -> dict[str, Any]:
             "MagnakaiDisciplines": [],
             "MagnakaiRank": "",
             "WeaponmasteryWeapons": [],
+            "GrandMasterDisciplines": [],
+            "GrandMasterRank": 0,
+            "GrandWeaponmasteryWeapons": [],
             "LoreCirclesCompleted": [],
             "ImprovedDisciplines": [],
             "LegacyKaiComplete": False,
@@ -1311,6 +1435,15 @@ def normalize_state(state: dict[str, Any]) -> dict[str, Any]:
     state["Character"]["WeaponmasteryWeapons"] = clean_weaponmastery_weapons(
         state["Character"].get("WeaponmasteryWeapons")
     )
+    state["Character"]["GrandMasterDisciplines"] = clean_grand_master_disciplines(
+        state["Character"].get("GrandMasterDisciplines")
+    )
+    state["Character"]["GrandWeaponmasteryWeapons"] = clean_grand_weaponmastery_weapons(
+        state["Character"].get("GrandWeaponmasteryWeapons")
+    )
+    state["Character"]["GrandMasterRank"] = max(
+        0, int(state["Character"].get("GrandMasterRank") or 0)
+    )
     if state["Character"].get("WeaponskillWeapon") not in set(WEAPONSKILL_MAP.values()):
         state["Character"]["WeaponskillWeapon"] = ""
     for key, value in base["Inventory"].items():
@@ -1323,6 +1456,9 @@ def normalize_state(state: dict[str, Any]) -> dict[str, Any]:
     state["Inventory"]["GoldCrowns"] = max(0, min(50, int(state["Inventory"].get("GoldCrowns") or 0)))
     state["Inventory"].pop("Nobles", None)
     state["Inventory"]["HasBackpack"] = bool(state["Inventory"].get("HasBackpack", True))
+    state["Inventory"]["BackpackCapacity"] = max(
+        1, min(20, int(state["Inventory"].get("BackpackCapacity") or 8))
+    )
     state["Inventory"]["QuiverArrows"] = max(0, int(state["Inventory"].get("QuiverArrows") or 0))
     for key, value in base["Combat"].items():
         state["Combat"].setdefault(key, value)
@@ -1376,6 +1512,8 @@ def normalize_state(state: dict[str, Any]) -> dict[str, Any]:
         ("Character", "KaiDisciplines"),
         ("Character", "MagnakaiDisciplines"),
         ("Character", "WeaponmasteryWeapons"),
+        ("Character", "GrandMasterDisciplines"),
+        ("Character", "GrandWeaponmasteryWeapons"),
         ("Character", "LoreCirclesCompleted"),
         ("Character", "ImprovedDisciplines"),
         ("Character", "CompletedBooks"),
@@ -1545,6 +1683,31 @@ def clean_weaponmastery_weapons(values: Any) -> list[str]:
         if match and match not in selected:
             selected.append(match)
     return selected
+
+
+def clean_grand_master_disciplines(values: Any) -> list[str]:
+    selected: list[str] = []
+    for item in as_list(values):
+        name = str(item or "").strip()
+        match = next((known for known in GRAND_MASTER_DISCIPLINES if known.lower() == name.lower()), "")
+        if match and match not in selected:
+            selected.append(match)
+    return selected
+
+
+def clean_grand_weaponmastery_weapons(values: Any) -> list[str]:
+    selected: list[str] = []
+    for item in as_list(values):
+        name = str(item or "").strip()
+        match = next((known for known in GRAND_WEAPONMASTERY_WEAPONS if known.lower() == name.lower()), "")
+        if match and match not in selected:
+            selected.append(match)
+    return selected
+
+
+def backpack_capacity(inventory: dict[str, Any]) -> int:
+    """Return the source-defined Backpack capacity for this campaign state."""
+    return max(1, min(20, int(inventory.get("BackpackCapacity") or 8)))
 
 
 def lore_circle_key(value: Any) -> str:
@@ -1826,9 +1989,9 @@ def apply_book2_armoury_to_state(
 
             if container == "backpack":
                 backpack_items = as_list(inventory.get("BackpackItems"))
-                if len(backpack_items) >= 8:
+                if item_slot_total(backpack_items) + item_slot_cost(item) > backpack_capacity(inventory):
                     raise ValueError(
-                        f"Taking {item} needs Backpack space because the Backpack limit is 8."
+                        f"Taking {item} needs Backpack space because the Backpack limit is {backpack_capacity(inventory)}."
                     )
                 backpack_items.append(item)
                 inventory["BackpackItems"] = backpack_items
@@ -1899,9 +2062,9 @@ def apply_book3_equipment_to_state(
 
             if container == "backpack":
                 backpack_items = as_list(inventory.get("BackpackItems"))
-                if len(backpack_items) >= 8:
+                if item_slot_total(backpack_items) + item_slot_cost(item) > backpack_capacity(inventory):
                     raise ValueError(
-                        f"Taking {item} needs Backpack space because the Backpack limit is 8."
+                        f"Taking {item} needs Backpack space because the Backpack limit is {backpack_capacity(inventory)}."
                     )
                 backpack_items.append(item)
                 inventory["BackpackItems"] = backpack_items
@@ -2100,9 +2263,9 @@ def apply_book6_starting_equipment_to_state(
                 inventory["Weapons"] = weapons
             elif container == "backpack":
                 backpack = as_list(inventory.get("BackpackItems"))
-                if len(backpack) >= 8:
+                if item_slot_total(backpack) + item_slot_cost(item) > backpack_capacity(inventory):
                     raise ValueError(
-                        f"Taking {item} needs Backpack space because the Backpack limit is 8."
+                        f"Taking {item} needs Backpack space because the Backpack limit is {backpack_capacity(inventory)}."
                     )
                 inventory["BackpackItems"] = backpack + [item]
             else:
@@ -2490,8 +2653,10 @@ def _apply_magnakai_field_issue(
                 inventory["Weapons"] = weapons + [item]
             elif container == "backpack":
                 backpack = as_list(inventory.get("BackpackItems"))
-                if len(backpack) >= 8:
-                    raise ValueError(f"Taking {item} exceeds the eight-item Backpack limit.")
+                if item_slot_total(backpack) + item_slot_cost(item) > backpack_capacity(inventory):
+                    raise ValueError(
+                        f"Taking {item} exceeds the {backpack_capacity(inventory)}-item Backpack limit."
+                    )
                 inventory["BackpackItems"] = backpack + [item]
             elif container == "pocket":
                 inventory["PocketSpecialItems"] = as_list(inventory.get("PocketSpecialItems")) + [item]
@@ -2503,6 +2668,279 @@ def _apply_magnakai_field_issue(
             )
         messages.append(f"Equipment choice: {choice}")
     return messages
+
+
+def _clean_grand_master_field_issue_choices(choices: Any, *, book_number: int) -> list[str]:
+    selected = [str(value).strip().lower() for value in as_list(choices) if str(value).strip()]
+    options = grand_master_field_issue_options(book_number)
+    count = grand_master_field_issue_count(book_number)
+    if len(set(selected)) != len(selected) or len(selected) != count or any(item not in options for item in selected):
+        raise ValueError(f"Book {book_number} requires exactly {count} Grand Master equipment choices.")
+    return selected
+
+
+def _apply_grand_master_field_issue(
+    state: dict[str, Any], choices: list[str], *, book_number: int
+) -> list[str]:
+    inventory = state["Inventory"]
+    messages: list[str] = []
+    for choice in choices:
+        option = grand_master_field_issue_options(book_number)[choice]
+        for container, item in option["Items"]:
+            if container == "weapon":
+                weapons = as_list(inventory.get("Weapons"))
+                if len(weapons) >= 2:
+                    raise ValueError(f"Taking {item} exceeds the two-Weapon limit.")
+                inventory["Weapons"] = weapons + [item]
+            elif container == "backpack":
+                backpack = as_list(inventory.get("BackpackItems"))
+                if item_slot_total(backpack) + item_slot_cost(item) > backpack_capacity(inventory):
+                    raise ValueError(
+                        f"Taking {item} exceeds the {backpack_capacity(inventory)}-item Backpack limit."
+                    )
+                inventory["BackpackItems"] = backpack + [item]
+            else:
+                inventory["SpecialItems"] = add_unique_item(inventory.get("SpecialItems"), item)
+        if option.get("Arrows"):
+            inventory["QuiverArrows"] = max(
+                int(inventory.get("QuiverArrows") or 0), int(option["Arrows"])
+            )
+        messages.append(f"Equipment choice: {choice}")
+    return messages
+
+
+def _configure_grand_master_character(
+    state: dict[str, Any], *, book_number: int, disciplines: list[str], mastery: list[str]
+) -> None:
+    character = state["Character"]
+    character.update(
+        {
+            "BookNumber": book_number,
+            "KaiDisciplines": list(KAI_DISCIPLINES),
+            "LegacyKaiComplete": True,
+            "MagnakaiDisciplines": list(MAGNAKAI_DISCIPLINES),
+            "MagnakaiRank": len(MAGNAKAI_DISCIPLINES),
+            "WeaponmasteryWeapons": list(WEAPONMASTERY_WEAPONS),
+            "GrandMasterDisciplines": disciplines,
+            "GrandMasterRank": len(disciplines),
+            "GrandWeaponmasteryWeapons": mastery,
+        }
+    )
+    state["RuleSet"] = "Grand Master"
+
+
+def create_grand_master_character_state(
+    *,
+    book_number: int,
+    name: str = "Lone Wolf",
+    grand_master_disciplines: Any = None,
+    grand_weaponmastery_weapons: Any = None,
+    section: int = 1,
+    combat_skill_roll: Any | None = None,
+    endurance_roll: Any | None = None,
+    gold_roll: Any | None = None,
+    equipment_choices: Any = None,
+) -> dict[str, Any]:
+    """Create a source-defined standalone Grand Master Action Chart."""
+    if book_number not in set(range(13, 21)):
+        raise ValueError("Grand Master standalone creation supports Books 13 through 20.")
+    expected_disciplines = 4 + (book_number - 13)
+    disciplines = clean_grand_master_disciplines(grand_master_disciplines)
+    if len(disciplines) != expected_disciplines:
+        raise ValueError(
+            f"Book {book_number} requires exactly {expected_disciplines} Grand Master Disciplines."
+        )
+    mastery = clean_grand_weaponmastery_weapons(grand_weaponmastery_weapons)
+    expected_mastery = 2 + (book_number - 13)
+    if "Grand Weaponmastery" in disciplines and len(mastery) != expected_mastery:
+        raise ValueError(
+            f"Book {book_number} Grand Weaponmastery requires exactly {expected_mastery} mastered weapons."
+        )
+    if "Grand Weaponmastery" not in disciplines and mastery:
+        raise ValueError("Choose Grand Weaponmastery before selecting mastered weapons.")
+
+    cs_roll = coerce_random_digit(combat_skill_roll)
+    end_roll = coerce_random_digit(endurance_roll)
+    gold_digit = coerce_random_digit(gold_roll)
+    stat_bonus = expected_disciplines - 4
+    state = normalize_state(default_state())
+    state["CurrentSection"] = max(1, min(BOOKS[book_number]["MaxSection"], int(section or 1)))
+    state["SectionHistory"] = []
+    character = state["Character"]
+    character.update(
+        {
+            "Name": str(name or "Lone Wolf").strip() or "Lone Wolf",
+            "CombatSkillBase": 25 + cs_roll + stat_bonus,
+            "CombatSkillCurrent": 25 + cs_roll + stat_bonus,
+            "EnduranceBase": 30 + end_roll + (2 * stat_bonus),
+            "EnduranceMax": 30 + end_roll + (2 * stat_bonus),
+            "EnduranceCurrent": 30 + end_roll + (2 * stat_bonus),
+        }
+    )
+    _configure_grand_master_character(
+        state, book_number=book_number, disciplines=disciplines, mastery=mastery
+    )
+    inventory = state["Inventory"]
+    inventory.update(
+        {
+            "Weapons": [],
+            "BackpackItems": [],
+            "SpecialItems": [GRAND_MASTER_ENTRY_MAPS[book_number]],
+            "PocketSpecialItems": [],
+            "GoldCrowns": 20 + gold_digit,
+            "HasBackpack": True,
+            "BackpackCapacity": 10,
+            "HasHerbPouch": False,
+            "HerbPouchItems": [],
+            "QuiverArrows": 0,
+        }
+    )
+    choice_ids = _clean_grand_master_field_issue_choices(
+        equipment_choices, book_number=book_number
+    )
+    messages = _apply_grand_master_field_issue(state, choice_ids, book_number=book_number)
+    character[f"Book{book_number}Setup"] = {
+        "Mode": "standalone",
+        "GrandMasterDisciplines": disciplines,
+        "GrandWeaponmasteryWeapons": mastery,
+        "GoldRoll": gold_digit,
+        "GoldGain": 20 + gold_digit,
+        "EquipmentChoices": choice_ids,
+        "Messages": messages,
+    }
+    character["CreationRolls"] = {
+        "CombatSkill": cs_roll,
+        "Endurance": end_roll,
+        f"Book{book_number}Gold": gold_digit,
+    }
+    state["Combat"] = json_clone(default_state()["Combat"])
+    state["Combat"]["StartedSection"] = int(state["CurrentSection"])
+    state["CurrentBookStats"] = {
+        "BookNumber": book_number,
+        "BookTitle": BOOKS[book_number]["Title"],
+        "StartSection": int(state["CurrentSection"]),
+        "LastSection": int(state["CurrentSection"]),
+        "SectionsVisited": 0,
+        "VisitedSections": [],
+        "StartingEnduranceMax": int(character["EnduranceMax"]),
+        "StartingGoldCrowns": int(inventory["GoldCrowns"]),
+        f"Book{book_number}GoldRoll": gold_digit,
+        f"Book{book_number}EquipmentChoices": list(choice_ids),
+    }
+    return normalize_state(state)
+
+
+def prepare_grand_master_state(
+    state: dict[str, Any],
+    *,
+    book_number: int,
+    grand_master_disciplines: Any,
+    grand_weaponmastery_weapons: Any = None,
+    gold_roll: Any | None = None,
+    equipment_choices: Any = None,
+    transition_drops: Any = None,
+) -> dict[str, Any]:
+    """Move a completed Book 12-19 campaign into the next Grand Master book."""
+    if book_number not in set(range(13, 21)):
+        raise ValueError("Grand Master continuation supports Books 13 through 20.")
+    prepared = normalize_state(json_clone(state))
+    character, inventory = prepared["Character"], prepared["Inventory"]
+    prior_book = book_number - 1
+    if int(character.get("BookNumber") or 0) != prior_book:
+        raise ValueError(f"Book {book_number} setup must continue a Book {prior_book} campaign.")
+
+    expected_disciplines = 4 + (book_number - 13)
+    selected = clean_grand_master_disciplines(grand_master_disciplines)
+    if book_number == 13:
+        if len(selected) != expected_disciplines:
+            raise ValueError("Book 13 requires exactly four Grand Master Disciplines.")
+        disciplines = selected
+    else:
+        owned = clean_grand_master_disciplines(character.get("GrandMasterDisciplines"))
+        if len(owned) != expected_disciplines - 1 or len(selected) != 1 or selected[0] in owned:
+            raise ValueError(f"Book {book_number} requires one new Grand Master Discipline.")
+        disciplines = owned + selected
+
+    owned_before = clean_grand_master_disciplines(character.get("GrandMasterDisciplines"))
+    had_grand_weaponmastery = "Grand Weaponmastery" in owned_before
+    mastery = clean_grand_weaponmastery_weapons(character.get("GrandWeaponmasteryWeapons"))
+    expected_mastery = 2 + (book_number - 13)
+    chosen_mastery = clean_grand_weaponmastery_weapons(grand_weaponmastery_weapons)
+    if "Grand Weaponmastery" in disciplines:
+        if book_number == 13:
+            if len(chosen_mastery) != expected_mastery:
+                raise ValueError("Book 13 Grand Weaponmastery requires exactly two mastered weapons.")
+            mastery = chosen_mastery
+        elif not had_grand_weaponmastery:
+            if len(mastery) or len(chosen_mastery) != expected_mastery:
+                raise ValueError(
+                    f"Book {book_number} Grand Weaponmastery requires exactly {expected_mastery} mastered weapons."
+                )
+            mastery = chosen_mastery
+        elif len(mastery) != expected_mastery - 1 or len(chosen_mastery) != 1 or chosen_mastery[0] in mastery:
+            raise ValueError(
+                f"Book {book_number} Grand Weaponmastery requires one new mastered weapon."
+            )
+        elif chosen_mastery:
+            mastery += chosen_mastery
+    elif chosen_mastery:
+        raise ValueError("Choose Grand Weaponmastery before selecting mastered weapons.")
+
+    choice_ids = _clean_grand_master_field_issue_choices(
+        equipment_choices, book_number=book_number
+    )
+    prepared["CurrentSection"] = 1
+    prepared["Combat"] = json_clone(default_state()["Combat"])
+    prepared["Combat"]["StartedSection"] = 1
+    discard_transition_stored_gear(prepared)
+    messages = apply_later_magnakai_transition_drops(inventory, transition_drops)
+    inventory["BackpackCapacity"] = 10
+    inventory["PocketSpecialItems"] = []
+    if book_number == 13:
+        kept = [item for item in as_list(inventory.get("SpecialItems")) if item in GRAND_MASTER_CARRYOVER_SPECIAL_ITEMS]
+        left_behind = [item for item in as_list(inventory.get("SpecialItems")) if item not in kept]
+        inventory["SpecialItems"] = kept
+        messages.extend(f"Left in safekeeping: {item}" for item in left_behind)
+    inventory["SpecialItems"] = add_unique_item(
+        inventory.get("SpecialItems"), GRAND_MASTER_ENTRY_MAPS[book_number]
+    )
+    gold_digit = coerce_random_digit(gold_roll)
+    inventory["GoldCrowns"] = min(50, int(inventory.get("GoldCrowns") or 0) + 20 + gold_digit)
+    if book_number > 13:
+        character["CombatSkillBase"] = int(character.get("CombatSkillBase") or 0) + 1
+        character["CombatSkillCurrent"] = int(character.get("CombatSkillCurrent") or 0) + 1
+        character["EnduranceBase"] = int(character.get("EnduranceBase") or 0) + 2
+        character["EnduranceMax"] = int(character.get("EnduranceMax") or 0) + 2
+        character["EnduranceCurrent"] = min(
+            int(character["EnduranceMax"]), int(character.get("EnduranceCurrent") or 0) + 2
+        )
+        messages.append("Grand Master advancement: +1 CS, +2 END.")
+    _configure_grand_master_character(
+        prepared, book_number=book_number, disciplines=disciplines, mastery=mastery
+    )
+    messages.extend(_apply_grand_master_field_issue(prepared, choice_ids, book_number=book_number))
+    character[f"Book{book_number}Setup"] = {
+        "Mode": "campaign",
+        "ContinuedFromBook": prior_book,
+        "GrandMasterDisciplines": disciplines,
+        "GrandWeaponmasteryWeapons": mastery,
+        "GoldRoll": gold_digit,
+        "EquipmentChoices": choice_ids,
+        "TransitionDrops": clean_later_magnakai_transition_drops(transition_drops),
+        "Messages": messages,
+    }
+    prepared["CurrentBookStats"] = {
+        "BookNumber": book_number,
+        "BookTitle": BOOK_CATALOG[book_number]["Title"],
+        "StartSection": 1,
+        "LastSection": 1,
+        "SectionsVisited": 0,
+        "VisitedSections": [],
+        "BookGoldRoll": gold_digit,
+        "EquipmentChoices": choice_ids,
+        "StartingEnduranceMax": int(character["EnduranceMax"]),
+    }
+    return normalize_state(prepared)
 
 
 def create_magnakai_character_state(
@@ -3699,13 +4137,18 @@ class LoneWolfReduxAssistant:
 
     def effective_disciplines(self) -> list[str]:
         is_magnakai = int(self.character.get("BookNumber") or 0) >= 6
+        is_grand_master = int(self.character.get("BookNumber") or 0) >= 13
         known = clean_kai_disciplines(self.character.get("KaiDisciplines"))
         if is_magnakai:
             known.extend(clean_magnakai_disciplines(self.character.get("MagnakaiDisciplines")))
+        if is_grand_master:
+            known.extend(clean_grand_master_disciplines(self.character.get("GrandMasterDisciplines")))
         if self.cheat_active("all_disciplines"):
             known.extend(KAI_DISCIPLINES)
             if is_magnakai:
                 known.extend(MAGNAKAI_DISCIPLINES)
+            if is_grand_master:
+                known.extend(GRAND_MASTER_DISCIPLINES)
         return list(dict.fromkeys(known))
 
     def cheat_resource_snapshot(self) -> dict[str, int]:
@@ -4002,6 +4445,10 @@ class LoneWolfReduxAssistant:
             item for item in MAGNAKAI_DISCIPLINES
             if item not in clean_magnakai_disciplines(self.character.get("MagnakaiDisciplines"))
         ]
+        missing_grand_master = [
+            item for item in GRAND_MASTER_DISCIPLINES
+            if item not in clean_grand_master_disciplines(self.character.get("GrandMasterDisciplines"))
+        ]
         return {
             "Active": True,
             "Summary": summary,
@@ -4010,6 +4457,7 @@ class LoneWolfReduxAssistant:
             "CanContinue": next_book is not None,
             "KaiDisciplineChoices": missing_kai,
             "MagnakaiDisciplineChoices": missing_magnakai,
+            "GrandMasterDisciplineChoices": missing_grand_master,
         }
 
     def pending_book_setup_payload(self) -> dict[str, Any]:
@@ -4748,7 +5196,7 @@ class LoneWolfReduxAssistant:
         unlimited = self.cheat_active("bottomless_inventory")
         if key == "Weapons" and not unlimited and len(as_list(self.inventory["Weapons"])) >= 2:
             return False
-        if key == "BackpackItems" and not unlimited and item_slot_total(self.inventory["BackpackItems"]) + item_slot_cost(item) > 8:
+        if key == "BackpackItems" and not unlimited and item_slot_total(self.inventory["BackpackItems"]) + item_slot_cost(item) > backpack_capacity(self.inventory):
             return False
         if key == "HerbPouchItems" and not unlimited and item_slot_total(self.inventory["HerbPouchItems"]) + item_slot_cost(item) > 8:
             return False
@@ -7311,7 +7759,13 @@ class LoneWolfReduxAssistant:
         mastered_weapons = clean_weaponmastery_weapons(
             self.character.get("WeaponmasteryWeapons")
         )
-        if "Weaponmastery" in self.effective_disciplines() and active in mastered_weapons:
+        grand_mastered_weapons = clean_grand_weaponmastery_weapons(
+            self.character.get("GrandWeaponmasteryWeapons")
+        )
+        if "Grand Weaponmastery" in self.effective_disciplines() and active in grand_mastered_weapons:
+            modifier += 5
+            notes.append(f"Grand Weaponmastery ({active}): +5 CS")
+        elif "Weaponmastery" in self.effective_disciplines() and active in mastered_weapons:
             modifier += 3
             notes.append(f"Weaponmastery ({active}): +3 CS")
         if self.has_item("Shield", ["special"]) and not bool(self.combat.get("SuppressShieldBonus")):
@@ -7417,10 +7871,18 @@ class LoneWolfReduxAssistant:
         hunting_suppressed = bool(action.get("huntingSuppressed")) or any(
             bool(self.automation_flags.get(flag)) for flag in suppressed_flags
         )
-        has_food_discipline = self.has_power("Hunting") or self.has_power("Huntmastery")
+        has_food_discipline = (
+            self.has_power("Hunting")
+            or self.has_power("Huntmastery")
+            or self.has_power("Grand Huntmastery")
+        )
         if bool(action.get("huntingExempt")) and has_food_discipline and not hunting_suppressed:
             available = self.count_items("Meal", ["backpack"])
-            label = "Huntmastery" if self.has_power("Huntmastery") else "Hunting"
+            label = (
+                "Grand Huntmastery" if self.has_power("Grand Huntmastery")
+                else "Huntmastery" if self.has_power("Huntmastery")
+                else "Hunting"
+            )
             return f"{label}: no Meal needed; Meals unchanged at {available}"
         count = max(0, int(action.get("count") or 1))
         mode = str(action.get("mode") or "per_missing")
@@ -8030,7 +8492,7 @@ class LoneWolfReduxAssistant:
             panel_header("Use Item", accent=SCREEN_ACCENTS["inventory"])
             panel_text("Use consumables from the Backpack. Enter a numbered slot or item name.", color="Gray")
             panel_footer()
-            self.show_inventory_slots("Backpack", self.inventory["BackpackItems"], 8)
+            self.show_inventory_slots("Backpack", self.inventory["BackpackItems"], backpack_capacity(self.inventory))
             item_type = input("Container [backpack]: ").strip() or "backpack"
             item = input("Slot or item to use: ").strip()
             if not item:
@@ -8693,7 +9155,7 @@ class LoneWolfReduxAssistant:
         backpack_status = (
             "unavailable"
             if not bool(self.automation_flags.get("backpackAvailable", True))
-            else capacity_text(self.inventory["BackpackItems"], 8)
+            else capacity_text(self.inventory["BackpackItems"], backpack_capacity(self.inventory))
         )
         panel_pair_row("Weapons", capacity_text(self.inventory["Weapons"], 2), "Backpack", backpack_status)
         panel_pair_row("Special Items", str(len(as_list(self.inventory["SpecialItems"]))), "Gold Crowns", self.inventory.get("GoldCrowns", 0))
@@ -8704,11 +9166,11 @@ class LoneWolfReduxAssistant:
     def show_inventory_screen(self) -> None:
         panel_header("Inventory", accent=SCREEN_ACCENTS["inventory"])
         panel_pair_row("Gold Crowns", self.inventory.get("GoldCrowns", 0), "Weapons", capacity_text(self.inventory["Weapons"], 2))
-        panel_pair_row("Backpack", capacity_text(self.inventory["BackpackItems"], 8), "Special Items", str(len(as_list(self.inventory["SpecialItems"]))))
+        panel_pair_row("Backpack", capacity_text(self.inventory["BackpackItems"], backpack_capacity(self.inventory)), "Special Items", str(len(as_list(self.inventory["SpecialItems"]))))
         panel_row("Meals", as_list(self.inventory["BackpackItems"]).count("Meal"))
         panel_footer()
         self.show_inventory_slots("Weapons", self.inventory["Weapons"], 2)
-        self.show_inventory_slots("Backpack", self.inventory["BackpackItems"], 8)
+        self.show_inventory_slots("Backpack", self.inventory["BackpackItems"], backpack_capacity(self.inventory))
         self.show_inventory_slots("Special Items", self.inventory["SpecialItems"], None)
         self.show_stored_gear()
         self.show_helpful_commands("inventory")
@@ -9002,7 +9464,7 @@ class LoneWolfReduxAssistant:
     def inventory_type_choices(self) -> dict[str, dict[str, Any]]:
         return {
             "weapon": {"key": "Weapons", "label": "Weapons", "capacity": 2},
-            "backpack": {"key": "BackpackItems", "label": "Backpack", "capacity": 8},
+            "backpack": {"key": "BackpackItems", "label": "Backpack", "capacity": backpack_capacity(self.inventory)},
             "special": {"key": "SpecialItems", "label": "Special Items", "capacity": None},
         }
 
@@ -9039,7 +9501,7 @@ class LoneWolfReduxAssistant:
         return reverse.get(key, "")
 
     def inventory_capacity_line(self) -> str:
-        backpack = "unavailable" if not bool(self.automation_flags.get("backpackAvailable", True)) else capacity_text(self.inventory["BackpackItems"], 8)
+        backpack = "unavailable" if not bool(self.automation_flags.get("backpackAvailable", True)) else capacity_text(self.inventory["BackpackItems"], backpack_capacity(self.inventory))
         return (
             f"Weapons {capacity_text(self.inventory['Weapons'], 2)} | "
             f"Backpack {backpack} | "
@@ -9131,8 +9593,8 @@ class LoneWolfReduxAssistant:
             if not bool(self.automation_flags.get("backpackAvailable", True)):
                 print("Backpack is not currently available.")
                 return
-            if not unlimited and item_slot_total(self.inventory["BackpackItems"]) + item_slot_cost(item) > 8:
-                print("Backpack limit is 8 items. Drop an item first.")
+            if not unlimited and item_slot_total(self.inventory["BackpackItems"]) + item_slot_cost(item) > backpack_capacity(self.inventory):
+                print(f"Backpack limit is {backpack_capacity(self.inventory)} items. Drop an item first.")
                 return
             self.inventory["BackpackItems"] = as_list(self.inventory["BackpackItems"]) + [item]
         elif item_type == "special":
@@ -10507,6 +10969,8 @@ class LoneWolfReduxAssistant:
         book6_weapon_exchanges: Any = None,
         book6_de_curing_option: int = 0,
         book6_de_weaponskill_option: int = 0,
+        grand_master_disciplines: Any = None,
+        grand_weaponmastery_weapons: Any = None,
         transition_drops: Any = None,
     ) -> None:
         completion = self.book_completion_payload()
@@ -10552,6 +11016,16 @@ class LoneWolfReduxAssistant:
                 book_number=next_book,
                 magnakai_discipline=book6_magnakai_disciplines,
                 weaponmastery_weapon=book6_weaponmastery_weapons,
+                gold_roll=book6_gold_roll,
+                equipment_choices=book6_equipment_choices,
+                transition_drops=transition_drops,
+            )
+            return
+        if next_book in set(range(13, 21)):
+            self.continue_to_grand_master(
+                book_number=next_book,
+                grand_master_disciplines=grand_master_disciplines,
+                grand_weaponmastery_weapons=grand_weaponmastery_weapons,
                 gold_roll=book6_gold_roll,
                 equipment_choices=book6_equipment_choices,
                 transition_drops=transition_drops,
@@ -10840,6 +11314,50 @@ class LoneWolfReduxAssistant:
             book_number=int(book_number),
             magnakai_discipline=str(magnakai_discipline or ""),
             weaponmastery_weapon=str(weaponmastery_weapon or ""),
+            gold_roll=gold_roll,
+            equipment_choices=equipment_choices,
+            transition_drops=transition_drops,
+        )
+        self.automation["Ending"] = None
+        self.automation["PendingBookSetup"] = None
+        self.clear_death_state()
+        self.record_section_visit()
+        self.save_section_checkpoint("ready")
+        self.write_current_position()
+        self.autosave()
+        print(f"Advanced to Book {book_number}: {BOOK_CATALOG[int(book_number)]['Title']}")
+        setup = self.character.get(f"Book{book_number}Setup")
+        if isinstance(setup, dict):
+            for message in as_list(setup.get("Messages")):
+                print(str(message))
+
+    def continue_to_grand_master(
+        self,
+        *,
+        book_number: int,
+        grand_master_disciplines: Any,
+        grand_weaponmastery_weapons: Any = None,
+        gold_roll: int | None = None,
+        equipment_choices: Any = None,
+        transition_drops: Any = None,
+    ) -> None:
+        completion = self.book_completion_payload()
+        summary = completion.get("Summary") if isinstance(completion.get("Summary"), dict) else {}
+        prior_book = int(book_number) - 1
+        if (
+            int(book_number) not in set(range(13, 21))
+            or not completion.get("Active")
+            or int(summary.get("BookNumber") or 0) != prior_book
+        ):
+            raise ValueError(
+                f"Book {book_number} setup requires a completed Book {prior_book} campaign."
+            )
+        self.restore_endurance_for_book_transition()
+        self.state = prepare_grand_master_state(
+            self.state,
+            book_number=int(book_number),
+            grand_master_disciplines=grand_master_disciplines,
+            grand_weaponmastery_weapons=grand_weaponmastery_weapons,
             gold_roll=gold_roll,
             equipment_choices=equipment_choices,
             transition_drops=transition_drops,

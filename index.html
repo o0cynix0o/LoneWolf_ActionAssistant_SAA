@@ -731,6 +731,19 @@
         summary: 'Book 12 supports fresh setup, Book 11 continuation, reader navigation, saves, inventory, and manual tools while section automation is expanded.',
         tags: ['Fantasy', 'Gamebook', 'Magnakai', 'Internal Testing']
       },
+      13: {
+        series: 'grandMaster', authors: 'Joe Dever', illustrator: 'Brian Williams', published: '1990',
+        status: 'Internal testing build',
+        summary: 'The Grand Master series begins with a mission to Ruel. Book 13 supports standalone Grand Master setup, Book 12 continuation, the expanded Action Chart, and source-led route testing.',
+        tags: ['Fantasy', 'Gamebook', 'Grand Master', 'Internal Testing']
+      },
+      14: { series: 'grandMaster', authors: 'Joe Dever', illustrator: 'Brian Williams', published: '1990', status: 'Internal testing build', summary: 'Book 14 supports Grand Master continuation, reader navigation, saves, and source-led route testing.', tags: ['Fantasy', 'Gamebook', 'Grand Master', 'Internal Testing'] },
+      15: { series: 'grandMaster', authors: 'Joe Dever', illustrator: 'Brian Williams', published: '1991', status: 'Internal testing build', summary: 'Book 15 supports Grand Master continuation, reader navigation, saves, and source-led route testing.', tags: ['Fantasy', 'Gamebook', 'Grand Master', 'Internal Testing'] },
+      16: { series: 'grandMaster', authors: 'Joe Dever', illustrator: 'Brian Williams', published: '1991', status: 'Internal testing build', summary: 'Book 16 supports Grand Master continuation, reader navigation, saves, and source-led route testing.', tags: ['Fantasy', 'Gamebook', 'Grand Master', 'Internal Testing'] },
+      17: { series: 'grandMaster', authors: 'Joe Dever', illustrator: 'Brian Williams', published: '1992', status: 'Internal testing build', summary: 'Book 17 supports Grand Master continuation, reader navigation, saves, and source-led route testing.', tags: ['Fantasy', 'Gamebook', 'Grand Master', 'Internal Testing'] },
+      18: { series: 'grandMaster', authors: 'Joe Dever', illustrator: 'Brian Williams', published: '1992', status: 'Internal testing build', summary: 'Book 18 supports Grand Master continuation, reader navigation, saves, and source-led route testing.', tags: ['Fantasy', 'Gamebook', 'Grand Master', 'Internal Testing'] },
+      19: { series: 'grandMaster', authors: 'Joe Dever', illustrator: 'Brian Williams', published: '1993', status: 'Internal testing build', summary: 'Book 19 supports Grand Master continuation, reader navigation, saves, and source-led route testing.', tags: ['Fantasy', 'Gamebook', 'Grand Master', 'Internal Testing'] },
+      20: { series: 'grandMaster', authors: 'Joe Dever', illustrator: 'Brian Williams', published: '1993', status: 'Internal testing build', summary: 'Book 20 supports Grand Master continuation, reader navigation, saves, and source-led route testing.', tags: ['Fantasy', 'Gamebook', 'Grand Master', 'Internal Testing'] },
       default: {
         authors: 'Joe Dever',
         illustrator: 'Various illustrators',
@@ -800,14 +813,14 @@
     ];
 
     const grandMasterBooks = [
-      comingBook(13, 'The Plague Lords of Ruel', '13tplor', 350, 'lw13.jpg'),
-      comingBook(14, 'The Captives of Kaag', '14tcok', 350, 'lw14.jpg'),
-      comingBook(15, 'The Darke Crusade', '15tdc', 350, 'lw15.jpg'),
-      comingBook(16, 'The Legacy of Vashna', '16tlov', 350, 'lw16.jpg'),
-      comingBook(17, 'The Deathlord of Ixia', '17tdoi', 350, 'lw17.jpg'),
-      comingBook(18, 'Dawn of the Dragons', '18dotd', 350, 'lw18.jpg'),
-      comingBook(19, "Wolf's Bane", '19wb', 350, 'lw19.jpg'),
-      comingBook(20, 'The Curse of Naar', '20tcon', 350, 'lw20.jpg')
+      testingBook(13, 'The Plague Lords of Ruel', '13tplor', 350, 'lw13.jpg'),
+      testingBook(14, 'The Captives of Kaag', '14tcok', 350, 'lw14.jpg'),
+      testingBook(15, 'The Darke Crusade', '15tdc', 350, 'lw15.jpg'),
+      testingBook(16, 'The Legacy of Vashna', '16tlov', 350, 'lw16.jpg'),
+      testingBook(17, 'The Deathlord of Ixia', '17tdoi', 350, 'lw17.jpg'),
+      testingBook(18, 'Dawn of the Dragons', '18dotd', 350, 'lw18.jpg'),
+      testingBook(19, "Wolf's Bane", '19wb', 350, 'lw19.jpg'),
+      testingBook(20, 'The Curse of Naar', '20tcon', 350, 'lw20.jpg')
     ];
 
     const newOrderBooks = [
@@ -822,7 +835,7 @@
       comingBook(29, 'The Storms of Chai', '29tsoc', 350, 'lw29.jpg')
     ];
 
-    const books = [...kaiBooks, ...magnakaiBooks];
+    const books = [...kaiBooks, ...magnakaiBooks, ...grandMasterBooks];
     const allBookCards = [...kaiBooks, ...magnakaiBooks, ...grandMasterBooks, ...newOrderBooks];
     const bookByNumber = new Map(allBookCards.map((book) => [book.number, book]));
     const readBooksStorageKey = 'lonewolf_redux.library.readBooks.v1';

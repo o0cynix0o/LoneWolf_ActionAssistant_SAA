@@ -1643,7 +1643,15 @@
       { number: 9, title: 'The Cauldron of Fear', folder: '09tcof', sections: 350 },
       { number: 10, title: 'The Dungeons of Torgar', folder: '10tdot', sections: 350 },
       { number: 11, title: 'The Prisoners of Time', folder: '11tpot', sections: 350 },
-      { number: 12, title: 'The Masters of Darkness', folder: '12tmod', sections: 350 }
+      { number: 12, title: 'The Masters of Darkness', folder: '12tmod', sections: 350 },
+      { number: 13, title: 'The Plague Lords of Ruel', folder: '13tplor', sections: 350 },
+      { number: 14, title: 'The Captives of Kaag', folder: '14tcok', sections: 350 },
+      { number: 15, title: 'The Darke Crusade', folder: '15tdc', sections: 350 },
+      { number: 16, title: 'The Legacy of Vashna', folder: '16tlov', sections: 350 },
+      { number: 17, title: 'The Deathlord of Ixia', folder: '17tdoi', sections: 350 },
+      { number: 18, title: 'Dawn of the Dragons', folder: '18dotd', sections: 350 },
+      { number: 19, title: "Wolf's Bane", folder: '19wb', sections: 350 },
+      { number: 20, title: 'The Curse of Naar', folder: '20tcon', sections: 350 }
     ];
     const book2Armoury = [
       ['sword', 'Sword'],
@@ -1714,9 +1722,23 @@
       ...book11Equipment.filter(([id]) => id !== 'meals'),
       ['meals', '4 Meals'], ['quarterstaff', 'Quarterstaff'], ['axe', 'Axe']
     ];
+    const grandMasterEquipment = {
+      13: [['sword', 'Sword'], ['bow', 'Bow'], ['quiver', 'Quiver with 6 Arrows'], ['axe', 'Axe'], ['meals', '4 Meals'], ['rope', 'Rope'], ['laumspur', 'Potion of Laumspur'], ['spear', 'Spear'], ['dagger', 'Dagger']],
+      14: [], 15: [],
+      16: [['sword', 'Sword'], ['bow', 'Bow'], ['quiver', 'Quiver with 6 Arrows'], ['axe', 'Axe'], ['meals', '2 Meals'], ['rope', 'Rope'], ['laumspur', 'Potion of Laumspur'], ['quarterstaff', 'Quarterstaff'], ['dagger', 'Dagger']],
+      17: [['broadsword', 'Broadsword'], ['bow', 'Bow'], ['quiver', 'Quiver with 6 Arrows'], ['dagger', 'Dagger'], ['sword', 'Sword'], ['meals', '2 Meals'], ['rope', 'Rope'], ['laumspur', 'Potion of Laumspur'], ['axe', 'Axe']],
+      18: [['quarterstaff', 'Quarterstaff'], ['bow', 'Bow'], ['quiver', 'Quiver with 6 Arrows'], ['dagger', 'Dagger'], ['sword', 'Sword'], ['meals', '2 Meals'], ['rope', 'Rope'], ['laumspur', 'Potion of Laumspur'], ['axe', 'Axe']],
+      19: [],
+      20: [['quarterstaff', 'Quarterstaff'], ['broadsword', 'Broadsword'], ['bow', 'Bow'], ['quiver', 'Quiver with 6 Arrows'], ['dagger', 'Dagger'], ['sword', 'Sword'], ['meals', '2 Meals'], ['rope', 'Rope'], ['laumspur', 'Potion of Laumspur'], ['axe', 'Axe']]
+    };
+    grandMasterEquipment[14] = [...grandMasterEquipment[13]];
+    grandMasterEquipment[15] = [...grandMasterEquipment[13]];
+    grandMasterEquipment[19] = [...grandMasterEquipment[17]];
     const kaiDisciplines = ['Camouflage', 'Hunting', 'Sixth Sense', 'Tracking', 'Healing', 'Weaponskill', 'Mindshield', 'Mindblast', 'Animal Kinship', 'Mind Over Matter'];
     const magnakaiDisciplines = ['Weaponmastery', 'Animal Control', 'Curing', 'Invisibility', 'Huntmastery', 'Pathsmanship', 'Divination', 'Psi-surge', 'Psi-screen', 'Nexus'];
     const weaponmasteryWeapons = ['Dagger', 'Spear', 'Mace', 'Warhammer', 'Sword', 'Axe', 'Short Sword', 'Quarterstaff', 'Broadsword', 'Bow'];
+    const grandMasterDisciplines = ['Grand Weaponmastery', 'Animal Mastery', 'Deliverance', 'Assimilance', 'Grand Huntmastery', 'Grand Pathsmanship', 'Kai-surge', 'Kai-screen', 'Grand Nexus', 'Telegnosis', 'Magi-magic', 'Kai-alchemy'];
+    const grandWeaponmasteryWeapons = [...weaponmasteryWeapons];
     const views = [
       ['sheet', 'Sheet'],
       ['inventory', 'Inventory'],
@@ -3268,7 +3290,7 @@
       const summary = completion.Summary || {};
       const nextBook = Number(completion.NextBookNumber || 0);
       const nextTitle = text(completion.NextBookTitle, '');
-      const continueControls = completion.CanContinue && nextBook >= 2 && nextBook <= 12 ? (
+      const continueControls = completion.CanContinue && nextBook >= 2 && nextBook <= 20 ? (
         `<button type="button" data-open-next-book="${escapeHtml(nextBook)}">Open Book ${escapeHtml(nextBook)}</button>`
       ) : (
         completion.CanContinue
@@ -3321,6 +3343,7 @@
     }
 
     function equipmentOptionsForBook(bookNumber) {
+      if (Number(bookNumber) >= 13 && Number(bookNumber) <= 20) return grandMasterEquipment[Number(bookNumber)] || [];
       if (Number(bookNumber) === 6) return book6Equipment;
       if ([7, 8].includes(Number(bookNumber))) return book7Equipment;
       if (Number(bookNumber) === 9) return book9Equipment;
@@ -3334,6 +3357,8 @@
     }
 
     function equipmentChoiceRuleForBook(bookNumber) {
+      if ([13, 14, 15].includes(Number(bookNumber))) return { min: 5, max: 5, exact: true };
+      if (Number(bookNumber) >= 16 && Number(bookNumber) <= 20) return { min: 4, max: 4, exact: true };
       if (Number(bookNumber) === 6) return { min: 7, max: 7, exact: true };
       if ([7, 8, 9, 10].includes(Number(bookNumber))) return { min: 5, max: 5, exact: true };
       if ([11, 12].includes(Number(bookNumber))) return { min: 6, max: 6, exact: true };
@@ -3347,6 +3372,7 @@
     }
 
     function equipmentLabelForBook(bookNumber) {
+      if (Number(bookNumber) >= 13 && Number(bookNumber) <= 20) return `Book ${bookNumber} Grand Master Equipment - choose exactly ${equipmentChoiceCountForBook(bookNumber)}`;
       if (Number(bookNumber) === 6) return 'Book 6 Field Issue - choose exactly 7';
       if ([7, 8, 9, 10].includes(Number(bookNumber))) return `Book ${bookNumber} Field Issue - choose exactly 5`;
       if ([11, 12].includes(Number(bookNumber))) return `Book ${bookNumber} Field Issue - choose exactly 6`;
@@ -3417,6 +3443,30 @@
             ${transitionBackpackDropFields(summary.BackpackItems)}
             ${weaponExchangeFields(weapons)}
             <button type="submit" data-book6-continue>Continue to Book 6</button>
+          </form>
+        `;
+      }
+      if (nextBook >= 13 && nextBook <= 20) {
+        const grandMasterChoices = arr(completion.GrandMasterDisciplineChoices);
+        const disciplineCount = nextBook === 13 ? 4 : 1;
+        const masteryCount = 2 + Math.max(0, nextBook - 13);
+        const options = equipmentOptionsForBook(nextBook);
+        const carriedItems = [
+          ...weapons.map((item, index) => ['weapon', index, item]),
+          ...arr((completion.Summary || {}).BackpackItems).map((item, index) => ['backpack', index, item])
+        ];
+        const disciplineControl = nextBook === 13
+          ? `<div class="check-field"><span>Choose exactly 4 Grand Master Disciplines</span><div class="check-grid">${grandMasterChoices.map((name) => `<label class="check-option"><input type="checkbox" name="grandMasterDiscipline" value="${escapeHtml(name)}"><span>${escapeHtml(name)}</span></label>`).join('')}</div></div>`
+          : `<label class="field">New Grand Master Discipline<select name="grandMasterDiscipline">${grandMasterChoices.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('')}</select></label>`;
+        const masteryControl = `<div class="check-field"><span>Grand Weaponmastery Weapons - select the source-required number if Grand Weaponmastery is chosen or already known</span><div class="check-grid">${grandWeaponmasteryWeapons.map((name) => `<label class="check-option"><input type="checkbox" name="grandWeaponmasteryWeapon" value="${escapeHtml(name)}"><span>${escapeHtml(name)}</span></label>`).join('')}</div></div>`;
+        return `
+          <form id="continueBookForm" class="grid" data-next-book="${escapeHtml(nextBook)}">
+            ${disciplineControl}
+            ${masteryControl}
+            <label class="field">Gold Roll<input name="goldRoll" type="number" min="0" max="9" placeholder="0-9"></label>
+            <div class="check-field"><span>${escapeHtml(equipmentLabelForBook(nextBook))}</span><div class="check-grid">${options.map(([id, label]) => `<label class="check-option"><input type="checkbox" name="equipmentChoices" value="${escapeHtml(id)}"><span>${escapeHtml(label)}</span></label>`).join('')}</div></div>
+            ${carriedItems.length ? `<div class="check-field"><span>Leave Behind Before Equipment Issue</span><div class="check-grid">${carriedItems.map(([container, index, item]) => `<label class="check-option"><input type="checkbox" name="transitionDrops" value="${escapeHtml(container)}:${escapeHtml(index)}"><span>${escapeHtml(item)} [${escapeHtml(container)}]</span></label>`).join('')}</div></div>` : ''}
+            <button type="submit">Continue to Book ${escapeHtml(nextBook)}</button>
           </form>
         `;
       }
@@ -5554,6 +5604,14 @@
               <span data-mastery-help>Weaponmastery Weapons</span>
               <div class="check-grid">${weaponmasteryWeapons.map((name) => `<label class="check-option"><input type="checkbox" name="weaponmasteryWeapons" value="${escapeHtml(name)}"><span>${escapeHtml(name)}</span></label>`).join('')}</div>
             </div>
+            <div class="check-field" data-grand-master-setup hidden>
+              <span data-grand-master-help>Grand Master Disciplines</span>
+              <div class="check-grid">${grandMasterDisciplines.map((name) => `<label class="check-option"><input type="checkbox" name="grandMasterDisciplines" value="${escapeHtml(name)}"><span>${escapeHtml(name)}</span></label>`).join('')}</div>
+            </div>
+            <div class="check-field" data-grand-mastery-setup hidden>
+              <span data-grand-mastery-help>Grand Weaponmastery Weapons</span>
+              <div class="check-grid">${grandWeaponmasteryWeapons.map((name) => `<label class="check-option"><input type="checkbox" name="grandWeaponmasteryWeapons" value="${escapeHtml(name)}"><span>${escapeHtml(name)}</span></label>`).join('')}</div>
+            </div>
             <div class="grid" data-book6-options hidden>
               <label class="field" title="Optional Book 6 rules carried over from the original assistant. Standard uses normal Magnakai rules. Curing cap limits Curing and Healing to 15 END restored in Book 6. Healing instead lets a Kai Healing user use Healing rather than Curing, capped at 10 END restored. Herb Pouch unlocks the Herb Pouch field-issue item and lets you drink a potion instead of attacking in combat.">Book 6 Curing Option<select name="deCuringOption" title="Hover the Curing Option label for a description of every choice."><option value="0" title="Use the normal Magnakai Curing rules.">Standard</option><option value="1" title="With Curing, cap total END restored by Curing or Healing at 15 during Book 6.">Curing cap</option><option value="2" title="With Kai Healing but no Curing, use Healing during Book 6; cap total END restored at 10.">Healing instead</option><option value="3" title="With Curing, unlock a Herb Pouch as field issue. It allows a potion instead of attacking in combat; the enemy takes no damage that round.">Herb Pouch</option></select></label>
               <label class="field" title="Optional Book 6 rule: with your recorded Weaponskill weapon equipped, gain +2 Combat Skill in Book 6. This bonus can stack with Weaponmastery.">Book 6 Weaponskill Option<select name="deWeaponskillOption" title="Hover the Weaponskill Option label for its full effect."><option value="0" title="Do not apply the optional Book 6 Weaponskill rule.">Standard</option><option value="1" title="Gain +2 Combat Skill while using your recorded Weaponskill weapon in Book 6. It can stack with Weaponmastery.">Weaponskill +2 CS</option></select></label>
@@ -5581,19 +5639,28 @@
     function adjustNewCharacterDisciplines(form) {
       const bookNumber = Number(form?.querySelector('[data-new-book]')?.value || 1);
       const isMagnakai = bookNumber >= 6 && bookNumber <= 12;
+      const isGrandMaster = bookNumber >= 13 && bookNumber <= 20;
       const magnakaiCount = Math.max(3, bookNumber - 3);
+      const grandMasterCount = 4 + Math.max(0, bookNumber - 13);
+      const grandMasteryCount = 2 + Math.max(0, bookNumber - 13);
       const help = form?.querySelector('[data-discipline-help]');
       if (help) help.textContent = 'Kai Disciplines - choose 5';
       form?.querySelectorAll('[data-kai-setup]').forEach((item) => { item.hidden = isMagnakai; });
       form?.querySelectorAll('[data-magnakai-setup]').forEach((item) => { item.hidden = !isMagnakai; });
       form?.querySelectorAll('[data-mastery-setup]').forEach((item) => { item.hidden = !isMagnakai; });
+      form?.querySelectorAll('[data-grand-master-setup]').forEach((item) => { item.hidden = !isGrandMaster; });
+      form?.querySelectorAll('[data-grand-mastery-setup]').forEach((item) => { item.hidden = !isGrandMaster; });
       form?.querySelectorAll('[data-book6-options]').forEach((item) => { item.hidden = bookNumber !== 6; });
       const magnakaiHelp = form?.querySelector('[data-magnakai-help]');
       if (magnakaiHelp) magnakaiHelp.textContent = `Magnakai Disciplines - choose exactly ${magnakaiCount}`;
       const masteryHelp = form?.querySelector('[data-mastery-help]');
       if (masteryHelp) masteryHelp.textContent = `Weaponmastery Weapons - choose exactly ${magnakaiCount} only when Weaponmastery is selected`;
+      const grandMasterHelp = form?.querySelector('[data-grand-master-help]');
+      if (grandMasterHelp) grandMasterHelp.textContent = `Grand Master Disciplines - choose exactly ${grandMasterCount}`;
+      const grandMasteryHelp = form?.querySelector('[data-grand-mastery-help]');
+      if (grandMasteryHelp) grandMasteryHelp.textContent = `Grand Weaponmastery Weapons - choose exactly ${grandMasteryCount} only when Grand Weaponmastery is selected`;
       form?.querySelectorAll('[data-book-setup]').forEach((item) => {
-        item.hidden = ![2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].includes(bookNumber);
+        item.hidden = ![2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].includes(bookNumber);
       });
       const equipmentHelp = form?.querySelector('[data-equipment-help]');
       if (equipmentHelp) equipmentHelp.textContent = equipmentLabelForBook(bookNumber);
@@ -5608,6 +5675,12 @@
       const masteryBoxes = Array.from(form?.querySelectorAll('input[name="weaponmasteryWeapons"]') || []);
       const selectedMastery = masteryBoxes.filter((box) => box.checked);
       if (selectedMastery.length > magnakaiCount) selectedMastery.slice(magnakaiCount).forEach((box) => { box.checked = false; });
+      const grandMasterBoxes = Array.from(form?.querySelectorAll('input[name="grandMasterDisciplines"]') || []);
+      const selectedGrandMaster = grandMasterBoxes.filter((box) => box.checked);
+      if (selectedGrandMaster.length > grandMasterCount) selectedGrandMaster.slice(grandMasterCount).forEach((box) => { box.checked = false; });
+      const grandMasteryBoxes = Array.from(form?.querySelectorAll('input[name="grandWeaponmasteryWeapons"]') || []);
+      const selectedGrandMastery = grandMasteryBoxes.filter((box) => box.checked);
+      if (selectedGrandMastery.length > grandMasteryCount) selectedGrandMastery.slice(grandMasteryCount).forEach((box) => { box.checked = false; });
     }
 
     function syncBook6HerbPouchChoice(form) {
@@ -5908,7 +5981,8 @@
         ...weapons.map((item, index) => ({ item, type: 'weapon', index, count: weapons.length }))
       ];
       const displaySpecialItems = specialItems.map((item, index) => ({ item, type: 'special', index, count: specialItems.length }));
-      const backpackLabel = flags.backpackAvailable === false || flags.backpackItemsAvailable === false ? 'Unavailable' : `${itemSlotTotal(inv.BackpackItems)}/8`;
+      const backpackCapacity = Number(inv.BackpackCapacity || 8);
+      const backpackLabel = flags.backpackAvailable === false || flags.backpackItemsAvailable === false ? 'Unavailable' : `${itemSlotTotal(inv.BackpackItems)}/${backpackCapacity}`;
       view.innerHTML = `
         <div class="panel">
           <h2>Inventory</h2>
@@ -5945,8 +6019,11 @@
     function renderDisciplines() {
       const c = currentCharacter();
       const isMagnakai = Number(c.BookNumber) >= 6;
+      const isGrandMaster = Number(c.BookNumber) >= 13;
       const magnakaiKnown = arr(c.MagnakaiDisciplines);
       const masteredWeapons = arr(c.WeaponmasteryWeapons);
+      const grandMasterKnown = arr(c.GrandMasterDisciplines);
+      const grandMasteredWeapons = arr(c.GrandWeaponmasteryWeapons);
       const needsWeaponskill = arr(c.KaiDisciplines).includes('Weaponskill') && !text(c.WeaponskillWeapon);
       view.innerHTML = `
         ${isMagnakai ? `
@@ -5959,6 +6036,17 @@
             </div>
           </div>
           ${powerPanel('Magnakai Disciplines', magnakaiDisciplines, magnakaiKnown)}
+        ` : ''}
+        ${isGrandMaster ? `
+          <div class="panel">
+            <h2>Grand Master Action Chart</h2>
+            <div class="grid">
+              ${field('Grand Master Rank', c.GrandMasterRank || grandMasterKnown.length || 'None')}
+              ${field('Known Disciplines', `${grandMasterKnown.length}/12`)}
+              ${field('Grand Weaponmastery Weapons', grandMasteredWeapons.length ? list(grandMasteredWeapons) : 'None')}
+            </div>
+          </div>
+          ${powerPanel('Grand Master Disciplines', grandMasterDisciplines, grandMasterKnown)}
         ` : ''}
         ${powerPanel(isMagnakai ? 'Kai Disciplines (Legacy)' : 'Kai Disciplines', kaiDisciplines, c.KaiDisciplines)}
         ${needsWeaponskill ? `
@@ -7198,7 +7286,7 @@
         syncBook6SetupRequirements(event.target.closest('form'));
         return;
       }
-      if (event.target.matches?.('input[name="kaiDisciplines"], input[name="magnakaiDisciplines"], input[name="weaponmasteryWeapons"], [data-new-book]')) {
+      if (event.target.matches?.('input[name="kaiDisciplines"], input[name="magnakaiDisciplines"], input[name="weaponmasteryWeapons"], input[name="grandMasterDisciplines"], input[name="grandWeaponmasteryWeapons"], [data-new-book]')) {
         adjustNewCharacterDisciplines(event.target.closest('form'));
       }
     });
@@ -7331,6 +7419,37 @@
           }, nextBook);
           return;
         }
+        if (nextBook >= 13 && nextBook <= 20) {
+          const grandSelections = formData.getAll('grandMasterDiscipline');
+          const grandMasterySelections = formData.getAll('grandWeaponmasteryWeapon');
+          const requiredDisciplines = nextBook === 13 ? 4 : 1;
+          const selectedGrandWeaponmastery = grandSelections.includes('Grand Weaponmastery');
+          const knownGrandWeaponmastery = arr(currentCharacter().GrandMasterDisciplines).includes('Grand Weaponmastery');
+          const expectedGrandMastery = (selectedGrandWeaponmastery || knownGrandWeaponmastery)
+            ? (nextBook === 13 || !knownGrandWeaponmastery ? 2 + (nextBook - 13) : 1)
+            : 0;
+          const requiredIssueCount = equipmentChoiceCountForBook(nextBook);
+          if (
+            grandSelections.length !== requiredDisciplines
+            || grandMasterySelections.length !== expectedGrandMastery
+            || equipmentSelections.length !== requiredIssueCount
+          ) {
+            setReceipt({
+              summary: `Book ${nextBook} - choose ${requiredDisciplines === 1 ? 'one' : 'exactly ' + requiredDisciplines} Grand Master Discipline${requiredDisciplines === 1 ? '' : 's'}, ${expectedGrandMastery} Grand Weaponmastery weapon${expectedGrandMastery === 1 ? '' : 's'}, and exactly ${requiredIssueCount} equipment choices.`,
+              title: `Book ${nextBook} Setup`
+            });
+            return;
+          }
+          await action({
+            action: 'continue_book',
+            grandMasterDiscipline: grandSelections,
+            grandWeaponmasteryWeapon: grandMasterySelections,
+            goldRoll: data.goldRoll,
+            equipmentChoices: equipmentSelections,
+            transitionDrops: formData.getAll('transitionDrops')
+          });
+          return;
+        }
         if ([7, 8, 9, 10, 11, 12].includes(nextBook)) {
           const requiredIssueCount = nextBook === 11 ? 0 : equipmentChoiceCountForBook(nextBook);
           if (magnakaiSelections.length !== 1 || equipmentSelections.length !== requiredIssueCount) {
@@ -7401,10 +7520,15 @@
         const bookNumber = Number(data.bookNumber || 1);
         const kaiSelections = formData.getAll('kaiDisciplines');
         const isMagnakai = bookNumber >= 6 && bookNumber <= 12;
+        const isGrandMaster = bookNumber >= 13 && bookNumber <= 20;
         const magnakaiSelections = formData.getAll('magnakaiDisciplines');
         const masterySelections = formData.getAll('weaponmasteryWeapons');
         const magnakaiCount = Math.max(3, bookNumber - 3);
-        if (!isMagnakai && kaiSelections.length !== 5) {
+        const grandMasterSelections = formData.getAll('grandMasterDisciplines');
+        const grandMasterySelections = formData.getAll('grandWeaponmasteryWeapons');
+        const grandMasterCount = 4 + Math.max(0, bookNumber - 13);
+        const grandMasteryCount = 2 + Math.max(0, bookNumber - 13);
+        if (!isMagnakai && !isGrandMaster && kaiSelections.length !== 5) {
           setReceipt({
             summary: 'Character - Choose exactly 5 Kai Disciplines.',
             details: [receiptDetail('Selected', `${kaiSelections.length}/5`)]
@@ -7422,10 +7546,21 @@
           });
           return;
         }
+        if (isGrandMaster && (
+          grandMasterSelections.length !== grandMasterCount
+          || (grandMasterSelections.includes('Grand Weaponmastery') && grandMasterySelections.length !== grandMasteryCount)
+          || (!grandMasterSelections.includes('Grand Weaponmastery') && grandMasterySelections.length)
+        )) {
+          setReceipt({
+            summary: `Book ${bookNumber} - choose exactly ${grandMasterCount} Grand Master Disciplines and Grand Weaponmastery weapons only when required.`,
+            details: [receiptDetail('Disciplines', `${grandMasterSelections.length}/${grandMasterCount}`), receiptDetail('Mastered Weapons', `${grandMasterySelections.length}/${grandMasteryCount}`)]
+          });
+          return;
+        }
         const armourySelections = formData.getAll('armouryChoices');
         const equipmentRule = equipmentChoiceRuleForBook(bookNumber);
         if (
-          [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].includes(bookNumber)
+          [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].includes(bookNumber)
           && (
             armourySelections.length < equipmentRule.min
             || armourySelections.length > equipmentRule.max
@@ -7449,6 +7584,8 @@
           kaiDisciplines: kaiSelections,
           magnakaiDisciplines: magnakaiSelections,
           weaponmasteryWeapons: masterySelections,
+          grandMasterDisciplines: grandMasterSelections,
+          grandWeaponmasteryWeapons: grandMasterySelections,
           goldRoll: data.goldRoll,
           difficulty: data.difficulty,
           permadeath: formData.has('permadeath'),
@@ -7456,7 +7593,7 @@
           deCuringOption: data.deCuringOption,
           deWeaponskillOption: data.deWeaponskillOption,
           armouryChoices: bookNumber === 2 ? armourySelections : [],
-          equipmentChoices: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12].includes(bookNumber) ? armourySelections : []
+          equipmentChoices: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].includes(bookNumber) ? armourySelections : []
         });
         book1Creation = null;
         clearCampaignStartRequest();

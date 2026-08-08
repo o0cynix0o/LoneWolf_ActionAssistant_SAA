@@ -63,13 +63,14 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
     """Protect the complete supported-book baseline and its automation data."""
 
     def test_supported_books_have_loaded_automation_and_flow_data(self) -> None:
-        expected_books = set(range(1, 13))
+        expected_books = set(range(1, 21))
         self.assertEqual(set(lonewolf_redux.BOOKS), expected_books)
 
         root = Path(lonewolf_redux.__file__).resolve().parent
         for book_number in expected_books:
-            self.assertTrue((root / "data" / f"book{book_number}-simple-automations.json").is_file())
             self.assertTrue((root / "data" / f"book{book_number}-section-flows.json").is_file())
+        for book_number in range(1, 13):
+            self.assertTrue((root / "data" / f"book{book_number}-simple-automations.json").is_file())
 
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
@@ -80,7 +81,7 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
                 books_dir=base / "books",
             )
 
-        self.assertTrue(expected_books.issubset({int(key) for key in assistant.section_automation}))
+        self.assertTrue(set(range(1, 13)).issubset({int(key) for key in assistant.section_automation}))
         self.assertTrue(expected_books.issubset({int(key) for key in assistant.section_flows}))
 
     def test_magnakai_catalog_entries_remain_available_for_play_and_readers(self) -> None:
@@ -338,8 +339,89 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             completion = assistant.book_completion_payload()
 
         self.assertEqual((assistant.character["BookNumber"], assistant.character["MagnakaiRank"]), (12, 9))
-        self.assertFalse(completion["CanContinue"])
-        self.assertEqual(assistant.run_state["Status"], "Completed")
+        self.assertTrue(completion["CanContinue"])
+        self.assertEqual(completion["NextBookNumber"], 13)
+        self.assertEqual(assistant.run_state["Status"], "Active")
+
+    def test_grand_master_creation_and_book12_handoff_preserve_source_rules(self) -> None:
+        standalone = lonewolf_redux.create_grand_master_character_state(
+            book_number=13,
+            grand_master_disciplines=[
+                "Grand Weaponmastery",
+                "Grand Huntmastery",
+                "Kai-surge",
+                "Kai-alchemy",
+            ],
+            grand_weaponmastery_weapons=["Sword", "Bow"],
+            combat_skill_roll=6,
+            endurance_roll=7,
+            gold_roll=4,
+            equipment_choices=["quiver", "axe", "meals", "rope", "laumspur"],
+        )
+        self.assertEqual(standalone["Character"]["BookNumber"], 13)
+        self.assertEqual(standalone["Character"]["GrandMasterRank"], 4)
+        self.assertEqual(standalone["Inventory"]["BackpackCapacity"], 10)
+        self.assertEqual(standalone["Character"]["CombatSkillBase"], 31)
+        self.assertEqual(standalone["Character"]["EnduranceBase"], 37)
+        self.assertIn("Map of the Dark Realm of Ruel", standalone["Inventory"]["SpecialItems"])
+
+        book12_state = lonewolf_redux.default_state()
+        book12_state["Character"].update(
+            {
+                "BookNumber": 12,
+                "CombatSkillBase": 25,
+                "EnduranceBase": 35,
+                "CombatSkillCurrent": 25,
+                "EnduranceCurrent": 35,
+            }
+        )
+        book12_state["Inventory"].update(
+            {
+                "Weapons": ["Sword"],
+                "BackpackItems": ["Meal"] * 8,
+                "SpecialItems": ["Sommerswerd", "Map of the Stornlands"],
+            }
+        )
+        book13_state = lonewolf_redux.prepare_grand_master_state(
+            book12_state,
+            book_number=13,
+            grand_master_disciplines=[
+                "Grand Weaponmastery",
+                "Grand Huntmastery",
+                "Kai-surge",
+                "Kai-alchemy",
+            ],
+            grand_weaponmastery_weapons=["Sword", "Bow"],
+            equipment_choices=["quiver", "axe", "meals", "rope", "laumspur"],
+            gold_roll=4,
+            transition_drops=["backpack:7", "backpack:6", "backpack:5", "backpack:4"],
+        )
+        self.assertEqual(book13_state["Inventory"]["Weapons"], ["Sword", "Axe"])
+        self.assertEqual(book13_state["Inventory"]["BackpackCapacity"], 10)
+        self.assertEqual(book13_state["Character"]["GrandWeaponmasteryWeapons"], ["Sword", "Bow"])
+
+        book14_state = lonewolf_redux.prepare_grand_master_state(
+            book13_state,
+            book_number=14,
+            grand_master_disciplines=["Animal Mastery"],
+            grand_weaponmastery_weapons=["Axe"],
+            equipment_choices=["quiver", "meals", "rope", "laumspur", "dagger"],
+            gold_roll=5,
+            transition_drops=[
+                "weapon:1",
+                "backpack:9",
+                "backpack:8",
+                "backpack:7",
+                "backpack:6",
+                "backpack:5",
+                "backpack:4",
+            ],
+        )
+        self.assertEqual(book14_state["Character"]["GrandMasterRank"], 5)
+        self.assertEqual(book14_state["Character"]["CombatSkillBase"], 26)
+        self.assertEqual(book14_state["Character"]["EnduranceBase"], 37)
+        self.assertEqual(book14_state["Character"]["GrandWeaponmasteryWeapons"], ["Sword", "Bow", "Axe"])
+        self.assertEqual(book14_state["Inventory"]["Weapons"], ["Sword", "Dagger"])
 
     def test_books6_to12_achievements_unlock_from_recorded_campaign_progress(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -2172,8 +2254,9 @@ class CampaignEntryPointTests(unittest.TestCase):
     def test_completion_ui_contains_magnakai_campaign_handoffs(self) -> None:
         assistant_html = self.source_text("assistant.html")
         server_source = self.source_text("app_server.py")
-        self.assertIn("nextBook >= 2 && nextBook <= 12", assistant_html)
+        self.assertIn("nextBook >= 2 && nextBook <= 20", assistant_html)
         self.assertIn("Choose exactly 3 Magnakai Disciplines", assistant_html)
+        self.assertIn("Grand Master Discipline", assistant_html)
         self.assertIn("New Magnakai Discipline", assistant_html)
         self.assertIn("Continue to Book ${escapeHtml(nextBook)}", assistant_html)
         self.assertIn("Leave Behind Before Field Issue", assistant_html)

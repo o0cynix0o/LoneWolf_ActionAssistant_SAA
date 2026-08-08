@@ -425,6 +425,18 @@ def apply_new_game(payload: dict) -> str:
             de_curing_option=int(payload.get("deCuringOption") or 0),
             de_weaponskill_option=int(payload.get("deWeaponskillOption") or 0),
         )
+    elif book_number in set(range(13, 21)):
+        ASSISTANT.state = lonewolf_redux.create_grand_master_character_state(
+            book_number=book_number,
+            name=name,
+            grand_master_disciplines=payload.get("grandMasterDisciplines"),
+            grand_weaponmastery_weapons=payload.get("grandWeaponmasteryWeapons"),
+            section=int(payload.get("section") or 1),
+            combat_skill_roll=payload.get("combatSkillRoll"),
+            endurance_roll=payload.get("enduranceRoll"),
+            gold_roll=payload.get("goldRoll"),
+            equipment_choices=payload.get("equipmentChoices") or payload.get("armouryChoices"),
+        )
     elif book_number == 5:
         ASSISTANT.state = lonewolf_redux.create_book5_character_state(
             name=name,
@@ -770,6 +782,8 @@ def handle_action(payload: dict) -> str:
                 book6_weapon_exchanges=payload.get("weaponExchanges"),
                 book6_de_curing_option=int(payload.get("deCuringOption") or 0),
                 book6_de_weaponskill_option=int(payload.get("deWeaponskillOption") or 0),
+                grand_master_disciplines=payload.get("grandMasterDiscipline"),
+                grand_weaponmastery_weapons=payload.get("grandWeaponmasteryWeapon"),
                 transition_drops=payload.get("transitionDrops"),
             )
         )
