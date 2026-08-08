@@ -6203,6 +6203,15 @@ class LoneWolfReduxAssistant:
             selected = selections.get(self.current_visit_key(), {}).get(selection_id) if isinstance(selections, dict) else None
             values = [str(value) for value in as_list(condition.get("values") or condition.get("value"))]
             return bool(selection_id) and str(selected or "") in values
+        if kind in {"section_selection_item", "section_selection_item_in_container"}:
+            selection_id = str(condition.get("id") or "").strip()
+            selections = self.automation.get("SectionSelections")
+            selected = selections.get(self.current_visit_key(), {}).get(selection_id) if isinstance(selections, dict) else None
+            return bool(selection_id and selected) and self.has_item(
+                str(selected),
+                condition.get("containers"),
+                str(condition.get("match") or "exact"),
+            )
         if kind in {"active_weaponskill_weapon", "weaponskill_active_weapon"}:
             return self.active_weapon_matches_weaponskill()
         if kind == "end_lt":
@@ -6393,6 +6402,11 @@ class LoneWolfReduxAssistant:
                         0,
                         len(clean_magnakai_disciplines(self.character.get("MagnakaiDisciplines"))) - 3,
                     )
+                elif value_from in {
+                    "grand_master_rank_above_two",
+                    "grand_master_disciplines_above_two",
+                }:
+                    value = max(0, int(self.character.get("GrandMasterRank") or 0) - 2)
                 else:
                     value = 0
             else:
@@ -6821,6 +6835,13 @@ class LoneWolfReduxAssistant:
         choices = [str(choice) for choice in as_list(selection.get("choices")) if str(choice).strip()]
         if str(selection.get("source") or "").lower() == "weapons":
             choices = self.available_combat_weapons(include_jewelled_dagger=True)
+        if str(selection.get("source") or "").lower() == "weapons_and_special":
+            choices = list(
+                dict.fromkeys(
+                    self.available_combat_weapons(include_jewelled_dagger=True)
+                    + [str(item) for item in as_list(self.inventory.get("SpecialItems")) if str(item).strip()]
+                )
+            )
         selected = None
         selections = self.automation.get("SectionSelections")
         if isinstance(selections, dict):

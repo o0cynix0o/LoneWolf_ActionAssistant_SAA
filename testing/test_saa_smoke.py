@@ -557,6 +557,38 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             assistant.set_section(335)
             self.assertEqual(assistant.roll_current_section(7)["Route"], 34)
 
+    def test_book15_initial_rnt_rules_apply_source_modifiers_and_rank_rules(self) -> None:
+        state = lonewolf_redux.create_grand_master_character_state(
+            book_number=15,
+            grand_master_disciplines=[
+                "Animal Mastery", "Grand Huntmastery", "Assimilance", "Grand Pathsmanship", "Kai-screen", "Telegnosis"
+            ],
+            grand_weaponmastery_weapons=[],
+            combat_skill_roll=0,
+            endurance_roll=0,
+            gold_roll=0,
+            equipment_choices=["sword", "bow", "quiver", "rope", "laumspur"],
+        )
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state = state
+            assistant.set_section(31)
+            self.assertEqual(assistant.roll_current_section(1)["Route"], 87)
+            assistant.set_section(59)
+            self.assertEqual(assistant.roll_current_section(3)["Route"], 268)
+            assistant.set_section(70)
+            self.assertEqual(assistant.roll_current_section(5)["Route"], 92)
+            assistant.set_section(102)
+            self.assertEqual(assistant.roll_current_section(2)["Route"], 119)
+            assistant.inventory["SpecialItems"].append("Sommerswerd")
+            assistant.set_section(238)
+            assistant.set_roll_selection("book15-238-weapon", "Sommerswerd")
+            self.assertEqual(assistant.roll_current_section(3)["Route"], 3)
+
     def test_books6_to20_achievements_unlock_from_recorded_campaign_progress(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
