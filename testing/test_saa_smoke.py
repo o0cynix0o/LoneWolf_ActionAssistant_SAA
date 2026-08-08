@@ -910,6 +910,62 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             assistant.apply_flow_loot("cache-gold")
             self.assertEqual(assistant.inventory["GoldCrowns"], 10)
 
+    def test_new_order_books24_to26_load_source_rnt_and_combat_catalogues(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            for book_number, rnt_count, combat_count in ((24, 38, 36), (25, 44, 39), (26, 68, 46)):
+                flows = assistant.section_flows[str(book_number)]
+                self.assertEqual(len([entry for entry in flows.values() if entry.get("roll")]), rnt_count)
+                self.assertEqual(len([entry for entry in flows.values() if entry.get("combat")]), combat_count)
+
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {
+                    "BookNumber": 24, "NewOrderRank": 8,
+                    "NewOrderDisciplines": ["Grand Huntmastery", "Grand Weaponmastery", "Animal Mastery"],
+                    "GrandMasterDisciplines": ["Grand Huntmastery", "Grand Weaponmastery", "Animal Mastery"],
+                    "GrandWeaponmasteryWeapons": ["Sword"],
+                    "KaiWeapon": lonewolf_redux.kai_weapon_for_roll(3),
+                },
+                "Inventory": {"GoldCrowns": 8},
+            })
+            assistant.set_section(178)
+            self.assertEqual(assistant.roll_current_section(0)["Route"], 80)
+            assistant.set_section(321)
+            self.assertEqual(assistant.roll_current_section(5)["Route"], 306)
+            assistant.set_section(328)
+            self.assertEqual(assistant.roll_current_section(0)["Route"], 32)
+
+            assistant.state["Character"].update({"BookNumber": 25, "NewOrderRank": 8})
+            assistant.set_section(47)
+            self.assertEqual(assistant.roll_current_section(5)["Route"], 283)
+            assistant.set_section(265)
+            assistant.start_section_combat()
+            self.assertEqual(assistant.combat["IgnoreEnemyLossRounds"], 1)
+            self.assertEqual(assistant.combat["TimedPlayerLossMultipliers"], [
+                {"multiplier": 2, "startRound": 1, "endRound": 1},
+            ])
+
+            assistant.state["Character"].update({
+                "BookNumber": 26, "NewOrderRank": 10, "EnduranceCurrent": 25, "EnduranceMax": 30,
+            })
+            assistant.set_section(6)
+            self.assertEqual(assistant.roll_current_section(3)["Route"], 97)
+            assistant.set_section(192)
+            self.assertEqual(assistant.roll_current_section(3)["Route"], 311)
+            assistant.set_section(48)
+            self.assertEqual(assistant.roll_current_section(1)["Route"], 220)
+            self.assertEqual(assistant.character["EnduranceCurrent"], 23)
+            assistant.set_section(127)
+            assistant.start_section_combat()
+            self.assertEqual(
+                (assistant.combat["WinWithinRounds"], assistant.combat["WinWithinRoute"], assistant.combat["TooLateRoute"]),
+                (4, 82, 236),
+            )
+
     def test_books6_to20_achievements_unlock_from_recorded_campaign_progress(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)

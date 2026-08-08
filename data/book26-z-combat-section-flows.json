@@ -1,0 +1,729 @@
+{
+  "26": {
+    "8": {
+      "combat": [
+        {
+          "id": "book26-8",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Horde (in battle-frenzy)",
+              "cs": 47,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 100,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "24": {
+      "combat": [
+        {
+          "id": "book26-24",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa",
+              "cs": 56,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 322,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "25": {
+      "combat": [
+        {
+          "id": "book26-25",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Agarashi",
+              "cs": 40,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 65
+        }
+      ]
+    },
+    "26": {
+      "combat": [
+        {
+          "id": "book26-26",
+          "enemies": [
+            {
+              "name": "Giant Steamspider",
+              "cs": 48,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 112,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "27": {
+      "combat": [
+        {
+          "id": "book26-27",
+          "enemies": [
+            {
+              "name": "Tomb of Andarin",
+              "cs": 50,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 110,
+          "canEvade": true,
+          "evadeRoute": 230
+        }
+      ]
+    },
+    "31": {
+      "combat": [
+        {
+          "id": "book26-31",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Horde (in battle-frenzy)",
+              "cs": 47,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 100,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "33": {
+      "combat": [
+        {
+          "id": "book26-33",
+          "enemies": [
+            {
+              "name": "Antah Wasps",
+              "cs": 40,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 174,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "40": {
+      "combat": [
+        {
+          "id": "book26-40",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Agarashi",
+              "cs": 44,
+              "endurance": 44
+            }
+          ],
+          "victoryRoute": 167
+        }
+      ]
+    },
+    "45": {
+      "combat": [
+        {
+          "id": "book26-45",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Agarashi",
+              "cs": 40,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 65
+        }
+      ]
+    },
+    "47": {
+      "combat": [
+        {
+          "id": "book26-47",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Agarashi Lancers",
+              "cs": 44,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 55
+        }
+      ]
+    },
+    "50": {
+      "combat": [
+        {
+          "id": "book26-50",
+          "enemies": [
+            {
+              "name": "Rock Golem",
+              "cs": 40,
+              "endurance": 70
+            }
+          ],
+          "victoryRoute": 74,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "57": {
+      "combat": [
+        {
+          "id": "book26-57",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Horde (in battle-frenzy)",
+              "cs": 47,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 100,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "89": {
+      "combat": [
+        {
+          "id": "book26-89",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Agarashi & Commander",
+              "cs": 50,
+              "endurance": 55
+            }
+          ],
+          "victoryRoute": 324
+        }
+      ]
+    },
+    "91": {
+      "combat": [
+        {
+          "id": "book26-91",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa",
+              "cs": 56,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 322,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "93": {
+      "combat": [
+        {
+          "id": "book26-93",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Agarashi & Commander",
+              "cs": 50,
+              "endurance": 55
+            }
+          ],
+          "victoryRoute": 324
+        }
+      ]
+    },
+    "108": {
+      "combat": [
+        {
+          "id": "book26-108",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa minions",
+              "cs": 38,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 9
+        }
+      ]
+    },
+    "109": {
+      "combat": [
+        {
+          "id": "book26-109",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Agarashi",
+              "cs": 42,
+              "endurance": 44
+            }
+          ],
+          "victoryRoute": 258
+        }
+      ]
+    },
+    "111": {
+      "combat": [
+        {
+          "id": "book26-111",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Agarashi",
+              "cs": 40,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 65
+        }
+      ]
+    },
+    "113": {
+      "combat": [
+        {
+          "id": "book26-113",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Agarashi Lancers (in battle-frenzy)",
+              "cs": 48,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 55,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "119": {
+      "combat": [
+        {
+          "id": "book26-119",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Agarashi",
+              "cs": 40,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 65
+        }
+      ]
+    },
+    "127": {
+      "combat": [
+        {
+          "id": "book26-127",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Agarashi (with spears)",
+              "cs": 45,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 82,
+          "winWithinRounds": 4,
+          "winWithinRoute": 82,
+          "tooLateRoute": 236
+        }
+      ]
+    },
+    "128": {
+      "combat": [
+        {
+          "id": "book26-128",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Agarashi Lancers",
+              "cs": 44,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 55
+        }
+      ]
+    },
+    "136": {
+      "combat": [
+        {
+          "id": "book26-136",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Agarashi Lancer",
+              "cs": 44,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 345,
+          "canEvade": true,
+          "evadeAfterRounds": 3,
+          "evadeRoute": 205
+        }
+      ]
+    },
+    "143": {
+      "combat": [
+        {
+          "id": "book26-143",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Horde (in battle-frenzy)",
+              "cs": 47,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 100,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "146": {
+      "combat": [
+        {
+          "id": "book26-146",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa minions",
+              "cs": 33,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 9,
+          "ignoreEnemyLossRounds": 2
+        }
+      ]
+    },
+    "156": {
+      "combat": [
+        {
+          "id": "book26-156",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Agarashi & Commander",
+              "cs": 50,
+              "endurance": 55
+            }
+          ],
+          "victoryRoute": 324
+        }
+      ]
+    },
+    "163": {
+      "combat": [
+        {
+          "id": "book26-163",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Agarashi (with spears)",
+              "cs": 40,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 82,
+          "winWithinRounds": 4,
+          "winWithinRoute": 82,
+          "tooLateRoute": 236
+        }
+      ]
+    },
+    "179": {
+      "combat": [
+        {
+          "id": "book26-179",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Agarashi & Commander",
+              "cs": 50,
+              "endurance": 55
+            }
+          ],
+          "victoryRoute": 324
+        }
+      ]
+    },
+    "183": {
+      "combat": [
+        {
+          "id": "book26-183",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Horde (in battle-frenzy)",
+              "cs": 47,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 100,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "196": {
+      "combat": [
+        {
+          "id": "book26-196",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Agarashi",
+              "cs": 40,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 65
+        }
+      ]
+    },
+    "208": {
+      "combat": [
+        {
+          "id": "book26-208",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Agarashi",
+              "cs": 40,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 65
+        }
+      ]
+    },
+    "215": {
+      "combat": [
+        {
+          "id": "book26-215",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa minions",
+              "cs": 33,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 9,
+          "ignoreEnemyLossRounds": 2
+        }
+      ]
+    },
+    "226": {
+      "combat": [
+        {
+          "id": "book26-226",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Horde (in battle-frenzy)",
+              "cs": 47,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 100,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "234": {
+      "combat": [
+        {
+          "id": "book26-234",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Agarashi & Commander",
+              "cs": 50,
+              "endurance": 55
+            }
+          ],
+          "victoryRoute": 324
+        }
+      ]
+    },
+    "244": {
+      "combat": [
+        {
+          "id": "book26-244",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Horde (in battle-frenzy)",
+              "cs": 47,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 100,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "282": {
+      "combat": [
+        {
+          "id": "book26-282",
+          "enemies": [
+            {
+              "name": "Rock Golem",
+              "cs": 40,
+              "endurance": 65
+            }
+          ],
+          "victoryRoute": 74,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "292": {
+      "combat": [
+        {
+          "id": "book26-292",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Agarashi (with spears)",
+              "cs": 42,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 82,
+          "winWithinRounds": 4,
+          "winWithinRoute": 82,
+          "tooLateRoute": 236
+        }
+      ]
+    },
+    "293": {
+      "combat": [
+        {
+          "id": "book26-293",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Agarashi",
+              "cs": 40,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 65
+        }
+      ]
+    },
+    "298": {
+      "combat": [
+        {
+          "id": "book26-298",
+          "enemies": [
+            {
+              "name": "Giant Steamspider",
+              "cs": 48,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 112,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "299": {
+      "combat": [
+        {
+          "id": "book26-299",
+          "enemies": [
+            {
+              "name": "Tomb of Andarin",
+              "cs": 50,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 110,
+          "canEvade": true,
+          "evadeRoute": 230
+        }
+      ]
+    },
+    "302": {
+      "combat": [
+        {
+          "id": "book26-302",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Agarashi",
+              "cs": 44,
+              "endurance": 44
+            }
+          ],
+          "victoryRoute": 167
+        }
+      ]
+    },
+    "316": {
+      "combat": [
+        {
+          "id": "book26-316",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Agarashi (with Drodarin battle-axes)",
+              "cs": 44,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 255
+        }
+      ]
+    },
+    "328": {
+      "combat": [
+        {
+          "id": "book26-328",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Agarashi (assault group)",
+              "cs": 48,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 200,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "340": {
+      "combat": [
+        {
+          "id": "book26-340",
+          "enemies": [
+            {
+              "name": "Rock Golem",
+              "cs": 40,
+              "endurance": 65
+            }
+          ],
+          "victoryRoute": 74,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "342": {
+      "combat": [
+        {
+          "id": "book26-342",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Agarashi",
+              "cs": 40,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 65
+        }
+      ]
+    },
+    "348": {
+      "combat": [
+        {
+          "id": "book26-348",
+          "enemies": [
+            {
+              "name": "Shom\u2019zaa Agarashi",
+              "cs": 40,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 65
+        }
+      ]
+    }
+  }
+}

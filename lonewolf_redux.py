@@ -1309,6 +1309,7 @@ def default_state() -> dict[str, Any]:
             "EnemyImmune": False,
             "SuppressShieldBonus": False,
             "PlayerLossMultiplier": 1,
+            "TimedPlayerLossMultipliers": [],
             "EnemyEnduranceThreshold": None,
             "EnemyEnduranceThresholdRoute": None,
             "UsePlayerTargetEndurance": False,
@@ -6132,6 +6133,19 @@ class LoneWolfReduxAssistant:
                     )
                 )
             )
+        if kind in {"grand_weaponmastery_kai_weapon", "grand_weaponmastery_kai_weapon_type"}:
+            kai_weapon = clean_kai_weapon(self.character.get("KaiWeapon"))
+            weapon_type = str(kai_weapon.get("Type") or "").strip().lower()
+            return (
+                "Grand Weaponmastery" in self.effective_disciplines()
+                and bool(weapon_type)
+                and any(
+                    str(weapon).strip().lower() == weapon_type
+                    for weapon in clean_grand_weaponmastery_weapons(
+                        self.character.get("GrandWeaponmasteryWeapons")
+                    )
+                )
+            )
         if kind in {"no_grand_weaponmastery_weapon", "grand_weaponmastery_missing_weapon"}:
             return not self.evaluate_flow_condition(
                 {
@@ -6411,6 +6425,8 @@ class LoneWolfReduxAssistant:
                     value = int(self.character["EnduranceCurrent"])
                 elif value_from in {"cs", "combat_skill", "combat skill"}:
                     value = int(self.character["CombatSkillCurrent"])
+                elif value_from in {"gold", "gold_crowns", "gold crowns"}:
+                    value = int(self.inventory.get("GoldCrowns") or 0)
                 elif value_from in {
                     "magnakai_discipline_count",
                     "magnakai_disciplines",
@@ -6437,6 +6453,10 @@ class LoneWolfReduxAssistant:
                     value = max(0, int(self.character.get("GrandMasterRank") or 0) - 6)
                 elif value_from in {"grand_master_rank_above_seven", "grand_master_disciplines_above_seven"}:
                     value = max(0, int(self.character.get("GrandMasterRank") or 0) - 7)
+                elif value_from in {"new_order_rank_above_five", "new_order_disciplines_above_five"}:
+                    value = max(0, int(self.character.get("NewOrderRank") or 0) - 5)
+                elif value_from in {"new_order_rank_above_six", "new_order_disciplines_above_six"}:
+                    value = max(0, int(self.character.get("NewOrderRank") or 0) - 6)
                 elif value_from in {"roll_selection", "roll_selection_number"}:
                     value = self.current_roll_selection_number(str(modifier.get("selectionId") or ""))
                 else:
@@ -10493,6 +10513,7 @@ class LoneWolfReduxAssistant:
                 or (bool(immune_unless_power) and not self.has_power(immune_unless_power)),
                 "SuppressShieldBonus": bool(preset.get("suppressShieldBonus", False)),
                 "PlayerLossMultiplier": player_loss_multiplier,
+                "TimedPlayerLossMultipliers": as_list(preset.get("timedPlayerLossMultipliers")),
                 "EnemyEnduranceThreshold": preset.get("enemyEnduranceThreshold"),
                 "EnemyEnduranceThresholdRoute": preset.get("enemyEnduranceThresholdRoute"),
                 "UsePlayerTargetEndurance": bool(preset.get("usePlayerTargetEndurance", False)),
@@ -11089,6 +11110,7 @@ class LoneWolfReduxAssistant:
                 "EnemyImmune": False,
                 "SuppressShieldBonus": False,
                 "PlayerLossMultiplier": 1,
+                "TimedPlayerLossMultipliers": [],
                 "EnemyEnduranceThreshold": None,
                 "EnemyEnduranceThresholdRoute": None,
                 "UsePlayerTargetEndurance": False,
@@ -11204,7 +11226,21 @@ class LoneWolfReduxAssistant:
         base_enemy_loss = self.loss_value(enemy_loss_raw, int(self.combat["EnemyEnduranceCurrent"]))
         player_loss = self.loss_value(player_loss_raw, self.effective_endurance_current())
         if not manual_result:
-            player_loss *= max(1, int(self.combat.get("PlayerLossMultiplier") or 1))
+            player_loss_multiplier = max(1, int(self.combat.get("PlayerLossMultiplier") or 1))
+            for timed_multiplier in as_list(self.combat.get("TimedPlayerLossMultipliers")):
+                if not isinstance(timed_multiplier, dict):
+                    continue
+                condition = timed_multiplier.get("condition")
+                if isinstance(condition, dict) and not self.evaluate_flow_condition(condition):
+                    continue
+                start_round = int(timed_multiplier.get("startRound") or 1)
+                end_round = int(timed_multiplier.get("endRound") or start_round)
+                if start_round <= round_number <= end_round:
+                    player_loss_multiplier = max(
+                        player_loss_multiplier,
+                        int(timed_multiplier.get("multiplier") or player_loss_multiplier),
+                    )
+            player_loss *= player_loss_multiplier
         if self.cheat_active("god_mode") or self.cheat_active("infinite_health"):
             player_loss = 0
         ignored_player_loss = 0

@@ -1,0 +1,669 @@
+{
+  "25": {
+    "2": {
+      "combat": [
+        {
+          "id": "book25-2",
+          "enemies": [
+            {
+              "name": "Wolfhound Handler",
+              "cs": 29,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 252
+        }
+      ]
+    },
+    "4": {
+      "combat": [
+        {
+          "id": "book25-4",
+          "enemies": [
+            {
+              "name": "Hammerland Bandits (in psychic shock)",
+              "cs": 28,
+              "endurance": 36
+            }
+          ],
+          "victoryRoute": 131
+        }
+      ]
+    },
+    "17": {
+      "combat": [
+        {
+          "id": "book25-17",
+          "enemies": [
+            {
+              "name": "Kraan (wounded)",
+              "cs": 32,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 157
+        }
+      ]
+    },
+    "25": {
+      "combat": [
+        {
+          "id": "book25-25",
+          "enemies": [
+            {
+              "name": "Hammerland Bandits",
+              "cs": 29,
+              "endurance": 36
+            }
+          ],
+          "victoryRoute": 131
+        }
+      ]
+    },
+    "31": {
+      "combat": [
+        {
+          "id": "book25-31",
+          "enemies": [
+            {
+              "name": "Kraan (wounded)",
+              "cs": 32,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 157
+        }
+      ]
+    },
+    "64": {
+      "combat": [
+        {
+          "id": "book25-64",
+          "enemies": [
+            {
+              "name": "Helkona Kraan",
+              "cs": 35,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 157
+        }
+      ]
+    },
+    "68": {
+      "combat": [
+        {
+          "id": "book25-68",
+          "enemies": [
+            {
+              "name": "Helkona Direflies",
+              "cs": 40,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 199
+        }
+      ]
+    },
+    "70": {
+      "combat": [
+        {
+          "id": "book25-70",
+          "enemies": [
+            {
+              "name": "Xaol the Necromancer (with Serpent Rod)",
+              "cs": 50,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 178
+        }
+      ]
+    },
+    "76": {
+      "combat": [
+        {
+          "id": "book25-76",
+          "enemies": [
+            {
+              "name": "Wolfhound Handler",
+              "cs": 29,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 252
+        }
+      ]
+    },
+    "78": {
+      "combat": [
+        {
+          "id": "book25-78",
+          "enemies": [
+            {
+              "name": "Helkona Drakkarim",
+              "cs": 30,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 14
+        }
+      ]
+    },
+    "84": {
+      "combat": [
+        {
+          "id": "book25-84",
+          "enemies": [
+            {
+              "name": "Urgaroh",
+              "cs": 42,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 100,
+          "canEvade": true,
+          "evadeAfterRounds": 3,
+          "evadeRoute": 73,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "90": {
+      "combat": [
+        {
+          "id": "book25-90",
+          "enemies": [
+            {
+              "name": "Fydakzh",
+              "cs": 52,
+              "endurance": 58
+            }
+          ],
+          "victoryRoute": 53
+        }
+      ]
+    },
+    "94": {
+      "combat": [
+        {
+          "id": "book25-94",
+          "enemies": [
+            {
+              "name": "Helkona Drakkarim",
+              "cs": 30,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 14
+        }
+      ]
+    },
+    "97": {
+      "combat": [
+        {
+          "id": "book25-97",
+          "enemies": [
+            {
+              "name": "Skryza",
+              "cs": 48,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 340,
+          "canEvade": true,
+          "evadeAfterRounds": 5,
+          "evadeRoute": 21
+        }
+      ]
+    },
+    "119": {
+      "combat": [
+        {
+          "id": "book25-119",
+          "enemies": [
+            {
+              "name": "Helkona Kraan",
+              "cs": 35,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 157
+        }
+      ]
+    },
+    "127": {
+      "combat": [
+        {
+          "id": "book25-127",
+          "enemies": [
+            {
+              "name": "Helkona Drakkarim",
+              "cs": 30,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 14
+        }
+      ]
+    },
+    "140": {
+      "combat": [
+        {
+          "id": "book25-140",
+          "enemies": [
+            {
+              "name": "Xaol Zombie (possessed by Zorkaan)",
+              "cs": 55,
+              "endurance": 43
+            }
+          ],
+          "conditionalModifiers": [
+            {
+              "modifier": -3,
+              "label": "No Kai-screen",
+              "condition": {
+                "type": "no_power",
+                "name": "Kai-screen"
+              }
+            }
+          ],
+          "roundLimit": 3,
+          "survivalRoute": 260,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "172": {
+      "combat": [
+        {
+          "id": "book25-172",
+          "enemies": [
+            {
+              "name": "Xaol Zombie (possessed by Zorkaan)",
+              "cs": 55,
+              "endurance": 43
+            }
+          ],
+          "conditionalModifiers": [
+            {
+              "modifier": -3,
+              "label": "No Kai-screen",
+              "condition": {
+                "type": "no_power",
+                "name": "Kai-screen"
+              }
+            }
+          ],
+          "roundLimit": 3,
+          "survivalRoute": 260,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "180": {
+      "combat": [
+        {
+          "id": "book25-180",
+          "enemies": [
+            {
+              "name": "Drakkarim Assault Squad",
+              "cs": 45,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 143
+        }
+      ]
+    },
+    "183": {
+      "combat": [
+        {
+          "id": "book25-183",
+          "enemies": [
+            {
+              "name": "Xaol\u2019s Skeleton Guards",
+              "cs": 45,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 266,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "184": {
+      "combat": [
+        {
+          "id": "book25-184",
+          "enemies": [
+            {
+              "name": "Helkona Drakkarim",
+              "cs": 32,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 66
+        }
+      ]
+    },
+    "187": {
+      "combat": [
+        {
+          "id": "book25-187",
+          "enemies": [
+            {
+              "name": "Xaol Zombie (possessed by Zorkaan)",
+              "cs": 52,
+              "endurance": 40
+            }
+          ],
+          "conditionalModifiers": [
+            {
+              "modifier": -3,
+              "label": "No Kai-screen",
+              "condition": {
+                "type": "no_power",
+                "name": "Kai-screen"
+              }
+            }
+          ],
+          "roundLimit": 3,
+          "survivalRoute": 260,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "190": {
+      "combat": [
+        {
+          "id": "book25-190",
+          "enemies": [
+            {
+              "name": "Skryza (wounded)",
+              "cs": 44,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 340,
+          "canEvade": true,
+          "evadeAfterRounds": 4,
+          "evadeRoute": 21
+        }
+      ]
+    },
+    "195": {
+      "combat": [
+        {
+          "id": "book25-195",
+          "enemies": [
+            {
+              "name": "Helkona Drakkarim",
+              "cs": 30,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 339
+        }
+      ]
+    },
+    "207": {
+      "combat": [
+        {
+          "id": "book25-207",
+          "enemies": [
+            {
+              "name": "Skryza (wounded)",
+              "cs": 46,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 340,
+          "canEvade": true,
+          "evadeAfterRounds": 4,
+          "evadeRoute": 21
+        }
+      ]
+    },
+    "213": {
+      "combat": [
+        {
+          "id": "book25-213",
+          "enemies": [
+            {
+              "name": "Helkona Kraan",
+              "cs": 38,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 157
+        }
+      ]
+    },
+    "216": {
+      "combat": [
+        {
+          "id": "book25-216",
+          "enemies": [
+            {
+              "name": "Drakkarim Assault Squad",
+              "cs": 45,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 143
+        }
+      ]
+    },
+    "221": {
+      "combat": [
+        {
+          "id": "book25-221",
+          "enemies": [
+            {
+              "name": "Helkona Drakkarim",
+              "cs": 30,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 14
+        }
+      ]
+    },
+    "222": {
+      "combat": [
+        {
+          "id": "book25-222",
+          "enemies": [
+            {
+              "name": "Xaol Zombie (possessed by Zorkaan)",
+              "cs": 55,
+              "endurance": 43
+            }
+          ],
+          "conditionalModifiers": [
+            {
+              "modifier": -3,
+              "label": "No Kai-screen",
+              "condition": {
+                "type": "no_power",
+                "name": "Kai-screen"
+              }
+            }
+          ],
+          "roundLimit": 3,
+          "survivalRoute": 260,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "237": {
+      "combat": [
+        {
+          "id": "book25-237",
+          "enemies": [
+            {
+              "name": "Akataz",
+              "cs": 25,
+              "endurance": 20
+            }
+          ],
+          "victoryRoute": 293
+        }
+      ]
+    },
+    "250": {
+      "combat": [
+        {
+          "id": "book25-250",
+          "enemies": [
+            {
+              "name": "Helkona Xaghash",
+              "cs": 52,
+              "endurance": 58
+            }
+          ],
+          "victoryRoute": 116
+        }
+      ]
+    },
+    "265": {
+      "combat": [
+        {
+          "id": "book25-265",
+          "enemies": [
+            {
+              "name": "Skryza",
+              "cs": 48,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 340,
+          "ignoreEnemyLossRounds": 1,
+          "timedPlayerLossMultipliers": [
+            {
+              "multiplier": 2,
+              "startRound": 1,
+              "endRound": 1
+            }
+          ],
+          "canEvade": true,
+          "evadeAfterRounds": 6,
+          "evadeRoute": 21
+        }
+      ]
+    },
+    "268": {
+      "combat": [
+        {
+          "id": "book25-268",
+          "enemies": [
+            {
+              "name": "Helkona Drakkar",
+              "cs": 25,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 28
+        }
+      ]
+    },
+    "277": {
+      "combat": [
+        {
+          "id": "book25-277",
+          "enemies": [
+            {
+              "name": "Kraan (wounded)",
+              "cs": 32,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 157
+        }
+      ]
+    },
+    "279": {
+      "combat": [
+        {
+          "id": "book25-279",
+          "enemies": [
+            {
+              "name": "Skryza",
+              "cs": 48,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 340,
+          "canEvade": true,
+          "evadeAfterRounds": 5,
+          "evadeRoute": 21
+        }
+      ]
+    },
+    "311": {
+      "combat": [
+        {
+          "id": "book25-311",
+          "enemies": [
+            {
+              "name": "Kraan (with wounded jaw)",
+              "cs": 32,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 157
+        }
+      ]
+    },
+    "312": {
+      "combat": [
+        {
+          "id": "book25-312",
+          "enemies": [
+            {
+              "name": "Hammerland Bandits",
+              "cs": 32,
+              "endurance": 36
+            }
+          ],
+          "victoryRoute": 253,
+          "modifier": -15
+        }
+      ]
+    },
+    "324": {
+      "combat": [
+        {
+          "id": "book25-324",
+          "enemies": [
+            {
+              "name": "Skryza (wounded)",
+              "cs": 45,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 340,
+          "canEvade": true,
+          "evadeAfterRounds": 4,
+          "evadeRoute": 21
+        }
+      ]
+    },
+    "343": {
+      "combat": [
+        {
+          "id": "book25-343",
+          "enemies": [
+            {
+              "name": "Helkona Drakkarim",
+              "cs": 30,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 28
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,566 @@
+{
+  "24": {
+    "4": {
+      "combat": [
+        {
+          "id": "book24-4",
+          "enemies": [
+            {
+              "name": "Duadon River Serpent",
+              "cs": 39,
+              "endurance": 28
+            }
+          ],
+          "victoryRoute": 124,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "9": {
+      "combat": [
+        {
+          "id": "book24-9",
+          "enemies": [
+            {
+              "name": "Eldenoran Horse-scouts",
+              "cs": 34,
+              "endurance": 34
+            }
+          ],
+          "victoryRoute": 156
+        }
+      ]
+    },
+    "24": {
+      "combat": [
+        {
+          "id": "book24-24",
+          "enemies": [
+            {
+              "name": "Frenzied Vorka",
+              "cs": 40,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 160
+        }
+      ]
+    },
+    "29": {
+      "combat": [
+        {
+          "id": "book24-29",
+          "enemies": [
+            {
+              "name": "Duadon River Serpent",
+              "cs": 39,
+              "endurance": 27
+            }
+          ],
+          "victoryRoute": 124,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "31": {
+      "combat": [
+        {
+          "id": "book24-31",
+          "enemies": [
+            {
+              "name": "\u00c9lite Rune Hall Guard",
+              "cs": 38,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 120
+        }
+      ]
+    },
+    "52": {
+      "combat": [
+        {
+          "id": "book24-52",
+          "enemies": [
+            {
+              "name": "Vorka Rune Defenders",
+              "cs": 40,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 187
+        }
+      ]
+    },
+    "53": {
+      "combat": [
+        {
+          "id": "book24-53",
+          "enemies": [
+            {
+              "name": "Farmer\u2019s Son",
+              "cs": 19,
+              "endurance": 24
+            }
+          ],
+          "victoryRoute": 177
+        }
+      ]
+    },
+    "68": {
+      "combat": [
+        {
+          "id": "book24-68",
+          "enemies": [
+            {
+              "name": "Duadon River Serpent",
+              "cs": 40,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 309,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "73": {
+      "combat": [
+        {
+          "id": "book24-73",
+          "enemies": [
+            {
+              "name": "Armoured Vorka",
+              "cs": 48,
+              "endurance": 46
+            }
+          ],
+          "victoryRoute": 251
+        }
+      ]
+    },
+    "75": {
+      "combat": [
+        {
+          "id": "book24-75",
+          "enemies": [
+            {
+              "name": "Zorkaan the Soultaker",
+              "cs": 58,
+              "endurance": 46
+            }
+          ],
+          "conditionalModifiers": [
+            {
+              "modifier": -3,
+              "label": "No Kai-screen",
+              "condition": {
+                "type": "no_power",
+                "name": "Kai-screen"
+              }
+            }
+          ],
+          "roundLimit": 3,
+          "survivalRoute": 209,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "80": {
+      "combat": [
+        {
+          "id": "book24-80",
+          "enemies": [
+            {
+              "name": "Sinistrari Captain (unarmoured)",
+              "cs": 48,
+              "endurance": 30
+            }
+          ]
+        }
+      ]
+    },
+    "84": {
+      "combat": [
+        {
+          "id": "book24-84",
+          "enemies": [
+            {
+              "name": "Frenzied Vorka",
+              "cs": 44,
+              "endurance": 44
+            }
+          ],
+          "victoryRoute": 52
+        }
+      ]
+    },
+    "92": {
+      "combat": [
+        {
+          "id": "book24-92",
+          "enemies": [
+            {
+              "name": "Zorkaan the Soultaker",
+              "cs": 48,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 240
+        }
+      ]
+    },
+    "101": {
+      "combat": [
+        {
+          "id": "book24-101",
+          "enemies": [
+            {
+              "name": "Guard Dog",
+              "cs": 25,
+              "endurance": 18
+            }
+          ],
+          "victoryRoute": 241,
+          "forceUnarmed": true,
+          "ignoreEnemyLossRounds": 2
+        }
+      ]
+    },
+    "126": {
+      "combat": [
+        {
+          "id": "book24-126",
+          "enemies": [
+            {
+              "name": "Frenzied Vorka",
+              "cs": 44,
+              "endurance": 41
+            }
+          ],
+          "victoryRoute": 160
+        }
+      ]
+    },
+    "136": {
+      "combat": [
+        {
+          "id": "book24-136",
+          "enemies": [
+            {
+              "name": "Zorkaan the Soultaker",
+              "cs": 58,
+              "endurance": 46
+            }
+          ],
+          "enemyImmune": true
+        }
+      ]
+    },
+    "138": {
+      "combat": [
+        {
+          "id": "book24-138",
+          "enemies": [
+            {
+              "name": "Eldenoran Horse-scouts",
+              "cs": 34,
+              "endurance": 34
+            }
+          ],
+          "victoryRoute": 348
+        }
+      ]
+    },
+    "154": {
+      "combat": [
+        {
+          "id": "book24-154",
+          "enemies": [
+            {
+              "name": "Zorkaan the Soultaker",
+              "cs": 58,
+              "endurance": 46
+            }
+          ],
+          "enemyImmune": true
+        }
+      ]
+    },
+    "160": {
+      "combat": [
+        {
+          "id": "book24-160",
+          "enemies": [
+            {
+              "name": "Vorka Rune Defenders",
+              "cs": 40,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 187
+        }
+      ]
+    },
+    "161": {
+      "combat": [
+        {
+          "id": "book24-161",
+          "enemies": [
+            {
+              "name": "Vorka",
+              "cs": 38,
+              "endurance": 36
+            }
+          ],
+          "victoryRoute": 255,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "182": {
+      "combat": [
+        {
+          "id": "book24-182",
+          "enemies": [
+            {
+              "name": "Zorkaan the Soultaker",
+              "cs": 58,
+              "endurance": 46
+            }
+          ],
+          "enemyImmune": true
+        }
+      ]
+    },
+    "185": {
+      "combat": [
+        {
+          "id": "book24-185",
+          "enemies": [
+            {
+              "name": "Eldenoran Horse-scouts",
+              "cs": 34,
+              "endurance": 34
+            }
+          ],
+          "victoryRoute": 156
+        }
+      ]
+    },
+    "196": {
+      "combat": [
+        {
+          "id": "book24-196",
+          "enemies": [
+            {
+              "name": "Eldenoran Horse-scouts",
+              "cs": 38,
+              "endurance": 36
+            }
+          ],
+          "victoryRoute": 263
+        }
+      ]
+    },
+    "206": {
+      "combat": [
+        {
+          "id": "book24-206",
+          "enemies": [
+            {
+              "name": "Duadon River Serpent",
+              "cs": 39,
+              "endurance": 28
+            }
+          ],
+          "victoryRoute": 124,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "211": {
+      "combat": [
+        {
+          "id": "book24-211",
+          "enemies": [
+            {
+              "name": "Eldenoran Horse-scouts",
+              "cs": 34,
+              "endurance": 34
+            }
+          ],
+          "victoryRoute": 156
+        }
+      ]
+    },
+    "217": {
+      "combat": [
+        {
+          "id": "book24-217",
+          "enemies": [
+            {
+              "name": "Frenzied Vorka",
+              "cs": 44,
+              "endurance": 44
+            }
+          ],
+          "victoryRoute": 52
+        }
+      ]
+    },
+    "223": {
+      "combat": [
+        {
+          "id": "book24-223",
+          "enemies": [
+            {
+              "name": "Ogron (with Warhammer)",
+              "cs": 42,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 132
+        }
+      ]
+    },
+    "245": {
+      "combat": [
+        {
+          "id": "book24-245",
+          "enemies": [
+            {
+              "name": "3 Eldenoran Deserters",
+              "cs": 37,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 91
+        }
+      ]
+    },
+    "264": {
+      "combat": [
+        {
+          "id": "book24-264",
+          "enemies": [
+            {
+              "name": "Zorkaan the Soultaker",
+              "cs": 46,
+              "endurance": 36
+            }
+          ],
+          "victoryRoute": 240
+        }
+      ]
+    },
+    "265": {
+      "combat": [
+        {
+          "id": "book24-265",
+          "enemies": [
+            {
+              "name": "Guard Dog",
+              "cs": 25,
+              "endurance": 18
+            }
+          ],
+          "victoryRoute": 241
+        }
+      ]
+    },
+    "277": {
+      "combat": [
+        {
+          "id": "book24-277",
+          "enemies": [
+            {
+              "name": "Frenzied Vorka",
+              "cs": 40,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 160
+        }
+      ]
+    },
+    "282": {
+      "combat": [
+        {
+          "id": "book24-282",
+          "enemies": [
+            {
+              "name": "Zorkaan the Soultaker",
+              "cs": 46,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 240
+        }
+      ]
+    },
+    "299": {
+      "combat": [
+        {
+          "id": "book24-299",
+          "enemies": [
+            {
+              "name": "Vorka (wounded)",
+              "cs": 36,
+              "endurance": 34
+            }
+          ],
+          "victoryRoute": 13,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "304": {
+      "combat": [
+        {
+          "id": "book24-304",
+          "enemies": [
+            {
+              "name": "Frenzied Vorka",
+              "cs": 46,
+              "endurance": 46
+            }
+          ],
+          "victoryRoute": 52
+        }
+      ]
+    },
+    "312": {
+      "combat": [
+        {
+          "id": "book24-312",
+          "enemies": [
+            {
+              "name": "Guard Dog",
+              "cs": 25,
+              "endurance": 18
+            }
+          ],
+          "victoryRoute": 241,
+          "forceUnarmed": true,
+          "ignoreEnemyLossRounds": 2
+        }
+      ]
+    },
+    "317": {
+      "combat": [
+        {
+          "id": "book24-317",
+          "enemies": [
+            {
+              "name": "Duadon River Serpent",
+              "cs": 39,
+              "endurance": 28
+            }
+          ],
+          "victoryRoute": 124,
+          "enemyImmune": true
+        }
+      ]
+    }
+  }
+}

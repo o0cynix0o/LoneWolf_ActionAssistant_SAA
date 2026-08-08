@@ -1,0 +1,2090 @@
+{
+  "26": {
+    "6": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 97,
+            "label": "0-6"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 75,
+            "label": "7 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "ENDURANCE higher than 20",
+            "value": 2,
+            "condition": {
+              "type": "end_gte",
+              "value": 21
+            }
+          },
+          {
+            "label": "Grand Huntmastery",
+            "value": 1,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          }
+        ]
+      }
+    },
+    "7": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 44,
+            "label": "0-6"
+          },
+          {
+            "min": 7,
+            "max": 8,
+            "route": 262,
+            "label": "7-8"
+          },
+          {
+            "min": 9,
+            "max": 99,
+            "route": 30,
+            "label": "9 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          },
+          {
+            "label": "Assimilance",
+            "value": 1,
+            "condition": {
+              "type": "power",
+              "name": "Assimilance"
+            }
+          }
+        ]
+      }
+    },
+    "9": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 186,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 302,
+            "label": "5 or more"
+          }
+        ]
+      }
+    },
+    "12": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 177,
+            "label": "0-6"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 228,
+            "label": "7 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Assimilance",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Assimilance"
+            }
+          },
+          {
+            "label": "Grand Huntmastery",
+            "value": 1,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          }
+        ]
+      }
+    },
+    "13": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 239,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 7,
+            "route": 317,
+            "label": "5-7"
+          },
+          {
+            "min": 8,
+            "max": 9,
+            "route": 291,
+            "label": "8-9"
+          }
+        ]
+      }
+    },
+    "14": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 2,
+            "route": 80,
+            "label": "0-2"
+          },
+          {
+            "min": 3,
+            "max": 99,
+            "route": 181,
+            "label": "3 or more"
+          }
+        ]
+      }
+    },
+    "15": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 266,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 113,
+            "label": "5 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "ENDURANCE 20 or higher",
+            "value": -1,
+            "condition": {
+              "type": "end_gte",
+              "value": 20
+            }
+          }
+        ],
+        "minTotal": 0
+      }
+    },
+    "19": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 44,
+            "label": "0-6"
+          },
+          {
+            "min": 7,
+            "max": 8,
+            "route": 262,
+            "label": "7-8"
+          },
+          {
+            "min": 9,
+            "max": 99,
+            "route": 30,
+            "label": "9 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          },
+          {
+            "label": "Assimilance",
+            "value": 1,
+            "condition": {
+              "type": "power",
+              "name": "Assimilance"
+            }
+          }
+        ]
+      }
+    },
+    "20": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 93,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 343,
+            "label": "5 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "ENDURANCE higher than 24",
+            "value": 2,
+            "condition": {
+              "type": "end_gte",
+              "value": 25
+            }
+          }
+        ]
+      }
+    },
+    "23": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 289,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 175,
+            "label": "4 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          }
+        ]
+      }
+    },
+    "28": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 1,
+            "route": 149,
+            "label": "0-1"
+          },
+          {
+            "min": 2,
+            "max": 7,
+            "route": 70,
+            "label": "2-7"
+          },
+          {
+            "min": 8,
+            "max": 9,
+            "route": 98,
+            "label": "8-9"
+          }
+        ]
+      }
+    },
+    "29": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 5,
+            "route": 94,
+            "label": "0-5"
+          },
+          {
+            "min": 6,
+            "max": 99,
+            "route": 297,
+            "label": "6 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": 1,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          },
+          {
+            "label": "Assimilance",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Assimilance"
+            }
+          }
+        ]
+      }
+    },
+    "36": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 1,
+            "route": 104,
+            "label": "0-1"
+          },
+          {
+            "min": 2,
+            "max": 7,
+            "route": 168,
+            "label": "2-7"
+          },
+          {
+            "min": 8,
+            "max": 99,
+            "route": 185,
+            "label": "8 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Assimilance",
+            "value": 3,
+            "condition": {
+              "type": "power",
+              "name": "Assimilance"
+            }
+          },
+          {
+            "label": "Grand Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          },
+          {
+            "label": "Kai-screen",
+            "value": 1,
+            "condition": {
+              "type": "power",
+              "name": "Kai-screen"
+            }
+          }
+        ]
+      }
+    },
+    "38": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 7,
+            "route": 331,
+            "label": "0-7"
+          },
+          {
+            "min": 8,
+            "max": 99,
+            "route": 121,
+            "label": "8 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "ENDURANCE 20 or lower",
+            "value": -1,
+            "condition": {
+              "type": "end_lt",
+              "value": 21
+            }
+          },
+          {
+            "label": "ENDURANCE 30 or higher",
+            "value": 1,
+            "condition": {
+              "type": "end_gte",
+              "value": 30
+            }
+          }
+        ]
+      }
+    },
+    "43": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 8,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 226,
+            "label": "5 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          },
+          {
+            "label": "ENDURANCE 10 or lower",
+            "value": -1,
+            "condition": {
+              "type": "end_lt",
+              "value": 11
+            }
+          }
+        ]
+      }
+    },
+    "44": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 99,
+            "route": 336,
+            "label": "ENDURANCE loss",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "deltaFrom": "roll_total",
+                "multiplier": -1
+              }
+            ]
+          }
+        ],
+        "zeroAsTen": true
+      }
+    },
+    "48": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "test": "odd",
+            "route": 220,
+            "label": "Odd: lose 2 ENDURANCE",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "delta": -2
+              }
+            ]
+          },
+          {
+            "test": "even",
+            "route": 220,
+            "label": "Even: lose 3 ENDURANCE",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "delta": -3
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "55": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 92,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 122,
+            "label": "5 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": 1,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          }
+        ]
+      }
+    },
+    "71": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 334,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 251,
+            "label": "5 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Assimilance",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Assimilance"
+            }
+          },
+          {
+            "label": "Grand Huntmastery",
+            "value": 1,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          }
+        ]
+      }
+    },
+    "79": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 5,
+            "route": 44,
+            "label": "0-5"
+          },
+          {
+            "min": 6,
+            "max": 8,
+            "route": 262,
+            "label": "6-8"
+          },
+          {
+            "min": 9,
+            "max": 99,
+            "route": 30,
+            "label": "9 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          },
+          {
+            "label": "Assimilance",
+            "value": 1,
+            "condition": {
+              "type": "power",
+              "name": "Assimilance"
+            }
+          }
+        ]
+      }
+    },
+    "81": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 56,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 9,
+            "route": 111,
+            "label": "4-9"
+          }
+        ]
+      }
+    },
+    "99": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 1,
+            "route": 44,
+            "label": "0-1"
+          },
+          {
+            "min": 2,
+            "max": 3,
+            "route": 262,
+            "label": "2-3"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 30,
+            "label": "4 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          },
+          {
+            "label": "Assimilance",
+            "value": 1,
+            "condition": {
+              "type": "power",
+              "name": "Assimilance"
+            }
+          }
+        ]
+      }
+    },
+    "105": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 5,
+            "route": 289,
+            "label": "0-5"
+          },
+          {
+            "min": 6,
+            "max": 99,
+            "route": 175,
+            "label": "6 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          }
+        ]
+      }
+    },
+    "106": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 44,
+            "label": "0-6"
+          },
+          {
+            "min": 7,
+            "max": 8,
+            "route": 262,
+            "label": "7-8"
+          },
+          {
+            "min": 9,
+            "max": 99,
+            "route": 30,
+            "label": "9 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          },
+          {
+            "label": "Assimilance",
+            "value": 1,
+            "condition": {
+              "type": "power",
+              "name": "Assimilance"
+            }
+          }
+        ]
+      }
+    },
+    "112": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 103,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 9,
+            "route": 11,
+            "label": "5-9"
+          }
+        ]
+      }
+    },
+    "121": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 114,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 6,
+            "route": 3,
+            "label": "4-6"
+          },
+          {
+            "min": 7,
+            "max": 9,
+            "route": 232,
+            "label": "7-9"
+          }
+        ]
+      }
+    },
+    "129": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 333,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 7,
+            "route": 296,
+            "label": "4-7"
+          },
+          {
+            "min": 8,
+            "max": 99,
+            "route": 124,
+            "label": "8 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          },
+          {
+            "label": "ENDURANCE 20 or lower",
+            "value": -2,
+            "condition": {
+              "type": "end_lt",
+              "value": 21
+            }
+          }
+        ]
+      }
+    },
+    "155": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 47,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 162,
+            "label": "4 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Assimilance",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Assimilance"
+            }
+          }
+        ]
+      }
+    },
+    "158": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "test": "odd",
+            "route": 319,
+            "label": "Odd: lose 1 ENDURANCE",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "delta": -1
+              }
+            ]
+          },
+          {
+            "test": "even",
+            "route": 319,
+            "label": "Even: lose 2 ENDURANCE",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "delta": -2
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "159": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 44,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 6,
+            "route": 262,
+            "label": "4-6"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 30,
+            "label": "7 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          },
+          {
+            "label": "Assimilance",
+            "value": 1,
+            "condition": {
+              "type": "power",
+              "name": "Assimilance"
+            }
+          }
+        ]
+      }
+    },
+    "164": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 7,
+            "route": 25,
+            "label": "0-7"
+          },
+          {
+            "min": 8,
+            "max": 99,
+            "route": 237,
+            "label": "8 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Weaponmastery with Bow",
+            "value": 5,
+            "condition": {
+              "type": "grand_weaponmastery_weapon",
+              "name": "Bow"
+            }
+          }
+        ]
+      }
+    },
+    "166": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 239,
+            "label": "0-6"
+          },
+          {
+            "min": 7,
+            "max": 9,
+            "route": 317,
+            "label": "7-9"
+          },
+          {
+            "min": 10,
+            "max": 99,
+            "route": 291,
+            "label": "10 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          }
+        ]
+      }
+    },
+    "169": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 92,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 122,
+            "label": "5 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": 1,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          }
+        ]
+      }
+    },
+    "178": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 116,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 9,
+            "route": 22,
+            "label": "5-9"
+          }
+        ]
+      }
+    },
+    "180": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 275,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 191,
+            "label": "4 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Rope",
+            "value": 1,
+            "condition": {
+              "type": "item",
+              "name": "Rope",
+              "containers": [
+                "backpack",
+                "special"
+              ]
+            }
+          },
+          {
+            "label": "Grand Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          }
+        ]
+      }
+    },
+    "184": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 7,
+            "route": 348,
+            "label": "0-7"
+          },
+          {
+            "min": 8,
+            "max": 99,
+            "route": 39,
+            "label": "8 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Ranks above Kai Grand Sentinel",
+            "valueFrom": "new_order_rank_above_six"
+          }
+        ]
+      }
+    },
+    "187": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 2,
+            "route": 298,
+            "label": "0-2"
+          },
+          {
+            "min": 3,
+            "max": 99,
+            "route": 152,
+            "label": "3 or more"
+          }
+        ]
+      }
+    },
+    "188": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 234,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 306,
+            "label": "4 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "ENDURANCE higher than 24",
+            "value": 3,
+            "condition": {
+              "type": "end_gte",
+              "value": 25
+            }
+          },
+          {
+            "label": "Grand Huntmastery",
+            "value": 1,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          }
+        ]
+      }
+    },
+    "192": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 5,
+            "route": 125,
+            "label": "0-5"
+          },
+          {
+            "min": 6,
+            "max": 99,
+            "route": 311,
+            "label": "6 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Weaponmastery with Kai Weapon",
+            "value": 3,
+            "condition": {
+              "type": "grand_weaponmastery_kai_weapon"
+            }
+          }
+        ]
+      }
+    },
+    "193": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 249,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 48,
+            "label": "5 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "ENDURANCE 25 or higher",
+            "value": 1,
+            "condition": {
+              "type": "end_gte",
+              "value": 25
+            }
+          },
+          {
+            "label": "ENDURANCE 10 or lower",
+            "value": -2,
+            "condition": {
+              "type": "end_lt",
+              "value": 11
+            }
+          }
+        ]
+      }
+    },
+    "219": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 151,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 126,
+            "label": "5 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "ENDURANCE higher than 20",
+            "value": 3,
+            "condition": {
+              "type": "end_gte",
+              "value": 21
+            }
+          },
+          {
+            "label": "Grand Huntmastery",
+            "value": 1,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          }
+        ]
+      }
+    },
+    "223": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 13,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 141,
+            "label": "5 or more"
+          }
+        ]
+      }
+    },
+    "227": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 5,
+            "route": 59,
+            "label": "0-5"
+          },
+          {
+            "min": 6,
+            "max": 99,
+            "route": 288,
+            "label": "6 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": 4,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          }
+        ]
+      }
+    },
+    "253": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 5,
+            "route": 267,
+            "label": "0-5"
+          },
+          {
+            "min": 6,
+            "max": 99,
+            "route": 313,
+            "label": "6 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Assimilance",
+            "value": 3,
+            "condition": {
+              "type": "power",
+              "name": "Assimilance"
+            }
+          }
+        ]
+      }
+    },
+    "259": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 119,
+            "label": "0-6"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 18,
+            "label": "7 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Weaponmastery with Bow",
+            "value": 5,
+            "condition": {
+              "type": "grand_weaponmastery_weapon",
+              "name": "Bow"
+            }
+          }
+        ]
+      }
+    },
+    "261": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 80,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 181,
+            "label": "4 or more"
+          }
+        ]
+      }
+    },
+    "262": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "test": "odd",
+            "route": 336,
+            "label": "Odd: lose 4 ENDURANCE",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "delta": -4
+              }
+            ]
+          },
+          {
+            "test": "even",
+            "route": 336,
+            "label": "Even: lose 2 ENDURANCE",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "delta": -2
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "265": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 2,
+            "route": 329,
+            "label": "0-2"
+          },
+          {
+            "min": 3,
+            "max": 6,
+            "route": 172,
+            "label": "3-6"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 49,
+            "label": "7 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Elementalism or Grand Huntmastery",
+            "value": 1,
+            "condition": {
+              "type": "any",
+              "conditions": [
+                {
+                  "type": "power",
+                  "name": "Elementalism"
+                },
+                {
+                  "type": "power",
+                  "name": "Grand Huntmastery"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "268": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 8,
+            "route": 196,
+            "label": "0-8"
+          },
+          {
+            "min": 9,
+            "max": 99,
+            "route": 142,
+            "label": "9 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Ranks above Kai Grand Sentinel",
+            "valueFrom": "new_order_rank_above_six"
+          }
+        ]
+      }
+    },
+    "269": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 2,
+            "route": 31,
+            "label": "0-2"
+          },
+          {
+            "min": 3,
+            "max": 99,
+            "route": 143,
+            "label": "3 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "ENDURANCE higher than 25",
+            "value": 3,
+            "condition": {
+              "type": "end_gte",
+              "value": 26
+            }
+          },
+          {
+            "label": "Grand Huntmastery",
+            "value": 1,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          }
+        ]
+      }
+    },
+    "272": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 24,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 9,
+            "route": 91,
+            "label": "5-9"
+          }
+        ]
+      }
+    },
+    "274": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 5,
+            "route": 89,
+            "label": "0-5"
+          },
+          {
+            "min": 6,
+            "max": 99,
+            "route": 156,
+            "label": "6 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          },
+          {
+            "label": "ENDURANCE 16 or lower",
+            "value": -1,
+            "condition": {
+              "type": "end_lt",
+              "value": 17
+            }
+          }
+        ]
+      }
+    },
+    "276": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 47,
+            "label": "0-6"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 248,
+            "label": "7 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Assimilance",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Assimilance"
+            }
+          }
+        ]
+      }
+    },
+    "278": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 2,
+            "route": 208,
+            "label": "0-2"
+          },
+          {
+            "min": 3,
+            "max": 9,
+            "route": 88,
+            "label": "3-9"
+          }
+        ]
+      }
+    },
+    "280": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 333,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 7,
+            "route": 296,
+            "label": "4-7"
+          },
+          {
+            "min": 8,
+            "max": 99,
+            "route": 124,
+            "label": "8 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          },
+          {
+            "label": "ENDURANCE 20 or lower",
+            "value": -2,
+            "condition": {
+              "type": "end_lt",
+              "value": 21
+            }
+          }
+        ]
+      }
+    },
+    "285": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 103,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 9,
+            "route": 11,
+            "label": "5-9"
+          }
+        ]
+      }
+    },
+    "287": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 183,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 57,
+            "label": "4 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "ENDURANCE higher than 25",
+            "value": 2,
+            "condition": {
+              "type": "end_gte",
+              "value": 26
+            }
+          }
+        ]
+      }
+    },
+    "300": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 136,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 9,
+            "route": 225,
+            "label": "4-9"
+          }
+        ]
+      }
+    },
+    "301": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 80,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 181,
+            "label": "5 or more"
+          }
+        ]
+      }
+    },
+    "309": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 186,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 62,
+            "label": "4 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          }
+        ]
+      }
+    },
+    "310": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 252,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 9,
+            "route": 107,
+            "label": "5-9"
+          }
+        ]
+      }
+    },
+    "318": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 286,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 7,
+            "route": 120,
+            "label": "4-7"
+          },
+          {
+            "min": 8,
+            "max": 99,
+            "route": 85,
+            "label": "8 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          }
+        ]
+      }
+    },
+    "322": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 114,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 6,
+            "route": 3,
+            "label": "4-6"
+          },
+          {
+            "min": 7,
+            "max": 9,
+            "route": 232,
+            "label": "7-9"
+          }
+        ]
+      }
+    },
+    "325": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 44,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 7,
+            "route": 262,
+            "label": "5-7"
+          },
+          {
+            "min": 8,
+            "max": 99,
+            "route": 30,
+            "label": "8 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          },
+          {
+            "label": "Assimilance",
+            "value": 1,
+            "condition": {
+              "type": "power",
+              "name": "Assimilance"
+            }
+          }
+        ]
+      }
+    },
+    "331": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 24,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 9,
+            "route": 91,
+            "label": "5-9"
+          }
+        ]
+      }
+    },
+    "337": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 289,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 175,
+            "label": "5 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          }
+        ]
+      }
+    },
+    "338": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 199,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 7,
+            "route": 171,
+            "label": "4-7"
+          },
+          {
+            "min": 8,
+            "max": 99,
+            "route": 137,
+            "label": "8 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "ENDURANCE 25 or higher",
+            "value": 1,
+            "condition": {
+              "type": "end_gte",
+              "value": 25
+            }
+          },
+          {
+            "label": "ENDURANCE 12 or lower",
+            "value": -2,
+            "condition": {
+              "type": "end_lt",
+              "value": 13
+            }
+          }
+        ]
+      }
+    },
+    "347": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 186,
+            "label": "0-6"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 62,
+            "label": "7 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

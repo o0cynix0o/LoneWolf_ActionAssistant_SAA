@@ -1,0 +1,788 @@
+{
+  "24": {
+    "3": {
+      "roll": {
+        "summary": "Escape from the Jagged Spires.",
+        "modifiers": [{"label": "Grand Huntmastery and Assimilance", "value": 3, "condition": {"type": "all", "conditions": [{"type": "power", "name": "Grand Huntmastery"}, {"type": "power", "name": "Assimilance"}]}}],
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 30,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 218,
+            "label": "4 or more"
+          }
+        ]
+      }
+    },
+    "16": {
+      "roll": {
+        "summary": "Escape from the Jagged Spires.",
+        "modifiers": [{"label": "Grand Huntmastery and Assimilance", "value": 3, "condition": {"type": "all", "conditions": [{"type": "power", "name": "Grand Huntmastery"}, {"type": "power", "name": "Assimilance"}]}}],
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 30,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 218,
+            "label": "4 or more"
+          }
+        ]
+      }
+    },
+    "20": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 167,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 192,
+            "label": "4 or more"
+          }
+        ]
+      }
+    },
+    "33": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 267,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 122,
+            "label": "4 or more"
+          }
+        ]
+      }
+    },
+    "62": {
+      "roll": {
+        "summary": "Snake venom injury.",
+        "outcomes": [{"test": "odd", "label": "Odd: lose 2 ENDURANCE", "actions": [{"type": "stat", "stat": "end", "delta": -2}]}, {"test": "even", "label": "Even: lose 4 ENDURANCE", "actions": [{"type": "stat", "stat": "end", "delta": -4}]}]
+      }
+    },
+    "94": {
+      "roll": {
+        "summary": "Escape from the Jagged Spires.",
+        "modifiers": [{"label": "Grand Huntmastery and Assimilance", "value": 3, "condition": {"type": "all", "conditions": [{"type": "power", "name": "Grand Huntmastery"}, {"type": "power", "name": "Assimilance"}]}}],
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 30,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 218,
+            "label": "4 or more"
+          }
+        ]
+      }
+    },
+    "105": {
+      "roll": {
+        "summary": "Avoid the swamp attack.",
+        "modifiers": [{"label": "Grand Huntmastery", "value": 1, "condition": {"type": "power", "name": "Grand Huntmastery"}}],
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 53,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 112,
+            "label": "5 or more"
+          }
+        ]
+      }
+    },
+    "106": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 2,
+            "route": 42,
+            "label": "0-2"
+          },
+          {
+            "min": 3,
+            "max": 99,
+            "route": 273,
+            "label": "3 or more"
+          }
+        ]
+      }
+    },
+    "107": {
+      "roll": {
+        "summary": "Avoid the swamp attack.",
+        "modifiers": [{"label": "Grand Huntmastery", "value": 1, "condition": {"type": "power", "name": "Grand Huntmastery"}}],
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 333,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 220,
+            "label": "5 or more"
+          }
+        ]
+      }
+    },
+    "117": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 235,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 78,
+            "label": "5 or more"
+          }
+        ]
+      }
+    },
+    "119": {
+      "roll": {
+        "summary": "Cross the hostile terrain.",
+        "modifiers": [{"label": "Grand Huntmastery", "value": 2, "condition": {"type": "power", "name": "Grand Huntmastery"}}],
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 41,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 6,
+            "route": 305,
+            "label": "4-6"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 254,
+            "label": "7 or more"
+          }
+        ]
+      }
+    },
+    "124": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 57,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 244,
+            "label": "5 or more"
+          }
+        ]
+      }
+    },
+    "135": {
+      "roll": {
+        "summary": "Avoid the mountain peril.",
+        "modifiers": [{"label": "Grand Nexus", "value": 3, "condition": {"type": "power", "name": "Grand Nexus"}}, {"label": "Grand Huntmastery", "value": 2, "condition": {"type": "power", "name": "Grand Huntmastery"}}],
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 67,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 8,
+            "route": 284,
+            "label": "5-8"
+          },
+          {
+            "min": 9,
+            "max": 99,
+            "route": 171,
+            "label": "9 or more"
+          }
+        ]
+      }
+    },
+    "145": {
+      "roll": {
+        "summary": "Avoid the mountain peril.",
+        "modifiers": [{"label": "Assimilance", "value": 3, "condition": {"type": "power", "name": "Assimilance"}}, {"label": "Grand Huntmastery", "value": 2, "condition": {"type": "power", "name": "Grand Huntmastery"}}],
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 118,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 6,
+            "route": 15,
+            "label": "4-6"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 322,
+            "label": "7 or more"
+          }
+        ]
+      }
+    },
+    "155": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 57,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 244,
+            "label": "5 or more"
+          }
+        ]
+      }
+    },
+    "178": {
+      "roll": {
+        "summary": "Survive the pursuit.",
+        "modifiers": [{"label": "Grand Huntmastery", "value": 3, "condition": {"type": "power", "name": "Grand Huntmastery"}}, {"label": "Grand Weaponmastery with Kai Weapon", "value": 2, "condition": {"type": "grand_weaponmastery_kai_weapon"}}, {"label": "Animal Mastery", "value": 1, "condition": {"type": "power", "name": "Animal Mastery"}}],
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 300,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 80,
+            "label": "4 or more"
+          }
+        ]
+      }
+    },
+    "180": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 167,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 192,
+            "label": "4 or more"
+          }
+        ]
+      }
+    },
+    "197": {
+      "roll": {
+        "summary": "Avoid the mountain peril.",
+        "modifiers": [{"label": "Assimilance", "value": 3, "condition": {"type": "power", "name": "Assimilance"}}, {"label": "Grand Huntmastery", "value": 2, "condition": {"type": "power", "name": "Grand Huntmastery"}}],
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 2,
+            "route": 172,
+            "label": "0-2"
+          },
+          {
+            "min": 3,
+            "max": 7,
+            "route": 8,
+            "label": "3-7"
+          },
+          {
+            "min": 8,
+            "max": 99,
+            "route": 346,
+            "label": "8 or more"
+          }
+        ]
+      }
+    },
+    "201": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 43,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 95,
+            "label": "4 or more"
+          }
+        ]
+      }
+    },
+    "222": {
+      "roll": {
+        "summary": "Persuade the wheelwright.",
+        "zeroAsTen": true,
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 232,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 81,
+            "label": "4 or more"
+          }
+        ]
+      }
+    },
+    "228": {
+      "roll": {
+        "summary": "Cross the hostile terrain.",
+        "modifiers": [{"label": "Grand Huntmastery", "value": 2, "condition": {"type": "power", "name": "Grand Huntmastery"}}],
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 41,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 6,
+            "route": 305,
+            "label": "4-6"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 254,
+            "label": "7 or more"
+          }
+        ]
+      }
+    },
+    "234": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 5,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 166,
+            "label": "5 or more"
+          }
+        ]
+      }
+    },
+    "249": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 107,
+            "label": "0-6"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 302,
+            "label": "7 or more"
+          }
+        ]
+      }
+    },
+    "252": {
+      "roll": {
+        "summary": "Cross the hostile terrain.",
+        "modifiers": [{"label": "Grand Huntmastery", "value": 1, "condition": {"type": "power", "name": "Grand Huntmastery"}}],
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 99,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 8,
+            "route": 216,
+            "label": "4-8"
+          },
+          {
+            "min": 9,
+            "max": 99,
+            "route": 153,
+            "label": "9 or more"
+          }
+        ]
+      }
+    },
+    "258": {
+      "roll": {
+        "summary": "Escape the mountain peril.",
+        "modifiers": [{"label": "Assimilance", "value": 5, "condition": {"type": "power", "name": "Assimilance"}}, {"label": "Grand Huntmastery", "value": 2, "condition": {"type": "power", "name": "Grand Huntmastery"}}],
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 7,
+            "route": 245,
+            "label": "0-7"
+          },
+          {
+            "min": 8,
+            "max": 99,
+            "route": 278,
+            "label": "8 or more"
+          }
+        ]
+      }
+    },
+    "272": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 5,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 166,
+            "label": "5 or more"
+          }
+        ]
+      }
+    },
+    "283": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 193,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 101,
+            "label": "5 or more"
+          }
+        ]
+      }
+    },
+    "288": {
+      "roll": {
+        "summary": "Persuade the wheelwright.",
+        "zeroAsTen": true,
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 11,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 341,
+            "label": "4 or more"
+          }
+        ]
+      }
+    },
+    "294": {
+      "roll": {
+        "summary": "Avoid the mountain peril.",
+        "modifiers": [{"label": "Grand Nexus", "value": 3, "condition": {"type": "power", "name": "Grand Nexus"}}, {"label": "Grand Huntmastery", "value": 2, "condition": {"type": "power", "name": "Grand Huntmastery"}}],
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 67,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 8,
+            "route": 284,
+            "label": "5-8"
+          },
+          {
+            "min": 9,
+            "max": 99,
+            "route": 171,
+            "label": "9 or more"
+          }
+        ]
+      }
+    },
+    "295": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 267,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 122,
+            "label": "5 or more"
+          }
+        ]
+      }
+    },
+    "313": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 55,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 99,
+            "route": 268,
+            "label": "4 or more"
+          }
+        ]
+      }
+    },
+    "315": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 94,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 9,
+            "route": 3,
+            "label": "5-9"
+          }
+        ]
+      }
+    },
+    "318": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 5,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 166,
+            "label": "5 or more"
+          }
+        ]
+      }
+    },
+    "320": {
+      "roll": {
+        "summary": "Open the sealed doorway.",
+        "modifiers": [{"label": "Dagger or Spike", "value": 1, "condition": {"type": "any", "conditions": [{"type": "item", "name": "Dagger", "containers": ["weapons"]}, {"type": "item", "name": "Spike", "containers": ["weapons", "backpack", "special"]}]}}, {"label": "Grand Nexus", "value": 2, "condition": {"type": "power", "name": "Grand Nexus"}}],
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 265,
+            "label": "0-3"
+          },
+          {
+            "min": 4,
+            "max": 7,
+            "route": 170,
+            "label": "4-7"
+          },
+          {
+            "min": 8,
+            "max": 99,
+            "route": 89,
+            "label": "8 or more"
+          }
+        ]
+      }
+    },
+    "321": {
+      "roll": {
+        "summary": "Use your Kai rank to escape the peril.",
+        "modifiers": [{"label": "Kai ranks above Grand Master Senior", "valueFrom": "new_order_rank_above_five"}],
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 275,
+            "label": "0-6"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 306,
+            "label": "7 or more"
+          }
+        ]
+      }
+    },
+    "328": {
+      "roll": {
+        "summary": "Bribe the guard with Gold Crowns.",
+        "modifiers": [{"label": "Gold Crowns", "valueFrom": "gold"}],
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 8,
+            "route": 32,
+            "label": "0-8"
+          },
+          {
+            "min": 9,
+            "max": 99,
+            "route": 234,
+            "label": "9 or more"
+          }
+        ]
+      }
+    },
+    "339": {
+      "roll": {
+        "summary": "Escape the mountain peril.",
+        "modifiers": [{"label": "Grand Pathsmanship", "value": 3, "condition": {"type": "power", "name": "Grand Pathsmanship"}}, {"label": "Grand Huntmastery", "value": 2, "condition": {"type": "power", "name": "Grand Huntmastery"}}, {"label": "Grand Nexus", "value": 1, "condition": {"type": "power", "name": "Grand Nexus"}}],
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 224,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 9,
+            "route": 307,
+            "label": "5-9"
+          },
+          {
+            "min": 10,
+            "max": 99,
+            "route": 103,
+            "label": "10 or more"
+          }
+        ]
+      }
+    },
+    "343": {
+      "roll": {
+        "summary": "Escape the mountain peril.",
+        "modifiers": [{"label": "Assimilance", "value": 1, "condition": {"type": "power", "name": "Assimilance"}}],
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 7,
+            "route": 14,
+            "label": "0-7"
+          },
+          {
+            "min": 8,
+            "max": 99,
+            "route": 212,
+            "label": "8 or more"
+          }
+        ]
+      }
+    }
+  }
+}
