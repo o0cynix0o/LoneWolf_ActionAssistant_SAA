@@ -765,6 +765,38 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             assistant.roll_current_section(1)
             self.assertEqual(assistant.character["EnduranceCurrent"], 16)
 
+    def test_book23_rnt_rules_handle_gold_choices_items_and_kai_screen(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {
+                    "BookNumber": 23, "EnduranceCurrent": 30, "EnduranceMax": 30,
+                    "GrandMasterDisciplines": ["Kai-screen"],
+                },
+                "Inventory": {"GoldCrowns": 10},
+            })
+            assistant.set_section(112)
+            self.assertTrue(assistant.roll_current_section(2)["Blocked"])
+            self.assertEqual(assistant.current_roll_selection_payload()["Options"][-1], "8")
+            assistant.set_roll_selection("book23-112-gold", "4")
+            self.assertEqual(assistant.roll_current_section(2)["Route"], 26)
+            self.assertEqual(assistant.inventory["GoldCrowns"], 4)
+            assistant.roll_current_section(2)
+            self.assertEqual(assistant.inventory["GoldCrowns"], 4)
+
+            assistant.set_section(124)
+            meals_before = assistant.inventory["BackpackItems"].count("Meal")
+            self.assertEqual(assistant.roll_current_section(0)["Route"], 35)
+            self.assertEqual(assistant.inventory["BackpackItems"].count("Meal"), meals_before + 2)
+
+            assistant.set_section(314)
+            assistant.roll_current_section(1)
+            self.assertEqual(assistant.character["EnduranceCurrent"], 28)
+
     def test_books6_to20_achievements_unlock_from_recorded_campaign_progress(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)

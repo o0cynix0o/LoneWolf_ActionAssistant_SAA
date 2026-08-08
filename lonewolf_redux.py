@@ -6792,6 +6792,7 @@ class LoneWolfReduxAssistant:
             elif delta_from in {"roll_selection", "roll_selection_number"}:
                 delta = self.current_roll_selection_number(str(resolved_action.get("selectionId") or ""))
                 delta *= int(resolved_action.get("multiplier") or 1)
+                delta += int(resolved_action.get("offset") or 0)
                 resolved_action["delta"] = delta
             message = self.apply_automation_action(resolved_action)
             if message:
@@ -6882,6 +6883,8 @@ class LoneWolfReduxAssistant:
             upper = int(numeric_range.get("max") or lower)
             if str(numeric_range.get("maxFrom") or "").lower() in {"end", "endurance", "endurance_current"}:
                 upper = int(self.character.get("EnduranceCurrent") or 0)
+            if str(numeric_range.get("maxFrom") or "").lower() in {"gold", "gold_crowns"}:
+                upper = max(0, int(self.inventory.get("GoldCrowns") or 0) - int(numeric_range.get("reserve") or 0))
             choices = [str(value) for value in range(lower, max(lower, upper) + 1)]
         if str(selection.get("source") or "").lower() == "weapons":
             choices = self.available_combat_weapons(include_jewelled_dagger=True)
