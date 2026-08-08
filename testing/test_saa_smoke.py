@@ -464,7 +464,7 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             weapon_result = assistant.roll_current_section(1)
             self.assertEqual((weapon_result["Total"], weapon_result["Route"]), (5, 248))
 
-    def test_books6_to12_achievements_unlock_from_recorded_campaign_progress(self) -> None:
+    def test_books6_to20_achievements_unlock_from_recorded_campaign_progress(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
             assistant = lonewolf_redux.LoneWolfReduxAssistant(
@@ -475,7 +475,7 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             )
             assistant.set_run_configuration("Story", False, "DataFile")
 
-            for book_number in range(6, 13):
+            for book_number in range(6, 21):
                 visited = list(range(1, 91))
                 assistant.state["Character"]["BookNumber"] = book_number
                 assistant.state["CurrentBookStats"] = {
@@ -491,14 +491,14 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             story_unlocks = {entry["Id"] for entry in assistant.sync_achievements()}
             assistant.set_run_configuration("Normal", False, "DataFile")
             exploration_unlocks = {entry["Id"] for entry in assistant.sync_achievements()}
-            expected_story = {f"lw{book_number}_complete" for book_number in range(6, 13)}
-            expected_exploration = {f"lw{book_number}_long_road" for book_number in range(6, 13)}
+            expected_story = {f"lw{book_number}_complete" for book_number in range(6, 21)}
+            expected_exploration = {f"lw{book_number}_long_road" for book_number in range(6, 21)}
             payload = assistant.achievement_payload()
 
         self.assertTrue(expected_story.issubset(story_unlocks))
         self.assertTrue(expected_exploration.issubset(exploration_unlocks))
         self.assertEqual(payload["SchemaVersion"], 2)
-        for book_number in range(6, 13):
+        for book_number in range(6, 21):
             self.assertEqual(payload["ByBook"][str(book_number)], {
                 "BookNumber": book_number,
                 "Total": 2,

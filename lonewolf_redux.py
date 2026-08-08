@@ -971,6 +971,29 @@ LONE_WOLF_MAGNAKAI_ACHIEVEMENTS = [
     },
 ]
 
+# These are tied only to recorded campaign progress while the per-section
+# Grand Master achievement pass is still being audited against the source.
+LONE_WOLF_GRAND_MASTER_ACHIEVEMENTS = [
+    achievement
+    for book_number in range(13, 21)
+    for achievement in (
+        {
+            "Id": f"lw{book_number}_complete",
+            "Name": BOOK_CATALOG[book_number]["Title"],
+            "BookNumber": book_number,
+            "Category": "Story",
+            "Description": f"Complete Book {book_number}.",
+        },
+        {
+            "Id": f"lw{book_number}_long_road",
+            "Name": f"Book {book_number} Wayfinder",
+            "BookNumber": book_number,
+            "Category": "Exploration",
+            "Description": f"Visit 90 or more unique Book {book_number} sections.",
+        },
+    )
+]
+
 LONE_WOLF_ACHIEVEMENTS = (
     LONE_WOLF_BOOK1_ACHIEVEMENTS
     + LONE_WOLF_BOOK2_ACHIEVEMENTS
@@ -978,6 +1001,7 @@ LONE_WOLF_ACHIEVEMENTS = (
     + LONE_WOLF_BOOK4_ACHIEVEMENTS
     + LONE_WOLF_BOOK5_ACHIEVEMENTS
     + LONE_WOLF_MAGNAKAI_ACHIEVEMENTS
+    + LONE_WOLF_GRAND_MASTER_ACHIEVEMENTS
     + [
         {
             "Id": "veteran_of_sommerlund",
@@ -4792,7 +4816,7 @@ class LoneWolfReduxAssistant:
         if achievement_id == "lw5_long_road":
             return max(len(sections), self.summary_metric_for_book(5, "UniqueSectionsVisited")) >= 100
 
-        magnakai_match = re.fullmatch(r"lw(6|7|8|9|10|11|12)_(complete|long_road)", achievement_id)
+        magnakai_match = re.fullmatch(r"lw(6|7|8|9|10|11|12|13|14|15|16|17|18|19|20)_(complete|long_road)", achievement_id)
         if magnakai_match:
             achievement_book = int(magnakai_match.group(1))
             if magnakai_match.group(2) == "complete":
