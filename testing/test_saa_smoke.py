@@ -917,7 +917,10 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
                 save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
                 state_data_dir=base / "state", books_dir=base / "books",
             )
-            for book_number, rnt_count, combat_count in ((24, 38, 36), (25, 44, 39), (26, 68, 46)):
+            for book_number, rnt_count, combat_count in (
+                (24, 38, 36), (25, 44, 39), (26, 68, 46),
+                (27, 60, 11), (28, 31, 27), (29, 21, 41),
+            ):
                 flows = assistant.section_flows[str(book_number)]
                 self.assertEqual(len([entry for entry in flows.values() if entry.get("roll")]), rnt_count)
                 self.assertEqual(len([entry for entry in flows.values() if entry.get("combat")]), combat_count)
@@ -964,6 +967,40 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             self.assertEqual(
                 (assistant.combat["WinWithinRounds"], assistant.combat["WinWithinRoute"], assistant.combat["TooLateRoute"]),
                 (4, 82, 236),
+            )
+
+            assistant.state["Character"].update({
+                "BookNumber": 27, "NewOrderRank": 9, "EnduranceCurrent": 20,
+            })
+            assistant.set_section(56)
+            self.assertEqual(assistant.roll_current_section(0)["Route"], 161)
+            assistant.set_section(37)
+            assistant.start_section_combat()
+            self.assertEqual(
+                (assistant.combat["Modifier"], assistant.combat["WinWithinRounds"], assistant.combat["TooLateRoute"]),
+                (2, 5, 105),
+            )
+
+            assistant.state["Character"].update({
+                "BookNumber": 28, "EnduranceCurrent": 15, "GrandWeaponmasteryWeapons": ["Sword", "Bow"],
+            })
+            assistant.set_section(65)
+            self.assertEqual(assistant.roll_current_section(0)["Route"], 238)
+            assistant.set_section(18)
+            assistant.start_section_combat()
+            self.assertEqual(assistant.combat["IgnoreEnemyLossRounds"], 2)
+
+            assistant.state["Character"].update({"BookNumber": 29, "NewOrderRank": 9, "EnduranceCurrent": 25})
+            assistant.set_section(234)
+            self.assertEqual(assistant.roll_current_section(0)["Route"], 131)
+            assistant.set_section(145)
+            self.assertEqual(assistant.roll_current_section(9)["Route"], 162)
+            self.assertEqual(assistant.character["EnduranceCurrent"], 18)
+            assistant.set_section(265)
+            assistant.start_section_combat()
+            self.assertEqual(
+                (assistant.combat["WinWithinRounds"], assistant.combat["WinWithinRoute"], assistant.combat["TooLateRoute"]),
+                (3, 313, 49),
             )
 
     def test_books6_to20_achievements_unlock_from_recorded_campaign_progress(self) -> None:

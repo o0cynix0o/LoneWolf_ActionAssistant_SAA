@@ -6252,6 +6252,14 @@ class LoneWolfReduxAssistant:
             return self.effective_endurance_current() < int(condition.get("value") or 0)
         if kind == "end_gte":
             return self.effective_endurance_current() >= int(condition.get("value") or 0)
+        if kind == "new_order_rank_gte":
+            return int(self.character.get("NewOrderRank") or 0) >= int(condition.get("value") or 0)
+        if kind == "container_item_count_gte":
+            container = str(condition.get("container") or "").strip().lower()
+            key = self.container_key(container)
+            return bool(key) and item_slot_total(as_list(self.inventory.get(key))) >= int(
+                condition.get("value") or 0
+            )
         return False
 
     def active_weapon_matches_weaponskill(self) -> bool:
@@ -6457,6 +6465,8 @@ class LoneWolfReduxAssistant:
                     value = max(0, int(self.character.get("NewOrderRank") or 0) - 5)
                 elif value_from in {"new_order_rank_above_six", "new_order_disciplines_above_six"}:
                     value = max(0, int(self.character.get("NewOrderRank") or 0) - 6)
+                elif value_from in {"new_order_rank_above_eight", "new_order_disciplines_above_eight"}:
+                    value = max(0, int(self.character.get("NewOrderRank") or 0) - 8)
                 elif value_from in {"roll_selection", "roll_selection_number"}:
                     value = self.current_roll_selection_number(str(modifier.get("selectionId") or ""))
                 else:

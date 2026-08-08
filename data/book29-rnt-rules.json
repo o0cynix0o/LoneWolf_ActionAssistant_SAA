@@ -1,0 +1,672 @@
+{
+  "29": {
+    "18": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 6,
+            "route": 235,
+            "label": "0-6"
+          },
+          {
+            "min": 7,
+            "max": 99,
+            "route": 219,
+            "label": "7 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Weaponmastery with Bow",
+            "value": 3,
+            "condition": {
+              "type": "grand_weaponmastery_weapon",
+              "name": "Bow"
+            }
+          }
+        ]
+      }
+    },
+    "37": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 99,
+            "route": 20,
+            "label": "ENDURANCE loss",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "deltaFrom": "roll_total",
+                "multiplier": -1
+              }
+            ]
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Kai-screen",
+            "value": -2,
+            "condition": {
+              "type": "power",
+              "name": "Kai-screen"
+            }
+          }
+        ],
+        "minTotal": 0,
+        "zeroAsTen": true
+      }
+    },
+    "57": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 9,
+            "label": "Apply printed RNT result"
+          }
+        ]
+      }
+    },
+    "72": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 9,
+            "label": "Apply printed RNT result"
+          }
+        ]
+      }
+    },
+    "75": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 9,
+            "label": "Apply printed RNT result"
+          }
+        ]
+      }
+    },
+    "81": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 99,
+            "route": 20,
+            "label": "ENDURANCE loss",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "deltaFrom": "roll_total",
+                "multiplier": -1
+              }
+            ]
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Kai-screen",
+            "value": -2,
+            "condition": {
+              "type": "power",
+              "name": "Kai-screen"
+            }
+          }
+        ],
+        "minTotal": 0,
+        "zeroAsTen": true
+      }
+    },
+    "88": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 99,
+            "route": 99,
+            "label": "ENDURANCE loss",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "deltaFrom": "roll_total",
+                "multiplier": -1
+              }
+            ]
+          }
+        ],
+        "zeroAsTen": true
+      }
+    },
+    "91": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 5,
+            "route": 331,
+            "label": "0-5"
+          },
+          {
+            "min": 6,
+            "max": 99,
+            "route": 134,
+            "label": "6 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Weaponmastery with Bow",
+            "value": 3,
+            "condition": {
+              "type": "grand_weaponmastery_weapon",
+              "name": "Bow"
+            }
+          }
+        ]
+      }
+    },
+    "117": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 99,
+            "route": 20,
+            "label": "ENDURANCE loss",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "deltaFrom": "roll_total",
+                "multiplier": -1
+              }
+            ]
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Kai-screen",
+            "value": -2,
+            "condition": {
+              "type": "power",
+              "name": "Kai-screen"
+            }
+          }
+        ],
+        "minTotal": 0,
+        "zeroAsTen": true
+      }
+    },
+    "120": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 5,
+            "route": 306,
+            "label": "0-5"
+          },
+          {
+            "min": 6,
+            "max": 99,
+            "route": 6,
+            "label": "6 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": 3,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          }
+        ]
+      }
+    },
+    "145": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 162,
+            "label": "Lose 3 ENDURANCE",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "delta": -3
+              }
+            ]
+          },
+          {
+            "min": 4,
+            "max": 6,
+            "route": 162,
+            "label": "Lose 5 ENDURANCE",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "delta": -5
+              }
+            ]
+          },
+          {
+            "min": 7,
+            "max": 8,
+            "route": 162,
+            "label": "Lose 7 ENDURANCE",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "delta": -7
+              }
+            ]
+          },
+          {
+            "min": 9,
+            "max": 99,
+            "label": "Fatal lightning strike",
+            "actions": [
+              {
+                "type": "ending",
+                "ending": "death",
+                "cause": "The Claw of Naar lightning strike ends the mission."
+              }
+            ]
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": -2,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          }
+        ],
+        "minTotal": 0
+      }
+    },
+    "159": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 5,
+            "route": 66,
+            "label": "0-5"
+          },
+          {
+            "min": 6,
+            "max": 99,
+            "route": 234,
+            "label": "6 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Weaponmastery with Bow",
+            "value": 2,
+            "condition": {
+              "type": "grand_weaponmastery_weapon",
+              "name": "Bow"
+            }
+          },
+          {
+            "label": "Sun Knight or higher",
+            "value": 2,
+            "condition": {
+              "type": "new_order_rank_gte",
+              "value": 9
+            }
+          }
+        ]
+      }
+    },
+    "169": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 2,
+            "route": 37,
+            "label": "0-2"
+          },
+          {
+            "min": 3,
+            "max": 6,
+            "route": 81,
+            "label": "3-6"
+          },
+          {
+            "min": 7,
+            "max": 9,
+            "route": 117,
+            "label": "7-9"
+          }
+        ]
+      }
+    },
+    "189": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 5,
+            "route": 121,
+            "label": "0-5"
+          },
+          {
+            "min": 6,
+            "max": 99,
+            "route": 198,
+            "label": "6 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Weaponmastery with Bow",
+            "value": 5,
+            "condition": {
+              "type": "grand_weaponmastery_weapon",
+              "name": "Bow"
+            }
+          }
+        ]
+      }
+    },
+    "210": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 3,
+            "route": 162,
+            "label": "Lose 3 ENDURANCE",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "delta": -3
+              }
+            ]
+          },
+          {
+            "min": 4,
+            "max": 6,
+            "route": 162,
+            "label": "Lose 5 ENDURANCE",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "delta": -5
+              }
+            ]
+          },
+          {
+            "min": 7,
+            "max": 8,
+            "route": 162,
+            "label": "Lose 7 ENDURANCE",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "delta": -7
+              }
+            ]
+          },
+          {
+            "min": 9,
+            "max": 99,
+            "label": "Fatal lightning strike",
+            "actions": [
+              {
+                "type": "ending",
+                "ending": "death",
+                "cause": "The Claw of Naar lightning strike ends the mission."
+              }
+            ]
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": -2,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          }
+        ],
+        "minTotal": 0
+      }
+    },
+    "211": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 5,
+            "route": 307,
+            "label": "0-5"
+          },
+          {
+            "min": 6,
+            "max": 99,
+            "route": 23,
+            "label": "6 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Weaponmastery with Bow",
+            "value": 5,
+            "condition": {
+              "type": "grand_weaponmastery_weapon",
+              "name": "Bow"
+            }
+          }
+        ]
+      }
+    },
+    "228": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 35,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 182,
+            "label": "5 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": 2,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          }
+        ]
+      }
+    },
+    "234": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 5,
+            "route": 131,
+            "label": "0-5"
+          },
+          {
+            "min": 6,
+            "max": 99,
+            "route": 243,
+            "label": "6 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Weaponmastery with Bow",
+            "value": 2,
+            "condition": {
+              "type": "grand_weaponmastery_weapon",
+              "name": "Bow"
+            }
+          },
+          {
+            "label": "Kai Grand Defender or higher",
+            "value": 2,
+            "condition": {
+              "type": "new_order_rank_gte",
+              "value": 7
+            }
+          }
+        ]
+      }
+    },
+    "290": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 206,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 129,
+            "label": "5 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Huntmastery",
+            "value": 3,
+            "condition": {
+              "type": "power",
+              "name": "Grand Huntmastery"
+            }
+          },
+          {
+            "label": "ENDURANCE 20 or lower",
+            "value": -1,
+            "condition": {
+              "type": "end_lt",
+              "value": 21
+            }
+          }
+        ],
+        "minTotal": 0
+      }
+    },
+    "323": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 99,
+            "route": 101,
+            "label": "ENDURANCE loss",
+            "actions": [
+              {
+                "type": "stat",
+                "stat": "end",
+                "deltaFrom": "roll_total",
+                "multiplier": -1
+              }
+            ]
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Six or more Backpack Items",
+            "value": 2,
+            "condition": {
+              "type": "container_item_count_gte",
+              "container": "backpack",
+              "value": 6
+            }
+          }
+        ],
+        "zeroAsTen": true
+      }
+    },
+    "333": {
+      "roll": {
+        "summary": "Source Random Number Table check.",
+        "outcomes": [
+          {
+            "min": 0,
+            "max": 4,
+            "route": 109,
+            "label": "0-4"
+          },
+          {
+            "min": 5,
+            "max": 99,
+            "route": 217,
+            "label": "5 or more"
+          }
+        ],
+        "modifiers": [
+          {
+            "label": "Grand Weaponmastery with Bow",
+            "value": 5,
+            "condition": {
+              "type": "grand_weaponmastery_weapon",
+              "name": "Bow"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,412 @@
+{
+  "28": {
+    "17": {
+      "combat": [
+        {
+          "id": "book28-17",
+          "enemies": [
+            {
+              "name": "Nahba Worm",
+              "cs": 45,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 8
+        }
+      ]
+    },
+    "18": {
+      "combat": [
+        {
+          "id": "book28-18",
+          "enemies": [
+            {
+              "name": "Chagarashi",
+              "cs": 42,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 280,
+          "ignoreEnemyLossRounds": 2
+        }
+      ]
+    },
+    "39": {
+      "combat": [
+        {
+          "id": "book28-39",
+          "enemies": [
+            {
+              "name": "Bhanarian Signalman",
+              "cs": 30,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 195,
+          "modifier": -4
+        }
+      ]
+    },
+    "50": {
+      "combat": [
+        {
+          "id": "book28-50",
+          "enemies": [
+            {
+              "name": "Imperial Guard Captain",
+              "cs": 46,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 173
+        }
+      ]
+    },
+    "54": {
+      "combat": [
+        {
+          "id": "book28-54",
+          "enemies": [
+            {
+              "name": "Bhanarian Assault Troops",
+              "cs": 47,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 125
+        }
+      ]
+    },
+    "63": {
+      "combat": [
+        {
+          "id": "book28-63",
+          "enemies": [
+            {
+              "name": "Bhanarian Cavalry Command",
+              "cs": 48,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 150
+        }
+      ]
+    },
+    "71": {
+      "combat": [
+        {
+          "id": "book28-71",
+          "enemies": [
+            {
+              "name": "Tomb Robbers (with Kai Weapon)",
+              "cs": 52,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 128
+        }
+      ]
+    },
+    "72": {
+      "combat": [
+        {
+          "id": "book28-72",
+          "enemies": [
+            {
+              "name": "Chagarashi",
+              "cs": 44,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 295
+        }
+      ]
+    },
+    "76": {
+      "combat": [
+        {
+          "id": "book28-76",
+          "enemies": [
+            {
+              "name": "Yansi Trapdoor (magically sealed)",
+              "cs": 50,
+              "endurance": 25
+            }
+          ],
+          "victoryRoute": 69
+        }
+      ]
+    },
+    "77": {
+      "combat": [
+        {
+          "id": "book28-77",
+          "enemies": [
+            {
+              "name": "Bhanarian Cavalry Command",
+              "cs": 48,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 266
+        }
+      ]
+    },
+    "82": {
+      "combat": [
+        {
+          "id": "book28-82",
+          "enemies": [
+            {
+              "name": "Krakalla",
+              "cs": 50,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 241
+        }
+      ]
+    },
+    "106": {
+      "combat": [
+        {
+          "id": "book28-106",
+          "enemies": [
+            {
+              "name": "Krakalla",
+              "cs": 50,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 241
+        }
+      ]
+    },
+    "115": {
+      "combat": [
+        {
+          "id": "book28-115",
+          "enemies": [
+            {
+              "name": "Chagarashi",
+              "cs": 44,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 97
+        }
+      ]
+    },
+    "135": {
+      "combat": [
+        {
+          "id": "book28-135",
+          "enemies": [
+            {
+              "name": "Chagarashi Leader",
+              "cs": 42,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 9
+        }
+      ]
+    },
+    "136": {
+      "combat": [
+        {
+          "id": "book28-136",
+          "enemies": [
+            {
+              "name": "Tomb Robbers (with Kai Weapon)",
+              "cs": 48,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 12
+        }
+      ]
+    },
+    "143": {
+      "combat": [
+        {
+          "id": "book28-143",
+          "enemies": [
+            {
+              "name": "Bhanarian Cavalry Command",
+              "cs": 50,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 266
+        }
+      ]
+    },
+    "148": {
+      "combat": [
+        {
+          "id": "book28-148",
+          "enemies": [
+            {
+              "name": "Javaian Bandit",
+              "cs": 28,
+              "endurance": 28
+            }
+          ],
+          "victoryRoute": 25
+        }
+      ]
+    },
+    "172": {
+      "combat": [
+        {
+          "id": "book28-172",
+          "enemies": [
+            {
+              "name": "Tomb Robber",
+              "cs": 30,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 139
+        }
+      ]
+    },
+    "174": {
+      "combat": [
+        {
+          "id": "book28-174",
+          "enemies": [
+            {
+              "name": "Chagarashi",
+              "cs": 44,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 295
+        }
+      ]
+    },
+    "179": {
+      "combat": [
+        {
+          "id": "book28-179",
+          "enemies": [
+            {
+              "name": "Bhanarian Cavalry Command",
+              "cs": 48,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 150
+        }
+      ]
+    },
+    "200": {
+      "combat": [
+        {
+          "id": "book28-200",
+          "enemies": [
+            {
+              "name": "Brumalghasts",
+              "cs": 57,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 105
+        }
+      ]
+    },
+    "224": {
+      "combat": [
+        {
+          "id": "book28-224",
+          "enemies": [
+            {
+              "name": "Chagarashi",
+              "cs": 44,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 295
+        }
+      ]
+    },
+    "225": {
+      "combat": [
+        {
+          "id": "book28-225",
+          "enemies": [
+            {
+              "name": "Tomb Robber",
+              "cs": 30,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 139
+        }
+      ]
+    },
+    "243": {
+      "combat": [
+        {
+          "id": "book28-243",
+          "enemies": [
+            {
+              "name": "Chagarashi",
+              "cs": 42,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 280,
+          "ignoreEnemyLossRounds": 1
+        }
+      ]
+    },
+    "254": {
+      "combat": [
+        {
+          "id": "book28-254",
+          "enemies": [
+            {
+              "name": "Tomb Robbers (with Kai Weapon)",
+              "cs": 44,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 128
+        }
+      ]
+    },
+    "262": {
+      "combat": [
+        {
+          "id": "book28-262",
+          "enemies": [
+            {
+              "name": "Nahba Worm",
+              "cs": 45,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 8
+        }
+      ]
+    },
+    "292": {
+      "combat": [
+        {
+          "id": "book28-292",
+          "enemies": [
+            {
+              "name": "Krakalla",
+              "cs": 50,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 241
+        }
+      ]
+    }
+  }
+}

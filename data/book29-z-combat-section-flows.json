@@ -1,0 +1,641 @@
+{
+  "29": {
+    "2": {
+      "combat": [
+        {
+          "id": "book29-2",
+          "enemies": [
+            {
+              "name": "Xaol the Necromancer (reconstructed undead, with Serpent Rod)",
+              "cs": 50,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 160
+        }
+      ]
+    },
+    "23": {
+      "combat": [
+        {
+          "id": "book29-23",
+          "enemies": [
+            {
+              "name": "Chagarashi Scout",
+              "cs": 40,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 224
+        }
+      ]
+    },
+    "28": {
+      "combat": [
+        {
+          "id": "book29-28",
+          "enemies": [
+            {
+              "name": "5 Nagah Ghouls",
+              "cs": 45,
+              "endurance": 57
+            }
+          ],
+          "victoryRoute": 227,
+          "ignorePlayerLossRounds": 1,
+          "modifier": 6
+        }
+      ]
+    },
+    "48": {
+      "combat": [
+        {
+          "id": "book29-48",
+          "enemies": [
+            {
+              "name": "Doomwolf",
+              "cs": 30,
+              "endurance": 26
+            }
+          ]
+        }
+      ]
+    },
+    "51": {
+      "combat": [
+        {
+          "id": "book29-51",
+          "enemies": [
+            {
+              "name": "Xaol the Necromancer (reconstructed undead, with Serpent Rod)",
+              "cs": 50,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 160
+        }
+      ]
+    },
+    "54": {
+      "combat": [
+        {
+          "id": "book29-54",
+          "enemies": [
+            {
+              "name": "Nagah Ghoul",
+              "cs": 38,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 72
+        }
+      ]
+    },
+    "60": {
+      "combat": [
+        {
+          "id": "book29-60",
+          "enemies": [
+            {
+              "name": "Kl\u00fcz (armed with Zukgudrak)",
+              "cs": 45,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 228
+        }
+      ]
+    },
+    "66": {
+      "combat": [
+        {
+          "id": "book29-66",
+          "enemies": [
+            {
+              "name": "Large Chagarashi",
+              "cs": 42,
+              "endurance": 37
+            }
+          ],
+          "victoryRoute": 313,
+          "winWithinRounds": 3,
+          "winWithinRoute": 313,
+          "tooLateRoute": 49
+        }
+      ]
+    },
+    "70": {
+      "combat": [
+        {
+          "id": "book29-70",
+          "enemies": [
+            {
+              "name": "Spectral Entity",
+              "cs": 45,
+              "endurance": 34
+            }
+          ],
+          "victoryRoute": 330
+        }
+      ]
+    },
+    "83": {
+      "combat": [
+        {
+          "id": "book29-83",
+          "enemies": [
+            {
+              "name": "Skarad",
+              "cs": 41,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 68
+        }
+      ]
+    },
+    "100": {
+      "combat": [
+        {
+          "id": "book29-100",
+          "enemies": [
+            {
+              "name": "Zashnor (in Ice Dragon form)",
+              "cs": 54,
+              "endurance": 52
+            }
+          ],
+          "victoryRoute": 312,
+          "enemyImmune": true,
+          "winWithinRounds": 6,
+          "winWithinRoute": 312,
+          "tooLateRoute": 50
+        }
+      ]
+    },
+    "101": {
+      "combat": [
+        {
+          "id": "book29-101",
+          "enemies": [
+            {
+              "name": "Tkukoma Estuary",
+              "cs": 34,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 294
+        }
+      ]
+    },
+    "109": {
+      "combat": [
+        {
+          "id": "book29-109",
+          "enemies": [
+            {
+              "name": "Mooldor (wounded)",
+              "cs": 34,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 300
+        }
+      ]
+    },
+    "116": {
+      "combat": [
+        {
+          "id": "book29-116",
+          "enemies": [
+            {
+              "name": "Spectral Entity",
+              "cs": 45,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 330
+        }
+      ]
+    },
+    "118": {
+      "combat": [
+        {
+          "id": "book29-118",
+          "enemies": [
+            {
+              "name": "2 Skarada (in combat frenzy)",
+              "cs": 45,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 274
+        }
+      ]
+    },
+    "121": {
+      "combat": [
+        {
+          "id": "book29-121",
+          "enemies": [
+            {
+              "name": "Skarad Leader (wounded)",
+              "cs": 42,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 17
+        }
+      ]
+    },
+    "131": {
+      "combat": [
+        {
+          "id": "book29-131",
+          "enemies": [
+            {
+              "name": "Wounded Chagarashi",
+              "cs": 38,
+              "endurance": 33
+            }
+          ],
+          "victoryRoute": 90
+        }
+      ]
+    },
+    "150": {
+      "combat": [
+        {
+          "id": "book29-150",
+          "enemies": [
+            {
+              "name": "Anseng (undead)",
+              "cs": 48,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 335
+        }
+      ]
+    },
+    "157": {
+      "combat": [
+        {
+          "id": "book29-157",
+          "enemies": [
+            {
+              "name": "Chagarashi Scout",
+              "cs": 38,
+              "endurance": 38
+            }
+          ]
+        }
+      ]
+    },
+    "158": {
+      "combat": [
+        {
+          "id": "book29-158",
+          "enemies": [
+            {
+              "name": "Mooldor",
+              "cs": 36,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 300,
+          "ignorePlayerLossRounds": 1
+        }
+      ]
+    },
+    "161": {
+      "combat": [
+        {
+          "id": "book29-161",
+          "enemies": [
+            {
+              "name": "Skarad",
+              "cs": 42,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 68,
+          "ignorePlayerLossRounds": 1,
+          "timedModifiers": [
+            {
+              "modifier": 3,
+              "startRound": 1,
+              "endRound": 1
+            }
+          ]
+        }
+      ]
+    },
+    "174": {
+      "combat": [
+        {
+          "id": "book29-174",
+          "enemies": [
+            {
+              "name": "5 Nagah Ghouls",
+              "cs": 45,
+              "endurance": 57
+            }
+          ],
+          "victoryRoute": 227,
+          "ignorePlayerLossRounds": 2,
+          "modifier": 6
+        }
+      ]
+    },
+    "194": {
+      "combat": [
+        {
+          "id": "book29-194",
+          "enemies": [
+            {
+              "name": "Doomwolf",
+              "cs": 30,
+              "endurance": 26
+            }
+          ]
+        }
+      ]
+    },
+    "195": {
+      "combat": [
+        {
+          "id": "book29-195",
+          "enemies": [
+            {
+              "name": "Chagarashi",
+              "cs": 44,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 302
+        }
+      ]
+    },
+    "207": {
+      "combat": [
+        {
+          "id": "book29-207",
+          "enemies": [
+            {
+              "name": "5 Nagah Ghouls",
+              "cs": 45,
+              "endurance": 59
+            }
+          ],
+          "victoryRoute": 227,
+          "ignorePlayerLossRounds": 1,
+          "modifier": 6
+        }
+      ]
+    },
+    "222": {
+      "combat": [
+        {
+          "id": "book29-222",
+          "enemies": [
+            {
+              "name": "Spectral Entity",
+              "cs": 45,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 330
+        }
+      ]
+    },
+    "230": {
+      "combat": [
+        {
+          "id": "book29-230",
+          "enemies": [
+            {
+              "name": "Xaol the Necromancer (reconstructed undead, with Serpent Rod)",
+              "cs": 50,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 160
+        }
+      ]
+    },
+    "242": {
+      "combat": [
+        {
+          "id": "book29-242",
+          "enemies": [
+            {
+              "name": "2 Chagarashi Scouts",
+              "cs": 45,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 224
+        }
+      ]
+    },
+    "256": {
+      "combat": [
+        {
+          "id": "book29-256",
+          "enemies": [
+            {
+              "name": "Skarad Leader (wounded)",
+              "cs": 42,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 17
+        }
+      ]
+    },
+    "257": {
+      "combat": [
+        {
+          "id": "book29-257",
+          "enemies": [
+            {
+              "name": "Doomwolf",
+              "cs": 32,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 86,
+          "ignoreEnemyLossRounds": 2
+        }
+      ]
+    },
+    "262": {
+      "combat": [
+        {
+          "id": "book29-262",
+          "enemies": [
+            {
+              "name": "Nagah Ghouls",
+              "cs": 44,
+              "endurance": 44
+            }
+          ],
+          "victoryRoute": 246
+        }
+      ]
+    },
+    "265": {
+      "combat": [
+        {
+          "id": "book29-265",
+          "enemies": [
+            {
+              "name": "Large Chagarashi",
+              "cs": 42,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 313,
+          "winWithinRounds": 3,
+          "winWithinRoute": 313,
+          "tooLateRoute": 49
+        }
+      ]
+    },
+    "268": {
+      "combat": [
+        {
+          "id": "book29-268",
+          "enemies": [
+            {
+              "name": "2 Chagarashi Scouts",
+              "cs": 45,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 224
+        }
+      ]
+    },
+    "296": {
+      "combat": [
+        {
+          "id": "book29-296",
+          "enemies": [
+            {
+              "name": "Skarad",
+              "cs": 41,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 68
+        }
+      ]
+    },
+    "304": {
+      "combat": [
+        {
+          "id": "book29-304",
+          "enemies": [
+            {
+              "name": "5 Nagah Ghouls",
+              "cs": 45,
+              "endurance": 60
+            }
+          ],
+          "victoryRoute": 227
+        }
+      ]
+    },
+    "307": {
+      "combat": [
+        {
+          "id": "book29-307",
+          "enemies": [
+            {
+              "name": "2 Chagarashi Scouts",
+              "cs": 45,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 224
+        }
+      ]
+    },
+    "319": {
+      "combat": [
+        {
+          "id": "book29-319",
+          "enemies": [
+            {
+              "name": "Xaol the Necromancer (reconstructed undead, with Serpent Rod)",
+              "cs": 50,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 160
+        }
+      ]
+    },
+    "324": {
+      "combat": [
+        {
+          "id": "book29-324",
+          "enemies": [
+            {
+              "name": "Chagarashi Scout (stunned)",
+              "cs": 34,
+              "endurance": 36
+            }
+          ]
+        }
+      ]
+    },
+    "328": {
+      "combat": [
+        {
+          "id": "book29-328",
+          "enemies": [
+            {
+              "name": "Skarad",
+              "cs": 42,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 68
+        }
+      ]
+    },
+    "342": {
+      "combat": [
+        {
+          "id": "book29-342",
+          "enemies": [
+            {
+              "name": "Kl\u00fcz (armed with Zukgudrak)",
+              "cs": 48,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 119
+        }
+      ]
+    },
+    "347": {
+      "combat": [
+        {
+          "id": "book29-347",
+          "enemies": [
+            {
+              "name": "Wild Guanza Herd",
+              "cs": 42,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 201
+        }
+      ]
+    }
+  }
+}

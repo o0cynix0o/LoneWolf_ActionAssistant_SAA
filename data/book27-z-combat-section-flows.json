@@ -1,0 +1,176 @@
+{
+  "27": {
+    "33": {
+      "combat": [
+        {
+          "id": "book27-33",
+          "enemies": [
+            {
+              "name": "Bhanarian Guards",
+              "cs": 37,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 144
+        }
+      ]
+    },
+    "37": {
+      "combat": [
+        {
+          "id": "book27-37",
+          "enemies": [
+            {
+              "name": "Bhanarian Roughriders",
+              "cs": 38,
+              "endurance": 41
+            }
+          ],
+          "victoryRoute": 256,
+          "modifier": 2,
+          "winWithinRounds": 5,
+          "winWithinRoute": 256,
+          "tooLateRoute": 105
+        }
+      ]
+    },
+    "97": {
+      "combat": [
+        {
+          "id": "book27-97",
+          "enemies": [
+            {
+              "name": "Sligza",
+              "cs": 49,
+              "endurance": 20
+            }
+          ],
+          "victoryRoute": 328,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "126": {
+      "combat": [
+        {
+          "id": "book27-126",
+          "enemies": [
+            {
+              "name": "Bavazanur Leader (Winged Agarashi)",
+              "cs": 42,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 36,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "186": {
+      "combat": [
+        {
+          "id": "book27-186",
+          "enemies": [
+            {
+              "name": "Parade Ground Guards",
+              "cs": 36,
+              "endurance": 39
+            }
+          ],
+          "victoryRoute": 41
+        }
+      ]
+    },
+    "270": {
+      "combat": [
+        {
+          "id": "book27-270",
+          "enemies": [
+            {
+              "name": "Xanon Leader",
+              "cs": 46,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 277
+        }
+      ]
+    },
+    "282": {
+      "combat": [
+        {
+          "id": "book27-282",
+          "enemies": [
+            {
+              "name": "Bhanarian Guards & Gunners",
+              "cs": 40,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 144
+        }
+      ]
+    },
+    "297": {
+      "combat": [
+        {
+          "id": "book27-297",
+          "enemies": [
+            {
+              "name": "Bhanarian Bridge Guards",
+              "cs": 32,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 84
+        }
+      ]
+    },
+    "315": {
+      "combat": [
+        {
+          "id": "book27-315",
+          "enemies": [
+            {
+              "name": "Sligza",
+              "cs": 49,
+              "endurance": 22
+            }
+          ],
+          "victoryRoute": 328,
+          "enemyImmune": true
+        }
+      ]
+    },
+    "326": {
+      "combat": [
+        {
+          "id": "book27-326",
+          "enemies": [
+            {
+              "name": "Bhanarian Guards",
+              "cs": 37,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 144
+        }
+      ]
+    },
+    "338": {
+      "combat": [
+        {
+          "id": "book27-338",
+          "enemies": [
+            {
+              "name": "Captain Gildas (Psychically possessed)",
+              "cs": 48,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 117
+        }
+      ]
+    }
+  }
+}
