@@ -114,8 +114,12 @@ def build_book_ledger(book_number: int, folder: Path) -> tuple[dict[str, Any], C
             "sourceRoutes": routes,
             "incomingRouteCount": int(incoming[section]),
         }
-    if len(entries) != 350:
-        raise ValueError(f"Book {book_number} expected 350 sections, found {len(entries)} in {folder}.")
+    expected_sections = set(range(1, max(parsed, default=0) + 1))
+    if set(parsed) != expected_sections:
+        raise ValueError(
+            f"Book {book_number} has a non-contiguous section range in {folder}: "
+            f"found {len(entries)} sections through {max(parsed, default=0)}."
+        )
     return {str(book_number): entries}, tags
 
 

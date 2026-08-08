@@ -41,8 +41,12 @@ def audit_book(book_number: int, folder: Path) -> dict[str, Any]:
         for name, pattern in SIGNALS.items():
             if re.search(pattern, parser.text, re.IGNORECASE):
                 hits[name].append(section)
-    if found_sections != set(range(1, 351)):
-        raise ValueError(f"Book {book_number} does not contain sections 1 through 350.")
+    expected_sections = set(range(1, max(found_sections, default=0) + 1))
+    if found_sections != expected_sections:
+        raise ValueError(
+            f"Book {book_number} does not contain a contiguous range from section 1 "
+            f"through {max(found_sections, default=0)}."
+        )
     return {
         "sectionCount": len(found_sections),
         "signals": {name: sorted(values) for name, values in hits.items()},
