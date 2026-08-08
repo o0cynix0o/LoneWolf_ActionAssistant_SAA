@@ -19,7 +19,6 @@ from generate_section_ledger import SectionPageParser, parse_book_spec
 
 SIGNALS = {
     "rnt": r"random number table",
-    "combat": r"combat skill|combat results table",
     "endurance": r"endurance",
     "meal": r"\bmeals?\b",
     "gold": r"gold crowns?",
@@ -30,15 +29,18 @@ SIGNALS = {
 
 
 def audit_book(book_number: int, folder: Path) -> dict[str, Any]:
-    hits = {name: [] for name in SIGNALS}
+    hits = {name: [] for name in (*SIGNALS, "combat")}
     found_sections: set[int] = set()
     for page in folder.glob("sect*.htm"):
+        source_html = page.read_text(encoding="utf-8", errors="ignore")
         parser = SectionPageParser()
-        parser.feed(page.read_text(encoding="utf-8", errors="ignore"))
+        parser.feed(source_html)
         section = parser.section
         if section is None:
             continue
         found_sections.add(section)
+        if re.search(r'<p\s+class=["\'][^"\']*\bcombat\b', source_html, re.IGNORECASE):
+            hits["combat"].append(section)
         for name, pattern in SIGNALS.items():
             if re.search(pattern, parser.text, re.IGNORECASE):
                 hits[name].append(section)

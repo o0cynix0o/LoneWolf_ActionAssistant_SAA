@@ -1,0 +1,27 @@
+{
+  "21": {
+    "5": {"combat": [{"id": "book21-5", "enemies": [{"name": "Dar-Isun", "cs": 39, "endurance": 38}], "forceUnarmedThroughRound": 1, "victoryRoute": 340}]},
+    "21": {"combat": [{"id": "book21-21", "enemies": [{"name": "Shadakine Raiders", "cs": 36, "endurance": 40}], "canEvade": true, "evadeAfterRounds": 3, "evadeRoute": 13, "victoryRoute": 97}]},
+    "31": {"combat": [{"id": "book21-31", "enemies": [{"name": "Slave trader's henchmen", "cs": 33, "endurance": 36}], "winWithinRounds": 4, "winWithinRoute": 289, "tooLateRoute": 195}]},
+    "43": {"combat": [{"id": "book21-43", "enemies": [{"name": "Deathstalker (mate)", "cs": 42, "endurance": 40}], "victoryRoute": 76}]},
+    "44": {"combat": [{"id": "book21-44", "enemies": [{"name": "Svolta", "cs": 37, "endurance": 36}], "timedModifiers": [{"modifier": -3, "startRound": 1, "endRound": 2}], "victoryRoute": 212}]},
+    "50": {"combat": [{"id": "book21-50", "enemies": [{"name": "Dromodon", "cs": 44, "endurance": 39}], "victoryRoute": 268}]},
+    "60": {"combat": [{"id": "book21-60", "enemies": [{"name": "Deathstalker (mate)", "cs": 42, "endurance": 40}], "victoryRoute": 76}]},
+    "94": {"combat": [{"id": "book21-94", "enemies": [{"name": "Deathstalker (stunned)", "cs": 38, "endurance": 38}], "ignorePlayerLossRounds": 1, "victoryRoute": 41}]},
+    "120": {"combat": [{"id": "book21-120", "enemies": [{"name": "Deathstalker (mate)", "cs": 42, "endurance": 40}], "victoryRoute": 76}]},
+    "135": {"combat": [{"id": "book21-135", "enemies": [{"name": "City Guards", "cs": 33, "endurance": 35}], "victoryRoute": 334}]},
+    "162": {"combat": [{"id": "book21-162", "enemies": [{"name": "Otokh", "cs": 40, "endurance": 40}], "modifier": -3, "victoryRoute": 315}]},
+    "192": {"combat": [{"id": "book21-192", "enemies": [{"name": "Svolta", "cs": 37, "endurance": 36}], "timedModifiers": [{"modifier": 2, "startRound": 1, "endRound": 1}], "victoryRoute": 212}]},
+    "204": {"combat": [{"id": "book21-204", "enemies": [{"name": "Deathstalker", "cs": 40, "endurance": 40}], "victoryRoute": 41}]},
+    "210": {"combat": [{"id": "book21-210", "enemies": [{"name": "Otokh", "cs": 40, "endurance": 40}], "victoryRoute": 315}]},
+    "230": {"combat": [{"id": "book21-230", "enemies": [{"name": "Dar-Isun", "cs": 39, "endurance": 38}], "forceUnarmedThroughRound": 1, "victoryRoute": 340}]},
+    "248": {"combat": [{"id": "book21-248", "enemies": [{"name": "Deathstalker", "cs": 40, "endurance": 40}], "victoryRoute": 41}]},
+    "257": {"combat": [{"id": "book21-257", "enemies": [{"name": "Svolta", "cs": 37, "endurance": 36}], "timedModifiers": [{"modifier": 2, "startRound": 1, "endRound": 1}], "victoryRoute": 212}]},
+    "261": {"combat": [{"id": "book21-261", "enemies": [{"name": "Svolta", "cs": 37, "endurance": 36}], "timedModifiers": [{"modifier": 2, "startRound": 1, "endRound": 1}], "victoryRoute": 212}]},
+    "266": {"combat": [{"id": "book21-266", "enemies": [{"name": "Deathstalker (grazed)", "cs": 39, "endurance": 38}], "victoryRoute": 41}]},
+    "279": {"combat": [{"id": "book21-279", "enemies": [{"name": "Deathstalker (wounded)", "cs": 38, "endurance": 36}], "victoryRoute": 41}]},
+    "300": {"combat": [{"id": "book21-300", "enemies": [{"name": "Deathstalker (mate)", "cs": 42, "endurance": 40}], "victoryRoute": 76}]},
+    "303": {"combat": [{"id": "book21-303", "enemies": [{"name": "Otokh", "cs": 40, "endurance": 40}], "victoryRoute": 315}]},
+    "331": {"combat": [{"id": "book21-331", "enemies": [{"name": "Shadakine Raiders", "cs": 36, "endurance": 40}], "canEvade": true, "evadeAfterRounds": 3, "evadeRoute": 13, "victoryRoute": 97}]}
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "23": {
+    "10": {"combat": [{"id": "book23-10", "enemies": [{"name": "Bavazanur (Winged Agarashi - wounded)", "cs": 38, "endurance": 30}], "modifier": 5, "victoryRoute": 129}]},
+    "25": {"combat": [{"id": "book23-25", "enemies": [{"name": "Hunting party", "cs": 47, "endurance": 40}], "timedModifiers": [{"modifier": 5, "startRound": 4, "endRound": 99}], "victoryRoute": 186}]},
+    "34": {"combat": [{"id": "book23-34", "enemies": [{"name": "Cavalian Bandits", "cs": 40, "endurance": 36}], "modifier": 5, "winWithinRounds": 3, "winWithinRoute": 215, "tooLateRoute": 103}]},
+    "60": {"combat": [{"id": "book23-60", "enemies": [{"name": "Zhakka (warrior-mage)", "cs": 42, "endurance": 36}], "roundLimit": 1, "oneRoundComparisonRoutes": {"playerLossGreater": 40, "enemyLossGreater": 297, "equal": 143}}]},
+    "83": {"combat": [{"id": "book23-83", "enemies": [{"name": "Baron Sadanzo (with Gem of Naar)", "cs": 54, "endurance": 36}], "victoryRoute": 50}]},
+    "103": {"combat": [{"id": "book23-103", "enemies": [{"name": "Peutrimax (with magical sword)", "cs": 53, "endurance": 38}], "modifier": 5, "victoryRoute": 176}]},
+    "107": {"combat": [{"id": "book23-107", "enemies": [{"name": "Tehda Stables Guard", "cs": 24, "endurance": 24}], "timedModifiers": [{"modifier": -5, "startRound": 1, "endRound": 1}], "victoryRoute": 316}]},
+    "128": {"combat": [{"id": "book23-128", "enemies": [{"name": "Cavalian Bandits", "cs": 40, "endurance": 36}], "modifier": 5, "winWithinRounds": 5, "winWithinRoute": 215, "tooLateRoute": 103}]},
+    "159": {"combat": [{"id": "book23-159", "enemies": [{"name": "Sadanzo's knights", "cs": 45, "endurance": 38}], "modifier": 5, "victoryRoute": 108}]},
+    "203": {"combat": [{"id": "book23-203", "enemies": [{"name": "Knight Bachelor and 6 Citadel Gaolers", "cs": 43, "endurance": 38}], "victoryRoute": 324}]},
+    "216": {"combat": [{"id": "book23-216", "enemies": [{"name": "Tehda Stables Guard", "cs": 24, "endurance": 24}], "forceUnarmed": true, "victoryRoute": 316}]},
+    "217": {"combat": [{"id": "book23-217", "enemies": [{"name": "Sadanzo's sorcerous blades", "cs": 40, "endurance": 20}], "victoryRoute": 106}]},
+    "244": {"combat": [{"id": "book23-244", "enemies": [{"name": "Sadanzo's sorcerous blades", "cs": 46, "endurance": 20}], "victoryRoute": 106}]},
+    "254": {"combat": [{"id": "book23-254", "enemies": [{"name": "Robber Knights of Voshno", "cs": 47, "endurance": 50}], "modifier": 5, "victoryRoute": 77}]},
+    "275": {"combat": [{"id": "book23-275", "enemies": [{"name": "Knight Bachelor and 6 Citadel Gaolers", "cs": 43, "endurance": 38}], "victoryRoute": 39}]},
+    "284": {"combat": [{"id": "book23-284", "enemies": [{"name": "Cavalian Bandits", "cs": 40, "endurance": 36}], "modifier": 5, "winWithinRounds": 4, "winWithinRoute": 215, "tooLateRoute": 103}]},
+    "301": {"combat": [{"id": "book23-301", "enemies": [{"name": "Bavazanur (Winged Agarashi)", "cs": 38, "endurance": 35}], "modifier": 5, "victoryRoute": 129}]}
+  }
+}

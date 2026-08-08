@@ -797,6 +797,73 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             assistant.roll_current_section(1)
             self.assertEqual(assistant.character["EnduranceCurrent"], 28)
 
+    def test_new_order_combat_catalogue_preserves_source_encounters_and_rules(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            self.assertEqual(len([entry for entry in assistant.section_flows["21"].values() if entry.get("combat")]), 23)
+            self.assertEqual(len([entry for entry in assistant.section_flows["22"].values() if entry.get("combat")]), 25)
+            self.assertEqual(len([entry for entry in assistant.section_flows["23"].values() if entry.get("combat")]), 17)
+
+            assistant.state["Character"].update({"BookNumber": 21, "CombatSkillCurrent": 20})
+            assistant.state["Inventory"]["Weapons"] = ["Sword"]
+            assistant.set_section(5)
+            assistant.start_section_combat()
+            self.assertEqual(assistant.combat["ForceUnarmedThroughRound"], 1)
+            self.assertEqual(assistant.combat["VictoryRoute"], 340)
+            assistant.set_section(31)
+            assistant.start_section_combat()
+            self.assertEqual((assistant.combat["WinWithinRounds"], assistant.combat["TooLateRoute"]), (4, 195))
+
+            assistant.state["Character"].update({"BookNumber": 22, "GrandMasterDisciplines": []})
+            assistant.set_section(67)
+            assistant.start_section_combat()
+            self.assertEqual(assistant.combat["Modifier"], -4)
+            assistant.set_section(106)
+            assistant.start_section_combat()
+            self.assertEqual((assistant.combat["RoundLimit"], assistant.combat["SurvivalRoute"]), (2, 215))
+
+            assistant.state["Character"]["BookNumber"] = 23
+            assistant.set_section(60)
+            assistant.start_section_combat()
+            self.assertEqual(assistant.combat["OneRoundComparisonRoutes"], {"playerLossGreater": 40, "enemyLossGreater": 297, "equal": 143})
+            assistant.set_section(25)
+            assistant.start_section_combat()
+            self.assertEqual(assistant.combat_skill_for_round(1), 20)
+            self.assertEqual(assistant.combat_skill_for_round(4), 25)
+
+    def test_new_order_books21_to23_unlock_campaign_achievements(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.set_run_configuration("Story", False, "DataFile")
+            for book_number in range(21, 24):
+                assistant.state["Character"]["BookNumber"] = book_number
+                assistant.state["CurrentBookStats"] = {
+                    "BookNumber": book_number,
+                    "BookTitle": lonewolf_redux.BOOK_CATALOG[book_number]["Title"],
+                    "StartSection": 1,
+                    "LastSection": 90,
+                    "SectionsVisited": 75,
+                    "VisitedSections": list(range(1, 76)),
+                }
+                assistant.ensure_book_completed(book_number)
+
+            story_unlocked = {entry["Id"] for entry in assistant.sync_achievements()}
+            assistant.set_run_configuration("Normal", False, "DataFile")
+            exploration_unlocked = {entry["Id"] for entry in assistant.sync_achievements()}
+
+        expected_complete = {f"lw{book_number}_complete" for book_number in range(21, 24)}
+        expected_long_road = {f"lw{book_number}_long_road" for book_number in range(21, 24)}
+        self.assertTrue(expected_complete.issubset(story_unlocked))
+        self.assertTrue(expected_long_road.issubset(exploration_unlocked))
+
     def test_books6_to20_achievements_unlock_from_recorded_campaign_progress(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)

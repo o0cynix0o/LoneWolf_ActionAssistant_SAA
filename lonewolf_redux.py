@@ -5197,15 +5197,15 @@ class LoneWolfReduxAssistant:
         if achievement_id == "lw5_long_road":
             return max(len(sections), self.summary_metric_for_book(5, "UniqueSectionsVisited")) >= 100
 
-        magnakai_match = re.fullmatch(r"lw(6|7|8|9|10|11|12|13|14|15|16|17|18|19|20)_(complete|long_road)", achievement_id)
-        if magnakai_match:
-            achievement_book = int(magnakai_match.group(1))
-            if magnakai_match.group(2) == "complete":
+        campaign_match = re.fullmatch(r"lw(\d+)_(complete|long_road)", achievement_id)
+        if campaign_match and 6 <= int(campaign_match.group(1)) <= 29:
+            achievement_book = int(campaign_match.group(1))
+            if campaign_match.group(2) == "complete":
                 return self.book_completed(achievement_book)
             return max(
                 len(self.sections_for_book(achievement_book)),
                 self.summary_metric_for_book(achievement_book, "UniqueSectionsVisited"),
-            ) >= 90
+            ) >= (90 if achievement_book <= 20 else 75)
 
         return False
 

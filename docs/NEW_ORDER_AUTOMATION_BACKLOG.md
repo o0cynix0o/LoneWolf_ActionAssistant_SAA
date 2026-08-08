@@ -7,9 +7,9 @@ regression run agree.
 
 | Phase | Books | RNT | Combat | Primary review focus |
 | --- | --- | ---: | ---: | --- |
-| 2 | 21-23 | 108 | 29 | Entry, Kai Weapon rules, inventory, achievement paths |
-| 3 | 24-26 | 150 | 17 | Rank/discipline conditions, meals, transfers |
-| 4 | 27-29 | 117 | 61 | Combat-heavy Book 29 and Book 28's 300-section range |
+| 2 | 21-23 | 108 | 65 | Entry, Kai Weapon rules, inventory, achievement paths |
+| 3 | 24-26 | 150 | 121 | Rank/discipline conditions, meals, transfers |
+| 4 | 27-29 | 117 | 79 | Combat-heavy Book 29 and Book 28's 300-section range |
 
 For every book, review and classify each candidate in these categories:
 
