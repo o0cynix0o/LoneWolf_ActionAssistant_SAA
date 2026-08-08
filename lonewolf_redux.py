@@ -6391,7 +6391,7 @@ class LoneWolfReduxAssistant:
         raw = random_digit() if raw_roll is None else int(raw_roll)
         raw = max(0, min(9, raw))
         modifiers: list[dict[str, Any]] = []
-        total = 10 if raw == 0 and bool(roll.get("zeroAsTen")) else raw
+        total = 10 if raw == 0 and bool(roll.get("zeroAsTen")) else (1 if raw == 0 and bool(roll.get("zeroAsOne")) else raw)
         for modifier in as_list(roll.get("modifiers")):
             if not isinstance(modifier, dict):
                 continue
@@ -6424,6 +6424,8 @@ class LoneWolfReduxAssistant:
                     value = max(0, int(self.character.get("GrandMasterRank") or 0) - 4)
                 elif value_from in {"grand_master_rank_above_five", "grand_master_disciplines_above_five"}:
                     value = max(0, int(self.character.get("GrandMasterRank") or 0) - 5)
+                elif value_from in {"grand_master_rank_above_six", "grand_master_disciplines_above_six"}:
+                    value = max(0, int(self.character.get("GrandMasterRank") or 0) - 6)
                 else:
                     value = 0
             else:
@@ -6440,6 +6442,9 @@ class LoneWolfReduxAssistant:
             total = max(int(roll.get("minTotal") or 0), total)
         if roll.get("maxTotal") is not None:
             total = min(int(roll.get("maxTotal") or 0), total)
+        for multiplier in as_list(roll.get("conditionalMultipliers")):
+            if isinstance(multiplier, dict) and self.evaluate_flow_condition(multiplier.get("condition")):
+                total *= int(multiplier.get("value") or 1)
         route = None
         label = ""
         matched_actions: list[dict[str, Any]] = []
