@@ -23,7 +23,9 @@ Books 1-20 are playable internal-testing campaigns:
 New Order Books 21-29 have a committed source-audit baseline but are not yet
 exposed as playable books. Their dedicated Action Chart and rules pass are the
 next implementation phase. Books 30-32 are not present in the local source
-set and are therefore not included.
+set because they do not have Project Aon-style HTML editions. They require a
+separate licensed-source and conversion path before this HTML-based importer
+can audit or support them.
 
 The assistant records source-verified route gates, section effects, combat
 exceptions, item events, Random Number Table results, achievements, and book

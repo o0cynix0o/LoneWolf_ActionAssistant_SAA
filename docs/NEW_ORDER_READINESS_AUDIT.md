@@ -32,5 +32,7 @@ This is a source-readiness milestone only. The app does not yet expose the New
 Order books as playable: its dedicated 16-discipline Action Chart, Kai Weapon,
 entry equipment, currency, campaign transfer, per-section automation, and
 achievements still require the same verified implementation pass used for the
-Grand Master series. Books 30-32 are not locally installed and therefore are
-not included in this audit.
+Grand Master series. Books 30-32 do not have Project Aon-style HTML editions,
+so they are outside the current HTML-import and audit pipeline. They will need
+an appropriate licensed source and a deliberate conversion path before they
+can be onboarded.
