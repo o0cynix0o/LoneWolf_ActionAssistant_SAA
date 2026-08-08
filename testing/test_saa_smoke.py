@@ -699,6 +699,29 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             assistant.roll_current_section(0)
             self.assertEqual(assistant.character["EnduranceCurrent"], 20)
 
+    def test_book19_rnt_rules_apply_bladed_weapon_rank_and_injury_rules(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {
+                    "BookNumber": 19, "EnduranceCurrent": 30, "EnduranceMax": 30,
+                    "GrandMasterRank": 10,
+                    "GrandMasterDisciplines": ["Grand Nexus", "Grand Huntmastery", "Grand Pathsmanship"],
+                },
+                "Inventory": {"Weapons": ["Sword"]},
+            })
+            assistant.set_section(17)
+            assistant.roll_current_section(1)
+            self.assertEqual(assistant.character["EnduranceCurrent"], 30)
+            assistant.set_section(69)
+            self.assertEqual(assistant.roll_current_section(2)["Route"], 228)
+            assistant.set_section(120)
+            self.assertEqual(assistant.roll_current_section(4)["Route"], 59)
+
     def test_books6_to20_achievements_unlock_from_recorded_campaign_progress(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)

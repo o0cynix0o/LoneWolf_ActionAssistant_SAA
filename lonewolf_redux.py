@@ -6139,6 +6139,12 @@ class LoneWolfReduxAssistant:
                     "name": condition.get("name") or condition.get("value"),
                 }
             )
+        if kind in {"bladed_weapon", "has_bladed_weapon"}:
+            blade_terms = ("sword", "dagger", "axe")
+            return any(
+                any(term in str(weapon).strip().lower() for term in blade_terms)
+                for weapon in self.available_combat_weapons()
+            )
         if kind == "item":
             return self.has_item(
                 str(condition.get("name") or ""),
