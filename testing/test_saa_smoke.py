@@ -2638,7 +2638,7 @@ class CardLayoutInteractionTests(unittest.TestCase):
                     return cls.assistant_html[match.start():index + 1]
         raise AssertionError(f"JavaScript function {name!r} has no closing brace")
 
-    def test_release_metadata_is_3_4_7_internal_testing(self) -> None:
+    def test_release_metadata_is_3_4_8_internal_testing(self) -> None:
         readme = (self.root / "README.md").read_text(encoding="utf-8")
         building = (self.root / "docs" / "BUILDING.md").read_text(encoding="utf-8")
         user_guide = (self.root / "docs" / "USER_GUIDE.md").read_text(encoding="utf-8")
@@ -2648,16 +2648,16 @@ class CardLayoutInteractionTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         version_info = (self.root / "version_info.txt").read_text(encoding="utf-8")
 
-        self.assertIn("# Lone Wolf Action Assistant 3.4.7 Internal Testing", readme)
-        self.assertIn("Version: **3.4.7 Internal Testing**", readme)
-        self.assertIn("# Building Lone Wolf Action Assistant 3.4.7 Internal Testing", building)
-        self.assertIn("# Lone Wolf Action Assistant 3.4.7 Internal Testing", user_guide)
-        self.assertIn("## 3.4.7 - Internal Testing", changelog)
-        self.assertIn('#define AppVersion "3.4.7"', installer)
-        self.assertIn("filevers=(3, 4, 7, 0)", version_info)
-        self.assertIn("prodvers=(3, 4, 7, 0)", version_info)
-        self.assertIn("StringStruct(u'FileVersion', u'3.4.7')", version_info)
-        self.assertIn("StringStruct(u'ProductVersion', u'3.4.7')", version_info)
+        self.assertIn("# Lone Wolf Action Assistant 3.4.8 Internal Testing", readme)
+        self.assertIn("Version: **3.4.8 Internal Testing**", readme)
+        self.assertIn("# Building Lone Wolf Action Assistant 3.4.8 Internal Testing", building)
+        self.assertIn("# Lone Wolf Action Assistant 3.4.8 Internal Testing", user_guide)
+        self.assertIn("## 3.4.8 - Internal Testing", changelog)
+        self.assertIn('#define AppVersion "3.4.8"', installer)
+        self.assertIn("filevers=(3, 4, 8, 0)", version_info)
+        self.assertIn("prodvers=(3, 4, 8, 0)", version_info)
+        self.assertIn("StringStruct(u'FileVersion', u'3.4.8')", version_info)
+        self.assertIn("StringStruct(u'ProductVersion', u'3.4.8')", version_info)
 
     def test_movable_cards_get_a_dedicated_drag_handle(self) -> None:
         self.assertIn("data-card-drag-handle", self.assistant_html)
