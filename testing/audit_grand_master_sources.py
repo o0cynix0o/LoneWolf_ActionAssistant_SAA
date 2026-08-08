@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Index Grand Master source-rule candidates without copying book prose.
+"""Index source-rule candidates without copying book prose.
 
 The generated JSON contains only book/section numbers and signal categories. It
 is deliberately a planning and verification artefact, not a replacement for
@@ -24,7 +24,8 @@ SIGNALS = {
     "meal": r"\bmeals?\b",
     "gold": r"gold crowns?",
     "inventory": r"backpack item|special item|discard .*item|erase .*item|lose .*item",
-    "discipline": r"grand (?:mastery|weaponmastery|huntmastery|pathsmanship|nexus)|kai-(?:surge|screen|alchemy)|animal mastery|deliverance|assimilance|telegnosis|magi-magic",
+    "discipline": r"grand (?:mastery|weaponmastery|huntmastery|pathsmanship|nexus)|kai-(?:surge|screen|alchemy)|animal mastery|deliverance|assimilance|telegnosis|magi-magic|astrology|herbmastery|elementalism|bardsmanship",
+    "kai_weapon": r"kai weapon|spawnsmite|alema|magnara|sunstrike|kaistar|valiance|ulnarias|raumas|illuminatus|firefall",
 }
 
 
@@ -69,7 +70,7 @@ def main() -> int:
         books[str(book_number)] = audit_book(book_number, source)
     payload = {
         "schemaVersion": 1,
-        "purpose": "Grand Master source-rule audit index; no licensed prose is stored.",
+        "purpose": "Source-rule audit index; no licensed prose is stored.",
         "books": books,
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)

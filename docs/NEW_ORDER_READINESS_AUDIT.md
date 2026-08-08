@@ -2,37 +2,41 @@
 
 ## Scope
 
-The locally available New Order source set contains Books 21-29. The source
-HTML is player-supplied and remains outside this repository; the committed
-audit data contains only derived section numbers, links, and broad rule
-signals.
+The local source set contains Books 21-29. The HTML remains outside this
+repository; committed audit artefacts contain only derived section numbers,
+links, and rule signals.
+
+## Current Implementation
+
+The application exposes Books 21-29 as the playable New Order campaign:
+16-discipline Action Charts, Kai Weapons, starting equipment, book-to-book
+continuation, reader routes, inventory, combat, saves, and baseline campaign
+achievements are implemented. The remaining work is the source-verified,
+per-section automation pass recorded in the companion backlog.
 
 ## Source Baseline
 
-| Book | Title | Folder | Sections | Printed links |
-| --- | --- | --- | ---: | ---: |
-| 21 | Voyage of the Moonstone | `21votm` | 350 | 532 |
-| 22 | The Buccaneers of Shadaki | `22tbos` | 350 | 529 |
-| 23 | Mydnight's Hero | `23mh` | 350 | 521 |
-| 24 | Rune War | `24rw` | 350 | 544 |
-| 25 | Trail of the Wolf | `25totw` | 350 | 559 |
-| 26 | The Fall of Blood Mountain | `26tfobm` | 350 | 582 |
-| 27 | Vampirium | `27v` | 350 | 549 |
-| 28 | The Hunger of Sejanoz | `28thos` | 300 | 448 |
-| 29 | The Storms of Chai | `29tsoc` | 350 | 544 |
-| Total |  |  | 3,100 | 4,808 |
+| Book | Folder | Sections | RNT | Combat | END | Meals | Gold | Inventory | Disciplines | Kai Weapon |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 21 | `21votm` | 350 | 30 | 7 | 92 | 28 | 56 | 30 | 87 | 5 |
+| 22 | `22tbos` | 350 | 38 | 8 | 81 | 22 | 14 | 28 | 84 | 50 |
+| 23 | `23mh` | 350 | 40 | 14 | 89 | 40 | 19 | 32 | 89 | 37 |
+| 24 | `24rw` | 350 | 38 | 7 | 82 | 36 | 10 | 26 | 109 | 47 |
+| 25 | `25totw` | 350 | 44 | 5 | 107 | 15 | 2 | 24 | 113 | 48 |
+| 26 | `26tfobm` | 350 | 68 | 5 | 108 | 6 | 0 | 18 | 112 | 60 |
+| 27 | `27v` | 350 | 60 | 8 | 80 | 12 | 14 | 18 | 99 | 41 |
+| 28 | `28thos` | 300 | 31 | 16 | 72 | 17 | 2 | 12 | 69 | 35 |
+| 29 | `29tsoc` | 350 | 26 | 37 | 115 | 18 | 42 | 39 | 78 | 47 |
 
-Book 28 is intentionally recorded as a 300-section book. The ledger generator
-now validates that a source has a contiguous numbered range rather than
-assuming every book ends at section 350.
+Book 28 is intentionally a 300-section book. The ledger generator validates
+each book's actual contiguous source range and does not assume 350 sections.
 
-## Current Boundary
+## Audit Artefacts
 
-This is a source-readiness milestone only. The app does not yet expose the New
-Order books as playable: its dedicated 16-discipline Action Chart, Kai Weapon,
-entry equipment, currency, campaign transfer, per-section automation, and
-achievements still require the same verified implementation pass used for the
-Grand Master series. Books 30-32 do not have Project Aon-style HTML editions,
-so they are outside the current HTML-import and audit pipeline. They will need
-an appropriate licensed source and a deliberate conversion path before they
-can be onboarded.
+- `data/new-order-source-audit.json`: source-derived candidate sections.
+- `data/book21-section-flows.json` through `data/book29-section-flows.json`:
+  prose-free route and classification ledgers.
+- `docs/NEW_ORDER_AUTOMATION_BACKLOG.md`: phased implementation queue.
+
+Books 30-32 remain outside this pipeline because compatible HTML source is not
+available.
