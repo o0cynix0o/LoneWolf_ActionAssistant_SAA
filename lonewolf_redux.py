@@ -6167,6 +6167,14 @@ class LoneWolfReduxAssistant:
         if kind in {"arrows_lt", "arrow_count_lt"}:
             arrows = int(self.inventory.get("QuiverArrows") or 0) + self.count_items("Arrow", ["backpack"])
             return arrows < int(condition.get("value") or 0)
+        if kind in {"last_roll_total_gt_stored", "last_roll_gt_stored"}:
+            last_roll = self.automation.get("LastRoll")
+            stored = self.automation.get("Stored")
+            return (
+                isinstance(last_roll, dict)
+                and isinstance(stored, dict)
+                and int(last_roll.get("Total") or 0) > int(stored.get(str(condition.get("key") or "")) or 0)
+            )
         if kind in {"gold_gte", "gold_at_least"}:
             return int(self.inventory.get("GoldCrowns") or 0) >= int(condition.get("value") or 0)
         if kind in {"gold_lt", "gold_below"}:
@@ -6462,6 +6470,10 @@ class LoneWolfReduxAssistant:
                 matched = total >= self.route_check_stat_value(str(outcome.get("stat") or ""))
             elif test in {"gt_stat", "total_gt_stat"}:
                 matched = total > self.route_check_stat_value(str(outcome.get("stat") or ""))
+            elif test in {"end_after_roll_lte", "end_after_loss_lte"}:
+                matched = self.effective_endurance_current() - total <= int(outcome.get("value") or 0)
+            elif test in {"end_after_roll_gte", "end_after_loss_gte"}:
+                matched = self.effective_endurance_current() - total >= int(outcome.get("value") or 0)
             if matched:
                 route = int(outcome.get("route")) if outcome.get("route") is not None else None
                 label = str(outcome.get("label") or "")
@@ -7662,7 +7674,9 @@ class LoneWolfReduxAssistant:
         replacement = choice.get("replacement") if isinstance(choice.get("replacement"), dict) else {}
         choice_kind = "exchange" if replacement else "loss"
         blocked_reason = ""
-        if not roll_ready:
+        if isinstance(choice.get("condition"), dict) and not self.evaluate_flow_condition(choice.get("condition")):
+            blocked_reason = str(choice.get("unavailableReason") or "No inventory loss is required for this result.")
+        elif not roll_ready:
             blocked_reason = "Roll this section before choosing the lost item(s)."
         elif applied:
             blocked_reason = "Loss choice already applied for this section visit."
