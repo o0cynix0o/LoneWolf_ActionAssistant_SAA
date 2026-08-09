@@ -2623,11 +2623,16 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
             arrow_condition, arrow_reason = assistant.infer_source_route_condition(
                 "If you have at least two Arrows in your Quiver, turn to 344."
             )
+            ticket_condition, ticket_reason = assistant.infer_source_route_condition(
+                "If you purchased a Riverboat Ticket for the riverboat at Soren, turn to 59."
+            )
 
             self.assertFalse(assistant.evaluate_flow_condition(rope_condition))
             self.assertFalse(assistant.evaluate_flow_condition(rank_condition))
             self.assertFalse(assistant.evaluate_flow_condition(arrow_condition))
+            self.assertFalse(assistant.evaluate_flow_condition(ticket_condition))
             assistant.inventory["BackpackItems"] = ["Rope"]
+            assistant.inventory["PocketSpecialItems"] = ["Riverboat Ticket to Luyen"]
             assistant.inventory["QuiverArrows"] = 2
             assistant.character["MagnakaiRank"] = 6
 
@@ -2637,6 +2642,46 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
         self.assertEqual(rope_reason, "Requires Rope.")
         self.assertEqual(rank_reason, "Requires Principalin rank.")
         self.assertEqual(arrow_reason, "Requires at least 2 Arrows.")
+        self.assertEqual(ticket_reason, "Requires Riverboat Ticket.")
+
+    def test_reader_preserves_compound_magnakai_and_named_item_route_gates(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            source = base / "books"
+            (source / "12tmod").mkdir(parents=True)
+            (source / "12tmod" / "sect176.htm").write_text(
+                '<p class="choice">If you possess either the Dagger of Vashna or the sword Helshezag and wish to use either of them, turn to <a href="sect230.htm">230</a>.</p>',
+                encoding="utf-8",
+            )
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=source,
+            )
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 11, "MagnakaiRank": 7, "MagnakaiDisciplines": ["Pathsmanship"]},
+            })
+            compound, reason = assistant.infer_source_route_condition(
+                "If you possess the Magnakai Discipline of Pathsmanship and have reached the rank of Scion-kai, or if you possess the Magnakai Discipline of Animal Control, turn to 309."
+            )
+            self.assertFalse(assistant.evaluate_flow_condition(compound))
+            assistant.character["MagnakaiDisciplines"].append("Animal Control")
+            self.assertTrue(assistant.evaluate_flow_condition(compound))
+            self.assertIn("Scion-Kai", reason)
+
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 12}, "CurrentSection": 176})
+            locked = next(route for route in assistant.current_section_flow_payload()["SourceRoutes"] if route["Section"] == 230)
+            assistant.follow_route(230)
+            self.assertEqual(assistant.state["CurrentSection"], 176)
+            assistant.inventory["SpecialItems"] = ["Helshezag"]
+            unlocked = next(route for route in assistant.current_section_flow_payload()["SourceRoutes"] if route["Section"] == 230)
+            assistant.follow_route(230)
+
+        self.assertFalse(locked["Available"])
+        self.assertIn("Helshezag", locked["BlockedReason"])
+        self.assertTrue(unlocked["Available"])
+        self.assertEqual(assistant.state["CurrentSection"], 230)
 
     def test_endurance_max_automation_clamps_current_endurance(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:

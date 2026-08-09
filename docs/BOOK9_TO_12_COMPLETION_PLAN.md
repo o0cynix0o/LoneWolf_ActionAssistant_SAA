@@ -55,6 +55,11 @@ and cannot accidentally follow a route the current Action Chart forbids.
   Lore-circle, named carried-item, and stated Arrow-count gates. It gives the
   player the specific missing requirement instead of silently hiding the
   choice.
+- Compound Magnakai wording keeps each printed branch intact. For example,
+  `Pathsmanship and Scion-kai rank, or Animal Control` is evaluated as two
+  alternatives rather than treating every listed requirement as optional.
+  Explicit named-item alternatives, including the Dagger of Vashna or
+  Helshezag, are likewise disabled until the relevant carried item exists.
 - Flow data can also attach explicit `condition` and `blockedReason` fields to
   an individual source route for audited gold, quantity, prior-event, and
   special-item gates.

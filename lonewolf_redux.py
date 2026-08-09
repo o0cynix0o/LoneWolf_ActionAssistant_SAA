@@ -5785,42 +5785,94 @@ class LoneWolfReduxAssistant:
                 )
 
         route_items = (
-            "Kalte Firesphere", "Torch and Tinderbox", "Sommerswerd", "Black Cube",
-            "Black Key", "Bullwhip", "Dagger", "Mirror", "Lantern", "Rope", "Bow",
+            ("Dagger of Vashna", "exact"),
+            ("Sinede's Silver Key", "exact"),
+            ("Silver Bow", "contains"),
+            ("Riverboat Ticket", "contains"),
+            ("Kalte Firesphere", "exact"),
+            ("Torch and Tinderbox", "exact"),
+            ("Map of Varetta", "exact"),
+            ("Bronin Warhammer", "exact"),
+            ("Sommerswerd", "exact"),
+            ("Black Cube", "exact"),
+            ("Black Key", "exact"),
+            ("Iron Key", "exact"),
+            ("Bullwhip", "exact"),
+            ("Helshezag", "exact"),
+            ("Fireseed", "exact"),
+            ("Lantern", "exact"),
+            ("Mirror", "exact"),
+            ("Dagger", "exact"),
+            ("Medal", "exact"),
+            ("Cess", "exact"),
+            ("Rope", "exact"),
+            ("Bow", "exact"),
         )
-        for item in route_items:
-            if re.match(
-                rf"^if you (?:have|possess) (?:(?:a|an|the)\s+)?{re.escape(item.lower())}\b",
-                lowered,
-            ):
-                return {"type": "item", "name": item}, f"Requires {item}."
+        item_clause = re.match(r"^if (?:you )?(?P<verb>have|possess|purchased)\b", lowered)
+        if item_clause:
+            item_conditions: list[dict[str, Any]] = []
+            item_names: list[str] = []
+            claimed_spans: list[tuple[int, int]] = []
+            for item, match_mode in route_items:
+                match = re.search(rf"(?<![a-z]){re.escape(item.lower())}(?![a-z])", clause.lower())
+                if not match or any(match.start() < end and start < match.end() for start, end in claimed_spans):
+                    continue
+                claimed_spans.append(match.span())
+                condition_type = "item_history" if item_clause.group("verb") == "purchased" else "item"
+                item_conditions.append({"type": condition_type, "name": item, "match": match_mode})
+                item_names.append(item)
+            if item_conditions:
+                item_uses_or = bool(re.search(r"\s+or\s+", clause, flags=re.IGNORECASE))
+                item_condition = item_conditions[0] if len(item_conditions) == 1 else {
+                    "type": "any" if item_uses_or else "all",
+                    "conditions": item_conditions,
+                }
+                requirement = " or ".join(item_names) if item_uses_or else " and ".join(item_names)
+                return item_condition, f"Requires {requirement}."
 
-        if not re.match(r"^if you (?:have|possess) the magnakai discipline of\b", lowered):
+        discipline_pattern = re.compile(
+            r"(?:^if\s+you\s+|\bor\s+if\s+you\s+)(?:have|possess)\s+the\s+magnakai\s+disciplines?\s+of\s+",
+            flags=re.IGNORECASE,
+        )
+        matches = list(discipline_pattern.finditer(clause))
+        if not matches:
             return None, ""
 
-        disciplines = [
-            name
-            for name in MAGNAKAI_DISCIPLINES
-            if re.search(rf"(?<![a-z]){re.escape(name.lower())}(?![a-z])", clause.lower())
-        ]
-        if not disciplines:
+        branches: list[dict[str, Any]] = []
+        requirements: list[str] = []
+        known_disciplines = list(MAGNAKAI_DISCIPLINES)
+        for index, match in enumerate(matches):
+            branch = clause[match.end():matches[index + 1].start() if index + 1 < len(matches) else len(clause)]
+            disciplines = [
+                name
+                for name in known_disciplines
+                if re.search(rf"(?<![a-z]){re.escape(name.lower())}(?![a-z])", branch.lower())
+            ]
+            if not disciplines:
+                continue
+            conditions: list[dict[str, Any]] = [{"type": "power", "name": name} for name in disciplines]
+            branch_rank_match = re.search(
+                r"\b(?:rank of|rank)\s+(?:kai master\s+)?([a-z-]+)",
+                branch,
+                flags=re.IGNORECASE,
+            )
+            branch_rank = branch_rank_match.group(1).lower() if branch_rank_match else ""
+            if branch_rank in magnakai_ranks:
+                conditions.append({"type": "magnakai_rank_gte", "value": magnakai_ranks[branch_rank]})
+            discipline_uses_or = bool(re.search(r"\s+or\s+", branch, flags=re.IGNORECASE))
+            branches.append(conditions[0] if len(conditions) == 1 else {
+                "type": "any" if discipline_uses_or else "all",
+                "conditions": conditions,
+            })
+            requirement = " or ".join(disciplines) if discipline_uses_or else " and ".join(disciplines)
+            if branch_rank in magnakai_ranks:
+                requirement = f"{requirement} and {branch_rank.title()} rank"
+            requirements.append(requirement)
+
+        if not branches:
             return None, ""
-
-        conditions: list[dict[str, Any]] = [
-            {"type": "power", "name": name} for name in disciplines
-        ]
-        if rank_name in magnakai_ranks:
-            conditions.append({"type": "magnakai_rank_gte", "value": magnakai_ranks[rank_name]})
-
-        uses_or = bool(re.search(r"\s+or\s+", clause, flags=re.IGNORECASE))
-        condition = conditions[0] if len(conditions) == 1 else {
-            "type": "any" if uses_or else "all",
-            "conditions": conditions,
-        }
-        requirement = " or ".join(disciplines) if uses_or else " and ".join(disciplines)
-        if rank_name in magnakai_ranks:
-            requirement = f"{requirement}{' or' if uses_or else ' and'} {rank_name.title()} rank"
-        return condition, f"Requires {requirement}."
+        condition = branches[0] if len(branches) == 1 else {"type": "any", "conditions": branches}
+        return condition, f"Requires {' or '.join(requirements)}."
 
     def route_availability_payload(self, route: dict[str, Any]) -> dict[str, Any]:
         payload = dict(route)
