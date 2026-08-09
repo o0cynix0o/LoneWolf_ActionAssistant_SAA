@@ -1,0 +1,528 @@
+{
+  "18": {
+    "9": {
+      "combat": [
+        {
+          "id": "book18-9",
+          "enemies": [
+            {
+              "name": "Prince Lutha (with Ring of Power)",
+              "cs": 54,
+              "endurance": 39
+            }
+          ],
+          "victoryRoute": 89
+        }
+      ]
+    },
+    "26": {
+      "combat": [
+        {
+          "id": "book18-26",
+          "enemies": [
+            {
+              "name": "Bargee (master thief)",
+              "cs": 36,
+              "endurance": 25
+            }
+          ],
+          "victoryRoute": 199
+        }
+      ]
+    },
+    "33": {
+      "combat": [
+        {
+          "id": "book18-33",
+          "enemies": [
+            {
+              "name": "Eldenoran Horse-scouts",
+              "cs": 34,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 85,
+          "winWithinRounds": 3,
+          "winWithinRoute": 85,
+          "tooLateRoute": 160,
+          "roundLimit": 3,
+          "roundExceededRoute": 160
+        }
+      ]
+    },
+    "39": {
+      "combat": [
+        {
+          "id": "book18-39",
+          "enemies": [
+            {
+              "name": "Ghost of Roark",
+              "cs": 48,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 146
+        }
+      ]
+    },
+    "50": {
+      "combat": [
+        {
+          "id": "book18-50",
+          "enemies": [
+            {
+              "name": "Duadon guardsmen",
+              "cs": 42,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 290,
+          "canEvade": true,
+          "evadeAfterRounds": 4,
+          "evadeRoute": 335
+        }
+      ]
+    },
+    "52": {
+      "combat": [
+        {
+          "id": "book18-52",
+          "enemies": [
+            {
+              "name": "Castle Guardsmen (impostors)",
+              "cs": 48,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 93
+        }
+      ]
+    },
+    "57": {
+      "combat": [
+        {
+          "id": "book18-57",
+          "enemies": [
+            {
+              "name": "Eldenoran Assault Troops",
+              "cs": 39,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 324
+        }
+      ]
+    },
+    "58": {
+      "combat": [
+        {
+          "id": "book18-58",
+          "enemies": [
+            {
+              "name": "Lavas",
+              "cs": 49,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 49
+        }
+      ]
+    },
+    "63": {
+      "combat": [
+        {
+          "id": "book18-63",
+          "enemies": [
+            {
+              "name": "Eldenoran Brigands",
+              "cs": 46,
+              "endurance": 41
+            }
+          ],
+          "victoryRoute": 109,
+          "canEvade": true,
+          "evadeAfterRounds": 4,
+          "evadeRoute": 182
+        }
+      ]
+    },
+    "73": {
+      "combat": [
+        {
+          "id": "book18-73",
+          "enemies": [
+            {
+              "name": "Eldenoran War-dogs (in blood-frenzy)",
+              "cs": 42,
+              "endurance": 47
+            }
+          ],
+          "victoryRoute": 295
+        }
+      ]
+    },
+    "98": {
+      "combat": [
+        {
+          "id": "book18-98",
+          "enemies": [
+            {
+              "name": "Vaxagore",
+              "cs": 56,
+              "endurance": 52
+            }
+          ],
+          "victoryRoute": 288
+        }
+      ]
+    },
+    "107": {
+      "combat": [
+        {
+          "id": "book18-107",
+          "enemies": [
+            {
+              "name": "Eldenoran Ambushers",
+              "cs": 38,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 285
+        }
+      ]
+    },
+    "137": {
+      "combat": [
+        {
+          "id": "book18-137",
+          "enemies": [
+            {
+              "name": "Castle Guardsmen (impostors)",
+              "cs": 48,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 93
+        }
+      ]
+    },
+    "144": {
+      "combat": [
+        {
+          "id": "book18-144",
+          "enemies": [
+            {
+              "name": "Hounds of Vikkak",
+              "cs": 50,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 45
+        }
+      ]
+    },
+    "155": {
+      "combat": [
+        {
+          "id": "book18-155",
+          "enemies": [
+            {
+              "name": "Thieves of Varetta",
+              "cs": 36,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 222
+        }
+      ]
+    },
+    "165": {
+      "combat": [
+        {
+          "id": "book18-165",
+          "enemies": [
+            {
+              "name": "Lavas",
+              "cs": 48,
+              "endurance": 46
+            }
+          ],
+          "victoryRoute": 282
+        }
+      ]
+    },
+    "167": {
+      "combat": [
+        {
+          "id": "book18-167",
+          "enemies": [
+            {
+              "name": "Eldenoran Thug (drunk)",
+              "cs": 30,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 333
+        }
+      ]
+    },
+    "172": {
+      "combat": [
+        {
+          "id": "book18-172",
+          "enemies": [
+            {
+              "name": "Prince Lutha (with Ring of Power)",
+              "cs": 54,
+              "endurance": 39
+            }
+          ],
+          "victoryRoute": 89
+        }
+      ]
+    },
+    "178": {
+      "combat": [
+        {
+          "id": "book18-178",
+          "enemies": [
+            {
+              "name": "Lavas",
+              "cs": 48,
+              "endurance": 46
+            }
+          ],
+          "victoryRoute": 49
+        }
+      ]
+    },
+    "183": {
+      "combat": [
+        {
+          "id": "book18-183",
+          "enemies": [
+            {
+              "name": "Eldenoran Ambushers",
+              "cs": 38,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 285
+        }
+      ]
+    },
+    "192": {
+      "combat": [
+        {
+          "id": "book18-192",
+          "enemies": [
+            {
+              "name": "Lavas",
+              "cs": 48,
+              "endurance": 46
+            }
+          ],
+          "victoryRoute": 282
+        }
+      ]
+    },
+    "216": {
+      "combat": [
+        {
+          "id": "book18-216",
+          "enemies": [
+            {
+              "name": "Eldenoran war-dogs (in blood-frenzy)",
+              "cs": 42,
+              "endurance": 47
+            }
+          ],
+          "victoryRoute": 295
+        }
+      ]
+    },
+    "239": {
+      "combat": [
+        {
+          "id": "book18-239",
+          "enemies": [
+            {
+              "name": "Vaxagore",
+              "cs": 52,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 288
+        }
+      ]
+    },
+    "253": {
+      "combat": [
+        {
+          "id": "book18-253",
+          "enemies": [
+            {
+              "name": "Ghost of Roark",
+              "cs": 48,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 146
+        }
+      ]
+    },
+    "269": {
+      "combat": [
+        {
+          "id": "book18-269",
+          "enemies": [
+            {
+              "name": "Castle Guardsmen (impostors)",
+              "cs": 48,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 159
+        }
+      ]
+    },
+    "273": {
+      "combat": [
+        {
+          "id": "book18-273",
+          "enemies": [
+            {
+              "name": "Castle Guardsmen (impostors)",
+              "cs": 48,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 93
+        }
+      ]
+    },
+    "278": {
+      "combat": [
+        {
+          "id": "book18-278",
+          "enemies": [
+            {
+              "name": "Eldenoran Ambushers",
+              "cs": 38,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 285,
+          "modifier": -4
+        }
+      ]
+    },
+    "303": {
+      "combat": [
+        {
+          "id": "book18-303",
+          "enemies": [
+            {
+              "name": "Lavas",
+              "cs": 45,
+              "endurance": 45
+            }
+          ]
+        }
+      ]
+    },
+    "304": {
+      "combat": [
+        {
+          "id": "book18-304",
+          "enemies": [
+            {
+              "name": "Hounds of Vikkak",
+              "cs": 45,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 347
+        }
+      ]
+    },
+    "306": {
+      "combat": [
+        {
+          "id": "book18-306",
+          "enemies": [
+            {
+              "name": "Prince Lutha (with Ring of Power)",
+              "cs": 54,
+              "endurance": 39
+            }
+          ],
+          "victoryRoute": 89
+        }
+      ]
+    },
+    "311": {
+      "combat": [
+        {
+          "id": "book18-311",
+          "enemies": [
+            {
+              "name": "Eldenoran Thug (drunk)",
+              "cs": 34,
+              "endurance": 34
+            }
+          ],
+          "victoryRoute": 333
+        }
+      ]
+    },
+    "314": {
+      "combat": [
+        {
+          "id": "book18-314",
+          "enemies": [
+            {
+              "name": "Lavas Sky Patrol",
+              "cs": 55,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 346
+        }
+      ]
+    },
+    "336": {
+      "combat": [
+        {
+          "id": "book18-336",
+          "enemies": [
+            {
+              "name": "Eldenoran brigands",
+              "cs": 50,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 109,
+          "canEvade": true,
+          "evadeAfterRounds": 4,
+          "evadeRoute": 182
+        }
+      ]
+    },
+    "344": {
+      "combat": [
+        {
+          "id": "book18-344",
+          "enemies": [
+            {
+              "name": "Lavas",
+              "cs": 50,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 145
+        }
+      ]
+    }
+  }
+}

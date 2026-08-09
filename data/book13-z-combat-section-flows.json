@@ -206,7 +206,8 @@
               "endurance": 50
             }
           ],
-          "victoryRoute": 305
+          "victoryRoute": 305,
+          "modifier": -4
         }
       ]
     },
@@ -319,7 +320,8 @@
               "endurance": 36
             }
           ],
-          "victoryRoute": 18
+          "victoryRoute": 18,
+          "modifier": -3
         }
       ]
     },
@@ -564,7 +566,8 @@
               "endurance": 38
             }
           ],
-          "victoryRoute": 24
+          "victoryRoute": 24,
+          "modifier": -6
         }
       ]
     },
@@ -624,7 +627,14 @@
               "endurance": 27
             }
           ],
-          "victoryRoute": 4
+          "victoryRoute": 4,
+          "timedModifiers": [
+            {
+              "modifier": -20,
+              "startRound": 1,
+              "endRound": 1
+            }
+          ]
         }
       ]
     },
@@ -692,6 +702,7 @@
             }
           ],
           "victoryRoute": 219,
+          "modifier": -5,
           "canEvade": true,
           "evadeAfterRounds": 6,
           "evadeRoute": 63

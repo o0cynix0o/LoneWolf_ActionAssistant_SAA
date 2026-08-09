@@ -226,8 +226,7 @@
               "endurance": 29
             }
           ],
-          "victoryRoute": 53,
-          "ignorePlayerLossRounds": 1
+          "victoryRoute": 53
         }
       ]
     },
@@ -287,8 +286,7 @@
               "endurance": 29
             }
           ],
-          "victoryRoute": 53,
-          "ignorePlayerLossRounds": 1
+          "victoryRoute": 53
         }
       ]
     },

@@ -1,0 +1,823 @@
+{
+  "17": {
+    "21": {
+      "combat": [
+        {
+          "id": "book17-21",
+          "enemies": [
+            {
+              "name": "Ixian Gybia",
+              "cs": 45,
+              "endurance": 58
+            }
+          ],
+          "victoryRoute": 68,
+          "modifier": -4,
+          "canEvade": true,
+          "evadeAfterRounds": 4,
+          "evadeRoute": 138
+        }
+      ]
+    },
+    "23": {
+      "combat": [
+        {
+          "id": "book17-23",
+          "enemies": [
+            {
+              "name": "Ixian Undead",
+              "cs": 46,
+              "endurance": 55
+            }
+          ],
+          "victoryRoute": 152
+        }
+      ]
+    },
+    "27": {
+      "combat": [
+        {
+          "id": "book17-27",
+          "enemies": [
+            {
+              "name": "Suggaz",
+              "cs": 40,
+              "endurance": 44
+            }
+          ],
+          "victoryRoute": 67
+        }
+      ]
+    },
+    "31": {
+      "combat": [
+        {
+          "id": "book17-31",
+          "enemies": [
+            {
+              "name": "Undead Drakkarim Search Party",
+              "cs": 40,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 324
+        }
+      ]
+    },
+    "35": {
+      "combat": [
+        {
+          "id": "book17-35",
+          "enemies": [
+            {
+              "name": "3 Cabalah",
+              "cs": 53,
+              "endurance": 54
+            }
+          ],
+          "victoryRoute": 173,
+          "canEvade": true,
+          "evadeAfterRounds": 4,
+          "evadeRoute": 41
+        }
+      ]
+    },
+    "38": {
+      "combat": [
+        {
+          "id": "book17-38",
+          "enemies": [
+            {
+              "name": "Lavas",
+              "cs": 52,
+              "endurance": 52
+            }
+          ],
+          "victoryRoute": 105
+        }
+      ]
+    },
+    "42": {
+      "combat": [
+        {
+          "id": "book17-42",
+          "enemies": [
+            {
+              "name": "Ixian Undead",
+              "cs": 41,
+              "endurance": 46
+            }
+          ],
+          "victoryRoute": 109,
+          "modifier": -5
+        }
+      ]
+    },
+    "43": {
+      "combat": [
+        {
+          "id": "book17-43",
+          "enemies": [
+            {
+              "name": "Dentaag",
+              "cs": 51,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 149
+        }
+      ]
+    },
+    "45": {
+      "combat": [
+        {
+          "id": "book17-45",
+          "enemies": [
+            {
+              "name": "Demonlord Tagazin",
+              "cs": 55,
+              "endurance": 60
+            }
+          ]
+        }
+      ]
+    },
+    "50": {
+      "combat": [
+        {
+          "id": "book17-50",
+          "enemies": [
+            {
+              "name": "Ixian Undead",
+              "cs": 42,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 103,
+          "modifier": -8
+        }
+      ]
+    },
+    "53": {
+      "combat": [
+        {
+          "id": "book17-53",
+          "enemies": [
+            {
+              "name": "Demonlord Tagazin (injured)",
+              "cs": 45,
+              "endurance": 45
+            }
+          ]
+        }
+      ]
+    },
+    "67": {
+      "combat": [
+        {
+          "id": "book17-67",
+          "enemies": [
+            {
+              "name": "Chaos-horde",
+              "cs": 46,
+              "endurance": 46
+            }
+          ],
+          "victoryRoute": 82
+        }
+      ]
+    },
+    "74": {
+      "combat": [
+        {
+          "id": "book17-74",
+          "enemies": [
+            {
+              "name": "Bulkhead Door",
+              "cs": 40,
+              "endurance": 50
+            }
+          ]
+        }
+      ]
+    },
+    "77": {
+      "combat": [
+        {
+          "id": "book17-77",
+          "enemies": [
+            {
+              "name": "Deathlord Ixiataaga (with Deathstaff\u2014uncharged)",
+              "cs": 60,
+              "endurance": 39
+            }
+          ],
+          "victoryRoute": 290
+        }
+      ]
+    },
+    "81": {
+      "combat": [
+        {
+          "id": "book17-81",
+          "enemies": [
+            {
+              "name": "Bulkhead Door",
+              "cs": 30,
+              "endurance": 40
+            }
+          ]
+        }
+      ]
+    },
+    "89": {
+      "combat": [
+        {
+          "id": "book17-89",
+          "enemies": [
+            {
+              "name": "Ixian Mhagani",
+              "cs": 40,
+              "endurance": 60
+            }
+          ],
+          "victoryRoute": 16
+        }
+      ]
+    },
+    "96": {
+      "combat": [
+        {
+          "id": "book17-96",
+          "enemies": [
+            {
+              "name": "3 Kajarda",
+              "cs": 48,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 32,
+          "winWithinRounds": 6,
+          "winWithinRoute": 32,
+          "tooLateRoute": 213,
+          "roundLimit": 6,
+          "roundExceededRoute": 213
+        }
+      ]
+    },
+    "110": {
+      "combat": [
+        {
+          "id": "book17-110",
+          "enemies": [
+            {
+              "name": "Ixian Mhagani",
+              "cs": 38,
+              "endurance": 60
+            }
+          ],
+          "victoryRoute": 16,
+          "ignorePlayerLossRounds": 2
+        }
+      ]
+    },
+    "111": {
+      "combat": [
+        {
+          "id": "book17-111",
+          "enemies": [
+            {
+              "name": "Chaos-horde",
+              "cs": 43,
+              "endurance": 46
+            }
+          ],
+          "victoryRoute": 263
+        }
+      ]
+    },
+    "121": {
+      "combat": [
+        {
+          "id": "book17-121",
+          "enemies": [
+            {
+              "name": "Ziog",
+              "cs": 50,
+              "endurance": 44
+            }
+          ],
+          "victoryRoute": 228
+        }
+      ]
+    },
+    "125": {
+      "combat": [
+        {
+          "id": "book17-125",
+          "enemies": [
+            {
+              "name": "3 Kajarda",
+              "cs": 48,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 32,
+          "winWithinRounds": 6,
+          "winWithinRoute": 32,
+          "tooLateRoute": 213,
+          "roundLimit": 6,
+          "roundExceededRoute": 213
+        }
+      ]
+    },
+    "130": {
+      "combat": [
+        {
+          "id": "book17-130",
+          "enemies": [
+            {
+              "name": "3 Cabalah",
+              "cs": 53,
+              "endurance": 54
+            }
+          ],
+          "victoryRoute": 293,
+          "canEvade": true,
+          "evadeAfterRounds": 4,
+          "evadeRoute": 41
+        }
+      ]
+    },
+    "132": {
+      "combat": [
+        {
+          "id": "book17-132",
+          "enemies": [
+            {
+              "name": "Ixian Undead",
+              "cs": 41,
+              "endurance": 46
+            }
+          ],
+          "victoryRoute": 109,
+          "modifier": -5
+        }
+      ]
+    },
+    "137": {
+      "combat": [
+        {
+          "id": "book17-137",
+          "enemies": [
+            {
+              "name": "Chaos-horde",
+              "cs": 46,
+              "endurance": 46
+            }
+          ],
+          "victoryRoute": 82
+        }
+      ]
+    },
+    "142": {
+      "combat": [
+        {
+          "id": "book17-142",
+          "enemies": [
+            {
+              "name": "Demonlord Tagazin (with Power Helm)",
+              "cs": 55,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 40
+        }
+      ]
+    },
+    "145": {
+      "combat": [
+        {
+          "id": "book17-145",
+          "enemies": [
+            {
+              "name": "Chaos-horde",
+              "cs": 48,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 190,
+          "canEvade": true,
+          "evadeAfterRounds": 6,
+          "evadeRoute": 235
+        }
+      ]
+    },
+    "154": {
+      "combat": [
+        {
+          "id": "book17-154",
+          "enemies": [
+            {
+              "name": "Chaos-horde",
+              "cs": 37,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 318
+        }
+      ]
+    },
+    "167": {
+      "combat": [
+        {
+          "id": "book17-167",
+          "enemies": [
+            {
+              "name": "3 Cabalah",
+              "cs": 50,
+              "endurance": 54
+            }
+          ],
+          "victoryRoute": 173,
+          "ignorePlayerLossRounds": 2
+        }
+      ]
+    },
+    "210": {
+      "combat": [
+        {
+          "id": "book17-210",
+          "enemies": [
+            {
+              "name": "Suggaz",
+              "cs": 44,
+              "endurance": 44
+            }
+          ],
+          "victoryRoute": 67
+        }
+      ]
+    },
+    "214": {
+      "combat": [
+        {
+          "id": "book17-214",
+          "enemies": [
+            {
+              "name": "Deathlord Ixiataaga (with Deathstaff\u2014uncharged)",
+              "cs": 60,
+              "endurance": 39
+            }
+          ],
+          "victoryRoute": 290
+        }
+      ]
+    },
+    "216": {
+      "combat": [
+        {
+          "id": "book17-216",
+          "enemies": [
+            {
+              "name": "Demonlord Tagazin",
+              "cs": 54,
+              "endurance": 60
+            }
+          ]
+        }
+      ]
+    },
+    "230": {
+      "combat": [
+        {
+          "id": "book17-230",
+          "enemies": [
+            {
+              "name": "Demonlord Tagazin (injured)",
+              "cs": 45,
+              "endurance": 45
+            }
+          ]
+        }
+      ]
+    },
+    "237": {
+      "combat": [
+        {
+          "id": "book17-237",
+          "enemies": [
+            {
+              "name": "Dentaag",
+              "cs": 51,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 149
+        }
+      ]
+    },
+    "239": {
+      "combat": [
+        {
+          "id": "book17-239",
+          "enemies": [
+            {
+              "name": "Ixian Undead",
+              "cs": 46,
+              "endurance": 55
+            }
+          ],
+          "victoryRoute": 152
+        }
+      ]
+    },
+    "242": {
+      "combat": [
+        {
+          "id": "book17-242",
+          "enemies": [
+            {
+              "name": "Ixian Undead",
+              "cs": 46,
+              "endurance": 55
+            }
+          ],
+          "victoryRoute": 152
+        }
+      ]
+    },
+    "243": {
+      "combat": [
+        {
+          "id": "book17-243",
+          "enemies": [
+            {
+              "name": "Drakkarim Undead",
+              "cs": 34,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 63
+        }
+      ]
+    },
+    "260": {
+      "combat": [
+        {
+          "id": "book17-260",
+          "enemies": [
+            {
+              "name": "Drakkarim Marines (undead)",
+              "cs": 42,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 37,
+          "winWithinRounds": 5,
+          "winWithinRoute": 37,
+          "tooLateRoute": 124,
+          "roundLimit": 5,
+          "roundExceededRoute": 124
+        }
+      ]
+    },
+    "264": {
+      "combat": [
+        {
+          "id": "book17-264",
+          "enemies": [
+            {
+              "name": "Cabalah",
+              "cs": 47,
+              "endurance": 45
+            }
+          ]
+        }
+      ]
+    },
+    "275": {
+      "combat": [
+        {
+          "id": "book17-275",
+          "enemies": [
+            {
+              "name": "Ixian Mhagani",
+              "cs": 40,
+              "endurance": 60
+            }
+          ],
+          "victoryRoute": 16
+        }
+      ]
+    },
+    "277": {
+      "combat": [
+        {
+          "id": "book17-277",
+          "enemies": [
+            {
+              "name": "Ziog",
+              "cs": 48,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 70
+        }
+      ]
+    },
+    "278": {
+      "combat": [
+        {
+          "id": "book17-278",
+          "enemies": [
+            {
+              "name": "Chaos Horde",
+              "cs": 48,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 190,
+          "canEvade": true,
+          "evadeAfterRounds": 6,
+          "evadeRoute": 235
+        }
+      ]
+    },
+    "279": {
+      "combat": [
+        {
+          "id": "book17-279",
+          "enemies": [
+            {
+              "name": "Undead Drakkarim Search Party (in psychic shock)",
+              "cs": 20,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 79
+        }
+      ]
+    },
+    "281": {
+      "combat": [
+        {
+          "id": "book17-281",
+          "enemies": [
+            {
+              "name": "3 Cabalah",
+              "cs": 53,
+              "endurance": 54
+            }
+          ],
+          "victoryRoute": 173,
+          "canEvade": true,
+          "evadeAfterRounds": 4,
+          "evadeRoute": 41
+        }
+      ]
+    },
+    "285": {
+      "combat": [
+        {
+          "id": "book17-285",
+          "enemies": [
+            {
+              "name": "Suggaz",
+              "cs": 40,
+              "endurance": 44
+            }
+          ],
+          "victoryRoute": 67
+        }
+      ]
+    },
+    "287": {
+      "combat": [
+        {
+          "id": "book17-287",
+          "enemies": [
+            {
+              "name": "3 Kajarda",
+              "cs": 48,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 32,
+          "winWithinRounds": 6,
+          "winWithinRoute": 32,
+          "tooLateRoute": 213,
+          "roundLimit": 6,
+          "roundExceededRoute": 213
+        }
+      ]
+    },
+    "288": {
+      "combat": [
+        {
+          "id": "book17-288",
+          "enemies": [
+            {
+              "name": "Ziog (damaged)",
+              "cs": 39,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 159
+        }
+      ]
+    },
+    "308": {
+      "combat": [
+        {
+          "id": "book17-308",
+          "enemies": [
+            {
+              "name": "Demonlord Tagazin (with Power Helm)",
+              "cs": 55,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 40
+        }
+      ]
+    },
+    "310": {
+      "combat": [
+        {
+          "id": "book17-310",
+          "enemies": [
+            {
+              "name": "Ixian Undead",
+              "cs": 43,
+              "endurance": 52
+            }
+          ],
+          "victoryRoute": 48,
+          "canEvade": true,
+          "evadeAfterRounds": 3,
+          "evadeRoute": 295
+        }
+      ]
+    },
+    "336": {
+      "combat": [
+        {
+          "id": "book17-336",
+          "enemies": [
+            {
+              "name": "Drakkarim Undead",
+              "cs": 34,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 63
+        }
+      ]
+    },
+    "337": {
+      "combat": [
+        {
+          "id": "book17-337",
+          "enemies": [
+            {
+              "name": "Suggaz",
+              "cs": 40,
+              "endurance": 44
+            }
+          ],
+          "victoryRoute": 67
+        }
+      ]
+    },
+    "341": {
+      "combat": [
+        {
+          "id": "book17-341",
+          "enemies": [
+            {
+              "name": "Demonlord Tagazin",
+              "cs": 55,
+              "endurance": 60
+            }
+          ]
+        }
+      ]
+    },
+    "347": {
+      "combat": [
+        {
+          "id": "book17-347",
+          "enemies": [
+            {
+              "name": "Lavas",
+              "cs": 49,
+              "endurance": 52
+            }
+          ],
+          "victoryRoute": 105
+        }
+      ]
+    }
+  }
+}

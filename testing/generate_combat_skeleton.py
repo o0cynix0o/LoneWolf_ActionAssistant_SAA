@@ -15,7 +15,8 @@ COMBAT_PATTERN = re.compile(r'<p class="combat">(.*?)</p>', re.IGNORECASE | re.D
 STAT_PATTERN = re.compile(r"COMBAT\s*SKILL\s*(\d+)\s*ENDURANCE\s*(\d+)", re.IGNORECASE)
 ROUTE_PATTERN = re.compile(r"(?:if you win|if you defeat).*?<a href=\"sect(\d+)\.htm\"", re.IGNORECASE | re.DOTALL)
 EVASION_PATTERN = re.compile(
-    r"may evade (?:this )?combat after (?P<rounds>\w+) rounds? by turning to\s*(?P<route>\d+)",
+    r"may (?:attempt to )?(?:evade|escape)(?: (?:this|the)? ?combat(?: with [^.]*?)?)?"
+    r"(?: at any time)? after (?:the )?(?P<rounds>\w+) rounds? by turning to\s*(?P<route>\d+)",
     re.IGNORECASE,
 )
 TIMED_MODIFIER_PATTERN = re.compile(
@@ -38,12 +39,13 @@ CONDITIONAL_DURATION_MODIFIER_PATTERN = re.compile(
     re.IGNORECASE,
 )
 DURATION_MODIFIER_PATTERN = re.compile(
-    r"increase your COMBAT SKILL(?: score)? by (?P<value>\d+)(?: points?)?"
-    r" for the duration of (?:this )?(?:combat|fight)",
+    r"(?P<direction>reduce|increase) your COMBAT SKILL(?: score)? by (?P<value>\d+)(?: points?)?"
+    r" for the duration of (?:this )?(?:[a-z-]+ )?(?:combat|fight)",
     re.IGNORECASE,
 )
 IGNORE_LOSS_PATTERN = re.compile(
-    r"ignore any ENDURANCE loss you may sustain in the first(?: (?P<rounds>\w+))? rounds?",
+    r"ignore any ENDURANCE (?:point )?loss(?:es)? you may sustain(?: during)?"
+    r" the first(?: (?P<rounds>\w+))? rounds?",
     re.IGNORECASE,
 )
 WIN_WITHIN_PATTERN = re.compile(
@@ -52,6 +54,10 @@ WIN_WITHIN_PATTERN = re.compile(
 )
 WIN_DURATION_PATTERN = re.compile(
     r"if you win and the (?:combat|fight) (?:takes|lasts) (?P<rounds>\w+) rounds? or less, turn to\s*(?P<route>\d+)",
+    re.IGNORECASE,
+)
+WIN_TOO_LATE_PATTERN = re.compile(
+    r"if you win(?: this| the)? (?:combat|fight) in (?P<rounds>\w+) rounds? or more, turn to\s*(?P<route>\d+)",
     re.IGNORECASE,
 )
 TOO_LATE_PATTERN = re.compile(
@@ -81,7 +87,10 @@ def add_standard_combat_rules(preset: dict[str, Any], combat_text: str) -> None:
     """Capture unambiguous combat clauses without copying source prose."""
     duration_match = DURATION_MODIFIER_PATTERN.search(combat_text)
     if duration_match:
-        preset["modifier"] = int(duration_match.group("value"))
+        prefix = combat_text[max(0, duration_match.start() - 180) : duration_match.start()].lower()
+        if "unless" not in prefix and "if you possess" not in prefix:
+            value = int(duration_match.group("value"))
+            preset["modifier"] = value if duration_match.group("direction").lower() == "increase" else -value
 
     conditional_duration_match = CONDITIONAL_DURATION_MODIFIER_PATTERN.search(combat_text)
     if conditional_duration_match:
@@ -163,6 +172,11 @@ def add_standard_combat_rules(preset: dict[str, Any], combat_text: str) -> None:
                 preset["tooLateRoute"] = route
                 preset["roundLimit"] = rounds
                 preset["roundExceededRoute"] = route
+            else:
+                late_match = WIN_TOO_LATE_PATTERN.search(combat_text[win_match.end():])
+                if late_match:
+                    route = int(late_match.group("route"))
+                    preset["tooLateRoute"] = route
 
 
 def section_preset(page: Path, book_number: int) -> tuple[int, dict[str, Any]] | None:

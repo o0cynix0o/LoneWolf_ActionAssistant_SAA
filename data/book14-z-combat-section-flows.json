@@ -308,7 +308,8 @@
               "endurance": 36
             }
           ],
-          "victoryRoute": 321
+          "victoryRoute": 321,
+          "modifier": -3
         }
       ]
     },
