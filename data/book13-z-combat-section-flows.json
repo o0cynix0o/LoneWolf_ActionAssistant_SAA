@@ -236,7 +236,12 @@
               "endurance": 22
             }
           ],
-          "victoryRoute": 254
+          "victoryRoute": 254,
+          "winWithinRounds": 5,
+          "winWithinRoute": 254,
+          "tooLateRoute": 37,
+          "roundLimit": 5,
+          "roundExceededRoute": 37
         }
       ]
     },
@@ -296,7 +301,10 @@
               "endurance": 50
             }
           ],
-          "victoryRoute": 320
+          "victoryRoute": 320,
+          "canEvade": true,
+          "evadeAfterRounds": 4,
+          "evadeRoute": 2
         }
       ]
     },
@@ -506,7 +514,12 @@
               "endurance": 36
             }
           ],
-          "victoryRoute": 64
+          "victoryRoute": 64,
+          "winWithinRounds": 4,
+          "winWithinRoute": 64,
+          "tooLateRoute": 114,
+          "roundLimit": 4,
+          "roundExceededRoute": 114
         }
       ]
     },
@@ -656,7 +669,14 @@
               "endurance": 39
             }
           ],
-          "victoryRoute": 327
+          "victoryRoute": 327,
+          "timedModifiers": [
+            {
+              "modifier": -3,
+              "startRound": 1,
+              "endRound": 2
+            }
+          ]
         }
       ]
     },
@@ -671,7 +691,10 @@
               "endurance": 56
             }
           ],
-          "victoryRoute": 219
+          "victoryRoute": 219,
+          "canEvade": true,
+          "evadeAfterRounds": 6,
+          "evadeRoute": 63
         }
       ]
     },
@@ -731,7 +754,12 @@
               "endurance": 34
             }
           ],
-          "victoryRoute": 64
+          "victoryRoute": 64,
+          "winWithinRounds": 4,
+          "winWithinRoute": 64,
+          "tooLateRoute": 114,
+          "roundLimit": 4,
+          "roundExceededRoute": 114
         }
       ]
     },

@@ -1,0 +1,551 @@
+{
+  "15": {
+    "6": {
+      "combat": [
+        {
+          "id": "book15-6",
+          "enemies": [
+            {
+              "name": "Tunnel Stalker",
+              "cs": 38,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 91,
+          "modifier": 3
+        }
+      ]
+    },
+    "7": {
+      "combat": [
+        {
+          "id": "book15-7",
+          "enemies": [
+            {
+              "name": "Ciquali",
+              "cs": 32,
+              "endurance": 28
+            }
+          ],
+          "victoryRoute": 148
+        }
+      ]
+    },
+    "32": {
+      "combat": [
+        {
+          "id": "book15-32",
+          "enemies": [
+            {
+              "name": "Wild Akataz Pack",
+              "cs": 38,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 286
+        }
+      ]
+    },
+    "44": {
+      "combat": [
+        {
+          "id": "book15-44",
+          "enemies": [
+            {
+              "name": "3 Gorodons",
+              "cs": 46,
+              "endurance": 60
+            }
+          ],
+          "victoryRoute": 264,
+          "winWithinRounds": 6,
+          "winWithinRoute": 264,
+          "tooLateRoute": 155,
+          "roundLimit": 6,
+          "roundExceededRoute": 155
+        }
+      ]
+    },
+    "54": {
+      "combat": [
+        {
+          "id": "book15-54",
+          "enemies": [
+            {
+              "name": "Zagganozod Captain",
+              "cs": 36,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 341
+        }
+      ]
+    },
+    "57": {
+      "combat": [
+        {
+          "id": "book15-57",
+          "enemies": [
+            {
+              "name": "Tukodak Guards",
+              "cs": 38,
+              "endurance": 34
+            }
+          ],
+          "victoryRoute": 12
+        }
+      ]
+    },
+    "75": {
+      "combat": [
+        {
+          "id": "book15-75",
+          "enemies": [
+            {
+              "name": "Warlord Magnaarn (with Nyras Sceptre)",
+              "cs": 50,
+              "endurance": 36
+            }
+          ],
+          "victoryRoute": 350
+        }
+      ]
+    },
+    "111": {
+      "combat": [
+        {
+          "id": "book15-111",
+          "enemies": [
+            {
+              "name": "Ciquali",
+              "cs": 30,
+              "endurance": 27
+            }
+          ],
+          "victoryRoute": 349
+        }
+      ]
+    },
+    "113": {
+      "combat": [
+        {
+          "id": "book15-113",
+          "enemies": [
+            {
+              "name": "Death Knight",
+              "cs": 33,
+              "endurance": 34
+            }
+          ],
+          "victoryRoute": 191
+        }
+      ]
+    },
+    "116": {
+      "combat": [
+        {
+          "id": "book15-116",
+          "enemies": [
+            {
+              "name": "Drakkarim Escorts",
+              "cs": 30,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 245
+        }
+      ]
+    },
+    "121": {
+      "combat": [
+        {
+          "id": "book15-121",
+          "enemies": [
+            {
+              "name": "Mawtaw",
+              "cs": 43,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 24
+        }
+      ]
+    },
+    "122": {
+      "combat": [
+        {
+          "id": "book15-122",
+          "enemies": [
+            {
+              "name": "Tunnel Stalker",
+              "cs": 43,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 330
+        }
+      ]
+    },
+    "154": {
+      "combat": [
+        {
+          "id": "book15-154",
+          "enemies": [
+            {
+              "name": "Lencian Crusader",
+              "cs": 34,
+              "endurance": 36
+            }
+          ]
+        }
+      ]
+    },
+    "179": {
+      "combat": [
+        {
+          "id": "book15-179",
+          "enemies": [
+            {
+              "name": "Warlord Magnaarn (with Nyras Sceptre)",
+              "cs": 50,
+              "endurance": 36
+            }
+          ],
+          "victoryRoute": 350
+        }
+      ]
+    },
+    "198": {
+      "combat": [
+        {
+          "id": "book15-198",
+          "enemies": [
+            {
+              "name": "Drakkarim Sergeant",
+              "cs": 32,
+              "endurance": 29
+            }
+          ],
+          "victoryRoute": 53,
+          "ignorePlayerLossRounds": 1
+        }
+      ]
+    },
+    "206": {
+      "combat": [
+        {
+          "id": "book15-206",
+          "enemies": [
+            {
+              "name": "Drakkarim Trench-troopers",
+              "cs": 29,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 4
+        }
+      ]
+    },
+    "218": {
+      "combat": [
+        {
+          "id": "book15-218",
+          "enemies": [
+            {
+              "name": "Tunnel Stalker",
+              "cs": 43,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 162
+        }
+      ]
+    },
+    "228": {
+      "combat": [
+        {
+          "id": "book15-228",
+          "enemies": [
+            {
+              "name": "Ciquali Chieftain",
+              "cs": 34,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 185
+        }
+      ]
+    },
+    "232": {
+      "combat": [
+        {
+          "id": "book15-232",
+          "enemies": [
+            {
+              "name": "Drakkarim Sergeant",
+              "cs": 30,
+              "endurance": 29
+            }
+          ],
+          "victoryRoute": 53,
+          "ignorePlayerLossRounds": 1
+        }
+      ]
+    },
+    "244": {
+      "combat": [
+        {
+          "id": "book15-244",
+          "enemies": [
+            {
+              "name": "Drakkarim Lancer",
+              "cs": 30,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 195,
+          "timedModifiers": [
+            {
+              "modifier": -10,
+              "startRound": 1,
+              "endRound": 2
+            }
+          ]
+        }
+      ]
+    },
+    "248": {
+      "combat": [
+        {
+          "id": "book15-248",
+          "enemies": [
+            {
+              "name": "2 Zagganozod Lancers",
+              "cs": 37,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 95
+        }
+      ]
+    },
+    "249": {
+      "combat": [
+        {
+          "id": "book15-249",
+          "enemies": [
+            {
+              "name": "Nad-jaguz",
+              "cs": 46,
+              "endurance": 46
+            }
+          ],
+          "victoryRoute": 219
+        }
+      ]
+    },
+    "250": {
+      "combat": [
+        {
+          "id": "book15-250",
+          "enemies": [
+            {
+              "name": "Wild Akataz Pack",
+              "cs": 40,
+              "endurance": 55
+            }
+          ],
+          "victoryRoute": 176
+        }
+      ]
+    },
+    "254": {
+      "combat": [
+        {
+          "id": "book15-254",
+          "enemies": [
+            {
+              "name": "Death Knights",
+              "cs": 38,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 35,
+          "winWithinRounds": 3,
+          "winWithinRoute": 35,
+          "tooLateRoute": 160,
+          "roundLimit": 3,
+          "roundExceededRoute": 160
+        }
+      ]
+    },
+    "268": {
+      "combat": [
+        {
+          "id": "book15-268",
+          "enemies": [
+            {
+              "name": "Tukodak Guards",
+              "cs": 38,
+              "endurance": 34
+            }
+          ],
+          "victoryRoute": 311
+        }
+      ]
+    },
+    "272": {
+      "combat": [
+        {
+          "id": "book15-272",
+          "enemies": [
+            {
+              "name": "3 Tukodak Guardians (in battle-frenzy)",
+              "cs": 44,
+              "endurance": 44
+            }
+          ],
+          "victoryRoute": 125
+        }
+      ]
+    },
+    "281": {
+      "combat": [
+        {
+          "id": "book15-281",
+          "enemies": [
+            {
+              "name": "Antah Wasps",
+              "cs": 40,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 120
+        }
+      ]
+    },
+    "283": {
+      "combat": [
+        {
+          "id": "book15-283",
+          "enemies": [
+            {
+              "name": "Tarhdemon (polymorphed Nadziran)",
+              "cs": 42,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 66
+        }
+      ]
+    },
+    "285": {
+      "combat": [
+        {
+          "id": "book15-285",
+          "enemies": [
+            {
+              "name": "Tunnel Stalker",
+              "cs": 43,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 91
+        }
+      ]
+    },
+    "297": {
+      "combat": [
+        {
+          "id": "book15-297",
+          "enemies": [
+            {
+              "name": "Mawtaw",
+              "cs": 38,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 24
+        }
+      ]
+    },
+    "305": {
+      "combat": [
+        {
+          "id": "book15-305",
+          "enemies": [
+            {
+              "name": "Armoury Guards",
+              "cs": 32,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 166,
+          "timedModifiers": [
+            {
+              "modifier": -3,
+              "startRound": 1,
+              "endRound": 1,
+              "condition": {
+                "type": "no_power",
+                "name": "Grand Pathsmanship"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "318": {
+      "combat": [
+        {
+          "id": "book15-318",
+          "enemies": [
+            {
+              "name": "Tunnel Stalker",
+              "cs": 43,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 162
+        }
+      ]
+    },
+    "326": {
+      "combat": [
+        {
+          "id": "book15-326",
+          "enemies": [
+            {
+              "name": "Gartoth",
+              "cs": 43,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 243
+        }
+      ]
+    },
+    "335": {
+      "combat": [
+        {
+          "id": "book15-335",
+          "enemies": [
+            {
+              "name": "Tunnel Stalker",
+              "cs": 44,
+              "endurance": 49
+            }
+          ],
+          "victoryRoute": 330,
+          "timedModifiers": [
+            {
+              "modifier": -3,
+              "startRound": 1,
+              "endRound": 1
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

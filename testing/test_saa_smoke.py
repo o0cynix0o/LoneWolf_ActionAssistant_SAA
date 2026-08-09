@@ -878,7 +878,7 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             self.assertEqual(assistant.combat_skill_for_round(1), 20)
             self.assertEqual(assistant.combat_skill_for_round(4), 25)
 
-    def test_grand_master_books13_and14_load_source_combat_catalogues(self) -> None:
+    def test_grand_master_books13_to16_load_source_combat_catalogues(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
             assistant = lonewolf_redux.LoneWolfReduxAssistant(
@@ -887,6 +887,8 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             )
             self.assertEqual(len([entry for entry in assistant.section_flows["13"].values() if entry.get("combat")]), 51)
             self.assertEqual(len([entry for entry in assistant.section_flows["14"].values() if entry.get("combat")]), 41)
+            self.assertEqual(len([entry for entry in assistant.section_flows["15"].values() if entry.get("combat")]), 34)
+            self.assertEqual(len([entry for entry in assistant.section_flows["16"].values() if entry.get("combat")]), 36)
 
             assistant.state = lonewolf_redux.normalize_state({
                 "Character": {"BookNumber": 13, "CombatSkillCurrent": 30, "EnduranceCurrent": 40, "EnduranceMax": 40},
@@ -904,6 +906,25 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             self.assertEqual(assistant.combat["EnemyCombatSkill"], 48)
             self.assertEqual(assistant.combat["EnemyEnduranceMax"], 52)
             self.assertEqual(assistant.combat["VictoryRoute"], 50)
+
+            assistant.character["BookNumber"] = 15
+            assistant.set_section(44)
+            assistant.start_section_combat()
+            self.assertEqual((assistant.combat["WinWithinRounds"], assistant.combat["TooLateRoute"]), (6, 155))
+            assistant.set_section(244)
+            assistant.start_section_combat()
+            self.assertEqual(assistant.combat_skill_for_round(1), 20)
+            self.assertEqual(assistant.combat_skill_for_round(3), 30)
+
+            assistant.character.update({"BookNumber": 16, "GrandMasterDisciplines": [], "GrandMasterRank": 5})
+            assistant.set_section(11)
+            assistant.start_section_combat()
+            self.assertEqual((assistant.combat["EvadeAfterRounds"], assistant.combat["EvadeRoute"]), (4, 222))
+            self.assertEqual(assistant.combat_skill_for_round(1), 25)
+            assistant.set_section(39)
+            assistant.start_section_combat()
+            self.assertEqual(assistant.combat_skill_for_round(1), 25)
+            self.assertEqual(assistant.combat_skill_for_round(4), 30)
 
     def test_new_order_books21_to29_unlock_campaign_achievements(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:

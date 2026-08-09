@@ -1,0 +1,675 @@
+{
+  "16": {
+    "11": {
+      "combat": [
+        {
+          "id": "book16-11",
+          "enemies": [
+            {
+              "name": "Vorndarol Jackals",
+              "cs": 42,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 347,
+          "conditionalModifiers": [
+            {
+              "modifier": -5,
+              "label": "Grand Master combat requirement",
+              "condition": {
+                "type": "any",
+                "conditions": [
+                  {
+                    "type": "no_power",
+                    "name": "Grand Weaponmastery"
+                  },
+                  {
+                    "type": "grand_master_rank_lt",
+                    "value": 6
+                  }
+                ]
+              }
+            }
+          ],
+          "canEvade": true,
+          "evadeAfterRounds": 4,
+          "evadeRoute": 222
+        }
+      ]
+    },
+    "14": {
+      "combat": [
+        {
+          "id": "book16-14",
+          "enemies": [
+            {
+              "name": "Vakovarian Brigand Captain",
+              "cs": 33,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 25,
+          "canEvade": true,
+          "evadeAfterRounds": 2,
+          "evadeRoute": 312,
+          "winWithinRounds": 5,
+          "winWithinRoute": 25,
+          "tooLateRoute": 145,
+          "roundLimit": 5,
+          "roundExceededRoute": 145
+        }
+      ]
+    },
+    "36": {
+      "combat": [
+        {
+          "id": "book16-36",
+          "enemies": [
+            {
+              "name": "Vortexi",
+              "cs": 40,
+              "endurance": 22
+            }
+          ],
+          "victoryRoute": 46
+        }
+      ]
+    },
+    "39": {
+      "combat": [
+        {
+          "id": "book16-39",
+          "enemies": [
+            {
+              "name": "Vakovarian Brigands",
+              "cs": 38,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 348,
+          "timedModifiers": [
+            {
+              "modifier": -5,
+              "startRound": 1,
+              "endRound": 3,
+              "condition": {
+                "type": "no_power",
+                "name": "Grand Huntmastery"
+              }
+            }
+          ],
+          "canEvade": true,
+          "evadeAfterRounds": 6,
+          "evadeRoute": 59
+        }
+      ]
+    },
+    "48": {
+      "combat": [
+        {
+          "id": "book16-48",
+          "enemies": [
+            {
+              "name": "Black Corvayl",
+              "cs": 44,
+              "endurance": 52
+            }
+          ],
+          "victoryRoute": 210,
+          "timedModifiers": [
+            {
+              "modifier": -10,
+              "startRound": 1,
+              "endRound": 1
+            }
+          ]
+        }
+      ]
+    },
+    "52": {
+      "combat": [
+        {
+          "id": "book16-52",
+          "enemies": [
+            {
+              "name": "Lavas",
+              "cs": 48,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 3,
+          "canEvade": true,
+          "evadeAfterRounds": 6,
+          "evadeRoute": 276
+        }
+      ]
+    },
+    "54": {
+      "combat": [
+        {
+          "id": "book16-54",
+          "enemies": [
+            {
+              "name": "Arch Druid Cadak",
+              "cs": 50,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 298
+        }
+      ]
+    },
+    "97": {
+      "combat": [
+        {
+          "id": "book16-97",
+          "enemies": [
+            {
+              "name": "Cheghath",
+              "cs": 37,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 303
+        }
+      ]
+    },
+    "99": {
+      "combat": [
+        {
+          "id": "book16-99",
+          "enemies": [
+            {
+              "name": "Vorndarol Jackals",
+              "cs": 42,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 347,
+          "conditionalModifiers": [
+            {
+              "modifier": -5,
+              "label": "Grand Master combat requirement",
+              "condition": {
+                "type": "any",
+                "conditions": [
+                  {
+                    "type": "no_power",
+                    "name": "Grand Weaponmastery"
+                  },
+                  {
+                    "type": "grand_master_rank_lt",
+                    "value": 6
+                  }
+                ]
+              }
+            }
+          ],
+          "canEvade": true,
+          "evadeAfterRounds": 4,
+          "evadeRoute": 222
+        }
+      ]
+    },
+    "103": {
+      "combat": [
+        {
+          "id": "book16-103",
+          "enemies": [
+            {
+              "name": "Vortexi",
+              "cs": 44,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 46
+        }
+      ]
+    },
+    "118": {
+      "combat": [
+        {
+          "id": "book16-118",
+          "enemies": [
+            {
+              "name": "Vortexi",
+              "cs": 49,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 46
+        }
+      ]
+    },
+    "123": {
+      "combat": [
+        {
+          "id": "book16-123",
+          "enemies": [
+            {
+              "name": "Arch Druid Cadak",
+              "cs": 48,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 298
+        }
+      ]
+    },
+    "130": {
+      "combat": [
+        {
+          "id": "book16-130",
+          "enemies": [
+            {
+              "name": "Acolytes of Vashna",
+              "cs": 45,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 311
+        }
+      ]
+    },
+    "132": {
+      "combat": [
+        {
+          "id": "book16-132",
+          "enemies": [
+            {
+              "name": "Cheghath",
+              "cs": 37,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 303
+        }
+      ]
+    },
+    "135": {
+      "combat": [
+        {
+          "id": "book16-135",
+          "enemies": [
+            {
+              "name": "Arch Druid Cadak",
+              "cs": 50,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 298
+        }
+      ]
+    },
+    "140": {
+      "combat": [
+        {
+          "id": "book16-140",
+          "enemies": [
+            {
+              "name": "Acolytes of Vashna (in battle-frenzy)",
+              "cs": 34,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 325
+        }
+      ]
+    },
+    "142": {
+      "combat": [
+        {
+          "id": "book16-142",
+          "enemies": [
+            {
+              "name": "Vortexi",
+              "cs": 46,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 159
+        }
+      ]
+    },
+    "152": {
+      "combat": [
+        {
+          "id": "book16-152",
+          "enemies": [
+            {
+              "name": "Zarthyn",
+              "cs": 45,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 90
+        }
+      ]
+    },
+    "158": {
+      "combat": [
+        {
+          "id": "book16-158",
+          "enemies": [
+            {
+              "name": "Lavas",
+              "cs": 44,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 3,
+          "canEvade": true,
+          "evadeAfterRounds": 5,
+          "evadeRoute": 276
+        }
+      ]
+    },
+    "180": {
+      "combat": [
+        {
+          "id": "book16-180",
+          "enemies": [
+            {
+              "name": "Durncrag Scavengers",
+              "cs": 42,
+              "endurance": 18
+            }
+          ],
+          "victoryRoute": 317
+        }
+      ]
+    },
+    "206": {
+      "combat": [
+        {
+          "id": "book16-206",
+          "enemies": [
+            {
+              "name": "Vortexi",
+              "cs": 44,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 46
+        }
+      ]
+    },
+    "208": {
+      "combat": [
+        {
+          "id": "book16-208",
+          "enemies": [
+            {
+              "name": "Vorndarol Jackals",
+              "cs": 42,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 347,
+          "conditionalModifiers": [
+            {
+              "modifier": -5,
+              "label": "Grand Master combat requirement",
+              "condition": {
+                "type": "any",
+                "conditions": [
+                  {
+                    "type": "no_power",
+                    "name": "Grand Weaponmastery"
+                  },
+                  {
+                    "type": "grand_master_rank_lt",
+                    "value": 6
+                  }
+                ]
+              }
+            }
+          ],
+          "canEvade": true,
+          "evadeAfterRounds": 4,
+          "evadeRoute": 222
+        }
+      ]
+    },
+    "216": {
+      "combat": [
+        {
+          "id": "book16-216",
+          "enemies": [
+            {
+              "name": "Demoness Shamath (in the guise of Gnekasha the Worm-thrall)",
+              "cs": 55,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 148
+        }
+      ]
+    },
+    "229": {
+      "combat": [
+        {
+          "id": "book16-229",
+          "enemies": [
+            {
+              "name": "Vortexi (weakened by psychic attack)",
+              "cs": 40,
+              "endurance": 22
+            }
+          ],
+          "victoryRoute": 159
+        }
+      ]
+    },
+    "232": {
+      "combat": [
+        {
+          "id": "book16-232",
+          "enemies": [
+            {
+              "name": "Crypt Spawn",
+              "cs": 43,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 79
+        }
+      ]
+    },
+    "254": {
+      "combat": [
+        {
+          "id": "book16-254",
+          "enemies": [
+            {
+              "name": "Zarthyn",
+              "cs": 48,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 90
+        }
+      ]
+    },
+    "257": {
+      "combat": [
+        {
+          "id": "book16-257",
+          "enemies": [
+            {
+              "name": "Black Corvayl",
+              "cs": 46,
+              "endurance": 58
+            }
+          ],
+          "victoryRoute": 210,
+          "timedModifiers": [
+            {
+              "modifier": -10,
+              "startRound": 1,
+              "endRound": 1
+            }
+          ]
+        }
+      ]
+    },
+    "267": {
+      "combat": [
+        {
+          "id": "book16-267",
+          "enemies": [
+            {
+              "name": "Arch Druid Cadak",
+              "cs": 45,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 298
+        }
+      ]
+    },
+    "268": {
+      "combat": [
+        {
+          "id": "book16-268",
+          "enemies": [
+            {
+              "name": "Vakovarian Brigands",
+              "cs": 38,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 348,
+          "canEvade": true,
+          "evadeAfterRounds": 6,
+          "evadeRoute": 59
+        }
+      ]
+    },
+    "284": {
+      "combat": [
+        {
+          "id": "book16-284",
+          "enemies": [
+            {
+              "name": "Vortexi",
+              "cs": 49,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 46
+        }
+      ]
+    },
+    "304": {
+      "combat": [
+        {
+          "id": "book16-304",
+          "enemies": [
+            {
+              "name": "Vakovarian brigands",
+              "cs": 46,
+              "endurance": 56
+            }
+          ],
+          "victoryRoute": 188,
+          "canEvade": true,
+          "evadeAfterRounds": 6,
+          "evadeRoute": 35
+        }
+      ]
+    },
+    "305": {
+      "combat": [
+        {
+          "id": "book16-305",
+          "enemies": [
+            {
+              "name": "Vortexi",
+              "cs": 40,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 46
+        }
+      ]
+    },
+    "306": {
+      "combat": [
+        {
+          "id": "book16-306",
+          "enemies": [
+            {
+              "name": "Black Corvayl",
+              "cs": 38,
+              "endurance": 56
+            }
+          ],
+          "victoryRoute": 210,
+          "timedModifiers": [
+            {
+              "modifier": -5,
+              "startRound": 1,
+              "endRound": 1
+            }
+          ]
+        }
+      ]
+    },
+    "334": {
+      "combat": [
+        {
+          "id": "book16-334",
+          "enemies": [
+            {
+              "name": "Shamath Automatons",
+              "cs": 38,
+              "endurance": 60
+            }
+          ],
+          "victoryRoute": 240,
+          "canEvade": true,
+          "evadeAfterRounds": 4,
+          "evadeRoute": 153
+        }
+      ]
+    },
+    "336": {
+      "combat": [
+        {
+          "id": "book16-336",
+          "enemies": [
+            {
+              "name": "Black Corvayl",
+              "cs": 46,
+              "endurance": 58
+            }
+          ],
+          "victoryRoute": 210,
+          "timedModifiers": [
+            {
+              "modifier": -10,
+              "startRound": 1,
+              "endRound": 1
+            }
+          ]
+        }
+      ]
+    },
+    "345": {
+      "combat": [
+        {
+          "id": "book16-345",
+          "enemies": [
+            {
+              "name": "Acolytes of Vashna",
+              "cs": 40,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 26
+        }
+      ]
+    }
+  }
+}
