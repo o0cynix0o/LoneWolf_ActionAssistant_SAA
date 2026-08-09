@@ -1,5 +1,11 @@
 # Lone Wolf Action Assistant Unification Plan
 
+> Historical implementation plan. Its original Books 1-8 objective is complete
+> and has since expanded through the current Books 1-29 internal-testing
+> boundary. For current support and verification, see `README.md`,
+> `docs/GRAND_MASTER_READINESS_AUDIT.md`, and
+> `docs/NEW_ORDER_READINESS_AUDIT.md`.
+
 ## Goal
 
 Create one supported application without losing either gameplay coverage or the

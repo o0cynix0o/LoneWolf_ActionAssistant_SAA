@@ -1,5 +1,9 @@
 # CODEX BRIEF — Package Lone Wolf Action Assistant as a standalone Windows desktop app
 
+> Historical packaging brief. The pywebview desktop package described here was
+> completed; use `README.md`, `docs/BUILDING.md`, and
+> `docs/CANONICAL_RELEASE.md` for the current 3.5.0 release workflow.
+
 ## Repo / paths
 - **Canonical application and release source:** `C:\Scripts\LoneWolf_ActionAssistant_SAA`
 - **Historical Python/web reference:** `C:\Scripts\LoneWolf_ActionAssistant_Redux`

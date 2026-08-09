@@ -51,7 +51,8 @@ reader-directed until its trigger and outcome are both unambiguous.
 1. Test fresh starts at every supported book.
 2. Test every inter-book handoff, including full Backpack and two-Weapon cases.
 3. Exercise RNT low/high boundaries, discipline modifiers, and item gates.
-4. Run story, easy, normal, and hard configurations; run permadeath separately.
+4. Run Story, Easy, Normal, Hard, and Veteran configurations; exercise every
+   valid permadeath setting and both DataFile and Manual CRT modes.
 5. Preserve a concise report of executed routes, expected endings, and any
    reader-directed cases that remain.
 

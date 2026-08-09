@@ -12,14 +12,14 @@ Version: **3.5.0 Internal Testing**
 
 ## What You Can Play
 
-Books 1-20 are playable internal-testing campaigns:
+Books 1-29 are playable internal-testing campaigns:
 
 | Series | Books | Support |
 | --- | --- | --- |
 | Kai | 1-5 | Character creation, campaign handoff, reader routes, inventory, combat, rolls, endings, saves, and achievements |
 | Magnakai | 6-12 | Fresh Magnakai setup or campaign handoff, disciplines, reader routes, inventory, combat, rolls, endings, saves, and achievements |
-| Grand Master | 13-20 | Fresh Grand Master setup or Book 12 campaign handoff, Grand Master disciplines, expanded Backpack, reader routes, inventory, source-derived combat and RNT catalogues, saves, and campaign achievements. Remaining non-combat section effects and source-ambiguous cases stay reader-directed. |
-| New Order | 21-29 | Fresh New Order setup and Book-to-book continuation, 16 disciplines, Kai Weapon, equipment, reader routes, inventory, source-verified RNT and combat catalogues, saves, and campaign achievements. |
+| Grand Master | 13-20 | Fresh Grand Master setup or Book 12 campaign handoff, Grand Master disciplines, expanded Backpack, reader routes, inventory, source-derived RNT, combat, and direct mandatory-effect catalogues, saves, and campaign achievements. |
+| New Order | 21-29 | Fresh New Order setup and Book-to-book continuation, 16 disciplines, Kai Weapon, equipment, reader routes, source-derived RNT, combat, and direct mandatory-effect catalogues, saves, and campaign achievements. |
 
 Books 30-32 do not have Project Aon-style HTML editions. They require a
 separate licensed-source and conversion path before this HTML-based importer
@@ -36,7 +36,7 @@ answer in the reader, where they belong.
 2. Open **Install Books** in the app.
 3. Import your own standard Project Aon ZIP files or extracted book folders.
 4. Start Book 1, continue a completed campaign, or choose a supported fresh
-   Magnakai setup.
+   Magnakai, Grand Master, or New Order setup.
 
 Book files are not included in this repository, installer, or release assets.
 The importer expects a valid folder containing at least `title.htm` and
@@ -72,9 +72,11 @@ remains when the book text returns or preserves it.
 - [Game modes and difficulty](https://github.com/o0cynix0o/LoneWolf_ActionAssistant_SAA/wiki/Game-Modes)
 - [Book support matrix](https://github.com/o0cynix0o/LoneWolf_ActionAssistant_SAA/wiki/Book-Support-Matrix)
 - [Strategy guides](https://github.com/o0cynix0o/LoneWolf_ActionAssistant_SAA/wiki/Strategy-Guide)
-- [Campaign testing report](docs/DEEP_CAMPAIGN_TEST_REPORT.md)
+- [Kai and Magnakai campaign testing report](docs/DEEP_CAMPAIGN_TEST_REPORT.md)
 - [Grand Master readiness audit](docs/GRAND_MASTER_READINESS_AUDIT.md)
+- [Grand Master campaign testing report](docs/GRAND_MASTER_CAMPAIGN_TEST_REPORT.md)
 - [New Order readiness audit](docs/NEW_ORDER_READINESS_AUDIT.md)
+- [New Order campaign testing report](docs/NEW_ORDER_CAMPAIGN_TEST_REPORT.md)
 
 ## Storage And Privacy
 

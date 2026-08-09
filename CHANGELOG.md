@@ -8,6 +8,15 @@
 - Added complete Grand Master standalone save/load regression coverage for
   Books 13-20 and corrected the support documentation to reflect the existing
   all-series RNT catalogues.
+- Added guarded direct mandatory-effect automation across Grand Master and New
+  Order Books 13-29, while preserving player-owned rewards, exchanges, and
+  chosen losses as reader-visible decisions.
+- Verified the Grand Master and New Order campaign spines across every
+  difficulty, valid permadeath setting, and CRT mode. The regression matrix
+  covers 18 handoff runs per series, Book 16 and Book 25 save/load checkpoints,
+  all 306 Grand Master combat presets, and all 265 New Order combat presets.
+- Corrected Book 20 completion to close the Grand Master run rather than offer
+  a false direct handoff to the distinct New Order character campaign.
 
 ## 3.4.9 - Internal Testing
 

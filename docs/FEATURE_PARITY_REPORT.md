@@ -1,5 +1,9 @@
 # Three-Way Feature Parity Report
 
+> Historical parity report, refreshed for the 3.5.0 internal-testing support
+> boundary. V1 and V2 remain reference implementations; V3 is the only
+> supported product and now covers Books 1-29.
+
 ## Executive Summary
 
 V3 is the canonical product because it retains the Redux browser experience
@@ -17,18 +21,20 @@ as parallel applications.
 | Feature | V1 PowerShell | V2 Redux web | V3 SAA canonical |
 |---|---|---|---|
 | Kai Books 1-5 campaign | ✅ | ✅ | ✅ |
-| Magnakai Books 6-8 | ✅ source implementation | ⚠️ core/catalogue only | ✅ standalone and continuation campaign |
+| Magnakai Books 6-12 | ⚠️ V1 source reference covers 6-8 | ⚠️ core/catalogue only | ✅ fresh setup and continuation campaign |
+| Grand Master Books 13-20 | ❌ | ⚠️ core/catalogue only | ➕ fresh setup, Book 12 handoff, source RNT/combat/direct effects |
+| New Order Books 21-29 | ❌ | ⚠️ core/catalogue only | ➕ fresh setup, series continuation, 16 disciplines, Kai Weapon, source RNT/combat/direct effects |
 | Book readers/installable HTML | ✅ local `books` | ✅ web install page | ✅ managed import and desktop reader |
 | Save/load and slots | ✅ PowerShell JSON | ✅ JSON slots/API | ✅ versioned V1/V2/V3 normalization and slots |
 | Run difficulty | ✅ Story, Easy, Normal, Hard, Veteran | ❌ | ✅ five V1-compatible rulesets in new-run UI and CLI |
 | Permadeath | ✅ optional except Story | ❌ | ✅ disables repeat/rewind recovery and records a dead run |
 | Run integrity | ✅ signed PowerShell state | ❌ | ✅ V3 SHA-256 signing; legacy signatures are retained as unverified metadata |
 | Achievement eligibility | ✅ difficulty-specific pools | ⚠️ achievements without V1 run gates | ✅ Story/Combat/Exploration/Challenge gates, including permadeath and integrity checks |
-| Combat/RNT | ✅ ruleset modules | ✅ Redux CRT/RNT | ✅ Redux CRT/RNT plus 104 source-extracted Magnakai presets |
+| Combat/RNT | ✅ ruleset modules | ✅ Redux CRT/RNT | ✅ Redux CRT/RNT plus source catalogues for all 1-29 books |
 | CRT resolution mode | ✅ DataFile or ManualCRT | ⚠️ automatic CRT only | ✅ automatic DataFile CRT or manual loss recording, separately from UI play mode |
 | Inventory, character sheet, action chart | ✅ console/web API | ✅ browser UI | ✅ browser UI and desktop shell |
 | Book 6 dynamic resale | ✅ sections 76/98/275 | ❌ | ✅ live inventory sale UI |
-| Book 5→6→7→8 handoff | ✅ | ⚠️ not release-complete | ✅ Magnakai carry-forward setup |
+| Series handoffs | ✅ Kai/Magnakai source behavior | ⚠️ not release-complete | ✅ Kai, Magnakai, Grand Master, and New Order intra-series setup |
 | Browser launch | ✅ PowerShell launches web stack | ✅ Python HTTP/WebSocket | ✅ retained browser surface under desktop host |
 | Desktop packaging/installer | ⚠️ portable PowerShell release artifacts | ❌ | ➕ pywebview, PyInstaller, Inno Setup |
 | Installed/user data separation | ❌ repo-local saves | ❌ repo-local saves | ➕ `runtime_paths.py` user-data root |
@@ -87,15 +93,14 @@ next book first, displays its Project Aon `tssf.htm` Story So Far page, and then
 shows the setup choices. Temporary stored or safekept equipment is not restored
 or transferred across that book boundary.
 
-Remaining audit work is route-by-route fixture coverage for the few one-off source
-mechanics outside normal combat and RNT handling. These are explicitly tracked in
-`UNIFICATION_PLAN.md`; they do not block fresh or continued Books 6-8 setup.
+Remaining audit work is route-by-route fixture coverage for one-off source
+mechanics outside normal combat and RNT handling. It does not block the
+internal-testing fresh or continued setups across the supported series.
 
 ## Recommendation
 
 Ship and maintain only V3. Back-port nothing into V1/V2: preserve them as
 read-only test/reference trees, keep their launchers out of release guidance,
-and use V3's installer as the one distribution route. Complete the remaining
-route fixtures and special target-point audit while retaining Books 6-8's public
-standalone and continued starts, then retire the old launch paths from normal
-user documentation.
+and use V3's installer as the one distribution route. Continue adding
+source-verified route fixtures as feedback finds ambiguous cases, while
+retaining all supported fresh and continued series starts.

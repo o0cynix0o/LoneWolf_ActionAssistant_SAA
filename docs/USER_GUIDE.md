@@ -37,9 +37,18 @@ books\lw\01fftd\title.htm
 books\lw\01fftd\sect1.htm
 ```
 
-Books 1-12 can be imported and played as campaigns. Books 9-12 have completed
-their first source and campaign pass; use the manual tools whenever the book
-calls for a choice or result the assistant has not presented as a rule card.
+Books 1-29 can be imported and played as internal-testing campaigns. Books 1-5
+are Kai, Books 6-12 are Magnakai, Books 13-20 are Grand Master, and Books
+21-29 are New Order. The assistant automates source-verified routes, RNT,
+combat, and mandatory bookkeeping; use the reader and manual Action Chart
+controls whenever the book gives you a personal choice, puzzle, optional reward,
+or item exchange.
+
+Books 6-20 can be started with their series-appropriate fresh Action Chart or
+through the preceding supported campaign handoff. Books 21-29 can be started
+fresh or continued within the New Order series. Book 20 deliberately ends the
+original Grand Master campaign; Book 21 begins a different New Order Kai Grand
+Master and is not a direct character handoff.
 
 Use **Open Managed Books Folder** when you need direct access to the selected storage location.
 
