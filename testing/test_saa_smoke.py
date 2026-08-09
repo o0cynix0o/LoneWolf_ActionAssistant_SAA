@@ -546,6 +546,161 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
         self.assertEqual(book14_state["Character"]["GrandWeaponmasteryWeapons"], ["Sword", "Bow", "Axe"])
         self.assertEqual(book14_state["Inventory"]["Weapons"], ["Sword", "Dagger"])
 
+    def test_grand_master_campaign_spine_survives_all_modes_and_book_handoffs(self) -> None:
+        configurations = [
+            ("Story", False),
+            ("Easy", False), ("Easy", True),
+            ("Normal", False), ("Normal", True),
+            ("Hard", False), ("Hard", True),
+            ("Veteran", False), ("Veteran", True),
+        ]
+
+        def field_issue(book_number: int) -> list[str]:
+            choices = ["quiver", "meals", "rope", "laumspur"]
+            return (["sword"] + choices) if lonewolf_redux.grand_master_field_issue_count(book_number) == 5 else choices
+
+        def transition_drops(assistant: lonewolf_redux.LoneWolfReduxAssistant, book_number: int, choices: list[str]) -> list[str]:
+            options = lonewolf_redux.GRAND_MASTER_EQUIPMENT_OPTIONS[book_number]
+            added_weapons = sum(
+                1 for choice in choices for container, _item in options[choice]["Items"] if container == "weapon"
+            )
+            added_backpack_slots = sum(
+                lonewolf_redux.item_slot_cost(item)
+                for choice in choices
+                for container, item in options[choice]["Items"]
+                if container == "backpack"
+            )
+            weapon_drops = max(0, len(assistant.inventory["Weapons"]) + added_weapons - 2)
+            backpack_drops = max(
+                0,
+                lonewolf_redux.item_slot_total(assistant.inventory["BackpackItems"])
+                + added_backpack_slots
+                - lonewolf_redux.backpack_capacity(assistant.inventory),
+            )
+            return (
+                [f"weapon:{index}" for index in range(weapon_drops)]
+                + [f"backpack:{index}" for index in range(backpack_drops)]
+            )
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            root = Path(lonewolf_redux.__file__).resolve().parent
+            for difficulty, permadeath in configurations:
+                for combat_mode in ("DataFile", "ManualCRT"):
+                    label = f"{difficulty}-{permadeath}-{combat_mode}"
+                    assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                        save_dir=base / label / "saves", data_dir=root / "data",
+                        state_data_dir=base / label / "state", books_dir=base / label / "books",
+                    )
+                    assistant.state = lonewolf_redux.create_grand_master_character_state(
+                        book_number=13,
+                        grand_master_disciplines=lonewolf_redux.GRAND_MASTER_DISCIPLINES[:4],
+                        grand_weaponmastery_weapons=lonewolf_redux.GRAND_WEAPONMASTERY_WEAPONS[:2],
+                        combat_skill_roll=0,
+                        endurance_roll=0,
+                        gold_roll=0,
+                        equipment_choices=field_issue(13),
+                    )
+                    assistant.set_run_configuration(difficulty, permadeath, combat_mode)
+
+                    with redirect_stdout(io.StringIO()):
+                        assistant.set_section(125)
+                        assistant.start_section_combat()
+                        if combat_mode == "ManualCRT":
+                            assistant.combat_round(["combat", "manual"], manual_losses=(1, 0))
+                        else:
+                            assistant.combat_round(["combat", "round", "0"])
+                    self.assertTrue(assistant.combat["Active"], label)
+                    with redirect_stdout(io.StringIO()):
+                        assistant.stop_combat()
+
+                    for book_number in range(13, 21):
+                        if book_number == 16:
+                            checkpoint = base / label / "book16.json"
+                            self.assertTrue(assistant.save_game(str(checkpoint), quiet=True), label)
+                            resumed = lonewolf_redux.LoneWolfReduxAssistant(
+                                save_dir=base / label / "resumed-saves", data_dir=root / "data",
+                                state_data_dir=base / label / "resumed-state", books_dir=base / label / "books",
+                            )
+                            self.assertTrue(resumed.load_game(str(checkpoint), quiet=True), label)
+                            assistant = resumed
+                            self.assertEqual(assistant.combat_mode(), combat_mode, label)
+                            self.assertEqual(assistant.difficulty(), difficulty, label)
+                            self.assertEqual(assistant.permadeath_enabled(), permadeath and difficulty != "Story", label)
+
+                        assistant.ensure_book_completed(book_number)
+                        completion = assistant.book_completion_payload()
+                        if book_number == 20:
+                            self.assertFalse(completion["CanContinue"], label)
+                            self.assertEqual(assistant.run_state["Status"], "Completed", label)
+                            continue
+
+                        with redirect_stdout(io.StringIO()):
+                            opened = assistant.open_next_book()
+                        self.assertEqual(opened, book_number + 1, label)
+                        next_book = book_number + 1
+                        choices = field_issue(next_book)
+                        with redirect_stdout(io.StringIO()):
+                            assistant.continue_completed_book(
+                                grand_master_disciplines=[lonewolf_redux.GRAND_MASTER_DISCIPLINES[next_book - 10]],
+                                grand_weaponmastery_weapons=[lonewolf_redux.GRAND_WEAPONMASTERY_WEAPONS[next_book - 12]],
+                                book6_gold_roll=0,
+                                book6_equipment_choices=choices,
+                                transition_drops=transition_drops(assistant, next_book, choices),
+                            )
+                        self.assertEqual(assistant.character["BookNumber"], next_book, label)
+                        self.assertEqual(assistant.state["CurrentSection"], 1, label)
+                        self.assertLessEqual(len(assistant.inventory["Weapons"]), 2, label)
+                        self.assertLessEqual(
+                            lonewolf_redux.item_slot_total(assistant.inventory["BackpackItems"]),
+                            lonewolf_redux.backpack_capacity(assistant.inventory),
+                            label,
+                        )
+
+    def test_every_grand_master_combat_preset_starts_in_both_crt_modes(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            root = Path(lonewolf_redux.__file__).resolve().parent
+            for combat_mode in ("DataFile", "ManualCRT"):
+                assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                    save_dir=base / combat_mode / "saves", data_dir=root / "data",
+                    state_data_dir=base / combat_mode / "state", books_dir=base / combat_mode / "books",
+                )
+                assistant.set_run_configuration("Veteran", True, combat_mode)
+                assistant.autosave = lambda: None
+                for book_number in range(13, 21):
+                    combat_sections = [
+                        int(section)
+                        for section, flow in assistant.section_flows[str(book_number)].items()
+                        if isinstance(flow, dict) and flow.get("combat")
+                    ]
+                    for section in combat_sections:
+                        assistant.state = lonewolf_redux.normalize_state({
+                            "Character": {
+                                "BookNumber": book_number,
+                                "CombatSkillCurrent": 99,
+                                "EnduranceCurrent": 99,
+                                "EnduranceMax": 99,
+                                "GrandMasterRank": 11,
+                                "GrandMasterDisciplines": lonewolf_redux.GRAND_MASTER_DISCIPLINES,
+                                "GrandWeaponmasteryWeapons": lonewolf_redux.GRAND_WEAPONMASTERY_WEAPONS,
+                            },
+                            "Inventory": {
+                                "Weapons": ["Sommerswerd", "Sword"],
+                                "BackpackItems": ["Rope", "Lantern", "Meal"],
+                                "SpecialItems": ["Dagger of Vashna", "Helshezag", "Sommerswerd"],
+                            },
+                            "CurrentSection": section,
+                        })
+                        assistant.set_run_configuration("Veteran", True, combat_mode)
+                        with redirect_stdout(io.StringIO()):
+                            assistant.start_section_combat()
+                            self.assertTrue(assistant.combat["Active"], (combat_mode, book_number, section))
+                            if combat_mode == "ManualCRT":
+                                assistant.combat_round(["combat", "manual"], manual_losses=(1, 0))
+                            else:
+                                assistant.combat_round(["combat", "round", "0"])
+
     def test_book13_rnt_rules_apply_grand_master_modifiers_and_roll_effects(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)

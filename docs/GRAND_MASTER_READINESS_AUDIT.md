@@ -39,15 +39,15 @@ automation-review tags.
 
 | Book | Sections | Printed links | RNT candidates | Combat candidates | END candidates | Discipline candidates |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| 13 | 350 | 523 | 35 | 14 | 106 | 104 |
-| 14 | 350 | 538 | 48 | 4 | 99 | 97 |
-| 15 | 350 | 495 | 36 | 9 | 84 | 76 |
-| 16 | 350 | 517 | 37 | 19 | 88 | 83 |
-| 17 | 350 | 534 | 32 | 9 | 100 | 102 |
-| 18 | 350 | 496 | 33 | 5 | 94 | 86 |
-| 19 | 350 | 526 | 45 | 5 | 104 | 95 |
-| 20 | 350 | 565 | 44 | 17 | 104 | 109 |
-| Total | 2,800 | 4,194 | 310 | 82 | 779 | 752 |
+| 13 | 350 | 523 | 35 | 51 | 106 | 104 |
+| 14 | 350 | 538 | 48 | 41 | 99 | 97 |
+| 15 | 350 | 495 | 36 | 34 | 84 | 76 |
+| 16 | 350 | 517 | 37 | 36 | 88 | 83 |
+| 17 | 350 | 534 | 32 | 52 | 100 | 102 |
+| 18 | 350 | 496 | 33 | 34 | 94 | 86 |
+| 19 | 350 | 526 | 45 | 32 | 104 | 95 |
+| 20 | 350 | 565 | 44 | 26 | 104 | 109 |
+| Total | 2,800 | 4,194 | 310 | 306 | 779 | 752 |
 
 `data/grand-master-source-audit.json` contains the corresponding section
 numbers for RNT, combat, END, meal, gold, inventory, and discipline signals.
@@ -96,4 +96,5 @@ destination are unambiguous and it has focused regression coverage.
 
 The baseline is covered by standalone setup, Book 12-to-13 handoff, RNT,
 combat, direct-effect, achievement, save/load, and inventory regression tests
-in `testing/test_saa_smoke.py`.
+in `testing/test_saa_smoke.py`. The deeper Book 13-20 mode and campaign-spine
+matrix is recorded in `docs/GRAND_MASTER_CAMPAIGN_TEST_REPORT.md`.

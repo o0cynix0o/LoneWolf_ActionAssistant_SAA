@@ -4815,7 +4815,7 @@ class LoneWolfReduxAssistant:
             history.append(summary)
         self.state["BookHistory"] = history
         self.automation["Ending"] = {"BookNumber": book_number, "Section": int(self.state["CurrentSection"]), "Type": "success"}
-        if book_number == max(BOOKS):
+        if book_number in {20, max(BOOKS)}:
             self.run_state["Status"] = "Completed"
             self.run_state["CompletedOn"] = datetime.now().isoformat(timespec="seconds")
         if save:
