@@ -3178,15 +3178,12 @@
       }
       container.innerHTML = '';
 
-      // The desktop shell reports the live PTY backend (WinPTY when frozen,
-      // ConPTY from source). WinPTY re-emits whole lines on redraws, so xterm
-      // needs its winpty compatibility rules or the cursor drifts after the
-      // first command's output and echo/backspace break. ConPTY marks wraps
-      // correctly on its own, so no hint is set there. Default to winpty since
-      // the shipped app is always frozen.
+      // Frozen builds use a pipe-backed CLI and browser-side line editing.
+      // Source builds retain ConPTY. The old WinPTY marker is accepted for
+      // compatibility with an already-open older desktop window.
       const ptyBackend = new URLSearchParams(window.location.search).get('ptyBackend')
         || localStorage.getItem('lonewolf_redux.ptyBackend')
-        || 'winpty';
+        || 'pipes';
       const terminalOptions = {
         cursorBlink: true,
         // The child CLI prints bare "\n" line endings, so xterm must translate
@@ -3229,8 +3226,67 @@
         updateCliStatus('Connection error');
         cliTerminal?.writeln('\r\n[Could not connect to the CLI bridge. Make sure the launcher started the WebSocket server.]');
       });
+      let inputBuffer = '';
+      let inputHistory = [];
+      let historyIndex = 0;
+      const eraseLocalInput = () => {
+        if (inputBuffer) cliTerminal.write('\b \b'.repeat(Array.from(inputBuffer).length));
+      };
+      const replaceLocalInput = (value) => {
+        eraseLocalInput();
+        inputBuffer = value;
+        if (inputBuffer) cliTerminal.write(inputBuffer);
+      };
+      const submitLocalInput = () => {
+        const line = inputBuffer;
+        cliTerminal.write('\r\n');
+        if (line) {
+          inputHistory.push(line);
+          if (inputHistory.length > 100) inputHistory.shift();
+        }
+        historyIndex = inputHistory.length;
+        inputBuffer = '';
+        cliSocket?.send(`${line}\n`);
+      };
+      const handlePipeInput = (data) => {
+        if (!cliSocket || cliSocket.readyState !== WebSocket.OPEN) return;
+        if (data === '\r' || data === '\n') {
+          submitLocalInput();
+          return;
+        }
+        if (data === '\x7f' || data === '\b') {
+          if (inputBuffer) {
+            inputBuffer = Array.from(inputBuffer).slice(0, -1).join('');
+            cliTerminal.write('\b \b');
+          }
+          return;
+        }
+        if (data === '\x1b[A') {
+          if (historyIndex > 0) historyIndex -= 1;
+          replaceLocalInput(inputHistory[historyIndex] || '');
+          return;
+        }
+        if (data === '\x1b[B') {
+          if (historyIndex < inputHistory.length - 1) historyIndex += 1;
+          else historyIndex = inputHistory.length;
+          replaceLocalInput(inputHistory[historyIndex] || '');
+          return;
+        }
+        if (data === '\x03') {
+          eraseLocalInput();
+          inputBuffer = '';
+          historyIndex = inputHistory.length;
+          cliTerminal.write('^C\r\n');
+          return;
+        }
+        if (!/[\x00-\x1f\x7f]/.test(data)) {
+          inputBuffer += data;
+          cliTerminal.write(data);
+        }
+      };
       cliTerminal.onData((data) => {
-        if (cliSocket?.readyState === WebSocket.OPEN) cliSocket.send(data);
+        if (ptyBackend === 'pipes') handlePipeInput(data);
+        else if (cliSocket?.readyState === WebSocket.OPEN) cliSocket.send(data);
       });
       cliResizeHandler = () => {
         cliFitAddon?.fit();

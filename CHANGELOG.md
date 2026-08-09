@@ -1,5 +1,17 @@
 # Changelog
 
+## 3.5.1 - Internal Testing
+
+- Released the completed Books 13-29 direct-effect, route-filter, campaign,
+  and combat-preset work that landed after the 3.5.0 package.
+- Replaced the frozen embedded CLI's WinPTY redraw/echo path with a pipe-backed
+  CLI and browser-side line editing, including local backspace and command
+  history handling.
+- Hardened atomic autosaves against brief Windows antivirus or indexing locks
+  without permitting partial-save writes.
+- Rebuilt the package and refreshed the release checksum from the exact
+  installer asset.
+
 ## 3.5.0 - Internal Testing
 
 - Added source-derived combat catalogues for all 306 directly represented Grand

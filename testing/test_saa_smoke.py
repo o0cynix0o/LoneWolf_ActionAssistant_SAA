@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import io
 import json
 import re
@@ -3925,7 +3926,7 @@ class CardLayoutInteractionTests(unittest.TestCase):
                     return cls.assistant_html[match.start():index + 1]
         raise AssertionError(f"JavaScript function {name!r} has no closing brace")
 
-    def test_release_metadata_is_3_5_0_internal_testing(self) -> None:
+    def test_release_metadata_is_3_5_1_internal_testing(self) -> None:
         readme = (self.root / "README.md").read_text(encoding="utf-8")
         building = (self.root / "docs" / "BUILDING.md").read_text(encoding="utf-8")
         user_guide = (self.root / "docs" / "USER_GUIDE.md").read_text(encoding="utf-8")
@@ -3935,16 +3936,16 @@ class CardLayoutInteractionTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         version_info = (self.root / "version_info.txt").read_text(encoding="utf-8")
 
-        self.assertIn("# Lone Wolf Action Assistant 3.5.0 Internal Testing", readme)
-        self.assertIn("Version: **3.5.0 Internal Testing**", readme)
-        self.assertIn("# Building Lone Wolf Action Assistant 3.5.0 Internal Testing", building)
-        self.assertIn("# Lone Wolf Action Assistant 3.5.0 Internal Testing", user_guide)
-        self.assertIn("## 3.5.0 - Internal Testing", changelog)
-        self.assertIn('#define AppVersion "3.5.0"', installer)
-        self.assertIn("filevers=(3, 5, 0, 0)", version_info)
-        self.assertIn("prodvers=(3, 5, 0, 0)", version_info)
-        self.assertIn("StringStruct(u'FileVersion', u'3.5.0')", version_info)
-        self.assertIn("StringStruct(u'ProductVersion', u'3.5.0')", version_info)
+        self.assertIn("# Lone Wolf Action Assistant 3.5.1 Internal Testing", readme)
+        self.assertIn("Version: **3.5.1 Internal Testing**", readme)
+        self.assertIn("# Building Lone Wolf Action Assistant 3.5.1 Internal Testing", building)
+        self.assertIn("# Lone Wolf Action Assistant 3.5.1 Internal Testing", user_guide)
+        self.assertIn("## 3.5.1 - Internal Testing", changelog)
+        self.assertIn('#define AppVersion "3.5.1"', installer)
+        self.assertIn("filevers=(3, 5, 1, 0)", version_info)
+        self.assertIn("prodvers=(3, 5, 1, 0)", version_info)
+        self.assertIn("StringStruct(u'FileVersion', u'3.5.1')", version_info)
+        self.assertIn("StringStruct(u'ProductVersion', u'3.5.1')", version_info)
 
     def test_movable_cards_get_a_dedicated_drag_handle(self) -> None:
         self.assertIn("data-card-drag-handle", self.assistant_html)
@@ -4227,10 +4228,9 @@ class ServiceTests(unittest.TestCase):
 
 class FrozenCliTests(unittest.TestCase):
     def test_xterm_terminal_matches_live_pty_backend(self) -> None:
-        # The PTY backend differs by build (ConPTY from source, WinPTY when
-        # frozen), so the shell passes the live backend to the page instead of
-        # xterm guessing. xterm must always translate LF -> CRLF (staircase
-        # fix) and apply the winpty compatibility rules only for WinPTY.
+        # Frozen builds use pipe transport and local browser-side line editing;
+        # source builds retain ConPTY. The page still understands WinPTY so an
+        # older already-open shell can reconnect without losing terminal setup.
         root = Path(saa_main.__file__).resolve().parent
         assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
         index_html = (root / "index.html").read_text(encoding="utf-8")
@@ -4242,7 +4242,10 @@ class FrozenCliTests(unittest.TestCase):
         self.assertIn("lonewolf_redux.ptyBackend", assistant_html)
         self.assertIn("lonewolf_redux.ptyBackend", index_html)
         self.assertIn("ptyBackend={pty_backend}", saa_main_src)
-        self.assertIn('"winpty" if getattr(sys, "frozen", False) else "conpty"', saa_main_src)
+        self.assertIn('"pipes" if getattr(sys, "frozen", False) else "conpty"', saa_main_src)
+        self.assertIn("handlePipeInput", assistant_html)
+        self.assertIn("inputHistory", assistant_html)
+        self.assertIn("submitLocalInput", assistant_html)
 
     def test_winpty_submits_xterm_standalone_enter_as_crlf(self) -> None:
         self.assertEqual(ws_server.normalize_winpty_input("\r"), "\r\n")
@@ -4305,6 +4308,35 @@ class FrozenCliTests(unittest.TestCase):
         self.assertEqual(command[:2], [r"C:\App\Lone Wolf Action Assistant.exe", "--cli"])
         self.assertIn("--save-dir", command)
         self.assertNotIn("CLI.exe", " ".join(command))
+
+    def test_frozen_terminal_uses_pipe_transport(self) -> None:
+        with (
+            mock.patch.object(ws_server.os, "name", "nt"),
+            mock.patch.object(ws_server.sys, "frozen", True, create=True),
+            mock.patch.object(ws_server, "terminal_session_pipes", new=mock.AsyncMock()) as pipes,
+            mock.patch.object(ws_server, "build_command", return_value=["app.exe", "--cli"]),
+        ):
+            websocket = mock.Mock()
+            websocket.request.headers.get.return_value = "http://localhost:8797"
+            asyncio.run(ws_server.terminal_session(websocket))
+
+        pipes.assert_awaited_once()
+        self.assertEqual(pipes.await_args.kwargs["env"][ws_server.PIPE_CLI_ENV], "1")
+
+    def test_pipe_cli_dispatch_bypasses_console_attachment(self) -> None:
+        with (
+            mock.patch.object(saa_main.sys, "frozen", True, create=True),
+            mock.patch.object(saa_main.sys, "argv", ["saa_main.py", "--cli"]),
+            mock.patch.dict(saa_main.os.environ, {saa_main.PIPE_CLI_ENV: "1"}),
+            mock.patch.object(saa_main, "_prepare_pipe_cli_stdio", return_value=True) as pipe_stdio,
+            mock.patch.object(saa_main, "_prepare_cli_stdio") as console_stdio,
+            mock.patch.object(saa_main.lonewolf_redux, "main") as cli_main,
+        ):
+            self.assertEqual(saa_main.main(), 0)
+
+        pipe_stdio.assert_called_once_with()
+        console_stdio.assert_not_called()
+        cli_main.assert_called_once_with()
 
 
 class CliPanelLayoutTests(unittest.TestCase):
@@ -4456,6 +4488,33 @@ class CorruptSaveTests(unittest.TestCase):
             target.write_text("{ not valid json ", encoding="utf-8")
             with mock.patch.object(app_server.ASSISTANT, "save_dir", Path(temp)):
                 self.assertFalse(app_server.ASSISTANT.load_game(str(target), quiet=True))
+
+    def test_save_retries_a_transient_replace_lock(self) -> None:
+        root = Path(lonewolf_redux.__file__).resolve().parent
+        with tempfile.TemporaryDirectory() as temp:
+            base = Path(temp)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=root / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            target = base / "saves" / "retry.json"
+            real_replace = lonewolf_redux.os.replace
+            calls = 0
+
+            def lock_once(source: Path, destination: Path) -> None:
+                nonlocal calls
+                calls += 1
+                if calls == 1:
+                    raise PermissionError("temporary test lock")
+                real_replace(source, destination)
+
+            with mock.patch.object(lonewolf_redux.os, "replace", side_effect=lock_once):
+                self.assertTrue(assistant.save_game(str(target), quiet=True))
+
+            self.assertEqual(calls, 2)
+            self.assertTrue(target.is_file())
 
 
 class RequestGuardTests(unittest.TestCase):

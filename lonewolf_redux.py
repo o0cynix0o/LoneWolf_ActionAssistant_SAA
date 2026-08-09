@@ -18,6 +18,7 @@ import re
 import shutil
 import sys
 import textwrap
+import time
 import uuid
 from datetime import datetime
 from pathlib import Path
@@ -9440,7 +9441,17 @@ class LoneWolfReduxAssistant:
                 json.dump(self.state, handle, indent=2)
                 handle.flush()
                 os.fsync(handle.fileno())
-            os.replace(temp_path, path)
+            # Windows Defender or the file indexer can briefly hold the previous
+            # save open while an autosave replaces it. Retry that transient lock
+            # while retaining the temp-file-and-replace integrity guarantee.
+            for attempt in range(6):
+                try:
+                    os.replace(temp_path, path)
+                    break
+                except PermissionError:
+                    if attempt == 5:
+                        raise
+                    time.sleep(0.05 * (attempt + 1))
         finally:
             if temp_path.exists():
                 temp_path.unlink(missing_ok=True)

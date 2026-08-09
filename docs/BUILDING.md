@@ -1,4 +1,4 @@
-# Building Lone Wolf Action Assistant 3.5.0 Internal Testing
+# Building Lone Wolf Action Assistant 3.5.1 Internal Testing
 
 ## Requirements
 
@@ -57,7 +57,9 @@ Run the frozen self-test:
 if ($LASTEXITCODE -ne 0) { throw 'Frozen self-test failed.' }
 ```
 
-The embedded CLI must also be tested through WinPTY in the frozen build. A normal subprocess is not equivalent because the packaged desktop executable uses a console-capable bootloader that only exposes its CLI streams when attached to a terminal.
+The frozen embedded CLI must be tested through the browser-side pipe transport.
+Its child process uses inherited standard pipes and local browser line editing;
+a normal source subprocess does not exercise that packaged path.
 
 ## Storage model
 

@@ -39,6 +39,7 @@ WS_HOST = "localhost"
 WS_PORT = int(os.environ.get("LONEWOLF_REDUX_WS_PORT", "8798"))
 INIT_COLS = 120
 INIT_ROWS = 30
+PIPE_CLI_ENV = "LONEWOLF_SAA_PIPE_CLI"
 
 LOCAL_WS_HOSTNAMES = {"localhost", "127.0.0.1", "::1"}
 
@@ -97,13 +98,24 @@ def build_command() -> list[str]:
     return [sys.executable, "-u", str(ASSISTANT_SCRIPT)] + shared_args
 
 
+def pipe_cli_environment() -> dict[str, str]:
+    """Mark a frozen CLI child so it keeps the standard pipes supplied by us."""
+    environment = dict(os.environ)
+    environment[PIPE_CLI_ENV] = "1"
+    return environment
+
+
 async def terminal_session(websocket):
     origin = websocket.request.headers.get("Origin")
     if not origin_is_local(origin):
         await websocket.close(code=1008, reason="cross-origin request rejected")
         return
     command = build_command()
-    if os.name == "nt" and winpty is not None:
+    if os.name == "nt" and getattr(sys, "frozen", False):
+        # A pipe-backed CLI avoids WinPTY's screen-scrape echo stream. The
+        # browser owns line editing and sends complete lines to this process.
+        await terminal_session_pipes(websocket, command, env=pipe_cli_environment())
+    elif os.name == "nt" and winpty is not None:
         await terminal_session_winpty(websocket, command)
     elif os.name != "nt":
         await terminal_session_posix_pty(websocket, command)
@@ -276,7 +288,9 @@ async def terminal_session_posix_pty(websocket, command: list[str]) -> None:
         pass
 
 
-async def terminal_session_pipes(websocket, command: list[str]) -> None:
+async def terminal_session_pipes(
+    websocket, command: list[str], *, env: dict[str, str] | None = None
+) -> None:
     try:
         proc = await asyncio.create_subprocess_exec(
             *command,
@@ -284,6 +298,7 @@ async def terminal_session_pipes(websocket, command: list[str]) -> None:
             stdin=asyncio.subprocess.PIPE,
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.STDOUT,
+            env=env,
         )
     except Exception as exc:
         await websocket.send(f"\r\nERROR: could not start Python assistant - {exc}\r\n")
@@ -318,8 +333,19 @@ async def terminal_session_pipes(websocket, command: list[str]) -> None:
     out_task.cancel()
     in_task.cancel()
     await asyncio.gather(out_task, in_task, return_exceptions=True)
+    if proc.stdin is not None:
+        proc.stdin.close()
+        try:
+            await proc.stdin.wait_closed()
+        except (BrokenPipeError, ConnectionResetError):
+            pass
     if proc.returncode is None:
         proc.terminate()
+    try:
+        await asyncio.wait_for(proc.wait(), timeout=5)
+    except asyncio.TimeoutError:
+        proc.kill()
+        await proc.wait()
 
 
 def write_current_position() -> None:

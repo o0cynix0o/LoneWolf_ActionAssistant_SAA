@@ -1,8 +1,22 @@
-# Handoff: CLI terminal typing is broken in the frozen desktop app
+# Handoff: Frozen CLI terminal typing repair
 
-**Status:** UNRESOLVED. Needs the larger fix described in "Recommended fix" below.
+**Status:** RESOLVED in 3.5.1. This document is retained as the investigation
+record for the former WinPTY redraw defect.
 **Author:** Claude (Opus 4.8) session, 2026-07-31. Handing off to Codex.
-**Branch:** `hidden-cli-cheats-3.1.7` (my changes are committed here, unpushed — see "Branch / commit state").
+**Historical branch:** `hidden-cli-cheats-3.1.7` (unmerged exploratory work).
+
+## Resolution
+
+The packaged desktop app no longer launches its CLI through WinPTY. In 3.5.1,
+the frozen desktop process starts its `--cli` child through inherited standard
+pipes and marks the child to restore those pipe streams. The browser provides
+the line editor: immediate local echo, Backspace, Enter, and a 100-command
+Up/Down history. Source runs retain their ConPTY path.
+
+This removes the WinPTY screen-scrape redraw stream that caused delayed echo,
+incorrect Backspace rendering, and unusable arrow keys. Validation used the
+real frozen executable both directly through pipes and through the real local
+WebSocket bridge, with a prompt, `help`, and `exit` exchange completing cleanly.
 
 ---
 
@@ -63,9 +77,9 @@ All probes were run headlessly against the **real frozen EXE** (`dist/Lone Wolf 
 
 ---
 
-## 5. Recommended fix (highest confidence, durable)
+## 5. Implemented fix (highest confidence, durable)
 
-**Move line editing + echo into the browser (local echo) and stop relying on the PTY's cooked-mode echo entirely.** Output rendering already works (command output like the `help` table displays fine) — only the *input/echo* path is broken. Local echo removes the entire class of WinPTY-screen-model-divergence bugs because the input line is drawn by our own JS, never by WinPTY's repaint stream.
+**Move line editing + echo into the browser (local echo) and stop relying on the PTY's cooked-mode echo entirely.** Output rendering already works (command output like the `help` table displays fine) — only the *input/echo* path is broken. Local echo removes the entire class of WinPTY-screen-model-divergence bugs because the input line is drawn by our own JS, never by WinPTY's repaint stream. This approach was implemented in 3.5.1 using inherited standard pipes for the frozen child.
 
 Concretely:
 

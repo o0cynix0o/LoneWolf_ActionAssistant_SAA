@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import ctypes
+import io
 import json
 import os
 import sys
@@ -21,6 +22,7 @@ from ws_server import WebSocketService
 APP_TITLE = "Lone Wolf Action Assistant"
 DEFAULT_HTTP_PORT = 8797
 DEFAULT_WS_PORT = 8798
+PIPE_CLI_ENV = "LONEWOLF_SAA_PIPE_CLI"
 
 
 def _lifecycle_log(message: str) -> None:
@@ -67,6 +69,39 @@ def _prepare_cli_stdio() -> bool:
         return True
     except OSError as exc:
         _lifecycle_log(f"CLI console streams could not be opened: {exc}")
+        return False
+
+
+def _prepare_pipe_cli_stdio() -> bool:
+    """Restore inherited subprocess pipes for a frozen windowed CLI child."""
+    if os.name != "nt" or not getattr(sys, "frozen", False):
+        return True
+    try:
+        import msvcrt
+
+        kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+        get_std_handle = kernel32.GetStdHandle
+        get_std_handle.argtypes = [ctypes.c_int]
+        get_std_handle.restype = ctypes.c_void_p
+
+        def open_stream(kind: int, flags: int, mode: str) -> io.TextIOWrapper:
+            handle = get_std_handle(kind)
+            if not handle or handle == ctypes.c_void_p(-1).value:
+                raise OSError(f"standard handle {kind} is unavailable")
+            descriptor = msvcrt.open_osfhandle(int(handle), flags)
+            raw = os.fdopen(descriptor, mode, closefd=True)
+            if "r" in mode:
+                return io.TextIOWrapper(raw, encoding="utf-8", errors="replace", line_buffering=True)
+            return io.TextIOWrapper(
+                raw, encoding="utf-8", errors="replace", line_buffering=True, write_through=True
+            )
+
+        sys.stdin = open_stream(-10, os.O_RDONLY | os.O_BINARY, "rb")
+        sys.stdout = open_stream(-11, os.O_WRONLY | os.O_BINARY, "wb")
+        sys.stderr = open_stream(-12, os.O_WRONLY | os.O_BINARY, "wb")
+        return True
+    except OSError as exc:
+        _lifecycle_log(f"CLI pipe streams could not be opened: {exc}")
         return False
 
 
@@ -174,11 +209,9 @@ def run_desktop() -> int:
         websocket = _start_websocket(DEFAULT_WS_PORT)
         _wait_for_http(base_url)
 
-        # The embedded terminal must tell xterm which Windows PTY backend it is
-        # rendering: the frozen EXE forces WinPTY (see ws_server), while running
-        # from source uses ConPTY. A wrong hint corrupts cursor/reflow tracking
-        # after large redraws, so pass the real backend through to the page.
-        pty_backend = "winpty" if getattr(sys, "frozen", False) else "conpty"
+        # Frozen builds use pipes and browser-side line editing so input never
+        # depends on WinPTY's repaint protocol. Source builds retain ConPTY.
+        pty_backend = "pipes" if getattr(sys, "frozen", False) else "conpty"
         window = webview.create_window(
             APP_TITLE,
             f"{base_url}/index.html?wsPort={websocket.port}&ptyBackend={pty_backend}",
@@ -206,7 +239,8 @@ def run_desktop() -> int:
 
 
 def main() -> int:
-    if getattr(sys, "frozen", False):
+    pipe_cli = os.environ.get(PIPE_CLI_ENV) == "1"
+    if getattr(sys, "frozen", False) and not pipe_cli:
         # PyInstaller's windowed bootloader exposes placeholder streams that
         # can raise during interpreter shutdown. CLI mode replaces them below.
         sys.stdout = None
@@ -216,7 +250,10 @@ def main() -> int:
     # flag so the existing CLI parser receives only its own arguments.
     if "--cli" in sys.argv[1:]:
         sys.argv.remove("--cli")
-        if not _prepare_cli_stdio():
+        if pipe_cli:
+            if not _prepare_pipe_cli_stdio():
+                return 1
+        elif not _prepare_cli_stdio():
             return 1
         lonewolf_redux.main()
         return 0
