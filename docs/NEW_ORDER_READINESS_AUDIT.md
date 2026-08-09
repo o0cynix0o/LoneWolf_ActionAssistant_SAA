@@ -31,7 +31,7 @@ per-section automation pass recorded in the companion backlog.
 Book 28 is intentionally a 300-section book. The ledger generator validates
 each book's actual contiguous source range and does not assume 350 sections.
 
-## Phase 2 Coverage
+## Implemented Coverage
 
 Books 21-23 now have source-verified Random Number Table coverage, including
 conditional modifiers, mandatory effects, and player-selected optional spends.
@@ -49,6 +49,13 @@ shared `testing/generate_direct_effect_skeleton.py` tool derives this
 prose-free catalogue from player-supplied HTML and deliberately excludes RNT,
 combat, conditional, optional, and player-choice text. Existing hand-audited
 item rules remain separate and are not replaced by the generated data.
+
+`data/book24to26-z-simple-automations.json` extends the same guarded direct
+effect pass to Books 24-26: 123 actions across 114 sections, consisting of
+90 exact ENDURANCE changes and 33 Grand Huntmastery-aware Meal requirements.
+There were no overlaps with the pre-existing simple automation catalogue.
+The Book 24-26 RNT, combat, route, and inventory catalogues remain the
+separate hand-audited data sets already used by the application.
 
 Optional rewards, equipment exchanges, chosen losses, puzzles, and contextual
 route conditions remain visible in the reader. They need a player decision or

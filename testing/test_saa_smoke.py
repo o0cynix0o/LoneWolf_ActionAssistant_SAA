@@ -1138,6 +1138,36 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             assistant.set_section(115)
             self.assertEqual(assistant.inventory["BackpackItems"], ["Meal"])
 
+    def test_new_order_books24_to26_direct_effect_catalogue_applies_safe_losses_and_meals(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            expected_counts = {24: 39, 25: 37, 26: 38}
+            self.assertEqual(
+                {book: len(assistant.section_automation[str(book)]) for book in expected_counts},
+                expected_counts,
+            )
+
+            for book_number, loss_section, meal_section in ((24, 8, 13), (25, 7, 83), (26, 3, 37)):
+                assistant.state = lonewolf_redux.normalize_state({
+                    "Character": {"BookNumber": book_number, "EnduranceCurrent": 20, "EnduranceMax": 30},
+                })
+                assistant.set_section(loss_section)
+                self.assertLess(assistant.character["EnduranceCurrent"], 20)
+
+                assistant.state = lonewolf_redux.normalize_state({
+                    "Character": {
+                        "BookNumber": book_number,
+                        "NewOrderDisciplines": ["Grand Huntmastery"],
+                    },
+                    "Inventory": {"BackpackItems": ["Meal"]},
+                })
+                assistant.set_section(meal_section)
+                self.assertEqual(assistant.inventory["BackpackItems"], ["Meal"])
+
     def test_new_order_books21_to29_unlock_campaign_achievements(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
