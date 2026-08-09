@@ -42,6 +42,19 @@ printed list position, while optional rewards and purchases remain explicit
 loot choices. New Order completion and exploration achievements are evaluated
 for Books 21-29.
 
+`data/book21to23-z-simple-automations.json` adds 137 source-derived direct
+actions across 134 sections: 89 exact ENDURANCE changes, 43 Grand
+Huntmastery-aware Meal requirements, and five compulsory Gold changes. The
+shared `testing/generate_direct_effect_skeleton.py` tool derives this
+prose-free catalogue from player-supplied HTML and deliberately excludes RNT,
+combat, conditional, optional, and player-choice text. Existing hand-audited
+item rules remain separate and are not replaced by the generated data.
+
+Optional rewards, equipment exchanges, chosen losses, puzzles, and contextual
+route conditions remain visible in the reader. They need a player decision or
+more context than a single deterministic section entry and are not silently
+automated.
+
 ## Audit Artefacts
 
 - `data/new-order-source-audit.json`: source-derived candidate sections.

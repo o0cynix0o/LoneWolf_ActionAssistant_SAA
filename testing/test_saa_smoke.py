@@ -1095,6 +1095,49 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             self.assertEqual(assistant.character["EnduranceCurrent"], 14)
             self.assertEqual(assistant.inventory["GoldCrowns"], 3)
 
+    def test_new_order_direct_effect_catalogue_applies_only_safe_source_effects(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            expected_counts = {21: 52, 22: 42, 23: 57}
+            self.assertEqual(
+                {book: len(assistant.section_automation[str(book)]) for book in expected_counts},
+                expected_counts,
+            )
+
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 21, "EnduranceCurrent": 20, "EnduranceMax": 30},
+            })
+            assistant.set_section(112)
+            self.assertEqual(assistant.character["EnduranceCurrent"], 17)
+
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 21},
+                "Inventory": {"GoldCrowns": 5},
+            })
+            assistant.set_section(127)
+            self.assertEqual(assistant.inventory["GoldCrowns"], 3)
+
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 22},
+                "Inventory": {"BackpackItems": ["Meal"]},
+            })
+            assistant.set_section(101)
+            self.assertEqual(assistant.inventory["BackpackItems"], [])
+
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {
+                    "BookNumber": 23,
+                    "NewOrderDisciplines": ["Grand Huntmastery"],
+                },
+                "Inventory": {"BackpackItems": ["Meal"]},
+            })
+            assistant.set_section(115)
+            self.assertEqual(assistant.inventory["BackpackItems"], ["Meal"])
+
     def test_new_order_books21_to29_unlock_campaign_achievements(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)

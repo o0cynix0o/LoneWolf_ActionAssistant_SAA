@@ -159,7 +159,11 @@ def extract_book(book_number: int, source: Path, data_root: Path) -> dict[str, A
                 if action["type"] == "stat" and action.get("stat") == "end"
             ]
             if not end_actions:
-                summary = "Source-mandated meal."
+                summary = (
+                    "Source-mandated meal."
+                    if any(action["type"] == "meal" for action in actions)
+                    else "Source-mandated Gold change."
+                )
             elif all(action["delta"] > 0 for action in end_actions):
                 summary = "Source-mandated ENDURANCE recovery."
             else:

@@ -452,7 +452,7 @@
       ]
     },
     "165": {
-      "summary": "Source-mandated meal.",
+      "summary": "Source-mandated Gold change.",
       "actions": [
         {
           "type": "stat",
@@ -724,7 +724,7 @@
       ]
     },
     "9": {
-      "summary": "Source-mandated meal.",
+      "summary": "Source-mandated Gold change.",
       "actions": [
         {
           "type": "stat",
@@ -2705,7 +2705,7 @@
       ]
     },
     "195": {
-      "summary": "Source-mandated meal.",
+      "summary": "Source-mandated Gold change.",
       "actions": [
         {
           "type": "stat",
