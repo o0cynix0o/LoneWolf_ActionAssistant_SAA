@@ -1,0 +1,769 @@
+{
+  "13": {
+    "3": {
+      "combat": [
+        {
+          "id": "book13-3",
+          "enemies": [
+            {
+              "name": "Fat Vazhag",
+              "cs": 18,
+              "endurance": 28
+            }
+          ],
+          "victoryRoute": 121
+        }
+      ]
+    },
+    "11": {
+      "combat": [
+        {
+          "id": "book13-11",
+          "enemies": [
+            {
+              "name": "Ruel War-dogs",
+              "cs": 36,
+              "endurance": 22
+            }
+          ],
+          "victoryRoute": 323
+        }
+      ]
+    },
+    "25": {
+      "combat": [
+        {
+          "id": "book13-25",
+          "enemies": [
+            {
+              "name": "Vazhag pack",
+              "cs": 34,
+              "endurance": 44
+            }
+          ],
+          "victoryRoute": 72
+        }
+      ]
+    },
+    "27": {
+      "combat": [
+        {
+          "id": "book13-27",
+          "enemies": [
+            {
+              "name": "Drakkar",
+              "cs": 32,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 255
+        }
+      ]
+    },
+    "31": {
+      "combat": [
+        {
+          "id": "book13-31",
+          "enemies": [
+            {
+              "name": "Pit Agarashi (wounded) & Vazhag",
+              "cs": 30,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 297
+        }
+      ]
+    },
+    "38": {
+      "combat": [
+        {
+          "id": "book13-38",
+          "enemies": [
+            {
+              "name": "3 Ruel Giganite",
+              "cs": 50,
+              "endurance": 80
+            }
+          ],
+          "victoryRoute": 286
+        }
+      ]
+    },
+    "45": {
+      "combat": [
+        {
+          "id": "book13-45",
+          "enemies": [
+            {
+              "name": "Pit Agarashi",
+              "cs": 34,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 110
+        }
+      ]
+    },
+    "47": {
+      "combat": [
+        {
+          "id": "book13-47",
+          "enemies": [
+            {
+              "name": "Plaghatar",
+              "cs": 35,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 129
+        }
+      ]
+    },
+    "54": {
+      "combat": [
+        {
+          "id": "book13-54",
+          "enemies": [
+            {
+              "name": "Brother Croumah (with Power Rod)",
+              "cs": 40,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 101
+        }
+      ]
+    },
+    "55": {
+      "combat": [
+        {
+          "id": "book13-55",
+          "enemies": [
+            {
+              "name": "Fat Vazhag",
+              "cs": 18,
+              "endurance": 28
+            }
+          ],
+          "victoryRoute": 121
+        }
+      ]
+    },
+    "56": {
+      "combat": [
+        {
+          "id": "book13-56",
+          "enemies": [
+            {
+              "name": "Stragnah",
+              "cs": 36,
+              "endurance": 39
+            }
+          ],
+          "victoryRoute": 327
+        }
+      ]
+    },
+    "74": {
+      "combat": [
+        {
+          "id": "book13-74",
+          "enemies": [
+            {
+              "name": "Vazhag",
+              "cs": 26,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 142
+        }
+      ]
+    },
+    "80": {
+      "combat": [
+        {
+          "id": "book13-80",
+          "enemies": [
+            {
+              "name": "2 Ruel Giganite",
+              "cs": 38,
+              "endurance": 60
+            }
+          ],
+          "victoryRoute": 286
+        }
+      ]
+    },
+    "86": {
+      "combat": [
+        {
+          "id": "book13-86",
+          "enemies": [
+            {
+              "name": "Acolytes of Vashna (One with Medallion of Protection)",
+              "cs": 36,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 305
+        }
+      ]
+    },
+    "90": {
+      "combat": [
+        {
+          "id": "book13-90",
+          "enemies": [
+            {
+              "name": "Vazhag pack",
+              "cs": 34,
+              "endurance": 44
+            }
+          ],
+          "victoryRoute": 149
+        }
+      ]
+    },
+    "100": {
+      "combat": [
+        {
+          "id": "book13-100",
+          "enemies": [
+            {
+              "name": "Ruel War-dogs",
+              "cs": 36,
+              "endurance": 22
+            }
+          ],
+          "victoryRoute": 254
+        }
+      ]
+    },
+    "107": {
+      "combat": [
+        {
+          "id": "book13-107",
+          "enemies": [
+            {
+              "name": "Cener Druid",
+              "cs": 20,
+              "endurance": 26
+            }
+          ],
+          "victoryRoute": 4
+        }
+      ]
+    },
+    "114": {
+      "combat": [
+        {
+          "id": "book13-114",
+          "enemies": [
+            {
+              "name": "Defender",
+              "cs": 30,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 5
+        }
+      ]
+    },
+    "120": {
+      "combat": [
+        {
+          "id": "book13-120",
+          "enemies": [
+            {
+              "name": "Degradon",
+              "cs": 49,
+              "endurance": 36
+            }
+          ],
+          "victoryRoute": 296
+        }
+      ]
+    },
+    "125": {
+      "combat": [
+        {
+          "id": "book13-125",
+          "enemies": [
+            {
+              "name": "Exterminus",
+              "cs": 50,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 320
+        }
+      ]
+    },
+    "131": {
+      "combat": [
+        {
+          "id": "book13-131",
+          "enemies": [
+            {
+              "name": "Plague Agarashi (Undead/magically animated)",
+              "cs": 46,
+              "endurance": 36
+            }
+          ],
+          "victoryRoute": 18
+        }
+      ]
+    },
+    "137": {
+      "combat": [
+        {
+          "id": "book13-137",
+          "enemies": [
+            {
+              "name": "Acolyte of Vashna (With Medallion of Protection)",
+              "cs": 25,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 29
+        }
+      ]
+    },
+    "144": {
+      "combat": [
+        {
+          "id": "book13-144",
+          "enemies": [
+            {
+              "name": "Cener Druid (prone)",
+              "cs": 20,
+              "endurance": 28
+            }
+          ],
+          "victoryRoute": 60
+        }
+      ]
+    },
+    "147": {
+      "combat": [
+        {
+          "id": "book13-147",
+          "enemies": [
+            {
+              "name": "Vazhag Lancer",
+              "cs": 32,
+              "endurance": 20
+            }
+          ],
+          "victoryRoute": 113
+        }
+      ]
+    },
+    "149": {
+      "combat": [
+        {
+          "id": "book13-149",
+          "enemies": [
+            {
+              "name": "Cener Druid",
+              "cs": 28,
+              "endurance": 28
+            }
+          ],
+          "victoryRoute": 53
+        }
+      ]
+    },
+    "156": {
+      "combat": [
+        {
+          "id": "book13-156",
+          "enemies": [
+            {
+              "name": "High Priest",
+              "cs": 47,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 340
+        }
+      ]
+    },
+    "157": {
+      "combat": [
+        {
+          "id": "book13-157",
+          "enemies": [
+            {
+              "name": "Pit Agarashi",
+              "cs": 34,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 297
+        }
+      ]
+    },
+    "167": {
+      "combat": [
+        {
+          "id": "book13-167",
+          "enemies": [
+            {
+              "name": "Vazhag pack",
+              "cs": 34,
+              "endurance": 44
+            }
+          ],
+          "victoryRoute": 303
+        }
+      ]
+    },
+    "185": {
+      "combat": [
+        {
+          "id": "book13-185",
+          "enemies": [
+            {
+              "name": "Cener Druid (prone)",
+              "cs": 20,
+              "endurance": 28
+            }
+          ],
+          "victoryRoute": 349
+        }
+      ]
+    },
+    "186": {
+      "combat": [
+        {
+          "id": "book13-186",
+          "enemies": [
+            {
+              "name": "Degradon",
+              "cs": 49,
+              "endurance": 36
+            }
+          ],
+          "victoryRoute": 40
+        }
+      ]
+    },
+    "202": {
+      "combat": [
+        {
+          "id": "book13-202",
+          "enemies": [
+            {
+              "name": "Stragnah",
+              "cs": 36,
+              "endurance": 39
+            }
+          ],
+          "victoryRoute": 327
+        }
+      ]
+    },
+    "212": {
+      "combat": [
+        {
+          "id": "book13-212",
+          "enemies": [
+            {
+              "name": "High Priest",
+              "cs": 47,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 340
+        }
+      ]
+    },
+    "216": {
+      "combat": [
+        {
+          "id": "book13-216",
+          "enemies": [
+            {
+              "name": "Ruel War-dogs",
+              "cs": 36,
+              "endurance": 22
+            }
+          ],
+          "victoryRoute": 323
+        }
+      ]
+    },
+    "221": {
+      "combat": [
+        {
+          "id": "book13-221",
+          "enemies": [
+            {
+              "name": "Plague Hound (wounded)",
+              "cs": 32,
+              "endurance": 36
+            }
+          ],
+          "victoryRoute": 64
+        }
+      ]
+    },
+    "225": {
+      "combat": [
+        {
+          "id": "book13-225",
+          "enemies": [
+            {
+              "name": "Vazhag",
+              "cs": 23,
+              "endurance": 23
+            }
+          ],
+          "victoryRoute": 142
+        }
+      ]
+    },
+    "237": {
+      "combat": [
+        {
+          "id": "book13-237",
+          "enemies": [
+            {
+              "name": "Cener Druid",
+              "cs": 28,
+              "endurance": 28
+            }
+          ],
+          "victoryRoute": 53
+        }
+      ]
+    },
+    "243": {
+      "combat": [
+        {
+          "id": "book13-243",
+          "enemies": [
+            {
+              "name": "Pit Agarashi",
+              "cs": 34,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 24
+        }
+      ]
+    },
+    "258": {
+      "combat": [
+        {
+          "id": "book13-258",
+          "enemies": [
+            {
+              "name": "Vazhag pack",
+              "cs": 32,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 288
+        }
+      ]
+    },
+    "262": {
+      "combat": [
+        {
+          "id": "book13-262",
+          "enemies": [
+            {
+              "name": "Vazhag patrol",
+              "cs": 40,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 83
+        }
+      ]
+    },
+    "263": {
+      "combat": [
+        {
+          "id": "book13-263",
+          "enemies": [
+            {
+              "name": "Fat Vazhag",
+              "cs": 18,
+              "endurance": 28
+            }
+          ],
+          "victoryRoute": 121
+        }
+      ]
+    },
+    "272": {
+      "combat": [
+        {
+          "id": "book13-272",
+          "enemies": [
+            {
+              "name": "Cener Druid",
+              "cs": 23,
+              "endurance": 27
+            }
+          ],
+          "victoryRoute": 4
+        }
+      ]
+    },
+    "275": {
+      "combat": [
+        {
+          "id": "book13-275",
+          "enemies": [
+            {
+              "name": "Vazhag archer",
+              "cs": 22,
+              "endurance": 21
+            }
+          ],
+          "victoryRoute": 161
+        }
+      ]
+    },
+    "283": {
+      "combat": [
+        {
+          "id": "book13-283",
+          "enemies": [
+            {
+              "name": "Vazhag lancer",
+              "cs": 32,
+              "endurance": 20
+            }
+          ],
+          "victoryRoute": 113
+        }
+      ]
+    },
+    "291": {
+      "combat": [
+        {
+          "id": "book13-291",
+          "enemies": [
+            {
+              "name": "Stragnah",
+              "cs": 36,
+              "endurance": 39
+            }
+          ],
+          "victoryRoute": 327
+        }
+      ]
+    },
+    "295": {
+      "combat": [
+        {
+          "id": "book13-295",
+          "enemies": [
+            {
+              "name": "Dholdaarg",
+              "cs": 43,
+              "endurance": 56
+            }
+          ],
+          "victoryRoute": 219
+        }
+      ]
+    },
+    "301": {
+      "combat": [
+        {
+          "id": "book13-301",
+          "enemies": [
+            {
+              "name": "Pechdrazil",
+              "cs": 40,
+              "endurance": 26
+            }
+          ],
+          "victoryRoute": 20
+        }
+      ]
+    },
+    "302": {
+      "combat": [
+        {
+          "id": "book13-302",
+          "enemies": [
+            {
+              "name": "Vazhag patrol",
+              "cs": 40,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 83
+        }
+      ]
+    },
+    "315": {
+      "combat": [
+        {
+          "id": "book13-315",
+          "enemies": [
+            {
+              "name": "Vazhag pack",
+              "cs": 34,
+              "endurance": 44
+            }
+          ],
+          "victoryRoute": 172
+        }
+      ]
+    },
+    "325": {
+      "combat": [
+        {
+          "id": "book13-325",
+          "enemies": [
+            {
+              "name": "Plague Hound",
+              "cs": 36,
+              "endurance": 34
+            }
+          ],
+          "victoryRoute": 64
+        }
+      ]
+    },
+    "339": {
+      "combat": [
+        {
+          "id": "book13-339",
+          "enemies": [
+            {
+              "name": "Plaghatar",
+              "cs": 24,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 129
+        }
+      ]
+    },
+    "345": {
+      "combat": [
+        {
+          "id": "book13-345",
+          "enemies": [
+            {
+              "name": "Acolyte of Vashna (with Medallion of Protection)",
+              "cs": 25,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 29
+        }
+      ]
+    }
+  }
+}

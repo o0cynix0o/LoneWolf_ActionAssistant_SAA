@@ -69,12 +69,14 @@ an audit queue, not a claim that every signalled section is already automated.
 
 The campaign shell, reader navigation, import path, entry rules, saves,
 inventory, and complete section-route ledgers are ready for internal testing.
-Book 13's 35 source RNT checks have completed the first executable-rule pass,
-including Grand Weaponmastery, discipline, ENDURANCE, item/weapon-selection,
-and dynamic ENDURANCE-loss modifiers. The remaining rules pass must inspect
-each numbered candidate and add only effects
-whose trigger, result, and destination are unambiguous: RNT ranges and
-modifiers, mandatory END changes and meals, combat records, item changes,
+Source-verified RNT catalogues now cover Books 13-20 (35, 48, 35, 37, 32, 33,
+45, and 44 executable rules respectively), including Grand Weaponmastery,
+discipline, ENDURANCE, item/weapon-selection, and dynamic ENDURANCE-loss
+modifiers. Books 13-14 also have source-derived combat catalogues.
+
+The remaining rules pass must inspect the non-RNT candidate effects and any
+special combat outcome individually, adding only effects whose trigger, result,
+and destination are unambiguous: mandatory END changes and meals, item changes,
 conditional gates, route-state flags, and achievements. Until a candidate has
 that source verification and a regression test, the reader remains the source
 of truth for that individual effect.

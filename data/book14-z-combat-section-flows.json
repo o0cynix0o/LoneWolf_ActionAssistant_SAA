@@ -1,0 +1,618 @@
+{
+  "14": {
+    "5": {
+      "combat": [
+        {
+          "id": "book14-5",
+          "enemies": [
+            {
+              "name": "Drakkarim Veterans",
+              "cs": 30,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 340
+        }
+      ]
+    },
+    "14": {
+      "combat": [
+        {
+          "id": "book14-14",
+          "enemies": [
+            {
+              "name": "Korozon",
+              "cs": 52,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 78
+        }
+      ]
+    },
+    "39": {
+      "combat": [
+        {
+          "id": "book14-39",
+          "enemies": [
+            {
+              "name": "Vodok",
+              "cs": 44,
+              "endurance": 52
+            }
+          ],
+          "victoryRoute": 150
+        }
+      ]
+    },
+    "58": {
+      "combat": [
+        {
+          "id": "book14-58",
+          "enemies": [
+            {
+              "name": "3 Vordak (in psychic shock)",
+              "cs": 28,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 260
+        }
+      ]
+    },
+    "62": {
+      "combat": [
+        {
+          "id": "book14-62",
+          "enemies": [
+            {
+              "name": "2 Xaghash",
+              "cs": 52,
+              "endurance": 60
+            }
+          ],
+          "victoryRoute": 276
+        }
+      ]
+    },
+    "72": {
+      "combat": [
+        {
+          "id": "book14-72",
+          "enemies": [
+            {
+              "name": "Ligan (with Ziranakag)",
+              "cs": 44,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 298
+        }
+      ]
+    },
+    "89": {
+      "combat": [
+        {
+          "id": "book14-89",
+          "enemies": [
+            {
+              "name": "Gnagusk",
+              "cs": 41,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 247
+        }
+      ]
+    },
+    "92": {
+      "combat": [
+        {
+          "id": "book14-92",
+          "enemies": [
+            {
+              "name": "Drakkarim Handlers",
+              "cs": 35,
+              "endurance": 39
+            }
+          ],
+          "victoryRoute": 40
+        }
+      ]
+    },
+    "102": {
+      "combat": [
+        {
+          "id": "book14-102",
+          "enemies": [
+            {
+              "name": "Gnagusk",
+              "cs": 41,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 247
+        }
+      ]
+    },
+    "118": {
+      "combat": [
+        {
+          "id": "book14-118",
+          "enemies": [
+            {
+              "name": "Vordak",
+              "cs": 22,
+              "endurance": 28
+            }
+          ],
+          "victoryRoute": 79
+        }
+      ]
+    },
+    "122": {
+      "combat": [
+        {
+          "id": "book14-122",
+          "enemies": [
+            {
+              "name": "Gnagusk",
+              "cs": 41,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 325
+        }
+      ]
+    },
+    "126": {
+      "combat": [
+        {
+          "id": "book14-126",
+          "enemies": [
+            {
+              "name": "Plaak",
+              "cs": 39,
+              "endurance": 20
+            }
+          ],
+          "victoryRoute": 285
+        }
+      ]
+    },
+    "128": {
+      "combat": [
+        {
+          "id": "book14-128",
+          "enemies": [
+            {
+              "name": "Zavaghar",
+              "cs": 52,
+              "endurance": 60
+            }
+          ]
+        }
+      ]
+    },
+    "129": {
+      "combat": [
+        {
+          "id": "book14-129",
+          "enemies": [
+            {
+              "name": "Vordak & Giak patrol",
+              "cs": 37,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 79
+        }
+      ]
+    },
+    "132": {
+      "combat": [
+        {
+          "id": "book14-132",
+          "enemies": [
+            {
+              "name": "Drakkarim Veterans",
+              "cs": 30,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 340
+        }
+      ]
+    },
+    "135": {
+      "combat": [
+        {
+          "id": "book14-135",
+          "enemies": [
+            {
+              "name": "Akataz (wounded)",
+              "cs": 20,
+              "endurance": 22
+            }
+          ],
+          "victoryRoute": 13
+        }
+      ]
+    },
+    "151": {
+      "combat": [
+        {
+          "id": "book14-151",
+          "enemies": [
+            {
+              "name": "Drakkarim",
+              "cs": 26,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 340
+        }
+      ]
+    },
+    "162": {
+      "combat": [
+        {
+          "id": "book14-162",
+          "enemies": [
+            {
+              "name": "Drakkarim",
+              "cs": 26,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 340
+        }
+      ]
+    },
+    "169": {
+      "combat": [
+        {
+          "id": "book14-169",
+          "enemies": [
+            {
+              "name": "Nadziran (in dragon guise, with flame-sword)",
+              "cs": 46,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 76
+        }
+      ]
+    },
+    "182": {
+      "combat": [
+        {
+          "id": "book14-182",
+          "enemies": [
+            {
+              "name": "Drakkarim",
+              "cs": 34,
+              "endurance": 36
+            }
+          ],
+          "victoryRoute": 321
+        }
+      ]
+    },
+    "195": {
+      "combat": [
+        {
+          "id": "book14-195",
+          "enemies": [
+            {
+              "name": "Giant Doomwolf",
+              "cs": 39,
+              "endurance": 49
+            }
+          ],
+          "victoryRoute": 295
+        }
+      ]
+    },
+    "197": {
+      "combat": [
+        {
+          "id": "book14-197",
+          "enemies": [
+            {
+              "name": "Vodok",
+              "cs": 44,
+              "endurance": 52
+            }
+          ],
+          "victoryRoute": 150
+        }
+      ]
+    },
+    "205": {
+      "combat": [
+        {
+          "id": "book14-205",
+          "enemies": [
+            {
+              "name": "Drakkarim",
+              "cs": 26,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 340
+        }
+      ]
+    },
+    "206": {
+      "combat": [
+        {
+          "id": "book14-206",
+          "enemies": [
+            {
+              "name": "Drakkarim Guards",
+              "cs": 32,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 67
+        }
+      ]
+    },
+    "210": {
+      "combat": [
+        {
+          "id": "book14-210",
+          "enemies": [
+            {
+              "name": "4 Drakkarim",
+              "cs": 37,
+              "endurance": 41
+            }
+          ],
+          "victoryRoute": 119
+        }
+      ]
+    },
+    "211": {
+      "combat": [
+        {
+          "id": "book14-211",
+          "enemies": [
+            {
+              "name": "Nadziran (in dragon guise, with flame-sword)",
+              "cs": 46,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 76
+        }
+      ]
+    },
+    "219": {
+      "combat": [
+        {
+          "id": "book14-219",
+          "enemies": [
+            {
+              "name": "3 Vordaks",
+              "cs": 40,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 260
+        }
+      ]
+    },
+    "221": {
+      "combat": [
+        {
+          "id": "book14-221",
+          "enemies": [
+            {
+              "name": "Gnagusk",
+              "cs": 41,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 247
+        }
+      ]
+    },
+    "229": {
+      "combat": [
+        {
+          "id": "book14-229",
+          "enemies": [
+            {
+              "name": "Ashradon",
+              "cs": 42,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 101
+        }
+      ]
+    },
+    "263": {
+      "combat": [
+        {
+          "id": "book14-263",
+          "enemies": [
+            {
+              "name": "2 Xaghash",
+              "cs": 52,
+              "endurance": 60
+            }
+          ],
+          "victoryRoute": 276
+        }
+      ]
+    },
+    "279": {
+      "combat": [
+        {
+          "id": "book14-279",
+          "enemies": [
+            {
+              "name": "3 Kaag Kraan",
+              "cs": 45,
+              "endurance": 60
+            }
+          ],
+          "victoryRoute": 190
+        }
+      ]
+    },
+    "280": {
+      "combat": [
+        {
+          "id": "book14-280",
+          "enemies": [
+            {
+              "name": "Drakkarim Veterans",
+              "cs": 30,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 340
+        }
+      ]
+    },
+    "281": {
+      "combat": [
+        {
+          "id": "book14-281",
+          "enemies": [
+            {
+              "name": "Ice Dragon (polymorphed Nadziran)",
+              "cs": 48,
+              "endurance": 52
+            }
+          ],
+          "victoryRoute": 50
+        }
+      ]
+    },
+    "286": {
+      "combat": [
+        {
+          "id": "book14-286",
+          "enemies": [
+            {
+              "name": "Akataz",
+              "cs": 24,
+              "endurance": 25
+            }
+          ],
+          "victoryRoute": 13
+        }
+      ]
+    },
+    "288": {
+      "combat": [
+        {
+          "id": "book14-288",
+          "enemies": [
+            {
+              "name": "Drakkarim Death Knights",
+              "cs": 42,
+              "endurance": 37
+            }
+          ],
+          "victoryRoute": 230
+        }
+      ]
+    },
+    "292": {
+      "combat": [
+        {
+          "id": "book14-292",
+          "enemies": [
+            {
+              "name": "Drakkarim",
+              "cs": 26,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 340
+        }
+      ]
+    },
+    "299": {
+      "combat": [
+        {
+          "id": "book14-299",
+          "enemies": [
+            {
+              "name": "Gnagusk",
+              "cs": 41,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 325
+        }
+      ]
+    },
+    "303": {
+      "combat": [
+        {
+          "id": "book14-303",
+          "enemies": [
+            {
+              "name": "3 Kaag Kraan",
+              "cs": 45,
+              "endurance": 60
+            }
+          ],
+          "victoryRoute": 190
+        }
+      ]
+    },
+    "318": {
+      "combat": [
+        {
+          "id": "book14-318",
+          "enemies": [
+            {
+              "name": "3 Egorghs",
+              "cs": 37,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 261
+        }
+      ]
+    },
+    "330": {
+      "combat": [
+        {
+          "id": "book14-330",
+          "enemies": [
+            {
+              "name": "Drakkarim",
+              "cs": 26,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 340
+        }
+      ]
+    },
+    "334": {
+      "combat": [
+        {
+          "id": "book14-334",
+          "enemies": [
+            {
+              "name": "Akataz",
+              "cs": 24,
+              "endurance": 25
+            }
+          ],
+          "victoryRoute": 13
+        }
+      ]
+    }
+  }
+}

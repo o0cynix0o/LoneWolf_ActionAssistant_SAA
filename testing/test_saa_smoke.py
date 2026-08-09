@@ -878,6 +878,33 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             self.assertEqual(assistant.combat_skill_for_round(1), 20)
             self.assertEqual(assistant.combat_skill_for_round(4), 25)
 
+    def test_grand_master_books13_and14_load_source_combat_catalogues(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            self.assertEqual(len([entry for entry in assistant.section_flows["13"].values() if entry.get("combat")]), 51)
+            self.assertEqual(len([entry for entry in assistant.section_flows["14"].values() if entry.get("combat")]), 41)
+
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 13, "CombatSkillCurrent": 30, "EnduranceCurrent": 40, "EnduranceMax": 40},
+                "Inventory": {"Weapons": ["Sword"]},
+            })
+            assistant.set_section(125)
+            assistant.start_section_combat()
+            self.assertEqual(assistant.combat["EnemyCombatSkill"], 50)
+            self.assertEqual(assistant.combat["EnemyEnduranceMax"], 50)
+            self.assertEqual(assistant.combat["VictoryRoute"], 320)
+
+            assistant.character["BookNumber"] = 14
+            assistant.set_section(281)
+            assistant.start_section_combat()
+            self.assertEqual(assistant.combat["EnemyCombatSkill"], 48)
+            self.assertEqual(assistant.combat["EnemyEnduranceMax"], 52)
+            self.assertEqual(assistant.combat["VictoryRoute"], 50)
+
     def test_new_order_books21_to29_unlock_campaign_achievements(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)

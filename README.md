@@ -18,7 +18,7 @@ Books 1-20 are playable internal-testing campaigns:
 | --- | --- | --- |
 | Kai | 1-5 | Character creation, campaign handoff, reader routes, inventory, combat, rolls, endings, saves, and achievements |
 | Magnakai | 6-12 | Fresh Magnakai setup or campaign handoff, disciplines, reader routes, inventory, combat, rolls, endings, saves, and achievements |
-| Grand Master | 13-20 | Fresh Grand Master setup or Book 12 campaign handoff, Grand Master disciplines, expanded Backpack, reader routes, inventory, combat, saves, and campaign achievements. Books 13-14 have executable RNT coverage; remaining numbered rules are reader-directed until their source verification pass is complete. |
+| Grand Master | 13-20 | Fresh Grand Master setup or Book 12 campaign handoff, Grand Master disciplines, expanded Backpack, reader routes, inventory, combat, saves, and campaign achievements. Source-verified RNT catalogues run across all eight books; combat and other section effects are being completed per book, while source-ambiguous cases remain reader-directed. |
 | New Order | 21-29 | Fresh New Order setup and Book-to-book continuation, 16 disciplines, Kai Weapon, equipment, reader routes, inventory, source-verified RNT and combat catalogues, saves, and campaign achievements. |
 
 Books 30-32 do not have Project Aon-style HTML editions. They require a
