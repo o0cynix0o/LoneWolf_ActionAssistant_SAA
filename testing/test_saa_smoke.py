@@ -1168,6 +1168,52 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
                 assistant.set_section(meal_section)
                 self.assertEqual(assistant.inventory["BackpackItems"], ["Meal"])
 
+    def test_new_order_books27_to29_direct_effect_catalogue_applies_safe_effects(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            expected_counts = {27: 56, 28: 32, 29: 24}
+            self.assertEqual(
+                {book: len(assistant.section_automation[str(book)]) for book in expected_counts},
+                expected_counts,
+            )
+
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 27, "EnduranceCurrent": 20, "EnduranceMax": 30},
+            })
+            assistant.set_section(5)
+            self.assertEqual(assistant.character["EnduranceCurrent"], 24)
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 27, "NewOrderDisciplines": ["Grand Huntmastery"]},
+                "Inventory": {"BackpackItems": ["Meal"]},
+            })
+            assistant.set_section(20)
+            self.assertEqual(assistant.inventory["BackpackItems"], ["Meal"])
+
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 28, "EnduranceCurrent": 20, "EnduranceMax": 30},
+            })
+            assistant.set_section(21)
+            self.assertEqual(assistant.character["EnduranceCurrent"], 15)
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 28, "NewOrderDisciplines": ["Grand Huntmastery"]},
+                "Inventory": {"BackpackItems": ["Meal"]},
+            })
+            assistant.set_section(7)
+            self.assertEqual(assistant.inventory["BackpackItems"], ["Meal"])
+
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 29, "EnduranceCurrent": 20, "EnduranceMax": 30},
+                "Inventory": {"GoldCrowns": 15},
+            })
+            assistant.set_section(29)
+            self.assertEqual(assistant.character["EnduranceCurrent"], 15)
+            assistant.set_section(33)
+            self.assertEqual(assistant.inventory["GoldCrowns"], 5)
+
     def test_new_order_books21_to29_unlock_campaign_achievements(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)

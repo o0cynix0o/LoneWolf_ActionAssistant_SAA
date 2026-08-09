@@ -1,0 +1,1161 @@
+{
+  "27": {
+    "101": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -1
+        }
+      ]
+    },
+    "106": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "122": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -4
+        }
+      ]
+    },
+    "128": {
+      "summary": "Source-mandated meal.",
+      "actions": [
+        {
+          "type": "meal",
+          "count": 1,
+          "mode": "all_or_loss",
+          "enduranceLoss": 3,
+          "huntingExempt": true
+        }
+      ]
+    },
+    "131": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "135": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -1
+        }
+      ]
+    },
+    "145": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -3
+        }
+      ]
+    },
+    "155": {
+      "summary": "Source-mandated ENDURANCE recovery.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": 3
+        }
+      ]
+    },
+    "161": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -5
+        }
+      ]
+    },
+    "165": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -1
+        }
+      ]
+    },
+    "171": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "172": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "175": {
+      "summary": "Source-mandated ENDURANCE recovery.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": 4
+        }
+      ]
+    },
+    "185": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -1
+        }
+      ]
+    },
+    "188": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -4
+        }
+      ]
+    },
+    "189": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -3
+        }
+      ]
+    },
+    "192": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "193": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -1
+        }
+      ]
+    },
+    "195": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -3
+        }
+      ]
+    },
+    "198": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "20": {
+      "summary": "Source-mandated meal.",
+      "actions": [
+        {
+          "type": "meal",
+          "count": 1,
+          "mode": "all_or_loss",
+          "enduranceLoss": 3,
+          "huntingExempt": true
+        }
+      ]
+    },
+    "208": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "209": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -4
+        }
+      ]
+    },
+    "216": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -1
+        }
+      ]
+    },
+    "223": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "234": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -4
+        }
+      ]
+    },
+    "248": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -4
+        }
+      ]
+    },
+    "25": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -4
+        }
+      ]
+    },
+    "254": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -1
+        }
+      ]
+    },
+    "259": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "264": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "265": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -4
+        }
+      ]
+    },
+    "27": {
+      "summary": "Source-mandated meal.",
+      "actions": [
+        {
+          "type": "meal",
+          "count": 1,
+          "mode": "all_or_loss",
+          "enduranceLoss": 3,
+          "huntingExempt": true
+        }
+      ]
+    },
+    "278": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -6
+        }
+      ]
+    },
+    "285": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -4
+        }
+      ]
+    },
+    "291": {
+      "summary": "Source-mandated meal.",
+      "actions": [
+        {
+          "type": "meal",
+          "count": 1,
+          "mode": "all_or_loss",
+          "enduranceLoss": 3,
+          "huntingExempt": true
+        }
+      ]
+    },
+    "292": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "300": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -3
+        }
+      ]
+    },
+    "307": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "31": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        },
+        {
+          "type": "meal",
+          "count": 1,
+          "mode": "all_or_loss",
+          "enduranceLoss": 3,
+          "huntingExempt": true
+        }
+      ]
+    },
+    "314": {
+      "summary": "Source-mandated meal.",
+      "actions": [
+        {
+          "type": "meal",
+          "count": 1,
+          "mode": "all_or_loss",
+          "enduranceLoss": 3,
+          "huntingExempt": true
+        }
+      ]
+    },
+    "321": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "322": {
+      "summary": "Source-mandated meal.",
+      "actions": [
+        {
+          "type": "meal",
+          "count": 1,
+          "mode": "all_or_loss",
+          "enduranceLoss": 3,
+          "huntingExempt": true
+        }
+      ]
+    },
+    "323": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "327": {
+      "summary": "Source-mandated meal.",
+      "actions": [
+        {
+          "type": "meal",
+          "count": 1,
+          "mode": "all_or_loss",
+          "enduranceLoss": 3,
+          "huntingExempt": true
+        }
+      ]
+    },
+    "337": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -3
+        }
+      ]
+    },
+    "341": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "348": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -1
+        }
+      ]
+    },
+    "39": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -1
+        }
+      ]
+    },
+    "42": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -5
+        }
+      ]
+    },
+    "46": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "5": {
+      "summary": "Source-mandated ENDURANCE recovery.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": 4
+        }
+      ]
+    },
+    "52": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "88": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -3
+        }
+      ]
+    },
+    "93": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -1
+        }
+      ]
+    },
+    "99": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -1
+        }
+      ]
+    }
+  },
+  "28": {
+    "131": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -4
+        }
+      ]
+    },
+    "138": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -3
+        }
+      ]
+    },
+    "142": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "154": {
+      "summary": "Source-mandated meal.",
+      "actions": [
+        {
+          "type": "meal",
+          "count": 1,
+          "mode": "all_or_loss",
+          "enduranceLoss": 3,
+          "huntingExempt": true
+        }
+      ]
+    },
+    "156": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -4
+        }
+      ]
+    },
+    "158": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -1
+        }
+      ]
+    },
+    "163": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "165": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "169": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "177": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "180": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -5
+        }
+      ]
+    },
+    "185": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -4
+        }
+      ]
+    },
+    "201": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -4
+        }
+      ]
+    },
+    "206": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -1
+        }
+      ]
+    },
+    "21": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -5
+        }
+      ]
+    },
+    "213": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -3
+        }
+      ]
+    },
+    "285": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -1
+        }
+      ]
+    },
+    "29": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -1
+        }
+      ]
+    },
+    "291": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "295": {
+      "summary": "Source-mandated meal.",
+      "actions": [
+        {
+          "type": "meal",
+          "count": 1,
+          "mode": "all_or_loss",
+          "enduranceLoss": 3,
+          "huntingExempt": true
+        }
+      ]
+    },
+    "46": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -1
+        }
+      ]
+    },
+    "48": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -4
+        }
+      ]
+    },
+    "55": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -4
+        }
+      ]
+    },
+    "57": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -3
+        }
+      ]
+    },
+    "64": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -3
+        }
+      ]
+    },
+    "7": {
+      "summary": "Source-mandated meal.",
+      "actions": [
+        {
+          "type": "meal",
+          "count": 1,
+          "mode": "all_or_loss",
+          "enduranceLoss": 3,
+          "huntingExempt": true
+        }
+      ]
+    },
+    "70": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -1
+        }
+      ]
+    },
+    "75": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -4
+        }
+      ]
+    },
+    "89": {
+      "summary": "Source-mandated meal.",
+      "actions": [
+        {
+          "type": "meal",
+          "count": 1,
+          "mode": "all_or_loss",
+          "enduranceLoss": 3,
+          "huntingExempt": true
+        }
+      ]
+    },
+    "9": {
+      "summary": "Source-mandated meal.",
+      "actions": [
+        {
+          "type": "meal",
+          "count": 1,
+          "mode": "all_or_loss",
+          "enduranceLoss": 3,
+          "huntingExempt": true
+        }
+      ]
+    },
+    "97": {
+      "summary": "Source-mandated meal.",
+      "actions": [
+        {
+          "type": "meal",
+          "count": 1,
+          "mode": "all_or_loss",
+          "enduranceLoss": 3,
+          "huntingExempt": true
+        }
+      ]
+    },
+    "98": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -3
+        }
+      ]
+    }
+  },
+  "29": {
+    "123": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -3
+        }
+      ]
+    },
+    "129": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -1
+        }
+      ]
+    },
+    "172": {
+      "summary": "Source-mandated Gold change.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "gold",
+          "delta": -10
+        }
+      ]
+    },
+    "184": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "206": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -3
+        }
+      ]
+    },
+    "240": {
+      "summary": "Source-mandated ENDURANCE recovery.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": 1
+        }
+      ]
+    },
+    "272": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "275": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -1
+        }
+      ]
+    },
+    "277": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "29": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -5
+        }
+      ]
+    },
+    "299": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -2
+        }
+      ]
+    },
+    "305": {
+      "summary": "Source-mandated ENDURANCE recovery.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": 10
+        }
+      ]
+    },
+    "306": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -3
+        }
+      ]
+    },
+    "322": {
+      "summary": "Source-mandated ENDURANCE recovery.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": 1
+        }
+      ]
+    },
+    "33": {
+      "summary": "Source-mandated Gold change.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "gold",
+          "delta": -10
+        }
+      ]
+    },
+    "331": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -3
+        }
+      ]
+    },
+    "334": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -1
+        }
+      ]
+    },
+    "337": {
+      "summary": "Source-mandated ENDURANCE recovery.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": 1
+        }
+      ]
+    },
+    "348": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -4
+        }
+      ]
+    },
+    "35": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -4
+        }
+      ]
+    },
+    "42": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -4
+        }
+      ]
+    },
+    "46": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -3
+        }
+      ]
+    },
+    "53": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -3
+        }
+      ]
+    },
+    "79": {
+      "summary": "Source-mandated ENDURANCE loss.",
+      "actions": [
+        {
+          "type": "stat",
+          "stat": "end",
+          "delta": -1
+        }
+      ]
+    }
+  }
+}

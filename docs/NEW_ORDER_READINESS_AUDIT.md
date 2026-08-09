@@ -57,6 +57,13 @@ There were no overlaps with the pre-existing simple automation catalogue.
 The Book 24-26 RNT, combat, route, and inventory catalogues remain the
 separate hand-audited data sets already used by the application.
 
+`data/book27to29-z-simple-automations.json` completes this direct-effect
+coverage for the New Order: 113 actions across 112 sections, consisting of
+97 exact ENDURANCE changes, 14 Grand Huntmastery-aware Meal requirements,
+and two compulsory Gold changes. There were no overlaps with the existing
+simple automation data. This includes Book 28's 300-section source range;
+the catalogue does not invent entries for sections that do not exist.
+
 Optional rewards, equipment exchanges, chosen losses, puzzles, and contextual
 route conditions remain visible in the reader. They need a player decision or
 more context than a single deterministic section entry and are not silently
