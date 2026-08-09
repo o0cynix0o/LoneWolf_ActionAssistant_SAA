@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.5.0 - Internal Testing
+
+- Added source-derived combat catalogues for all 306 directly represented Grand
+  Master encounters in Books 13-20, including standard evasion, timed combat,
+  round-limit, one-round-comparison, rank, discipline, and item-bonus rules.
+- Added complete Grand Master standalone save/load regression coverage for
+  Books 13-20 and corrected the support documentation to reflect the existing
+  all-series RNT catalogues.
+
 ## 3.4.9 - Internal Testing
 
 - Completed the source-verified RNT and combat catalogue pass for New Order

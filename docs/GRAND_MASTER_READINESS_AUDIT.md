@@ -72,7 +72,9 @@ inventory, and complete section-route ledgers are ready for internal testing.
 Source-verified RNT catalogues now cover Books 13-20 (35, 48, 35, 37, 32, 33,
 45, and 44 executable rules respectively), including Grand Weaponmastery,
 discipline, ENDURANCE, item/weapon-selection, and dynamic ENDURANCE-loss
-modifiers. Books 13-14 also have source-derived combat catalogues.
+modifiers. Source-derived combat catalogues now cover all eight books, with
+306 directly represented encounters and source-safe evasion, timed-combat,
+round-limit, comparison, rank, discipline, and item-bonus rules.
 
 The remaining rules pass must inspect the non-RNT candidate effects and any
 special combat outcome individually, adding only effects whose trigger, result,

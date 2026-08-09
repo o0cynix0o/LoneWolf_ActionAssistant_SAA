@@ -313,6 +313,55 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
                 )
                 self.assertEqual(restored.character["KaiWeapon"]["Name"], "Kaistar")
 
+    def test_every_grand_master_standalone_setup_round_trips_through_save_load(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            for book_number in range(13, 21):
+                discipline_count = 4 + (book_number - 13)
+                mastery_count = 2 + (book_number - 13)
+                options = lonewolf_redux.GRAND_MASTER_EQUIPMENT_OPTIONS[book_number]
+                non_weapon_choices = [
+                    option_id
+                    for option_id, option in options.items()
+                    if not any(container == "weapon" for container, _ in option.get("Items", []))
+                ]
+                weapon_choices = [
+                    option_id
+                    for option_id, option in options.items()
+                    if any(container == "weapon" for container, _ in option.get("Items", []))
+                ]
+                equipment_choices = (
+                    non_weapon_choices + weapon_choices[:2]
+                )[:lonewolf_redux.grand_master_field_issue_count(book_number)]
+                state = lonewolf_redux.create_grand_master_character_state(
+                    book_number=book_number,
+                    grand_master_disciplines=lonewolf_redux.GRAND_MASTER_DISCIPLINES[:discipline_count],
+                    grand_weaponmastery_weapons=lonewolf_redux.GRAND_WEAPONMASTERY_WEAPONS[:mastery_count],
+                    combat_skill_roll=0,
+                    endurance_roll=0,
+                    gold_roll=0,
+                    equipment_choices=equipment_choices,
+                )
+                assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                    save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                    state_data_dir=base / "state", books_dir=base / "books",
+                )
+                assistant.state = state
+                save_path = base / f"grand-master-book{book_number}.json"
+                self.assertTrue(assistant.save_game(str(save_path), quiet=True))
+
+                restored = lonewolf_redux.LoneWolfReduxAssistant(
+                    save_dir=base / "restored", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                    state_data_dir=base / "restored-state", books_dir=base / "books",
+                )
+                self.assertTrue(restored.load_game(str(save_path), quiet=True))
+                self.assertEqual(restored.character["BookNumber"], book_number)
+                self.assertEqual(restored.character["GrandMasterRank"], discipline_count)
+                self.assertEqual(
+                    restored.character["GrandWeaponmasteryWeapons"],
+                    lonewolf_redux.GRAND_WEAPONMASTERY_WEAPONS[:mastery_count],
+                )
+
     def test_full_backpack_can_be_trimmed_during_a_book2_transition(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
@@ -3318,7 +3367,7 @@ class CardLayoutInteractionTests(unittest.TestCase):
                     return cls.assistant_html[match.start():index + 1]
         raise AssertionError(f"JavaScript function {name!r} has no closing brace")
 
-    def test_release_metadata_is_3_4_9_internal_testing(self) -> None:
+    def test_release_metadata_is_3_5_0_internal_testing(self) -> None:
         readme = (self.root / "README.md").read_text(encoding="utf-8")
         building = (self.root / "docs" / "BUILDING.md").read_text(encoding="utf-8")
         user_guide = (self.root / "docs" / "USER_GUIDE.md").read_text(encoding="utf-8")
@@ -3328,16 +3377,16 @@ class CardLayoutInteractionTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         version_info = (self.root / "version_info.txt").read_text(encoding="utf-8")
 
-        self.assertIn("# Lone Wolf Action Assistant 3.4.9 Internal Testing", readme)
-        self.assertIn("Version: **3.4.9 Internal Testing**", readme)
-        self.assertIn("# Building Lone Wolf Action Assistant 3.4.9 Internal Testing", building)
-        self.assertIn("# Lone Wolf Action Assistant 3.4.9 Internal Testing", user_guide)
-        self.assertIn("## 3.4.9 - Internal Testing", changelog)
-        self.assertIn('#define AppVersion "3.4.9"', installer)
-        self.assertIn("filevers=(3, 4, 9, 0)", version_info)
-        self.assertIn("prodvers=(3, 4, 9, 0)", version_info)
-        self.assertIn("StringStruct(u'FileVersion', u'3.4.9')", version_info)
-        self.assertIn("StringStruct(u'ProductVersion', u'3.4.9')", version_info)
+        self.assertIn("# Lone Wolf Action Assistant 3.5.0 Internal Testing", readme)
+        self.assertIn("Version: **3.5.0 Internal Testing**", readme)
+        self.assertIn("# Building Lone Wolf Action Assistant 3.5.0 Internal Testing", building)
+        self.assertIn("# Lone Wolf Action Assistant 3.5.0 Internal Testing", user_guide)
+        self.assertIn("## 3.5.0 - Internal Testing", changelog)
+        self.assertIn('#define AppVersion "3.5.0"', installer)
+        self.assertIn("filevers=(3, 5, 0, 0)", version_info)
+        self.assertIn("prodvers=(3, 5, 0, 0)", version_info)
+        self.assertIn("StringStruct(u'FileVersion', u'3.5.0')", version_info)
+        self.assertIn("StringStruct(u'ProductVersion', u'3.5.0')", version_info)
 
     def test_movable_cards_get_a_dedicated_drag_handle(self) -> None:
         self.assertIn("data-card-drag-handle", self.assistant_html)
