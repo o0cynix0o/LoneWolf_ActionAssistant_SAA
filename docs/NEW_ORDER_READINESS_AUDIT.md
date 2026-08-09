@@ -75,6 +75,8 @@ automated.
 - `data/book21-section-flows.json` through `data/book29-section-flows.json`:
   prose-free route and classification ledgers.
 - `docs/NEW_ORDER_AUTOMATION_BACKLOG.md`: phased implementation queue.
+- `docs/NEW_ORDER_CAMPAIGN_TEST_REPORT.md`: campaign, mode, save/load, and
+  combat-preset regression coverage.
 
 Books 30-32 remain outside this pipeline because compatible HTML source is not
 available.
