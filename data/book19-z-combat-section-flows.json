@@ -1,0 +1,509 @@
+{
+  "19": {
+    "2": {
+      "combat": [
+        {
+          "id": "book19-2",
+          "enemies": [
+            {
+              "name": "Ukara (chained)",
+              "cs": 44,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 348
+        }
+      ]
+    },
+    "3": {
+      "combat": [
+        {
+          "id": "book19-3",
+          "enemies": [
+            {
+              "name": "Crypt Spawn Horde",
+              "cs": 55,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 350
+        }
+      ]
+    },
+    "14": {
+      "combat": [
+        {
+          "id": "book19-14",
+          "enemies": [
+            {
+              "name": "Mech-wulf",
+              "cs": 40,
+              "endurance": 36
+            }
+          ],
+          "victoryRoute": 5
+        }
+      ]
+    },
+    "27": {
+      "combat": [
+        {
+          "id": "book19-27",
+          "enemies": [
+            {
+              "name": "Rahjaz",
+              "cs": 48,
+              "endurance": 41
+            }
+          ],
+          "victoryRoute": 249
+        }
+      ]
+    },
+    "44": {
+      "combat": [
+        {
+          "id": "book19-44",
+          "enemies": [
+            {
+              "name": "Mech-wulf",
+              "cs": 44,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 5
+        }
+      ]
+    },
+    "75": {
+      "combat": [
+        {
+          "id": "book19-75",
+          "enemies": [
+            {
+              "name": "Golasyx",
+              "cs": 49,
+              "endurance": 45
+            }
+          ],
+          "oneRoundComparisonRoutes": {
+            "enemyLossGreater": 163,
+            "equal": 163,
+            "playerLossGreater": 221
+          }
+        }
+      ]
+    },
+    "111": {
+      "combat": [
+        {
+          "id": "book19-111",
+          "enemies": [
+            {
+              "name": "2 Cryopedeans",
+              "cs": 38,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 350
+        }
+      ]
+    },
+    "116": {
+      "combat": [
+        {
+          "id": "book19-116",
+          "enemies": [
+            {
+              "name": "Golasyx",
+              "cs": 49,
+              "endurance": 45
+            }
+          ],
+          "oneRoundComparisonRoutes": {
+            "enemyLossGreater": 38,
+            "equal": 38,
+            "playerLossGreater": 192
+          }
+        }
+      ]
+    },
+    "123": {
+      "combat": [
+        {
+          "id": "book19-123",
+          "enemies": [
+            {
+              "name": "Crypt Spawn Horde",
+              "cs": 50,
+              "endurance": 36
+            }
+          ],
+          "victoryRoute": 350
+        }
+      ]
+    },
+    "127": {
+      "combat": [
+        {
+          "id": "book19-127",
+          "enemies": [
+            {
+              "name": "Mech-wulf",
+              "cs": 50,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 5
+        }
+      ]
+    },
+    "141": {
+      "combat": [
+        {
+          "id": "book19-141",
+          "enemies": [
+            {
+              "name": "Caq",
+              "cs": 32,
+              "endurance": 20
+            }
+          ],
+          "victoryRoute": 328
+        }
+      ]
+    },
+    "147": {
+      "combat": [
+        {
+          "id": "book19-147",
+          "enemies": [
+            {
+              "name": "Crypt Spawn Horde",
+              "cs": 50,
+              "endurance": 36
+            }
+          ],
+          "victoryRoute": 111
+        }
+      ]
+    },
+    "162": {
+      "combat": [
+        {
+          "id": "book19-162",
+          "enemies": [
+            {
+              "name": "2 Cryopedeans",
+              "cs": 38,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 350
+        }
+      ]
+    },
+    "168": {
+      "combat": [
+        {
+          "id": "book19-168",
+          "enemies": [
+            {
+              "name": "Kataka",
+              "cs": 42,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 333
+        }
+      ]
+    },
+    "169": {
+      "combat": [
+        {
+          "id": "book19-169",
+          "enemies": [
+            {
+              "name": "Ukara (chained)",
+              "cs": 44,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 348
+        }
+      ]
+    },
+    "181": {
+      "combat": [
+        {
+          "id": "book19-181",
+          "enemies": [
+            {
+              "name": "Meghanic",
+              "cs": 48,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 338
+        }
+      ]
+    },
+    "188": {
+      "combat": [
+        {
+          "id": "book19-188",
+          "enemies": [
+            {
+              "name": "Rahjaz",
+              "cs": 48,
+              "endurance": 41
+            }
+          ],
+          "victoryRoute": 249
+        }
+      ]
+    },
+    "193": {
+      "combat": [
+        {
+          "id": "book19-193",
+          "enemies": [
+            {
+              "name": "6 Avarosi",
+              "cs": 44,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 325
+        }
+      ]
+    },
+    "194": {
+      "combat": [
+        {
+          "id": "book19-194",
+          "enemies": [
+            {
+              "name": "Ekmakon",
+              "cs": 40,
+              "endurance": 25
+            }
+          ],
+          "victoryRoute": 9
+        }
+      ]
+    },
+    "201": {
+      "combat": [
+        {
+          "id": "book19-201",
+          "enemies": [
+            {
+              "name": "Cryopedeans",
+              "cs": 45,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 350
+        }
+      ]
+    },
+    "213": {
+      "combat": [
+        {
+          "id": "book19-213",
+          "enemies": [
+            {
+              "name": "2 Knoarcs",
+              "cs": 48,
+              "endurance": 41
+            }
+          ],
+          "victoryRoute": 129
+        }
+      ]
+    },
+    "217": {
+      "combat": [
+        {
+          "id": "book19-217",
+          "enemies": [
+            {
+              "name": "Bangrol",
+              "cs": 34,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 142,
+          "winWithinRounds": 3,
+          "winWithinRoute": 142,
+          "tooLateRoute": 19,
+          "roundLimit": 3,
+          "roundExceededRoute": 19
+        }
+      ]
+    },
+    "237": {
+      "combat": [
+        {
+          "id": "book19-237",
+          "enemies": [
+            {
+              "name": "Ekmakon",
+              "cs": 40,
+              "endurance": 25
+            }
+          ],
+          "victoryRoute": 9,
+          "modifier": -5
+        }
+      ]
+    },
+    "241": {
+      "combat": [
+        {
+          "id": "book19-241",
+          "enemies": [
+            {
+              "name": "Bangrol",
+              "cs": 34,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 142,
+          "winWithinRounds": 2,
+          "winWithinRoute": 142,
+          "tooLateRoute": 19,
+          "roundLimit": 2,
+          "roundExceededRoute": 19
+        }
+      ]
+    },
+    "265": {
+      "combat": [
+        {
+          "id": "book19-265",
+          "enemies": [
+            {
+              "name": "Meghanic",
+              "cs": 48,
+              "endurance": 48
+            }
+          ],
+          "victoryRoute": 338
+        }
+      ]
+    },
+    "276": {
+      "combat": [
+        {
+          "id": "book19-276",
+          "enemies": [
+            {
+              "name": "Manoyd (with power gloves)",
+              "cs": 40,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 289
+        }
+      ]
+    },
+    "283": {
+      "combat": [
+        {
+          "id": "book19-283",
+          "enemies": [
+            {
+              "name": "Temple Portal",
+              "cs": 50,
+              "endurance": 50
+            }
+          ]
+        }
+      ]
+    },
+    "299": {
+      "combat": [
+        {
+          "id": "book19-299",
+          "enemies": [
+            {
+              "name": "Mech-wulf",
+              "cs": 38,
+              "endurance": 35
+            }
+          ],
+          "victoryRoute": 5
+        }
+      ]
+    },
+    "306": {
+      "combat": [
+        {
+          "id": "book19-306",
+          "enemies": [
+            {
+              "name": "Rahjaz",
+              "cs": 48,
+              "endurance": 41
+            }
+          ],
+          "victoryRoute": 249
+        }
+      ]
+    },
+    "311": {
+      "combat": [
+        {
+          "id": "book19-311",
+          "enemies": [
+            {
+              "name": "Solyx",
+              "cs": 45,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 186,
+          "canEvade": true,
+          "evadeAfterRounds": 4,
+          "evadeRoute": 144
+        }
+      ]
+    },
+    "322": {
+      "combat": [
+        {
+          "id": "book19-322",
+          "enemies": [
+            {
+              "name": "Mech-wulf",
+              "cs": 50,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 5
+        }
+      ]
+    },
+    "340": {
+      "combat": [
+        {
+          "id": "book19-340",
+          "enemies": [
+            {
+              "name": "Golasyx",
+              "cs": 49,
+              "endurance": 45
+            }
+          ],
+          "oneRoundComparisonRoutes": {
+            "enemyLossGreater": 163,
+            "equal": 163,
+            "playerLossGreater": 221
+          }
+        }
+      ]
+    }
+  }
+}

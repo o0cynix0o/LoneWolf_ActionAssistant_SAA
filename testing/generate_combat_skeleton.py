@@ -38,13 +38,19 @@ CONDITIONAL_DURATION_MODIFIER_PATTERN = re.compile(
     r" for the duration of (?:this )?(?:combat|fight)",
     re.IGNORECASE,
 )
+CONDITIONAL_POSITIVE_MODIFIER_PATTERN = re.compile(
+    r"if you possess (?P<thing>.+?)[, ]+you may add (?:a further )?(?P<value>\w+)"
+    r"(?: \([^)]*\))? to your COMBAT SKILL(?: score)?"
+    r"(?: for the duration of (?:this )?(?:[a-z-]+ )?(?:combat|fight))?",
+    re.IGNORECASE,
+)
 DURATION_MODIFIER_PATTERN = re.compile(
-    r"(?P<direction>reduce|increase) your COMBAT SKILL(?: score)? by (?P<value>\d+)(?: points?)?"
+    r"(?P<direction>reduce|increase) your COMBAT SKILL(?: score)? by (?P<value>\w+)(?: points?)?"
     r" for the duration of (?:this )?(?:[a-z-]+ )?(?:combat|fight)",
     re.IGNORECASE,
 )
 IGNORE_LOSS_PATTERN = re.compile(
-    r"ignore any ENDURANCE (?:point )?loss(?:es)? you may sustain(?: during)?"
+    r"ignore any ENDURANCE(?: points?)? losses? you may sustain(?: during)?"
     r" the first(?: (?P<rounds>\w+))? rounds?",
     re.IGNORECASE,
 )
@@ -58,6 +64,11 @@ WIN_DURATION_PATTERN = re.compile(
 )
 WIN_TOO_LATE_PATTERN = re.compile(
     r"if you win(?: this| the)? (?:combat|fight) in (?P<rounds>\w+) rounds? or more, turn to\s*(?P<route>\d+)",
+    re.IGNORECASE,
+)
+ONE_ROUND_COMPARISON_PATTERN = re.compile(
+    r"fight this combat for one round.*?if (?P<first>.*?) turn to\s*(?P<first_route>\d+)"
+    r".*?if (?P<second>.*?) turn to\s*(?P<second_route>\d+)",
     re.IGNORECASE,
 )
 TOO_LATE_PATTERN = re.compile(
@@ -89,8 +100,9 @@ def add_standard_combat_rules(preset: dict[str, Any], combat_text: str) -> None:
     if duration_match:
         prefix = combat_text[max(0, duration_match.start() - 180) : duration_match.start()].lower()
         if "unless" not in prefix and "if you possess" not in prefix:
-            value = int(duration_match.group("value"))
-            preset["modifier"] = value if duration_match.group("direction").lower() == "increase" else -value
+            value = parse_round(duration_match.group("value"))
+            if value:
+                preset["modifier"] = value if duration_match.group("direction").lower() == "increase" else -value
 
     conditional_duration_match = CONDITIONAL_DURATION_MODIFIER_PATTERN.search(combat_text)
     if conditional_duration_match:
@@ -111,6 +123,20 @@ def add_standard_combat_rules(preset: dict[str, Any], combat_text: str) -> None:
             "label": "Grand Master combat requirement",
             "condition": condition,
         }]
+
+    for positive_match in CONDITIONAL_POSITIVE_MODIFIER_PATTERN.finditer(combat_text):
+        thing = re.sub(r"^(?:a|an|the)\s+", "", positive_match.group("thing").strip(), flags=re.IGNORECASE)
+        value = parse_round(positive_match.group("value"))
+        if not value or not thing:
+            continue
+        condition_type = "power" if thing.lower().endswith("mastery") else "item"
+        condition: dict[str, Any] = {"type": condition_type, "name": thing}
+        modifiers = preset.setdefault("conditionalModifiers", [])
+        modifiers.append({
+            "modifier": value,
+            "label": thing,
+            "condition": condition,
+        })
 
     conditional_match = CONDITIONAL_TIMED_MODIFIER_PATTERN.search(combat_text)
     if conditional_match:
@@ -177,6 +203,25 @@ def add_standard_combat_rules(preset: dict[str, Any], combat_text: str) -> None:
                 if late_match:
                     route = int(late_match.group("route"))
                     preset["tooLateRoute"] = route
+
+    comparison_match = ONE_ROUND_COMPARISON_PATTERN.search(combat_text)
+    if comparison_match:
+        first = comparison_match.group("first").lower()
+        second = comparison_match.group("second").lower()
+        first_route = int(comparison_match.group("first_route"))
+        second_route = int(comparison_match.group("second_route"))
+        if "equal or greater" in first and "enemy" in first and "greater" in second:
+            preset["oneRoundComparisonRoutes"] = {
+                "enemyLossGreater": first_route,
+                "equal": first_route,
+                "playerLossGreater": second_route,
+            }
+        elif "lose more" in first and "enemy" in first and "enemy loses more" in second:
+            preset["oneRoundComparisonRoutes"] = {
+                "playerLossGreater": first_route,
+                "enemyLossGreater": second_route,
+                "equal": second_route,
+            }
 
 
 def section_preset(page: Path, book_number: int) -> tuple[int, dict[str, Any]] | None:

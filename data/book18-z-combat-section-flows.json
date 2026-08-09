@@ -427,7 +427,12 @@
               "cs": 45,
               "endurance": 45
             }
-          ]
+          ],
+          "oneRoundComparisonRoutes": {
+            "playerLossGreater": 263,
+            "enemyLossGreater": 226,
+            "equal": 226
+          }
         }
       ]
     },

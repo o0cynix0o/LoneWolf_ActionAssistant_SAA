@@ -1,0 +1,528 @@
+{
+  "20": {
+    "24": {
+      "combat": [
+        {
+          "id": "book20-24",
+          "enemies": [
+            {
+              "name": "Haemodyls",
+              "cs": 49,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 19,
+          "conditionalModifiers": [
+            {
+              "modifier": 2,
+              "label": "Animal Mastery",
+              "condition": {
+                "type": "power",
+                "name": "Animal Mastery"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "30": {
+      "combat": [
+        {
+          "id": "book20-30",
+          "enemies": [
+            {
+              "name": "Avagnids",
+              "cs": 48,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 316,
+          "conditionalModifiers": [
+            {
+              "modifier": 2,
+              "label": "Animal Mastery",
+              "condition": {
+                "type": "power",
+                "name": "Animal Mastery"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "32": {
+      "combat": [
+        {
+          "id": "book20-32",
+          "enemies": [
+            {
+              "name": "Chaos-mutants",
+              "cs": 45,
+              "endurance": 37
+            }
+          ],
+          "victoryRoute": 129
+        }
+      ]
+    },
+    "46": {
+      "combat": [
+        {
+          "id": "book20-46",
+          "enemies": [
+            {
+              "name": "Haemodyls",
+              "cs": 49,
+              "endurance": 42
+            }
+          ],
+          "victoryRoute": 19,
+          "conditionalModifiers": [
+            {
+              "modifier": 2,
+              "label": "Animal Mastery",
+              "condition": {
+                "type": "power",
+                "name": "Animal Mastery"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "64": {
+      "combat": [
+        {
+          "id": "book20-64",
+          "enemies": [
+            {
+              "name": "Huan\u2019zhor the Dragonlord",
+              "cs": 56,
+              "endurance": 60
+            }
+          ],
+          "conditionalModifiers": [
+            {
+              "modifier": 3,
+              "label": "Blue Diamond",
+              "condition": {
+                "type": "item",
+                "name": "Blue Diamond"
+              }
+            },
+            {
+              "modifier": 2,
+              "label": "Skarn-Ska",
+              "condition": {
+                "type": "item",
+                "name": "Skarn-Ska"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "69": {
+      "combat": [
+        {
+          "id": "book20-69",
+          "enemies": [
+            {
+              "name": "Nemagog swarm",
+              "cs": 40,
+              "endurance": 32
+            }
+          ],
+          "victoryRoute": 28
+        }
+      ]
+    },
+    "74": {
+      "combat": [
+        {
+          "id": "book20-74",
+          "enemies": [
+            {
+              "name": "Ghazoul",
+              "cs": 50,
+              "endurance": 38
+            }
+          ],
+          "victoryRoute": 36
+        }
+      ]
+    },
+    "92": {
+      "combat": [
+        {
+          "id": "book20-92",
+          "enemies": [
+            {
+              "name": "Nemagog swarm",
+              "cs": 36,
+              "endurance": 30
+            }
+          ],
+          "victoryRoute": 28
+        }
+      ]
+    },
+    "93": {
+      "combat": [
+        {
+          "id": "book20-93",
+          "enemies": [
+            {
+              "name": "Lavas sentry",
+              "cs": 45,
+              "endurance": 45
+            }
+          ],
+          "victoryRoute": 119
+        }
+      ]
+    },
+    "94": {
+      "combat": [
+        {
+          "id": "book20-94",
+          "enemies": [
+            {
+              "name": "Avagnids",
+              "cs": 50,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 316,
+          "conditionalModifiers": [
+            {
+              "modifier": 2,
+              "label": "Animal Mastery",
+              "condition": {
+                "type": "power",
+                "name": "Animal Mastery"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "121": {
+      "combat": [
+        {
+          "id": "book20-121",
+          "enemies": [
+            {
+              "name": "Kekataag the Avenger",
+              "cs": 60,
+              "endurance": 58
+            }
+          ],
+          "victoryRoute": 29
+        }
+      ]
+    },
+    "147": {
+      "combat": [
+        {
+          "id": "book20-147",
+          "enemies": [
+            {
+              "name": "Zantaz",
+              "cs": 52,
+              "endurance": 50
+            }
+          ],
+          "victoryRoute": 186
+        }
+      ]
+    },
+    "185": {
+      "combat": [
+        {
+          "id": "book20-185",
+          "enemies": [
+            {
+              "name": "Huan\u2019zhor the Dragonlord",
+              "cs": 56,
+              "endurance": 60
+            }
+          ],
+          "conditionalModifiers": [
+            {
+              "modifier": 3,
+              "label": "Blue Diamond",
+              "condition": {
+                "type": "item",
+                "name": "Blue Diamond"
+              }
+            },
+            {
+              "modifier": 2,
+              "label": "Skarn-Ska",
+              "condition": {
+                "type": "item",
+                "name": "Skarn-Ska"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "193": {
+      "combat": [
+        {
+          "id": "book20-193",
+          "enemies": [
+            {
+              "name": "Haemodyls",
+              "cs": 47,
+              "endurance": 47
+            }
+          ],
+          "victoryRoute": 19,
+          "conditionalModifiers": [
+            {
+              "modifier": 2,
+              "label": "Animal Mastery",
+              "condition": {
+                "type": "power",
+                "name": "Animal Mastery"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "197": {
+      "combat": [
+        {
+          "id": "book20-197",
+          "enemies": [
+            {
+              "name": "Avagnids",
+              "cs": 48,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 316,
+          "conditionalModifiers": [
+            {
+              "modifier": 2,
+              "label": "Animal Mastery",
+              "condition": {
+                "type": "power",
+                "name": "Animal Mastery"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "211": {
+      "combat": [
+        {
+          "id": "book20-211",
+          "enemies": [
+            {
+              "name": "Kekataag the Avenger",
+              "cs": 60,
+              "endurance": 58
+            }
+          ],
+          "victoryRoute": 29
+        }
+      ]
+    },
+    "212": {
+      "combat": [
+        {
+          "id": "book20-212",
+          "enemies": [
+            {
+              "name": "Muntaag swarm",
+              "cs": 47,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 285
+        }
+      ]
+    },
+    "226": {
+      "combat": [
+        {
+          "id": "book20-226",
+          "enemies": [
+            {
+              "name": "Haemodyls",
+              "cs": 49,
+              "endurance": 47
+            }
+          ],
+          "victoryRoute": 19,
+          "conditionalModifiers": [
+            {
+              "modifier": 2,
+              "label": "Animal Mastery",
+              "condition": {
+                "type": "power",
+                "name": "Animal Mastery"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "234": {
+      "combat": [
+        {
+          "id": "book20-234",
+          "enemies": [
+            {
+              "name": "Ghazoul",
+              "cs": 50,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 36
+        }
+      ]
+    },
+    "254": {
+      "combat": [
+        {
+          "id": "book20-254",
+          "enemies": [
+            {
+              "name": "Zantaz",
+              "cs": 52,
+              "endurance": 52
+            }
+          ],
+          "victoryRoute": 186
+        }
+      ]
+    },
+    "282": {
+      "combat": [
+        {
+          "id": "book20-282",
+          "enemies": [
+            {
+              "name": "Kekataag the Avenger",
+              "cs": 60,
+              "endurance": 58
+            }
+          ],
+          "victoryRoute": 29
+        }
+      ]
+    },
+    "299": {
+      "combat": [
+        {
+          "id": "book20-299",
+          "enemies": [
+            {
+              "name": "Haemodyls",
+              "cs": 47,
+              "endurance": 47
+            }
+          ],
+          "victoryRoute": 19,
+          "conditionalModifiers": [
+            {
+              "modifier": 2,
+              "label": "Animal Mastery",
+              "condition": {
+                "type": "power",
+                "name": "Animal Mastery"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "304": {
+      "combat": [
+        {
+          "id": "book20-304",
+          "enemies": [
+            {
+              "name": "Haemodyls",
+              "cs": 49,
+              "endurance": 47
+            }
+          ],
+          "victoryRoute": 19,
+          "conditionalModifiers": [
+            {
+              "modifier": 2,
+              "label": "Animal Mastery",
+              "condition": {
+                "type": "power",
+                "name": "Animal Mastery"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "310": {
+      "combat": [
+        {
+          "id": "book20-310",
+          "enemies": [
+            {
+              "name": "Zantaz",
+              "cs": 50,
+              "endurance": 46
+            }
+          ],
+          "victoryRoute": 186
+        }
+      ]
+    },
+    "318": {
+      "combat": [
+        {
+          "id": "book20-318",
+          "enemies": [
+            {
+              "name": "Muntaag swarm",
+              "cs": 47,
+              "endurance": 40
+            }
+          ],
+          "victoryRoute": 285
+        }
+      ]
+    },
+    "345": {
+      "combat": [
+        {
+          "id": "book20-345",
+          "enemies": [
+            {
+              "name": "Haemodyls",
+              "cs": 49,
+              "endurance": 47
+            }
+          ],
+          "victoryRoute": 19,
+          "conditionalModifiers": [
+            {
+              "modifier": 2,
+              "label": "Animal Mastery",
+              "condition": {
+                "type": "power",
+                "name": "Animal Mastery"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
