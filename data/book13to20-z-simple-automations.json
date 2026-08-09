@@ -1,0 +1,112 @@
+{
+  "13": {
+    "147": {
+      "summary": "Destroyed Backpack contents.",
+      "actions": [
+        {"type": "discard_backpack_items"}
+      ]
+    }
+  },
+  "14": {
+    "9": {
+      "summary": "Submersion loses all Gold and the first Backpack Item.",
+      "actions": [
+        {"type": "stat", "stat": "gold", "mode": "set", "value": 0},
+        {"type": "remove_item_at", "container": "backpack", "index": 0}
+      ]
+    },
+    "112": {
+      "summary": "Damaged third Backpack Item.",
+      "actions": [
+        {"type": "remove_item_at", "container": "backpack", "index": 2}
+      ]
+    },
+    "165": {
+      "summary": "Submersion loses all Gold and the first Backpack Item.",
+      "actions": [
+        {"type": "stat", "stat": "gold", "mode": "set", "value": 0},
+        {"type": "remove_item_at", "container": "backpack", "index": 0}
+      ]
+    },
+    "342": {
+      "summary": "Submersion injury loses all Gold and the first Backpack Item.",
+      "actions": [
+        {"type": "stat", "stat": "end", "delta": -3},
+        {"type": "stat", "stat": "gold", "mode": "set", "value": 0},
+        {"type": "remove_item_at", "container": "backpack", "index": 0}
+      ]
+    }
+  },
+  "16": {
+    "18": {
+      "summary": "Missing second Backpack Item.",
+      "actions": [
+        {"type": "remove_item_at", "container": "backpack", "index": 1}
+      ]
+    },
+    "108": {
+      "summary": "Gifted first Backpack Item.",
+      "actions": [
+        {"type": "remove_item_at", "container": "backpack", "index": 0}
+      ]
+    },
+    "210": {
+      "summary": "Missing second Backpack Item.",
+      "actions": [
+        {"type": "remove_item_at", "container": "backpack", "index": 1}
+      ]
+    }
+  },
+  "17": {
+    "63": {
+      "summary": "Theft of all Gold and the first two Backpack Items.",
+      "actions": [
+        {"type": "stat", "stat": "gold", "mode": "set", "value": 0},
+        {"type": "remove_item_at", "container": "backpack", "index": 1},
+        {"type": "remove_item_at", "container": "backpack", "index": 0}
+      ]
+    },
+    "169": {
+      "summary": "Lost fourth and sixth Backpack Items.",
+      "actions": [
+        {"type": "remove_item_at", "container": "backpack", "index": 5},
+        {"type": "remove_item_at", "container": "backpack", "index": 3}
+      ]
+    }
+  },
+  "18": {
+    "28": {
+      "summary": "Compulsory passage payment.",
+      "actions": [
+        {"type": "stat", "stat": "gold", "delta": -5}
+      ]
+    },
+    "236": {
+      "summary": "Capture injury and confiscated weapons, Gold, and Backpack contents.",
+      "actions": [
+        {"type": "stat", "stat": "end", "delta": -3},
+        {"type": "discard_weapons"},
+        {"type": "discard_backpack_items"},
+        {"type": "stat", "stat": "gold", "mode": "set", "value": 0}
+      ]
+    }
+  },
+  "19": {
+    "205": {
+      "summary": "Injury and lost third Backpack Item.",
+      "actions": [
+        {"type": "stat", "stat": "end", "delta": -4},
+        {"type": "remove_item_at", "container": "backpack", "index": 2}
+      ]
+    }
+  },
+  "20": {
+    "164": {
+      "summary": "Flash injury and destroyed Dagger.",
+      "actions": [
+        {"type": "stat", "stat": "end", "delta": -4},
+        {"type": "remove_item", "name": "Dagger", "containers": ["weapons"]}
+      ]
+    }
+  }
+}

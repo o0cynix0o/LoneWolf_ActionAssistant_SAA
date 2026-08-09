@@ -1021,6 +1021,80 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
             assistant.start_section_combat()
             self.assertEqual(assistant.combat["VictoryRoute"], 29)
 
+    def test_grand_master_direct_endurance_catalogue_applies_only_safe_source_effects(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            expected_counts = {13: 38, 14: 32, 15: 30, 16: 35, 17: 39, 18: 37, 19: 38, 20: 44}
+            self.assertEqual(
+                {book: len(assistant.section_automation[str(book)]) for book in expected_counts},
+                expected_counts,
+            )
+
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 13, "EnduranceCurrent": 20, "EnduranceMax": 30},
+            })
+            assistant.set_section(10)
+            self.assertEqual(assistant.character["EnduranceCurrent"], 23)
+            assistant.apply_section_automation(force=False, visit_changed=False)
+            self.assertEqual(assistant.character["EnduranceCurrent"], 23)
+
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 17, "EnduranceCurrent": 20, "EnduranceMax": 30},
+            })
+            assistant.set_section(11)
+            self.assertEqual(assistant.character["EnduranceCurrent"], 18)
+
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 19, "EnduranceCurrent": 20, "EnduranceMax": 30},
+            })
+            assistant.set_section(216)
+            self.assertEqual(assistant.character["EnduranceCurrent"], 28)
+
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 13, "EnduranceCurrent": 20, "EnduranceMax": 30},
+                "Inventory": {"BackpackItems": ["Meal"]},
+            })
+            assistant.set_section(106)
+            self.assertEqual(assistant.inventory["BackpackItems"], [])
+
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {
+                    "BookNumber": 13, "EnduranceCurrent": 20, "EnduranceMax": 30,
+                    "GrandMasterDisciplines": ["Grand Huntmastery"],
+                },
+                "Inventory": {"BackpackItems": ["Meal"]},
+            })
+            assistant.set_section(106)
+            self.assertEqual(assistant.inventory["BackpackItems"], ["Meal"])
+
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 14},
+                "Inventory": {"GoldCrowns": 10, "BackpackItems": ["Rope", "Torch", "Tinderbox"]},
+            })
+            assistant.set_section(112)
+            self.assertEqual(assistant.inventory["GoldCrowns"], 10)
+            self.assertEqual(assistant.inventory["BackpackItems"], ["Rope", "Torch"])
+
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 17},
+                "Inventory": {"GoldCrowns": 10, "BackpackItems": ["Rope", "Torch", "Tinderbox"]},
+            })
+            assistant.set_section(63)
+            self.assertEqual(assistant.inventory["GoldCrowns"], 0)
+            self.assertEqual(assistant.inventory["BackpackItems"], ["Tinderbox"])
+
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 20, "EnduranceCurrent": 20, "EnduranceMax": 30},
+                "Inventory": {"GoldCrowns": 5},
+            })
+            assistant.set_section(103)
+            self.assertEqual(assistant.character["EnduranceCurrent"], 14)
+            self.assertEqual(assistant.inventory["GoldCrowns"], 3)
+
     def test_new_order_books21_to29_unlock_campaign_achievements(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)

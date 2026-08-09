@@ -76,15 +76,24 @@ modifiers. Source-derived combat catalogues now cover all eight books, with
 306 directly represented encounters and source-safe evasion, timed-combat,
 round-limit, comparison, rank, discipline, and item-bonus rules.
 
-The remaining rules pass must inspect the non-RNT candidate effects and any
-special combat outcome individually, adding only effects whose trigger, result,
-and destination are unambiguous: mandatory END changes and meals, item changes,
-conditional gates, route-state flags, and achievements. Until a candidate has
-that source verification and a regression test, the reader remains the source
-of truth for that individual effect.
+`data/book13to20-simple-automations.json` now contains 312 additional,
+source-derived direct actions across 293 sections: 227 exact ENDURANCE changes,
+60 Grand Huntmastery-aware Meal requirements, nine compulsory Gold changes,
+and 16 compulsory Backpack or weapon losses. It is reproducibly generated from player-supplied HTML
+by `testing/generate_direct_effect_skeleton.py`; the separate
+`book13to20-z-simple-automations.json` records the small set of audited,
+position-specific equipment losses that need an explicit review rather than a
+text pattern.
+
+The remaining reader-directed work is deliberately limited to rules that need
+a player decision or a broader context than a single section: optional loot,
+equipment exchanges, chosen item losses, puzzles, conditional route gates,
+route-state flags, and bespoke terminal outcomes. These are not silently
+automated. A future rule should be added only when its trigger, result, and
+destination are unambiguous and it has focused regression coverage.
 
 ## Verification
 
-The initial baseline is covered by the standalone and Book 12-to-14 Grand
-Master regression test in `testing/test_saa_smoke.py`. The full smoke suite
-passes with 179 tests at this stage.
+The baseline is covered by standalone setup, Book 12-to-13 handoff, RNT,
+combat, direct-effect, achievement, save/load, and inventory regression tests
+in `testing/test_saa_smoke.py`.
