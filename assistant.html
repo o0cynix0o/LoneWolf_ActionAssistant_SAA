@@ -1573,18 +1573,73 @@
     <div class="status-line" id="serverStatus">Loading...</div>
   </header>
 
-  <main class="workspace lw-campaign-desk">
+  <main class="workspace lw-native" id="workspace">
+    <!-- CAMPAIGN: left rail -->
     <aside class="campaign-rail" id="campaignRail" aria-label="Current campaign"></aside>
-    <section class="reader-pane" aria-label="Book reader">
+
+    <!-- CAMPAIGN: center workspace (native story + reused tool tabs) -->
+    <section class="lw-campaign-main" id="campaignMain" aria-label="Campaign workspace">
+      <header class="lw-workspace-head" id="campaignHead"></header>
+      <div class="lw-metric-grid" id="campaignMetrics"></div>
+      <nav class="lw-tabbar" id="campaignTabbar" role="tablist" aria-label="Campaign views"></nav>
+      <article class="lw-story-panel lw-ui-panel" id="storyPanel" aria-label="Story"></article>
+      <div class="lw-tool-mount" id="campaignToolMount" hidden></div>
+    </section>
+
+    <!-- CAMPAIGN: right "at a glance" rail -->
+    <aside class="lw-glance" id="campaignGlance" aria-label="At a glance"></aside>
+
+    <!-- READER: reading-first surface + companion -->
+    <section class="lw-reader" id="readerRoot" aria-label="Reader">
+      <header class="lw-reader-head" id="readerHead"></header>
+      <article class="lw-reading-surface" id="readerSurface" aria-label="Reading surface"></article>
+    </section>
+    <aside class="lw-reader-companion-stack" id="readerCompanion" aria-label="Reader companion"></aside>
+
+    <!-- TOOLS / CONSOLE workspace -->
+    <section class="lw-tools" id="toolsRoot" aria-label="Tools workspace">
+      <header class="lw-tools-head" id="toolsHead"></header>
+      <div class="lw-tools-body">
+        <nav class="tools-navigation" id="toolsNavigation" aria-label="Campaign tools"></nav>
+        <div class="lw-tools-content">
+          <div class="lw-tools-summary" id="toolsSummary"></div>
+          <div class="lw-quick-roll lw-ui-panel" id="toolsQuickRoll"></div>
+          <div class="lw-active-tool" id="toolsActiveMount"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reused singleton: tool renderers write here; re-homed into the active surface's mount -->
+    <section id="view"></section>
+
+    <!-- Shell hero target (populated by lw-shell.js) kept for compatibility -->
+    <div id="productionContext" hidden aria-hidden="true"></div>
+
+    <!-- App menu (kept) -->
+    <button class="app-menu-button" type="button" id="appMenuButton" data-app-menu-toggle aria-label="Assistant menu" title="Assistant menu"></button>
+    <div class="menu-popover app-menu-popover" id="appMenu" hidden></div>
+
+    <!-- Front-matter / map overlay reuses the book iframe for non-section pages -->
+    <div class="lw-frontmatter-overlay" id="frontMatterOverlay" hidden>
+      <div class="lw-frontmatter-overlay__bar"><span id="frontMatterTitle">Reference</span><button class="lw-ui-button" type="button" data-frontmatter-close>Close</button></div>
+      <iframe id="book-frame" name="book-frame" title="Lone Wolf book reference"></iframe>
+    </div>
+
+    <!-- Hidden legacy singletons retained for null-safety of legacy renderers -->
+    <div class="lw-legacy-hidden" hidden aria-hidden="true">
+      <div class="status-grid" id="statusGrid"></div>
+      <section class="quick-panel" id="quickPanel"></section>
+      <div class="quick-tabs-divider" id="quickTabsDivider"></div>
+      <nav class="tabs" id="tabs"></nav>
       <div class="toolbar">
-        <div class="toolbar-book-series" data-reader-series="kai" aria-label="Kai series books">
+        <div class="toolbar-book-series" data-reader-series="kai">
           <button class="book-button" type="button" data-book="1">Book 1</button>
           <button class="book-button" type="button" data-book="2">Book 2</button>
           <button class="book-button" type="button" data-book="3">Book 3</button>
           <button class="book-button" type="button" data-book="4">Book 4</button>
           <button class="book-button" type="button" data-book="5">Book 5</button>
         </div>
-        <div class="toolbar-book-series" data-reader-series="magnakai" aria-label="Magnakai series books" hidden>
+        <div class="toolbar-book-series" data-reader-series="magnakai" hidden>
           <button class="book-button" type="button" data-book="6">Book 6</button>
           <button class="book-button" type="button" data-book="7">Book 7</button>
           <button class="book-button" type="button" data-book="8">Book 8</button>
@@ -1593,7 +1648,7 @@
           <button class="book-button" type="button" data-book="11">Book 11</button>
           <button class="book-button" type="button" data-book="12">Book 12</button>
         </div>
-        <div class="toolbar-book-series" data-reader-series="grand-master" aria-label="Grand Master series books" hidden>
+        <div class="toolbar-book-series" data-reader-series="grand-master" hidden>
           <button class="book-button" type="button" data-book="13">Book 13</button>
           <button class="book-button" type="button" data-book="14">Book 14</button>
           <button class="book-button" type="button" data-book="15">Book 15</button>
@@ -1603,7 +1658,7 @@
           <button class="book-button" type="button" data-book="19">Book 19</button>
           <button class="book-button" type="button" data-book="20">Book 20</button>
         </div>
-        <div class="toolbar-book-series" data-reader-series="new-order" aria-label="New Order series books" hidden>
+        <div class="toolbar-book-series" data-reader-series="new-order" hidden>
           <button class="book-button" type="button" data-book="21">Book 21</button>
           <button class="book-button" type="button" data-book="22">Book 22</button>
           <button class="book-button" type="button" data-book="23">Book 23</button>
@@ -1618,28 +1673,11 @@
         <button type="button" id="titleBtn">Title</button>
         <span class="reader-title" id="readerTitle">Loading...</span>
       </div>
-      <iframe id="book-frame" name="book-frame" title="Lone Wolf book"></iframe>
-    </section>
+    </div>
 
-    <section class="app-pane" aria-label="Lone Wolf web assistant">
-      <button class="app-menu-button" type="button" id="appMenuButton" data-app-menu-toggle aria-label="Assistant menu" title="Assistant menu"></button>
-      <div class="menu-popover app-menu-popover" id="appMenu" hidden></div>
-      <div class="tools-layout-shell">
-        <nav class="tools-navigation" id="toolsNavigation" aria-label="Campaign tools"></nav>
-        <div class="tools-main">
-          <section class="lw-production-context" id="productionContext" aria-label="Campaign context"></section>
-          <div class="status-grid" id="statusGrid"></div>
-          <section class="reader-companion" id="readerCompanion" aria-label="Reader companion"></section>
-          <section class="quick-panel" id="quickPanel" aria-label="Quick actions"></section>
-          <div class="quick-tabs-divider" id="quickTabsDivider" aria-hidden="true"></div>
-          <nav class="tabs" id="tabs"></nav>
-          <section id="view"></section>
-          <div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="false"></div>
-          <div class="visually-hidden" id="cardLayoutStatus" aria-live="polite" aria-atomic="true"></div>
-          <div class="message" id="message">Ready.</div>
-        </div>
-      </div>
-    </section>
+    <div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="false"></div>
+    <div class="visually-hidden" id="cardLayoutStatus" aria-live="polite" aria-atomic="true"></div>
+    <div class="message" id="message" hidden>Ready.</div>
   </main>
   <aside class="lw-console-drawer" id="consoleDrawer" aria-label="Command console" hidden>
     <div class="lw-console-drawer__bar">
@@ -3078,26 +3116,40 @@
       document.body.classList.toggle('lw-settings-active', activeView === 'settings');
       renderStatus();
       renderCampaignRail();
+
+      const deathActive = currentDeath().Active;
+      const setupActive = !!app.pendingBookSetup?.Active;
+      const completeActive = currentBookComplete().Active;
+      const cliActive = isCliMode() && !campaignStartRequested;
+      const takeover = deathActive || setupActive || completeActive;
+      document.body.classList.toggle('lw-native-takeover', takeover);
+
+      if (isNativeSurface) {
+        renderNativeSurface({ deathActive, setupActive, completeActive, cliActive, takeover });
+        return;
+      }
+
+      // ---- Legacy fallback path (non-native surfaces only) ----
       renderReaderCompanion();
       renderToolsNavigation();
-      if (isCliMode() && !campaignStartRequested) {
+      if (cliActive) {
         renderCliPanel();
         return;
       }
       renderQuickPanel();
       renderTabs();
-      if (currentDeath().Active) {
+      if (deathActive) {
         renderDeathScreen();
         decorateInterfaceCards('death');
         return;
       }
-      if (app.pendingBookSetup?.Active) {
+      if (setupActive) {
         renderBookSetupScreen();
         syncBook6SetupRequirements(view.querySelector('#continueBookForm'));
         decorateInterfaceCards('book-setup');
         return;
       }
-      if (currentBookComplete().Active) {
+      if (completeActive) {
         renderBookCompleteScreen();
         decorateInterfaceCards('complete');
         return;
@@ -3241,6 +3293,377 @@
         </div>
       `;
     }
+
+    // ============================================================
+    //  NATIVE PROTOTYPE SURFACES  (Campaign Desk / Reader First / Tools)
+    //  Renders the real Project Aon section text + choices natively
+    //  (no iframe) and arranges live campaign state into the design
+    //  prototype layouts. Reuses action(), bookUrl(), the tool
+    //  renderers, and app.state throughout. No engine/save changes.
+    // ============================================================
+    const nativeSurface = pageParams.get('surface') || 'campaign';
+    const nativeConsole = pageParams.get('console') === '1';
+    const isNativeSurface = ['campaign', 'reader', 'tools'].includes(nativeSurface);
+    const workspaceEl = document.getElementById('workspace');
+    const CAMPAIGN_TABS = [['story', 'Story'], ['sheet', 'Action Chart'], ['inventory', 'Inventory'], ['combat', 'Combat'], ['notes', 'Notes']];
+    let campaignTab = 'story';
+    let browseSection = requestedBrowseSection;
+    let storyRenderToken = 0;
+    let lastStory = { book: null, section: null, choices: [], title: '' };
+
+    function nativeEl(id) { return document.getElementById(id); }
+    function mountView(target) { const v = nativeEl('view'); if (target && v && v.parentElement !== target) target.appendChild(v); }
+    function runToolRenderer(viewName) {
+      const map = { sheet: renderSheet, inventory: renderInventory, disciplines: renderDisciplines, sections: renderSections, combat: renderCombat, achievements: renderAchievements, saves: renderSaves, notes: renderNotes, settings: renderSettings };
+      (map[viewName] || renderSheet)();
+    }
+    function knownDisciplines(c) {
+      const b = Number(c.BookNumber);
+      let arr = [];
+      if (b <= 5) arr = c.KaiDisciplines; else if (b <= 12) arr = c.MagnakaiDisciplines; else if (b <= 20) arr = c.GrandMasterDisciplines; else arr = c.NewOrderDisciplines;
+      return (arr || []).filter(Boolean);
+    }
+    function inventorySummaryText(inv) {
+      const w = (inv.Weapons || []).length;
+      const cap = inv.BackpackCapacity || 8;
+      const bp = (inv.BackpackItems || []).length;
+      const sp = (inv.SpecialItems || []).length;
+      return `${w} weapon${w === 1 ? '' : 's'} · ${bp} / ${cap} backpack · ${sp} special item${sp === 1 ? '' : 's'}`;
+    }
+
+    // ---- Native Project Aon section parser -----------------------------------
+    function sectionNumberFromHref(href) {
+      const m = String(href || '').match(/sect(\d+)\.htm/i);
+      return m ? Number(m[1]) : null;
+    }
+    function parseSectionDocument(doc, bookNumber) {
+      const folder = bookByNumber(bookNumber).folder;
+      const main = doc.querySelector('.maintext') || doc.querySelector('article') || doc.body;
+      const clone = main.cloneNode(true);
+      clone.querySelectorAll('script, style, #page-navigation, nav, .navbar, footer, #license').forEach((n) => n.remove());
+      let title = '';
+      const h3 = clone.querySelector('h3');
+      if (h3) { title = h3.textContent.trim(); h3.remove(); }
+      // Absolute-path the illustration images so they resolve outside the section folder.
+      clone.querySelectorAll('img').forEach((img) => {
+        const src = img.getAttribute('src') || '';
+        if (src && !/^(https?:|\/|data:)/i.test(src)) img.setAttribute('src', `books/lw/${folder}/${src}`);
+        img.removeAttribute('integrity');
+        img.removeAttribute('crossorigin');
+        img.classList.add('story-illustration');
+      });
+      // Collect printed choices (p.choice) as buttons, remove from prose flow.
+      const choices = [];
+      clone.querySelectorAll('p.choice').forEach((p) => {
+        const anchor = p.querySelector('a[href]');
+        const section = anchor ? sectionNumberFromHref(anchor.getAttribute('href')) : null;
+        const label = p.textContent.replace(/\s+/g, ' ').trim();
+        if (section) { choices.push({ section, label }); p.remove(); }
+      });
+      // Remaining anchors: turn intra-book section links into live jumps, unwrap the rest
+      // (illustration anchors to illN.htm, table-of-contents, licence links, etc.).
+      clone.querySelectorAll('a[href]').forEach((a) => {
+        const section = sectionNumberFromHref(a.getAttribute('href'));
+        if (section) { a.setAttribute('data-story-jump', section); a.removeAttribute('href'); a.classList.add('story-jump'); }
+        else { a.replaceWith(...a.childNodes); }
+      });
+      clone.querySelectorAll('p.combat').forEach((p) => p.classList.add('story-combat'));
+      clone.querySelectorAll('p.deadend').forEach((p) => p.classList.add('story-deadend'));
+      clone.querySelectorAll('p.signpost').forEach((p) => p.classList.add('story-signpost'));
+      return { title, prose: clone.innerHTML, choices };
+    }
+    async function fetchSection(bookNumber, section) {
+      const url = bookUrl(bookNumber, section);
+      if (!/sect\d+\.htm$/i.test(url)) return { error: 'not-installed', url };
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) return { error: 'missing', url };
+      const doc = new DOMParser().parseFromString(await res.text(), 'text/html');
+      return { doc };
+    }
+    function storyChoiceButtonsHtml(choices, variant) {
+      if (!choices.length) return `<p class="story-no-choice">No further choices are printed for this section. If the section calls for combat, a roll, or an ending, use the campaign tools.</p>`;
+      const cls = variant === 'reader' ? 'book-choice' : 'story-choice';
+      return `<div class="story-choice-list">` + choices.map((c) =>
+        `<button class="${cls}" type="button" data-story-route="${c.section}"><span>${escapeHtml(c.label)}</span><small>Turn to ${c.section}</small></button>`).join('') + `</div>`;
+    }
+    async function renderStoryInto(target, variant) {
+      if (!target || !app) return;
+      const character = currentCharacter();
+      const showBook = browseMode ? requestedBrowseBook : Number(character.BookNumber);
+      const showSection = browseMode ? (browseSection || 1) : Number(app.state.CurrentSection);
+      const token = ++storyRenderToken;
+      target.innerHTML = `<div class="story-loading">Loading section ${escapeHtml(showSection)}…</div>`;
+      let result;
+      try { result = await fetchSection(showBook, showSection); } catch (e) { result = { error: 'network' }; }
+      if (token !== storyRenderToken) return;
+      if (result.error) {
+        const installLink = result.error === 'not-installed' ? ` <a href="install-books.html?book=${showBook}">Install this book</a>.` : '';
+        target.innerHTML = `<div class="story-error"><p>The book text for section ${escapeHtml(showSection)} is not available.${installLink}</p></div>`;
+        lastStory = { book: showBook, section: showSection, choices: [], title: '' };
+        if (variant === 'reader') renderReaderCompanionNative();
+        updateChoiceCheck(0);
+        return;
+      }
+      const parsed = parseSectionDocument(result.doc, showBook);
+      lastStory = { book: showBook, section: showSection, choices: parsed.choices, title: parsed.title };
+      const bookMeta = bookByNumber(showBook);
+      const heading = parsed.title && parsed.title !== String(showSection) ? escapeHtml(parsed.title) : escapeHtml(bookMeta.title);
+      const head = variant === 'reader'
+        ? `<p class="chapter">${escapeHtml(bookMeta.title)}</p><h2>Section ${escapeHtml(showSection)}</h2>`
+        : `<div class="lw-story-panel__head"><div><p class="lw-eyebrow">${escapeHtml(bookMeta.title)}</p><h2>Section ${escapeHtml(showSection)}</h2></div><span class="lw-ui-status lw-ui-status--reading">Current section</span></div>`;
+      target.innerHTML = head + `<div class="prose story-prose">${parsed.prose}</div>` + (variant === 'reader' ? `<div class="rule"></div>` : '') + storyChoiceButtonsHtml(parsed.choices, variant);
+      if (variant === 'reader') renderReaderCompanionNative();
+      updateChoiceCheck(parsed.choices.length);
+    }
+    function updateChoiceCheck(count) {
+      const next = document.querySelector('[data-reader-next]');
+      if (!next) return;
+      if (count === 1) { next.disabled = false; next.dataset.readerNextSection = String(lastStory.choices[0].section); }
+      else { next.disabled = true; delete next.dataset.readerNextSection; }
+    }
+
+    // ---- Campaign Desk -------------------------------------------------------
+    function renderCampaignHead() {
+      const el = nativeEl('campaignHead'); if (!el) return;
+      el.innerHTML = `<div class="lw-workspace-head__text"><p class="lw-eyebrow">Current campaign</p><h1>Continue your journey</h1><p class="lw-muted">Your current section is ready. The assistant opens the reader and Action Chart in the place you left them.</p></div><div class="lw-section-no">Section ${escapeHtml(app.state.CurrentSection)}</div>`;
+    }
+    function renderCampaignMetrics() {
+      const el = nativeEl('campaignMetrics'); if (!el) return;
+      const c = currentCharacter(); const inv = currentInventory(); const run = app.run || {};
+      el.innerHTML = [
+        ['Endurance', `${c.EnduranceCurrent} / ${c.EnduranceMax}`],
+        ['Combat Skill', c.CombatSkillCurrent],
+        ['Gold', inv.GoldCrowns ?? 0],
+        ['Game mode', text(run.Difficulty, 'Normal')]
+      ].map(([l, v]) => `<div class="lw-metric"><small>${l}</small><strong>${escapeHtml(v)}</strong></div>`).join('');
+    }
+    function renderCampaignTabbar() {
+      const el = nativeEl('campaignTabbar'); if (!el) return;
+      el.innerHTML = CAMPAIGN_TABS.map(([id, label]) => `<button type="button" role="tab" class="lw-tab${campaignTab === id ? ' active' : ''}" data-campaign-tab="${id}" aria-selected="${campaignTab === id}">${label}</button>`).join('');
+    }
+    function renderCampaignGlance() {
+      const el = nativeEl('campaignGlance'); if (!el) return;
+      const c = currentCharacter(); const inv = currentInventory();
+      const disc = knownDisciplines(c);
+      const seriesLabel = campaignSeriesForBook(c.BookNumber).label.replace(' Series', '');
+      el.innerHTML = `
+        <div class="lw-ui-panel lw-glance__panel">
+          <div class="lw-glance__head"><h2>At a glance</h2><span class="lw-ui-status">Saved</span></div>
+          <div class="lw-glance__body">
+            <div class="lw-glance__row"><strong>Last action</strong><span>Arrived at section ${escapeHtml(app.state.CurrentSection)}</span></div>
+            <div class="lw-glance__row"><strong>Known ${escapeHtml(seriesLabel)}</strong><span>${disc.length ? escapeHtml(disc.join(' · ')) : 'None yet'}</span></div>
+            <div class="lw-glance__row"><strong>Inventory</strong><span>${escapeHtml(inventorySummaryText(inv))}</span></div>
+          </div>
+          <div class="lw-glance__tools">
+            <button class="lw-ui-button" type="button" data-roll ${manualDisabledAttributes('roll helper')}><strong>Roll</strong><span>Random Number Table</span></button>
+            <button class="lw-ui-button" type="button" data-campaign-tab="combat"><strong>Combat</strong><span>Start tracked fight</span></button>
+            <button class="lw-ui-button" type="button" data-open-map><strong>Map</strong><span>View the map</span></button>
+            <button class="lw-ui-button" type="button" data-save-current><strong>Save</strong><span>Create a checkpoint</span></button>
+          </div>
+        </div>
+        <div class="lw-ui-panel lw-glance__panel lw-glance__choices">
+          <div class="lw-glance__head"><h2>Choices</h2></div>
+          <div class="lw-glance__body">${choicesPanelBody()}</div>
+        </div>`;
+    }
+    function renderCampaignSurface() {
+      renderCampaignHead();
+      renderCampaignMetrics();
+      renderCampaignTabbar();
+      renderCampaignGlance();
+      const storyPanel = nativeEl('storyPanel');
+      const toolMount = nativeEl('campaignToolMount');
+      if (campaignTab === 'story') {
+        if (storyPanel) storyPanel.hidden = false;
+        if (toolMount) toolMount.hidden = true;
+        renderStoryInto(storyPanel, 'campaign');
+      } else {
+        if (storyPanel) storyPanel.hidden = true;
+        if (toolMount) { toolMount.hidden = false; mountView(toolMount); }
+        activeView = campaignTab;
+        runToolRenderer(campaignTab);
+      }
+    }
+
+    // ---- Reader First --------------------------------------------------------
+    function renderReaderHead() {
+      const el = nativeEl('readerHead'); if (!el) return;
+      const c = currentCharacter(); const book = bookByNumber(c.BookNumber);
+      const canPrev = (app.state.SectionHistory || []).length > 0;
+      el.innerHTML = `
+        <div class="lw-reader-head__text">
+          <p class="lw-eyebrow">Reading · Book ${escapeHtml(c.BookNumber)}</p>
+          <h1>${escapeHtml(book.title)}</h1>
+          <p class="lw-muted">Section ${escapeHtml(app.state.CurrentSection)}. The assistant tracks the campaign while the book stays central.</p>
+        </div>
+        <div class="lw-reader-nav">
+          <button class="lw-ui-button" type="button" data-reader-prev ${canPrev ? '' : 'disabled'}>Previous</button>
+          <button class="lw-ui-button lw-ui-button--primary" type="button" data-rail-current>Start Current Campaign</button>
+          <button class="lw-ui-button" type="button" data-reader-next disabled title="Choose a path below to continue">Next section</button>
+        </div>`;
+    }
+    function renderReaderCompanionNative() {
+      const el = nativeEl('readerCompanion'); if (!el) return;
+      const c = currentCharacter(); const inv = currentInventory(); const run = app.run || {};
+      const routes = lastStory.choices.length;
+      el.innerHTML = `
+        <section class="lw-ui-panel lw-companion__panel">
+          <div class="lw-companion__head"><h3>Campaign</h3><span class="lw-ui-status lw-ui-status--reading">Reading</span></div>
+          <div class="lw-companion__list">
+            <div><span>Endurance</span><span>${escapeHtml(c.EnduranceCurrent)} / ${escapeHtml(c.EnduranceMax)}</span></div>
+            <div><span>Combat Skill</span><span>${escapeHtml(c.CombatSkillCurrent)}</span></div>
+            <div><span>Gold Crowns</span><span>${escapeHtml(inv.GoldCrowns ?? 0)}</span></div>
+            <div><span>Difficulty</span><span>${escapeHtml(text(run.Difficulty, 'Normal'))}</span></div>
+          </div>
+        </section>
+        <section class="lw-ui-panel lw-companion__panel">
+          <h3>Assistant</h3>
+          <div class="lw-companion__grid">
+            <button class="lw-ui-button" type="button" data-roll ${manualDisabledAttributes('roll helper')}>Roll 0-9</button>
+            <a class="lw-ui-button" href="assistant.html?surface=tools&tool=combat&resume=1">Combat</a>
+            <a class="lw-ui-button" href="assistant.html?surface=tools&tool=inventory&resume=1">Inventory</a>
+            <a class="lw-ui-button" href="assistant.html?surface=tools&tool=sheet&resume=1">Action Chart</a>
+          </div>
+        </section>
+        <section class="lw-ui-panel lw-companion__panel">
+          <div class="lw-companion__head"><h3>Choice check</h3><span class="lw-ui-status">${routes} route${routes === 1 ? '' : 's'}</span></div>
+          <p class="lw-muted">Every printed choice stays visible in book order. Discipline-gated routes remain shown so your story choice stays in context.</p>
+        </section>
+        <section class="lw-ui-panel lw-companion__panel">
+          <h3>Reading tools</h3>
+          <div class="lw-companion__grid">
+            <button class="lw-ui-button" type="button" data-open-tssf>Story so far</button>
+            <button class="lw-ui-button" type="button" data-open-map>Map</button>
+            <a class="lw-ui-button" href="assistant.html?surface=tools&tool=notes&resume=1">Notes</a>
+            <a class="lw-ui-button" href="assistant.html?surface=tools&tool=settings&resume=1">Settings</a>
+          </div>
+        </section>`;
+    }
+    function renderReaderSurface() {
+      renderReaderHead();
+      renderReaderCompanionNative();
+      renderStoryInto(nativeEl('readerSurface'), 'reader');
+    }
+
+    // ---- Tools / Console -----------------------------------------------------
+    function renderToolsHead() {
+      const el = nativeEl('toolsHead'); if (!el) return;
+      const c = currentCharacter();
+      const consoleMode = nativeConsole || isCliMode();
+      el.innerHTML = consoleMode
+        ? `<div class="lw-tools-head__text"><p class="lw-eyebrow">Command console</p><h1>Keyboard-driven control</h1><p class="lw-muted">Commands act on this same live save. Book ${escapeHtml(c.BookNumber)}, section ${escapeHtml(app.state.CurrentSection)}.</p></div><div class="lw-tools-head__actions"><a class="lw-ui-button" href="assistant.html?surface=tools&resume=1">Back to tools</a><a class="lw-ui-button" href="assistant.html?surface=campaign&resume=1">Campaign desk</a></div>`
+        : `<div class="lw-tools-head__text"><p class="lw-eyebrow">Campaign assistant</p><h1>Tools that follow the story.</h1><p class="lw-muted">One destination for bookkeeping and testing. It keeps the current campaign visible and opens the exact tool you need.</p></div><div class="lw-tools-head__actions"><a class="lw-ui-button" href="assistant.html?surface=campaign&resume=1">Return to campaign</a><a class="lw-ui-button" href="assistant.html?surface=reader&resume=1">Reader view</a></div>`;
+    }
+    function renderToolsSummary() {
+      const el = nativeEl('toolsSummary'); if (!el) return;
+      const c = currentCharacter(); const inv = currentInventory(); const run = app.run || {};
+      const disc = knownDisciplines(c);
+      const crt = text(run.CombatMode, 'DataFile') === 'ManualCRT' ? 'Manual CRT' : 'Automatic CRT';
+      el.innerHTML = `
+        <section class="lw-ui-panel lw-tools-summary__panel">
+          <div class="lw-companion__head"><div><p class="lw-eyebrow">Current campaign</p><h2>Book ${escapeHtml(c.BookNumber)} · Section ${escapeHtml(app.state.CurrentSection)}</h2></div><span class="lw-ui-status lw-ui-status--reading">Reading</span></div>
+          <div class="lw-metric-grid">
+            <div class="lw-metric"><small>Endurance</small><strong>${escapeHtml(c.EnduranceCurrent)} / ${escapeHtml(c.EnduranceMax)}</strong></div>
+            <div class="lw-metric"><small>Combat Skill</small><strong>${escapeHtml(c.CombatSkillCurrent)}</strong></div>
+            <div class="lw-metric"><small>Gold</small><strong>${escapeHtml(inv.GoldCrowns ?? 0)}</strong></div>
+            <div class="lw-metric"><small>Difficulty</small><strong>${escapeHtml(text(run.Difficulty, 'Normal'))}</strong></div>
+          </div>
+          <div class="lw-token-row">${disc.map((d) => `<span>${escapeHtml(d)}</span>`).join('')}<span>${crt}</span></div>
+        </section>`;
+    }
+    function renderToolsQuickRoll() {
+      const el = nativeEl('toolsQuickRoll'); if (!el) return;
+      const flow = currentFlow();
+      const last = [flow.LastRoll, flow.StagedRoll, app.state?.LastRoll].find((v) => typeof v === 'number');
+      const rollLabel = flow.Entry?.roll || flow.Entry?.stagedRoll ? 'Section Roll' : 'Roll 0-9';
+      const shown = (last === 0 || last) ? last : '–';
+      el.innerHTML = `<p class="lw-eyebrow">Quick roll</p><div class="lw-quick-roll__number">${escapeHtml(shown)}</div><p class="lw-muted">Last Random Number Table result</p><button class="lw-ui-button lw-ui-button--primary" type="button" data-roll ${manualDisabledAttributes('roll helper')}>${rollLabel}</button>`;
+    }
+    function renderToolsSurface(f) {
+      renderToolsHead();
+      renderToolsNavigation();
+      const mount = nativeEl('toolsActiveMount');
+      if ((f && f.cliActive) || (isCliMode() && !campaignStartRequested)) {
+        document.body.classList.add('lw-console-active');
+        mountView(mount);
+        renderCliPanel();
+        return;
+      }
+      document.body.classList.remove('lw-console-active');
+      renderToolsSummary();
+      renderToolsQuickRoll();
+      mountView(mount);
+      runToolRenderer(activeView && activeView !== 'story' ? activeView : 'sheet');
+    }
+
+    // ---- Front-matter / map overlay (reuses the book iframe) -----------------
+    function openFrontMatter(frontMatter, title) {
+      const ov = nativeEl('frontMatterOverlay'); const t = nativeEl('frontMatterTitle');
+      const book = browseMode ? requestedBrowseBook : Number(currentCharacter().BookNumber);
+      if (t) t.textContent = title;
+      bookFrame.src = bookUrl(book, null, frontMatter);
+      if (ov) ov.hidden = false;
+    }
+    function closeFrontMatter() {
+      const ov = nativeEl('frontMatterOverlay'); if (ov) ov.hidden = true;
+      bookFrame.removeAttribute('src');
+    }
+    function readerGoPrev() {
+      const hist = app.state.SectionHistory || [];
+      if (!hist.length) return;
+      const prev = hist.length >= 2 ? hist[hist.length - 2] : hist[hist.length - 1];
+      const section = Number(prev.Section);
+      if (Number.isInteger(section)) action({ action: 'set_position', book: Number(prev.BookNumber || currentCharacter().BookNumber), section });
+    }
+
+    // ---- Surface orchestrator (called from render) ---------------------------
+    function renderNativeSurface(flags) {
+      const f = flags || {};
+      // Assert the shell classes ourselves so surface rendering never races the
+      // deferred shell script (which may add lw-surface-* after the first render).
+      document.body.classList.add('lw-shell-assistant', 'lw-surface-' + nativeSurface);
+      if (f.takeover) {
+        mountView(workspaceEl);
+        if (f.deathActive) renderDeathScreen();
+        else if (f.setupActive) { renderBookSetupScreen(); syncBook6SetupRequirements(view.querySelector('#continueBookForm')); }
+        else if (f.completeActive) renderBookCompleteScreen();
+        return;
+      }
+      if (nativeSurface === 'campaign') renderCampaignSurface();
+      else if (nativeSurface === 'reader') renderReaderSurface();
+      else if (nativeSurface === 'tools') renderToolsSurface(f);
+    }
+
+    // Native surface event delegation (bound once).
+    if (!window.__lwNativeBound) {
+      window.__lwNativeBound = true;
+      document.addEventListener('click', (event) => {
+        const jump = event.target.closest('[data-story-route],[data-story-jump]');
+        if (jump) {
+          const s = Number(jump.getAttribute('data-story-route') || jump.getAttribute('data-story-jump'));
+          if (Number.isInteger(s)) { event.preventDefault(); if (browseMode) { browseSection = s; render(); } else { action({ action: 'route', section: s }); } }
+          return;
+        }
+        const tab = event.target.closest('[data-campaign-tab]');
+        if (tab) { event.preventDefault(); campaignTab = tab.getAttribute('data-campaign-tab'); render(); return; }
+        const prev = event.target.closest('[data-reader-prev]');
+        if (prev && !prev.disabled) { event.preventDefault(); readerGoPrev(); return; }
+        const next = event.target.closest('[data-reader-next]');
+        if (next && !next.disabled) { event.preventDefault(); const s = Number(next.dataset.readerNextSection); if (Number.isInteger(s)) action({ action: 'route', section: s }); return; }
+        if (event.target.closest('[data-open-map]')) { event.preventDefault(); openFrontMatter('map.htm', 'Map'); return; }
+        if (event.target.closest('[data-open-tssf]')) { event.preventDefault(); openFrontMatter('tssf.htm', 'Story so far'); return; }
+        if (event.target.closest('[data-frontmatter-close]')) { event.preventDefault(); closeFrontMatter(); return; }
+      });
+    }
+
+    // Initialise native tab from the requested tool / new-campaign entry.
+    (function initNativeSurface() {
+      const t = pageParams.get('tool');
+      if (nativeSurface === 'campaign') {
+        if (campaignStartRequested) campaignTab = 'sheet';
+        else if (t && ['sheet', 'inventory', 'combat', 'notes'].includes(t)) campaignTab = t;
+      }
+    })();
 
     function renderCliPanel() {
       stopCliTerminal();
