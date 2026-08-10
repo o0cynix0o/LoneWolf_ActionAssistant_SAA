@@ -204,8 +204,21 @@ def run_desktop() -> int:
         http_server, http_thread = _start_http(DEFAULT_HTTP_PORT)
         http_port = int(http_server.server_address[1])
         base_url = f"http://127.0.0.1:{http_port}"
-        os.environ["LONEWOLF_SAA_CHEAT_URL"] = f"{base_url}/api/internal/session-cheats"
+        cheat_url = f"{base_url}/api/internal/session-cheats"
+        os.environ["LONEWOLF_SAA_CHEAT_URL"] = cheat_url
         os.environ["LONEWOLF_SAA_CHEAT_TOKEN"] = app_server.CHEAT_SESSION.token
+        # Publish the live url+token to a file the CLI worker reads fresh, so a
+        # relaunch always resyncs even if a stale token lingers in the process
+        # environment. Best-effort: the CLI degrades gracefully without it.
+        try:
+            cheat_file = PATHS.user_data / "cheat-session.json"
+            cheat_file.write_text(
+                json.dumps({"url": cheat_url, "token": app_server.CHEAT_SESSION.token}),
+                encoding="utf-8",
+            )
+            os.environ["LONEWOLF_SAA_CHEAT_FILE"] = str(cheat_file)
+        except OSError as exc:
+            _lifecycle_log(f"cheat-session file could not be written: {exc}")
         websocket = _start_websocket(DEFAULT_WS_PORT)
         _wait_for_http(base_url)
 
@@ -235,6 +248,12 @@ def run_desktop() -> int:
             app_server.stop_server(http_server, http_thread)
         os.environ.pop("LONEWOLF_SAA_CHEAT_URL", None)
         os.environ.pop("LONEWOLF_SAA_CHEAT_TOKEN", None)
+        cheat_file_path = os.environ.pop("LONEWOLF_SAA_CHEAT_FILE", None)
+        if cheat_file_path:
+            try:
+                os.remove(cheat_file_path)
+            except OSError:
+                pass
         _lifecycle_log("desktop shutdown complete")
 
 

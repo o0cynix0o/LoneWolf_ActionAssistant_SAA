@@ -173,10 +173,17 @@ class RemoteCheatClient:
             headers={"Content-Type": "application/json", "X-LoneWolf-Session": self.token},
             method="POST",
         )
-        with urllib.request.urlopen(request, timeout=3) as response:
-            result = json.load(response)
+        # A cheat-session hiccup (stale token after a restart, a 403 from a
+        # zombie instance, a timeout) must never take down the CLI. The remote
+        # cheat sync is an optional easter-egg feature, so degrade to the last
+        # known status instead of raising.
+        try:
+            with urllib.request.urlopen(request, timeout=3) as response:
+                result = json.load(response)
+        except Exception:
+            return self._status
         if not isinstance(result, dict):
-            raise RuntimeError("Invalid cheat-session response.")
+            return self._status
         self._status = result
         return result
 
@@ -209,9 +216,36 @@ class RemoteCheatClient:
         return self._request({"operation": "toggle", "digest": digest, "snapshot": snapshot})
 
 
-def provider_from_environment(environment: dict[str, str]) -> CheatSession | RemoteCheatClient:
+def _cheat_config_from_environment(environment: dict[str, str]) -> tuple[str, str]:
+    """Resolve the cheat endpoint url and token.
+
+    A live-token file (written by the desktop app on start) is preferred over
+    the process environment so a CLI worker always talks to the currently
+    running server, even if it inherited a stale token from a previous
+    instance. The environment is the fallback.
+    """
+    path = str(environment.get("LONEWOLF_SAA_CHEAT_FILE") or "").strip()
+    if path:
+        try:
+            with open(path, "r", encoding="utf-8") as handle:
+                data = json.load(handle)
+            url = str(data.get("url") or "").strip()
+            token = str(data.get("token") or "").strip()
+            if url and token:
+                return url, token
+        except Exception:
+            pass
     url = str(environment.get("LONEWOLF_SAA_CHEAT_URL") or "").strip()
     token = str(environment.get("LONEWOLF_SAA_CHEAT_TOKEN") or "").strip()
+    return url, token
+
+
+def provider_from_environment(environment: dict[str, str]) -> CheatSession | RemoteCheatClient:
+    url, token = _cheat_config_from_environment(environment)
     if url and token:
-        return RemoteCheatClient(url, token)
+        try:
+            return RemoteCheatClient(url, token)
+        except Exception:
+            # Never let cheat-session setup abort the CLI; run a local session.
+            return CheatSession()
     return CheatSession()
