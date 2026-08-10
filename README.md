@@ -1,4 +1,4 @@
-# Lone Wolf Action Assistant 3.5.4 Internal Testing
+# Lone Wolf Action Assistant 3.6.0 Internal Testing
 
 Lone Wolf Action Assistant is a standalone Windows desktop play aid for the
 *Lone Wolf* gamebooks. It is a digital Action Chart, reader companion, and
@@ -8,7 +8,7 @@ server yourself.
 
 **Internal-testing release:** [download the current Windows installer](https://github.com/o0cynix0o/LoneWolf_ActionAssistant_SAA/releases/latest).
 
-Version: **3.5.4 Internal Testing**
+Version: **3.6.0 Internal Testing**
 
 ## What You Can Play
 
@@ -64,6 +64,11 @@ The importer expects a valid folder containing at least `title.htm` and
 - **Tools** is the full Action Chart, inventory, combat, saves, achievements,
   notes, and settings workspace.
 - **Console** opens the keyboard-first CLI against that same active save.
+- **Settings** is part of Tools, so campaign modes, themes, reader preferences,
+  saves, and layout preferences have one canonical home.
+- **Manage Your Books** is the Library's live collection view. It shows the
+  installed state of all 29 supported books and keeps ZIP/folder import tools
+  beside the collection they update.
 
 - **Auto Mode** applies available section helpers and keeps the Action Chart in
   sync as you play.

@@ -1,4 +1,4 @@
-# Lone Wolf Action Assistant 3.5.4 Internal Testing
+# Lone Wolf Action Assistant 3.6.0 Internal Testing
 
 ## Installation
 
@@ -26,7 +26,7 @@ During installation, you may select:
 
 You can also add books later:
 
-1. Open **Install Books** in the application.
+1. Open **Manage Your Books** from the Library.
 2. Choose **Import ZIP Files** or **Import Extracted Folder**.
 3. The app validates each book and copies it into managed storage.
 
@@ -77,6 +77,10 @@ The top navigation always works with the same active save and current section:
 - **Tools** expands the Action Chart, inventory, combat, achievements, saves,
   notes, game modes, and settings into one workspace.
 - **Console** opens the embedded terminal against the same campaign state.
+- **Settings** lives in Tools, so game modes, themes, reader preferences, save
+  slots, and layout controls are managed in one place.
+- **Manage Your Books** reports the installed state of all 29 supported books
+  beside the native ZIP and extracted-folder import actions.
 
 Switching layouts never changes the current book, section, character, or
 campaign mode. It only changes how the same game is presented.

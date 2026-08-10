@@ -1,5 +1,20 @@
 # Changelog
 
+## 3.6.0 - Internal Testing
+
+- Rebuilt the production Library, Campaign, Reader, Tools, Console, Settings,
+  and Book Manager views around one shared visual system and shared campaign
+  state. The former design prototypes are now implemented in the application.
+- Made Library the campaign command center, with **Start Current Campaign** as
+  the direct return to the saved book and section, and the active book visibly
+  marked **Reading**.
+- Added a three-pane Campaign Desk, a reader-first companion mode, a focused
+  Tools workspace, and a full Command Console route without adding a second
+  save format or changing campaign rules.
+- Consolidated Settings in Tools and replaced the static installer page with a
+  live Book Manager that reports the installed state of all 29 supported books
+  while retaining the native ZIP and folder import actions.
+
 ## 3.5.4 - Internal Testing
 
 - Completed the production UI pass begun in 3.5.3: Library Command now
