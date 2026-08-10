@@ -98,6 +98,63 @@ body.lw-shell-index .reader-panel {
   background: var(--lw-shell-surface);
 }
 
+/* Library Command: the campaign is the entry point, while the complete book
+   catalogue stays one deliberate series switch away. */
+body.lw-shell-index header {
+  min-height: 210px;
+  padding-block: 26px 22px;
+}
+body.lw-shell-index main {
+  grid-template-columns: minmax(265px, 310px) minmax(0, 1fr);
+  align-items: start;
+}
+body.lw-shell-index .reader-panel {
+  position: sticky;
+  top: 76px;
+  padding: 14px;
+  border-radius: 6px;
+}
+.lw-library-overview {
+  display: grid;
+  gap: 5px;
+  margin: 0 0 14px;
+  padding: 12px;
+  border: 1px solid #44886b;
+  border-radius: 5px;
+  background: color-mix(in srgb, #44886b 12%, var(--lw-shell-surface));
+}
+.lw-library-overview__eyebrow {
+  color: var(--lw-shell-live);
+  font: 700 .67rem Arial, sans-serif;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.lw-library-overview strong { color: var(--lw-shell-accent); font-size: 1rem; line-height: 1.2; }
+.lw-library-overview span:last-child { color: var(--lw-shell-muted); font: .77rem Arial, sans-serif; }
+body.lw-shell-index .reader-actions { gap: 7px; }
+body.lw-shell-index .reader-panel a,
+body.lw-shell-index .reader-panel button { min-height: 38px; border-radius: 4px; font-family: Arial, sans-serif; }
+body.lw-shell-index .reader-actions #currentBtn { border-color: var(--lw-shell-accent); background: var(--lw-shell-accent); color: #102025; }
+body.lw-shell-index .series-board { gap: 16px; }
+.lw-series-filter { display: flex; gap: 7px; flex-wrap: wrap; padding-bottom: 4px; }
+.lw-series-filter button {
+  min-height: 34px;
+  padding: 6px 11px;
+  border: 1px solid var(--lw-shell-border);
+  border-radius: 4px;
+  background: var(--lw-shell-surface);
+  color: var(--lw-shell-muted);
+  font: 700 .78rem Arial, sans-serif;
+  cursor: pointer;
+}
+.lw-series-filter button:hover,
+.lw-series-filter button.active { border-color: var(--lw-shell-accent-2); background: var(--lw-shell-raised); color: var(--lw-shell-accent); }
+body.lw-shell-index .series-section { padding: 18px; border: 1px solid var(--lw-shell-border); border-radius: 6px; background: color-mix(in srgb, var(--lw-shell-surface) 92%, transparent); }
+body.lw-shell-index .series-section[hidden] { display: none; }
+body.lw-shell-index .books { grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); overflow: visible; }
+body.lw-shell-index .book { min-height: 290px; border-color: var(--lw-shell-border); background: var(--lw-shell-surface); }
+body.lw-shell-index .book.lw-current-book { min-height: 330px; border-width: 2px; }
+
 body.lw-shell-index .reader-panel h2,
 body.lw-shell-index .series-heading {
   color: var(--lw-shell-accent);
@@ -174,7 +231,202 @@ body.lw-shell-assistant .lw-inline-nav a[aria-current="page"] {
 
 body.lw-shell-assistant .workspace {
   height: calc(100vh - 56px);
+  grid-template-columns: minmax(460px, 1.15fr) minmax(430px, .85fr);
+  background: var(--lw-bg, #0c1214);
 }
+
+/* Production campaign shell.  The legacy renderers remain in place beneath
+   this layer so every existing action continues to use the same live state. */
+body.lw-shell-assistant .reader-pane {
+  padding: 12px;
+  gap: 10px;
+  border-right-color: var(--lw-shell-border);
+  background: color-mix(in srgb, var(--lw-bg, #0c1214) 82%, #000);
+}
+
+body.lw-shell-assistant .toolbar {
+  min-height: 50px;
+  padding: 8px 10px;
+  border: 1px solid var(--lw-shell-border);
+  border-radius: 6px;
+  background: var(--lw-shell-surface);
+}
+
+body.lw-shell-assistant .toolbar button {
+  min-height: 30px;
+  border-color: var(--lw-shell-border);
+  background: transparent;
+  color: var(--lw-shell-muted);
+}
+
+body.lw-shell-assistant .toolbar button:hover,
+body.lw-shell-assistant .toolbar button.active {
+  border-color: var(--lw-shell-accent-2);
+  background: color-mix(in srgb, var(--lw-shell-accent-2) 16%, transparent);
+  color: var(--lw-shell-accent);
+}
+
+body.lw-shell-assistant .reader-title {
+  color: var(--lw-shell-accent);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: .86rem;
+}
+
+body.lw-shell-assistant #book-frame {
+  border: 1px solid var(--lw-shell-border);
+  border-radius: 6px;
+  background: #ffffe6;
+}
+
+body.lw-shell-assistant .app-pane {
+  padding: 12px;
+  gap: 10px;
+  overflow: auto;
+  background: var(--lw-bg, #0c1214);
+}
+
+body.lw-shell-assistant .app-menu-button { top: 21px; right: 20px; }
+
+.lw-production-context {
+  display: flex;
+  flex-shrink: 0;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 84px;
+  padding: 15px 52px 14px 16px;
+  border: 1px solid var(--lw-shell-border);
+  border-radius: 6px;
+  background: linear-gradient(100deg, var(--lw-shell-surface), color-mix(in srgb, var(--lw-shell-raised) 78%, transparent));
+}
+
+.lw-production-context__eyebrow {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--lw-shell-live);
+  font: 700 .68rem Arial, sans-serif;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.lw-production-context h2 {
+  margin: 0 !important;
+  color: var(--lw-shell-accent);
+  font: 700 clamp(1.05rem, 1.7vw, 1.45rem) Georgia, "Times New Roman", serif !important;
+  line-height: 1.08 !important;
+  letter-spacing: 0 !important;
+  overflow-wrap: anywhere;
+}
+
+.lw-production-context p { margin: 5px 0 0; color: var(--lw-shell-muted); font-size: .8rem; }
+.lw-production-context__actions { display: flex; gap: 7px; flex-wrap: wrap; }
+.lw-production-context__actions a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 6px 9px;
+  border: 1px solid var(--lw-shell-accent-2);
+  border-radius: 4px;
+  color: var(--lw-shell-accent);
+  font: 700 .76rem Arial, sans-serif;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.lw-production-context__actions a:hover { background: color-mix(in srgb, var(--lw-shell-accent-2) 16%, transparent); }
+.lw-production-context__actions button {
+  min-height: 32px;
+  padding: 6px 9px;
+  border-radius: 4px;
+  font: 700 .76rem Arial, sans-serif;
+}
+
+.lw-console-drawer {
+  position: fixed;
+  z-index: 100;
+  top: 56px;
+  right: 0;
+  width: min(680px, 92vw);
+  height: calc(100vh - 56px);
+  padding: 12px;
+  border-left: 1px solid var(--lw-shell-border);
+  background: var(--lw-bg, #0c1214);
+  box-shadow: -18px 0 40px rgba(0, 0, 0, .42);
+}
+.lw-console-drawer[hidden] { display: none; }
+.lw-console-drawer__bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 0 10px; }
+.lw-console-drawer__bar span { display: block; color: var(--lw-shell-accent); font: 700 1rem Georgia, "Times New Roman", serif; }
+.lw-console-drawer__bar small { display: block; margin-top: 3px; color: var(--lw-shell-muted); font: .72rem Arial, sans-serif; }
+.lw-console-drawer__bar button { min-height: 32px; padding: 6px 10px; border-radius: 4px; }
+.lw-console-drawer iframe { width: 100%; height: calc(100% - 54px); border: 1px solid var(--lw-shell-border); border-radius: 5px; background: var(--lw-bg, #0c1214); }
+
+body.lw-shell-assistant .status-grid {
+  margin: 0;
+  flex-shrink: 0;
+  padding: 0;
+  grid-template-columns: minmax(180px, 2fr) repeat(4, minmax(68px, .7fr));
+  border: 0;
+  background: transparent;
+}
+
+body.lw-shell-assistant .stat-card {
+  min-height: 70px;
+  padding: 11px 12px;
+  border-color: var(--lw-shell-border);
+  background: var(--lw-shell-surface);
+}
+body.lw-shell-assistant .stat-card span { color: var(--lw-shell-muted); }
+body.lw-shell-assistant .stat-card strong { color: var(--lw-shell-accent); font-size: .95rem; }
+body.lw-shell-assistant .stat-card.status-section strong { color: var(--lw-shell-live); }
+
+body.lw-shell-assistant .quick-panel {
+  flex: 0 0 auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  gap: 10px;
+  background: transparent;
+}
+
+body.lw-shell-assistant .quick-panel > .dashboard-card,
+body.lw-shell-assistant #view > .dashboard-card,
+body.lw-shell-assistant #view > .panel {
+  border-color: var(--lw-shell-border);
+  background: var(--lw-shell-surface);
+  box-shadow: none;
+}
+
+body.lw-shell-assistant .quick-tabs-divider { margin: 0; border-color: var(--lw-shell-border); }
+body.lw-shell-assistant .tabs {
+  position: sticky;
+  flex-shrink: 0;
+  top: -12px;
+  z-index: 4;
+  margin: 0;
+  padding: 8px 0;
+  background: var(--lw-bg, #0c1214);
+}
+body.lw-shell-assistant .tabs button { border-color: var(--lw-shell-border); background: var(--lw-shell-surface); }
+body.lw-shell-assistant #view { min-height: min-content; }
+body.lw-shell-assistant .message { position: sticky; bottom: -12px; margin-top: auto; }
+
+/* The reader stays deliberately quiet: book text first, live status second.
+   Full editing remains one click away in Tools and never forks the save. */
+body.lw-shell-assistant.lw-surface-reader .app-pane { padding: 12px; }
+body.lw-shell-assistant.lw-surface-reader .lw-production-context { min-height: 128px; align-items: start; flex-direction: column; }
+body.lw-shell-assistant.lw-surface-reader .status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+body.lw-shell-assistant.lw-surface-reader .status-book { grid-column: 1 / -1; }
+body.lw-shell-assistant.lw-surface-reader .quick-panel,
+body.lw-shell-assistant.lw-surface-reader .quick-tabs-divider,
+body.lw-shell-assistant.lw-surface-reader .tabs,
+body.lw-shell-assistant.lw-surface-reader #view { display: none; }
+body.lw-shell-assistant.lw-surface-reader .message { margin-top: 0; }
+
+/* Tools is a real workspace rather than a hidden reader pane. */
+body.lw-shell-assistant.lw-surface-tools .app-pane { width: min(1460px, 100%); margin: 0 auto; }
+body.lw-shell-assistant.lw-surface-tools .lw-production-context { min-height: 96px; }
+body.lw-shell-assistant.lw-surface-tools .status-grid { grid-template-columns: minmax(220px, 2fr) repeat(4, minmax(90px, .75fr)); }
+body.lw-shell-assistant.lw-surface-tools .quick-panel { grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); }
+body.lw-shell-assistant.lw-surface-tools #view { padding-bottom: 24px; }
 
 body.lw-shell-assistant.lw-surface-reader .workspace {
   grid-template-columns: minmax(0, 1fr) minmax(300px, 26vw);
@@ -232,7 +484,10 @@ body.lw-shell-utility .book-link {
   .lw-global-nav__brand span:last-child,
   .lw-global-nav__campaign { display: none; }
   body.lw-shell-assistant header h1 { display: none; }
+  body.lw-shell-index main { grid-template-columns: 1fr; }
+  body.lw-shell-index .reader-panel { position: static; }
   body.lw-shell-assistant .workspace { height: calc(100vh - 52px); }
+  .lw-production-context { align-items: start; flex-direction: column; padding-right: 42px; }
 }
 
 @media (max-width: 680px) {
@@ -240,5 +495,11 @@ body.lw-shell-utility .book-link {
   body.lw-shell-assistant .workspace { grid-template-columns: minmax(0, 1fr); }
   body.lw-shell-assistant .reader-pane { min-height: 48vh; border-right: 0; border-bottom: 1px solid var(--lw-shell-border); }
   body.lw-shell-assistant.lw-surface-tools .reader-pane { display: none; }
+  body.lw-shell-assistant .reader-pane { padding: 8px; }
+  body.lw-shell-assistant .app-pane { padding: 8px; }
+  .lw-production-context { padding: 12px 36px 12px 12px; }
+  body.lw-shell-assistant .status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  body.lw-shell-assistant .status-book { grid-column: 1 / -1; }
+  body.lw-shell-assistant.lw-surface-tools .status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lw-console-drawer { top: 52px; width: 100vw; height: calc(100vh - 52px); }
 }
-

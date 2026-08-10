@@ -1,5 +1,5 @@
 #define AppName "Lone Wolf Action Assistant"
-#define AppVersion "3.5.3"
+#define AppVersion "3.5.4"
 #define AppPublisher "Lone Wolf Action Assistant"
 #define AppExeName "Lone Wolf Action Assistant.exe"
 #define AppId "{{DE7CF6E7-C1E2-496B-8873-470524AB28CC}"

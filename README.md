@@ -1,4 +1,4 @@
-# Lone Wolf Action Assistant 3.5.3 Internal Testing
+# Lone Wolf Action Assistant 3.5.4 Internal Testing
 
 Lone Wolf Action Assistant is a standalone Windows desktop play aid for the
 *Lone Wolf* gamebooks. It is a digital Action Chart, reader companion, and
@@ -8,7 +8,7 @@ server yourself.
 
 **Internal-testing release:** [download the current Windows installer](https://github.com/o0cynix0o/LoneWolf_ActionAssistant_SAA/releases/latest).
 
-Version: **3.5.3 Internal Testing**
+Version: **3.5.4 Internal Testing**
 
 ## What You Can Play
 
@@ -37,6 +37,10 @@ answer in the reader, where they belong.
 3. Import your own standard Project Aon ZIP files or extracted book folders.
 4. Start Book 1, continue a completed campaign, or choose a supported fresh
    Magnakai, Grand Master, or New Order setup.
+
+The Library opens on the current campaign and marks its active book as
+**Reading**. Use **Start Current Campaign** to return to the saved section;
+Campaign, Reader, Tools, and Console all operate on that same campaign state.
 
 Book files are not included in this repository, installer, or release assets.
 The importer expects a valid folder containing at least `title.htm` and

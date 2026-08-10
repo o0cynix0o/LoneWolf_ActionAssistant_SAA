@@ -1619,6 +1619,7 @@
     <section class="app-pane" aria-label="Lone Wolf web assistant">
       <button class="app-menu-button" type="button" id="appMenuButton" data-app-menu-toggle aria-label="Assistant menu" title="Assistant menu"></button>
       <div class="menu-popover app-menu-popover" id="appMenu" hidden></div>
+      <section class="lw-production-context" id="productionContext" aria-label="Campaign context"></section>
       <div class="status-grid" id="statusGrid"></div>
       <section class="quick-panel" id="quickPanel" aria-label="Quick actions"></section>
       <div class="quick-tabs-divider" id="quickTabsDivider" aria-hidden="true"></div>
@@ -1629,6 +1630,13 @@
       <div class="message" id="message">Ready.</div>
     </section>
   </main>
+  <aside class="lw-console-drawer" id="consoleDrawer" aria-label="Command console" hidden>
+    <div class="lw-console-drawer__bar">
+      <div><span>Command console</span><small>Commands affect this same live campaign.</small></div>
+      <button type="button" data-console-drawer-close aria-label="Close command console" title="Close command console">Close</button>
+    </div>
+    <iframe id="consoleDrawerFrame" title="Lone Wolf command console"></iframe>
+  </aside>
 
   <script>
     if (window.location.protocol === 'file:') {

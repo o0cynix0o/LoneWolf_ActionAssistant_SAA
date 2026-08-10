@@ -72,10 +72,108 @@
     if (title) title.insertAdjacentElement('afterend', status);
   }
 
+  function seriesForBook(book) {
+    if (book <= 5) return 'kai';
+    if (book <= 12) return 'magnakai';
+    if (book <= 20) return 'grand-master';
+    return 'new-order';
+  }
+
+  function prepareLibrary(payload) {
+    if (!indexPage) return;
+    const bookNumber = Number(payload?.state?.Character?.BookNumber);
+    if (!Number.isInteger(bookNumber)) return;
+    const activeSeries = seriesForBook(bookNumber);
+    const board = document.querySelector('.series-board');
+    const panel = document.querySelector('.reader-panel');
+    const card = document.querySelector('[data-book-number="' + bookNumber + '"]');
+    if (!board || !panel) return;
+    const title = card?.querySelector('strong')?.textContent?.trim() || ('Book ' + bookNumber);
+    const section = Number(payload?.state?.CurrentSection);
+    let overview = panel.querySelector('.lw-library-overview');
+    if (!overview) {
+      overview = document.createElement('section');
+      overview.className = 'lw-library-overview';
+      panel.prepend(overview);
+    }
+    overview.innerHTML = '<span class="lw-library-overview__eyebrow">Reading now</span><strong>Book ' + bookNumber + ': ' + title + '</strong><span>Section ' + (Number.isInteger(section) ? section : '1') + ' · saved campaign</span>';
+
+    let filters = board.querySelector('.lw-series-filter');
+    if (!filters) {
+      filters = document.createElement('nav');
+      filters.className = 'lw-series-filter';
+      filters.setAttribute('aria-label', 'Choose a book series');
+      filters.innerHTML = [
+        ['kai', 'Kai'], ['magnakai', 'Magnakai'], ['grand-master', 'Grand Master'], ['new-order', 'New Order']
+      ].map(([id, label]) => '<button type="button" data-series-filter="' + id + '">' + label + '</button>').join('');
+      board.prepend(filters);
+      filters.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-series-filter]');
+        if (!button) return;
+        board.dataset.activeSeries = button.dataset.seriesFilter;
+        board.querySelectorAll('[data-series-filter]').forEach((item) => item.classList.toggle('active', item === button));
+        board.querySelectorAll('.series-section').forEach((sectionNode) => {
+          sectionNode.hidden = sectionNode.id !== button.dataset.seriesFilter + 'SeriesSection';
+        });
+      });
+    }
+    board.dataset.activeSeries = activeSeries;
+    filters.querySelectorAll('[data-series-filter]').forEach((button) => button.classList.toggle('active', button.dataset.seriesFilter === activeSeries));
+    board.querySelectorAll('.series-section').forEach((sectionNode) => {
+      const heading = sectionNode.querySelector('.series-heading')?.id || '';
+      const id = heading.replace('SeriesHeading', '').replace('grandMaster', 'grand-master').replace('newOrder', 'new-order').replace('kai', 'kai').replace('magnakai', 'magnakai');
+      sectionNode.id = id + 'SeriesSection';
+      sectionNode.hidden = id !== activeSeries;
+    });
+  }
+
   function syncCampaignStatus(payload) {
     const label = campaignLabel(payload);
     document.querySelectorAll('[data-lw-campaign-status]').forEach((node) => { node.textContent = label; });
     markCurrentBook(payload);
+    prepareLibrary(payload);
+    renderProductionContext(payload);
+  }
+
+  function renderProductionContext(payload) {
+    if (!assistantPage) return;
+    const target = document.getElementById('productionContext');
+    if (!target) return;
+    const state = payload?.state || {};
+    const character = state.Character || {};
+    const book = Number(character.BookNumber);
+    const section = Number(state.CurrentSection);
+    const title = typeof window.bookByNumber === 'function'
+      ? window.bookByNumber(book)?.title
+      : '';
+    const readableBook = Number.isInteger(book) ? 'Book ' + book + (title ? ' · ' + title : '') : 'Current campaign';
+    const readableSection = Number.isInteger(section) ? 'Section ' + section : 'Preparing campaign';
+    if (surface === 'tools') {
+      target.innerHTML = '<div><span class="lw-production-context__eyebrow">Campaign tools</span><h2>Everything that supports this adventure</h2><p>' + readableBook + ' · ' + readableSection + '</p></div><div class="lw-production-context__actions"><a href="assistant.html?surface=campaign&resume=1">Return to campaign</a><a href="assistant.html?surface=reader&resume=1">Reader view</a></div>';
+      return;
+    }
+    if (surface === 'reader') {
+      target.innerHTML = '<div><span class="lw-production-context__eyebrow">Focused reader</span><h2>' + readableBook + '</h2><p>' + readableSection + ' · your campaign stays live while you read.</p></div><div class="lw-production-context__actions"><a href="assistant.html?surface=campaign&resume=1">Campaign desk</a><a href="assistant.html?surface=tools&resume=1">Tools</a><button type="button" data-console-drawer-open>Console</button></div>';
+      return;
+    }
+    target.innerHTML = '<div><span class="lw-production-context__eyebrow">Current campaign</span><h2>' + readableBook + '</h2><p>' + readableSection + ' · choose the next legal action from the book.</p></div><div class="lw-production-context__actions"><a href="assistant.html?surface=reader&resume=1">Reader view</a><a href="assistant.html?surface=tools&resume=1">Campaign tools</a><button type="button" data-console-drawer-open>Console</button></div>';
+  }
+
+  function bindConsoleDrawer() {
+    if (!assistantPage) return;
+    const drawer = document.getElementById('consoleDrawer');
+    const frame = document.getElementById('consoleDrawerFrame');
+    if (!drawer || !frame) return;
+    document.addEventListener('click', (event) => {
+      if (event.target.closest('[data-console-drawer-open]')) {
+        frame.src = 'assistant.html?surface=tools&console=1&resume=1&embedded=1';
+        drawer.hidden = false;
+      }
+      if (event.target.closest('[data-console-drawer-close]')) {
+        drawer.hidden = true;
+        frame.removeAttribute('src');
+      }
+    });
   }
 
   function boot() {
@@ -83,6 +181,7 @@
     document.body.classList.add('lw-surface-' + surface);
     if (assistantPage) addAssistantNav();
     else addGlobalNav();
+    bindConsoleDrawer();
     fetch('/api/state', { cache: 'no-store' })
       .then((response) => response.ok ? response.json() : null)
       .then((payload) => { if (payload) syncCampaignStatus(payload); })

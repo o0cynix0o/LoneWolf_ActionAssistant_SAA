@@ -1,5 +1,17 @@
 # Changelog
 
+## 3.5.4 - Internal Testing
+
+- Completed the production UI pass begun in 3.5.3: Library Command now
+  foregrounds the saved campaign and its active series, Campaign has a clear
+  current-book context, Reader is a focused companion view, and Tools is a
+  dedicated full-width workspace.
+- Added a compact Campaign/Reader Console drawer backed by the same live save
+  and terminal session model as the full Console route.
+- Kept the original reader, Action Chart, combat, inventory, automation,
+  achievements, saves, game modes, and 29-book campaign rules intact beneath
+  the shared presentation layer.
+
 ## 3.5.3 - Internal Testing
 
 - Unified the Library, Campaign, Reader, Tools, Console, Settings, and book

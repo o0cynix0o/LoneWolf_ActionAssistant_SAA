@@ -1,4 +1,4 @@
-# Lone Wolf Action Assistant 3.5.3 Internal Testing
+# Lone Wolf Action Assistant 3.5.4 Internal Testing
 
 ## Installation
 
