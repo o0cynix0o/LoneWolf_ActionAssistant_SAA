@@ -1,5 +1,17 @@
 # Changelog
 
+## 3.5.3 - Internal Testing
+
+- Unified the Library, Campaign, Reader, Tools, Console, Settings, and book
+  installation surfaces behind one shared navigation and visual foundation.
+- Made **Start Current Campaign** the primary Library action and marked the
+  saved book as **Reading**, including its current section.
+- Added Campaign, Reader, and Tools presentation routes over the same save:
+  Campaign keeps reader and assistant together, Reader prioritizes book text,
+  and Tools expands the assistant workspace.
+- Exposed the embedded CLI as the Console route and guarded Settings rendering
+  until the active campaign state has loaded.
+
 ## 3.5.2 - Internal Testing
 
 - Enforced the published twelve-Special-Item carrying limit from Book 8 onward.

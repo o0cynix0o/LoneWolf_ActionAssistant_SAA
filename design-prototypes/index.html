@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lone Wolf redesign studies</title>
+  <link rel="stylesheet" href="common.css">
+  <style>
+    .intro { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 24px; align-items: end; margin: 34px 0 30px; }
+    .intro p { max-width: 760px; }
+    .current-note { padding: 17px; border-left: 3px solid var(--green); background: var(--surface); }
+    .studies { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px; }
+    .study { display: grid; grid-template-rows: 174px auto; overflow: hidden; }
+    .study-visual { position: relative; overflow: hidden; border-bottom: 1px solid var(--border); }
+    .study-visual img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; opacity: .4; filter: saturate(.7); }
+    .study-label { position: absolute; inset: auto 15px 14px; font-family: var(--serif); color: var(--accent); font-size: 1.5rem; font-weight: 700; }
+    .study .panel-body { display: grid; align-content: space-between; min-height: 220px; }
+    .study ul { margin: 4px 0 18px; padding-left: 19px; color: var(--muted); line-height: 1.55; font-size: .9rem; }
+    @media (max-width: 900px) { .studies, .intro { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="index.html"><span class="brand-mark"></span><span>Lone Wolf</span></a>
+      <nav class="main-nav" aria-label="Prototype navigation"><a aria-current="page" href="index.html">Design studies</a><a href="campaign-desk.html">Campaign Desk</a><a href="reader-first.html">Reader First</a><a href="library-command.html">Library Command</a><a href="tools.html">Tools</a></nav>
+      <div class="campaign-chip"><span class="live-dot"></span> Book 6, section 219</div>
+    </header>
+    <main class="page">
+      <section class="intro">
+        <div>
+          <p class="eyebrow">UI redesign studies</p>
+          <h1>One campaign. Three useful shapes.</h1>
+          <p class="muted">Each direction uses the same current campaign: Book 6, <em>The Kingdoms of Terror</em>, at section 219. The goal is to choose the right structure before changing the live application.</p>
+        </div>
+        <aside class="current-note"><span class="status reading">Reading</span><h3 style="margin-top:9px">The campaign is the anchor.</h3><p class="muted" style="margin-bottom:0">The primary action in every study is <strong style="color:var(--accent)">Start Current Campaign</strong>, not an ambiguous reader or resume command.</p></aside>
+      </section>
+      <section class="studies">
+        <article class="study panel"><div class="study-visual"><img src="../assets/images/book-covers/lw06.jpg" alt="The Kingdoms of Terror cover"><div class="study-label">A. Campaign Desk</div></div><div class="panel-body"><div><span class="status reading">Reading</span><p style="margin-top:12px">A practical desktop command centre. It keeps campaign state, active tools, and a compact series path within reach.</p><ul><li>Strong all-purpose candidate</li><li>Dense without looking terminal-like</li><li>Best for active play and testing</li></ul></div><a class="button primary" href="campaign-desk.html">Open Campaign Desk</a></div></article>
+        <article class="study panel"><div class="study-visual"><img src="../assets/images/book-covers/lw06.jpg" alt="The Kingdoms of Terror cover"><div class="study-label">B. Reader First</div></div><div class="panel-body"><div><span class="status ready">Reading-focused</span><p style="margin-top:12px">The book is the main event. Decisions and story remain calm and legible while the assistant stays nearby.</p><ul><li>Maximum reading space</li><li>Focused choice handling</li><li>Tools never crowd the page</li></ul></div><a class="button primary" href="reader-first.html">Open Reader First</a></div></article>
+        <article class="study panel"><div class="study-visual"><img src="../assets/images/book-covers/lw06.jpg" alt="The Kingdoms of Terror cover"><div class="study-label">C. Library Command</div></div><div class="panel-body"><div><span class="status ready">Collection-focused</span><p style="margin-top:12px">A campaign library that makes all 29 books comprehensible while preserving one obvious place to continue.</p><ul><li>Best series navigation</li><li>Clear book status and readiness</li><li>Good home for importing and testing</li></ul></div><a class="button primary" href="library-command.html">Open Library Command</a></div></article>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

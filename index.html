@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lone Wolf Library</title>
   <script src="assets/js/lw-appearance-early.js"></script>
+  <link rel="stylesheet" href="assets/css/lw-shell.css">
+  <script defer src="assets/js/lw-shell.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     body {
@@ -531,19 +533,19 @@
   </header>
 
   <main>
-    <aside class="reader-panel" aria-label="Reader tools">
-      <h2>Reader</h2>
+    <aside class="reader-panel" aria-label="Current campaign">
+      <h2>Current Campaign</h2>
       <div class="reader-body">
-        <p class="muted">Read the book on the left while using the web assistant on the right.</p>
+        <p class="muted" id="currentCampaignSummary">Loading your saved campaign...</p>
         <div class="reader-actions">
-          <a href="assistant.html?campaign=new&amp;book=1" title="Create a new Book 1 character before beginning Flight from the Dark.">Start New Campaign</a>
-          <a href="assistant.html">Open Reader</a>
-          <button id="currentBtn" type="button">Open Current Section</button>
-          <a href="library.html">Simple Book List</a>
+          <button id="currentBtn" type="button">Start Current Campaign</button>
+          <a href="assistant.html?surface=reader&amp;resume=1">Open Reader View</a>
+          <a href="assistant.html?campaign=new&amp;book=1">Start New Campaign</a>
+          <a href="library.html">Browse All Books</a>
           <a href="install-books.html">Install Project Aon Books</a>
           <button id="settingsBtn" type="button">Settings</button>
         </div>
-        <p class="muted">Book files are not included in the release package. Download the standard Lone Wolf HTML ZIPs from Project Aon and extract them into <code>books\lw</code>.</p>
+        <p class="muted">Campaign, Reader, Tools, and Console all continue the same saved adventure.</p>
       </div>
     </aside>
     <section class="series-board" aria-label="Lone Wolf books">
@@ -1001,7 +1003,7 @@
         : '';
       const currentSectionButton = book.enabled === false
         ? ''
-        : '<button type="button" data-open-current-section>Resume Current Campaign</button>';
+        : '<button type="button" data-open-current-section>Start Current Campaign</button>';
       const read = isBookRead(book.number);
       bookDetailsContent.innerHTML = `
         <aside class="book-dialog-cover">
@@ -1077,19 +1079,27 @@
     async function openCurrentSection() {
       const position = await getCurrentPosition();
       if (!position) {
-        window.location.href = 'assistant.html?resume=1';
+        window.location.href = 'assistant.html?surface=campaign&resume=1';
         return;
       }
       const book = books.find((item) => item.number === Number(position.book));
       const section = Number(position.section);
       if (!book || section < 1 || section > book.sections) {
-        window.location.href = 'assistant.html?resume=1';
+        window.location.href = 'assistant.html?surface=campaign&resume=1';
         return;
       }
-      window.location.href = 'assistant.html?resume=1';
+      window.location.href = 'assistant.html?surface=campaign&resume=1';
     }
 
     document.getElementById('currentBtn').addEventListener('click', openCurrentSection);
+
+    getCurrentPosition().then((position) => {
+      const summary = document.getElementById('currentCampaignSummary');
+      if (!summary || !position) return;
+      const book = books.find((item) => item.number === Number(position.book));
+      if (!book) return;
+      summary.textContent = `Reading Book ${book.number}: ${book.title}, section ${position.section}.`;
+    });
 
     bookDetailsModal.addEventListener('click', (event) => {
       if (event.target.closest('[data-open-current-section]')) {

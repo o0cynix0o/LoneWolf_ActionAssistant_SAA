@@ -1,4 +1,4 @@
-# Lone Wolf Action Assistant 3.5.2 Internal Testing
+# Lone Wolf Action Assistant 3.5.3 Internal Testing
 
 ## Installation
 
@@ -64,9 +64,26 @@ does not silently discard an item for you.
 
 Use **Open Managed Books Folder** when you need direct access to the selected storage location.
 
-## Arranging assistant cards
+## Navigation and play layouts
 
-The Assistant page keeps cards inside five fixed sections:
+The top navigation always works with the same active save and current section:
+
+- **Library** is the campaign home. The current book receives the **Reading**
+  label, and **Start Current Campaign** opens its saved section.
+- **Campaign** is the normal play layout. It places the Project Aon reader and
+  the assistant beside each other.
+- **Reader** is an alternate, reading-first layout for players who prefer a
+  wider book pane. It does not create another campaign or save.
+- **Tools** expands the Action Chart, inventory, combat, achievements, saves,
+  notes, game modes, and settings into one workspace.
+- **Console** opens the embedded terminal against the same campaign state.
+
+Switching layouts never changes the current book, section, character, or
+campaign mode. It only changes how the same game is presented.
+
+## Arranging Tools cards
+
+The Tools workspace keeps cards inside five fixed sections:
 
 - The Book, Section, END, Gold, and CS summary stays fixed.
 - Quick Actions cards can be reordered, resized, collapsed, and closed inside the Quick Actions section.

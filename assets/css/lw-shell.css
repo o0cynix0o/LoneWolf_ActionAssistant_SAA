@@ -1,0 +1,244 @@
+:root {
+  --lw-shell-ink: var(--lw-text, #edf5f2);
+  --lw-shell-muted: var(--lw-muted-2, #9aafb0);
+  --lw-shell-surface: var(--lw-panel, #131e21);
+  --lw-shell-raised: var(--lw-panel-2, #18272b);
+  --lw-shell-border: var(--lw-border, #36545a);
+  --lw-shell-accent: var(--lw-accent, #bfeeff);
+  --lw-shell-accent-2: var(--lw-accent-2, #78abb3);
+  --lw-shell-live: #87d6ad;
+}
+
+.lw-global-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px clamp(16px, 3vw, 48px);
+  border-bottom: 1px solid var(--lw-shell-border);
+  background: color-mix(in srgb, var(--lw-bg, #0c1214) 94%, transparent);
+  backdrop-filter: blur(14px);
+  font-family: Arial, sans-serif;
+}
+
+.lw-global-nav__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 6px;
+  color: var(--lw-shell-accent);
+  font: 700 1.1rem Georgia, "Times New Roman", serif;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.lw-global-nav__mark {
+  width: 25px;
+  height: 32px;
+  background: currentColor;
+  -webkit-mask: url('../images/series-sigil-wolf-mask.png') center / contain no-repeat;
+  mask: url('../images/series-sigil-wolf-mask.png') center / contain no-repeat;
+}
+
+.lw-global-nav__links {
+  display: flex;
+  gap: 3px;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.lw-global-nav__links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 7px 10px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: var(--lw-shell-muted);
+  font-size: .84rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.lw-global-nav__links a:hover,
+.lw-global-nav__links a[aria-current="page"] {
+  border-color: var(--lw-shell-border);
+  background: var(--lw-shell-raised);
+  color: var(--lw-shell-accent);
+}
+
+.lw-global-nav__campaign {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-left: auto;
+  padding: 6px 9px;
+  border: 1px solid var(--lw-shell-border);
+  border-radius: 999px;
+  color: var(--lw-shell-muted);
+  font-size: .76rem;
+  white-space: nowrap;
+}
+
+.lw-global-nav__campaign::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--lw-shell-live);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--lw-shell-live) 14%, transparent);
+}
+
+body.lw-shell-index .reader-panel {
+  border-color: var(--lw-shell-border);
+  background: var(--lw-shell-surface);
+}
+
+body.lw-shell-index .reader-panel h2,
+body.lw-shell-index .series-heading {
+  color: var(--lw-shell-accent);
+}
+
+body.lw-shell-index .reader-actions a:first-child,
+body.lw-shell-index .reader-actions [data-start-current-campaign] {
+  border-color: var(--lw-shell-accent);
+  background: var(--lw-shell-accent);
+  color: #102025;
+}
+
+body.lw-shell-index .book.lw-current-book {
+  border-color: #44886b;
+  background: color-mix(in srgb, #44886b 13%, var(--lw-shell-surface));
+  box-shadow: inset 3px 0 0 var(--lw-shell-live);
+}
+
+.lw-current-book-status {
+  display: inline-flex;
+  width: max-content;
+  margin-top: 6px;
+  padding: 3px 7px;
+  border: 1px solid #44886b;
+  border-radius: 999px;
+  color: var(--lw-shell-live);
+  font: 700 .7rem Arial, sans-serif;
+}
+
+body.lw-shell-assistant header {
+  height: auto;
+  min-height: 56px;
+  gap: .6rem;
+  background: var(--lw-shell-surface);
+  border-color: var(--lw-shell-border);
+}
+
+body.lw-shell-assistant header > a:first-child {
+  display: none;
+}
+
+body.lw-shell-assistant header h1 {
+  color: var(--lw-shell-accent);
+  white-space: nowrap;
+}
+
+body.lw-shell-assistant .lw-inline-nav {
+  display: flex;
+  gap: 3px;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+body.lw-shell-assistant .lw-inline-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 31px;
+  padding: 6px 9px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: var(--lw-shell-muted);
+  font-size: .78rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+body.lw-shell-assistant .lw-inline-nav a:hover,
+body.lw-shell-assistant .lw-inline-nav a[aria-current="page"] {
+  border-color: var(--lw-shell-border);
+  background: var(--lw-shell-raised);
+  color: var(--lw-shell-accent);
+}
+
+body.lw-shell-assistant .workspace {
+  height: calc(100vh - 56px);
+}
+
+body.lw-shell-assistant.lw-surface-reader .workspace {
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 26vw);
+}
+
+body.lw-shell-assistant.lw-surface-reader .reader-pane {
+  border-color: var(--lw-shell-border);
+}
+
+body.lw-shell-assistant.lw-surface-tools .workspace {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+body.lw-shell-assistant.lw-surface-tools .reader-pane {
+  display: none;
+}
+
+body.lw-shell-assistant .status-grid,
+body.lw-shell-assistant .stat-card,
+body.lw-shell-assistant .panel,
+body.lw-shell-assistant .item-row {
+  border-color: var(--lw-shell-border);
+  background: var(--lw-shell-surface);
+}
+
+body.lw-shell-assistant button {
+  border-color: var(--lw-shell-accent-2);
+  color: var(--lw-shell-accent);
+  background: var(--lw-shell-raised);
+}
+
+body.lw-shell-assistant button:hover {
+  border-color: var(--lw-shell-accent);
+  background: color-mix(in srgb, var(--lw-shell-accent-2) 16%, var(--lw-shell-raised));
+}
+
+body.lw-shell-assistant button.active {
+  border-color: var(--lw-shell-accent);
+  background: var(--lw-shell-accent);
+  color: #102025;
+}
+
+body.lw-shell-utility main {
+  padding-top: 28px;
+}
+
+body.lw-shell-utility .panel,
+body.lw-shell-utility .book-link {
+  border-color: var(--lw-shell-border);
+  background: var(--lw-shell-surface);
+}
+
+@media (max-width: 860px) {
+  .lw-global-nav { gap: 8px; padding-inline: 12px; }
+  .lw-global-nav__brand span:last-child,
+  .lw-global-nav__campaign { display: none; }
+  body.lw-shell-assistant header h1 { display: none; }
+  body.lw-shell-assistant .workspace { height: calc(100vh - 52px); }
+}
+
+@media (max-width: 680px) {
+  body.lw-shell-assistant.lw-surface-reader .workspace,
+  body.lw-shell-assistant .workspace { grid-template-columns: minmax(0, 1fr); }
+  body.lw-shell-assistant .reader-pane { min-height: 48vh; border-right: 0; border-bottom: 1px solid var(--lw-shell-border); }
+  body.lw-shell-assistant.lw-surface-tools .reader-pane { display: none; }
+}
+

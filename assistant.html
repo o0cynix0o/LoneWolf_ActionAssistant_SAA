@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lone Wolf - Web Assistant</title>
   <script src="assets/js/lw-appearance-early.js"></script>
+  <link rel="stylesheet" href="assets/css/lw-shell.css">
+  <script defer src="assets/js/lw-shell.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; }
@@ -1808,7 +1810,8 @@
     const settingsApi = window.LoneWolfReduxSettings;
     let assistantSettings = settingsApi.apply(settingsApi.readLocal());
     let app = null;
-    let activeView = 'sheet';
+    const requestedToolView = new URLSearchParams(window.location.search).get('tool');
+    let activeView = ['sheet', 'inventory', 'disciplines', 'sections', 'combat', 'achievements', 'saves', 'notes', 'settings'].includes(requestedToolView) ? requestedToolView : 'sheet';
     let activeBook = 1;
     let activeSection = null;
     let book1Creation = null;
@@ -1828,7 +1831,7 @@
     let campaignEntryFocusPending = campaignStartRequested;
     const playModeKey = 'lonewolf_redux.mode';
     const playModes = ['auto', 'manual', 'cli'];
-    let playMode = normalizePlayMode(localStorage.getItem(playModeKey));
+    let playMode = pageParams.get('console') === '1' ? 'cli' : normalizePlayMode(localStorage.getItem(playModeKey));
     let cliTerminal = null;
     let cliFitAddon = null;
     let cliSocket = null;
@@ -7841,7 +7844,7 @@
       assistantSettings = settingsApi.apply(settings);
       settingsApi.injectReaderTheme(bookFrame, assistantSettings);
       if (cliTerminal) cliTerminal.options.theme = cliTheme();
-      if (activeView === 'settings') render();
+      if (app && activeView === 'settings') render();
     }
 
     window.addEventListener('lonewolf-settings-changed', (event) => {

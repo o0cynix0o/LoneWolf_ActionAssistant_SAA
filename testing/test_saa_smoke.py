@@ -3538,7 +3538,7 @@ class CampaignEntryPointTests(unittest.TestCase):
     def test_home_current_section_uses_live_state_and_only_resumes(self) -> None:
         index_html = self.source_text("index.html")
         self.assertIn("fetch('/api/state?ts=' + Date.now()", index_html)
-        self.assertIn("window.location.href = 'assistant.html?resume=1';", index_html)
+        self.assertIn("window.location.href = 'assistant.html?surface=campaign&resume=1';", index_html)
         self.assertNotIn('assistant.html?book=${book.number}&section=${section}', index_html)
 
     def test_assistant_honors_campaign_start_without_mutating_until_begin(self) -> None:
@@ -3926,7 +3926,7 @@ class CardLayoutInteractionTests(unittest.TestCase):
                     return cls.assistant_html[match.start():index + 1]
         raise AssertionError(f"JavaScript function {name!r} has no closing brace")
 
-    def test_release_metadata_is_3_5_2_internal_testing(self) -> None:
+    def test_release_metadata_is_3_5_3_internal_testing(self) -> None:
         readme = (self.root / "README.md").read_text(encoding="utf-8")
         building = (self.root / "docs" / "BUILDING.md").read_text(encoding="utf-8")
         user_guide = (self.root / "docs" / "USER_GUIDE.md").read_text(encoding="utf-8")
@@ -3936,16 +3936,16 @@ class CardLayoutInteractionTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         version_info = (self.root / "version_info.txt").read_text(encoding="utf-8")
 
-        self.assertIn("# Lone Wolf Action Assistant 3.5.2 Internal Testing", readme)
-        self.assertIn("Version: **3.5.2 Internal Testing**", readme)
-        self.assertIn("# Building Lone Wolf Action Assistant 3.5.2 Internal Testing", building)
-        self.assertIn("# Lone Wolf Action Assistant 3.5.2 Internal Testing", user_guide)
-        self.assertIn("## 3.5.2 - Internal Testing", changelog)
-        self.assertIn('#define AppVersion "3.5.2"', installer)
-        self.assertIn("filevers=(3, 5, 2, 0)", version_info)
-        self.assertIn("prodvers=(3, 5, 2, 0)", version_info)
-        self.assertIn("StringStruct(u'FileVersion', u'3.5.2')", version_info)
-        self.assertIn("StringStruct(u'ProductVersion', u'3.5.2')", version_info)
+        self.assertIn("# Lone Wolf Action Assistant 3.5.3 Internal Testing", readme)
+        self.assertIn("Version: **3.5.3 Internal Testing**", readme)
+        self.assertIn("# Building Lone Wolf Action Assistant 3.5.3 Internal Testing", building)
+        self.assertIn("# Lone Wolf Action Assistant 3.5.3 Internal Testing", user_guide)
+        self.assertIn("## 3.5.3 - Internal Testing", changelog)
+        self.assertIn('#define AppVersion "3.5.3"', installer)
+        self.assertIn("filevers=(3, 5, 3, 0)", version_info)
+        self.assertIn("prodvers=(3, 5, 3, 0)", version_info)
+        self.assertIn("StringStruct(u'FileVersion', u'3.5.3')", version_info)
+        self.assertIn("StringStruct(u'ProductVersion', u'3.5.3')", version_info)
 
     def test_movable_cards_get_a_dedicated_drag_handle(self) -> None:
         self.assertIn("data-card-drag-handle", self.assistant_html)
