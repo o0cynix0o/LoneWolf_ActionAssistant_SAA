@@ -7,6 +7,7 @@
   <script src="assets/js/lw-appearance-early.js"></script>
   <link rel="stylesheet" href="assets/css/lw-shell.css">
   <link rel="stylesheet" href="assets/css/lw-ui-foundation.css">
+  <link rel="stylesheet" href="assets/css/lw-campaign.css">
   <script defer src="assets/js/lw-shell.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css">
   <style>
@@ -1570,7 +1571,8 @@
     <div class="status-line" id="serverStatus">Loading...</div>
   </header>
 
-  <main class="workspace">
+  <main class="workspace lw-campaign-desk">
+    <aside class="campaign-rail" id="campaignRail" aria-label="Current campaign"></aside>
     <section class="reader-pane" aria-label="Book reader">
       <div class="toolbar">
         <div class="toolbar-book-series" data-reader-series="kai" aria-label="Kai series books">
@@ -3063,6 +3065,7 @@
       cancelCardDrag({ restore: true, announce: false });
       setModeIndicator();
       renderStatus();
+      renderCampaignRail();
       if (isCliMode() && !campaignStartRequested) {
         renderCliPanel();
         return;
@@ -3118,6 +3121,53 @@
         ['Gold', currentInventory().GoldCrowns ?? 0, 'status-gold'],
         ['CS', c.CombatSkillCurrent, 'status-cs']
       ].map(([label, value, className]) => `<div class="stat-card ${className}"><span>${label}</span><strong>${escapeHtml(value)}</strong></div>`).join('');
+    }
+
+    function campaignSeriesForBook(bookNumber) {
+      const number = Number(bookNumber);
+      if (number <= 5) return { label: 'Kai Series', start: 1, end: 5 };
+      if (number <= 12) return { label: 'Magnakai Series', start: 6, end: 12 };
+      if (number <= 20) return { label: 'Grand Master Series', start: 13, end: 20 };
+      return { label: 'New Order Series', start: 21, end: 29 };
+    }
+
+    function campaignCoverPath(bookNumber) {
+      return `assets/images/book-covers/lw${String(Number(bookNumber)).padStart(2, '0')}.jpg`;
+    }
+
+    function renderCampaignRail() {
+      const rail = document.getElementById('campaignRail');
+      if (!rail || !app) return;
+      const character = currentCharacter();
+      const book = bookByNumber(character.BookNumber);
+      const series = campaignSeriesForBook(character.BookNumber);
+      const currentSection = Number(app.state.CurrentSection);
+      const seriesBooks = books.filter((entry) => entry.number >= series.start && entry.number <= series.end);
+      rail.innerHTML = `
+        <section class="lw-ui-panel campaign-rail__summary">
+          <div class="campaign-rail__cover"><img src="${campaignCoverPath(book.number)}" alt="Cover art for ${escapeHtml(book.title)}" onerror="this.remove()"></div>
+          <div class="campaign-rail__content">
+            <span class="lw-ui-status lw-ui-status--reading">Reading</span>
+            <h2>${escapeHtml(book.title)}</h2>
+            <p>${escapeHtml(series.label)} · Book ${escapeHtml(book.number)} · Section ${escapeHtml(currentSection)}</p>
+            <button class="lw-ui-button lw-ui-button--primary" type="button" data-rail-current>Return to current section</button>
+          </div>
+        </section>
+        <p class="campaign-rail__label">${escapeHtml(series.label)}</p>
+        <nav class="campaign-rail__book-list" aria-label="${escapeHtml(series.label)} books">
+          ${seriesBooks.map((entry) => {
+            const current = entry.number === book.number;
+            return `<button class="campaign-rail__book${current ? ' is-current' : ''}" type="button" data-rail-book="${escapeHtml(entry.number)}" title="${current ? 'Return to the saved book and section' : 'Browse this book without changing the saved campaign'}">
+              <img src="${campaignCoverPath(entry.number)}" alt="">
+              <span><strong>${escapeHtml(entry.number)}. ${escapeHtml(entry.title)}</strong><span>${current ? `Section ${escapeHtml(currentSection)} · Reading` : 'Browse book'}</span></span>
+            </button>`;
+          }).join('')}
+        </nav>
+        <div class="campaign-rail__links">
+          <a href="index.html">Open Library</a>
+          <a href="assistant.html?surface=tools&resume=1">Open campaign tools</a>
+        </div>
+      `;
     }
 
     function renderCliPanel() {
@@ -7839,6 +7889,15 @@
 
     document.querySelectorAll('.book-button').forEach((button) => {
       button.addEventListener('click', () => loadBook(Number(button.dataset.book), null));
+    });
+    document.getElementById('campaignRail').addEventListener('click', (event) => {
+      const current = event.target.closest('[data-rail-current]');
+      if (current) {
+        syncBookToState();
+        return;
+      }
+      const bookButton = event.target.closest('[data-rail-book]');
+      if (bookButton) loadBook(Number(bookButton.dataset.railBook), null);
     });
     document.getElementById('currentBtn').addEventListener('click', () => {
       if (browseMode) {

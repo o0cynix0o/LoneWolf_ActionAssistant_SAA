@@ -4202,6 +4202,22 @@ class LibraryProductionTests(unittest.TestCase):
         self.assertTrue((root / "assets" / "css" / "lw-library.css").is_file())
 
 
+class CampaignDeskProductionTests(unittest.TestCase):
+    def test_campaign_desk_keeps_reader_and_live_assistant_together(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
+
+        self.assertIn('href="assets/css/lw-campaign.css"', assistant_html)
+        self.assertIn('class="workspace lw-campaign-desk"', assistant_html)
+        self.assertIn('id="campaignRail"', assistant_html)
+        self.assertIn("function renderCampaignRail()", assistant_html)
+        self.assertIn("function campaignSeriesForBook(bookNumber)", assistant_html)
+        self.assertIn("data-rail-current", assistant_html)
+        self.assertIn("data-rail-book", assistant_html)
+        self.assertIn("renderCampaignRail();", assistant_html)
+        self.assertTrue((root / "assets" / "css" / "lw-campaign.css").is_file())
+
+
 class DistributionNoticeTests(unittest.TestCase):
     def test_notice_matches_and_ships_with_the_authorized_release(self) -> None:
         root = Path(saa_main.__file__).resolve().parent

@@ -208,7 +208,9 @@ body.lw-shell-assistant .lw-inline-nav {
   gap: 3px;
   min-width: 0;
   overflow-x: auto;
+  scrollbar-width: none;
 }
+body.lw-shell-assistant .lw-inline-nav::-webkit-scrollbar { display: none; }
 
 body.lw-shell-assistant .lw-inline-nav a {
   display: inline-flex;
