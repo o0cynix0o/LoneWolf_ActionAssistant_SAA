@@ -3,6 +3,9 @@
 These are isolated, static design studies. They intentionally do not call the
 application API or mutate campaign state.
 
+For the implementation-level redesign contract, see
+[Unified UI Implementation Guide](../docs/UNIFIED_UI_IMPLEMENTATION_GUIDE.md).
+
 - `index.html` compares the three directions.
 - `campaign-desk.html` is the compact, tool-forward direction.
 - `reader-first.html` gives the book and current choice centre stage.
