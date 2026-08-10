@@ -7,6 +7,7 @@
   <script src="assets/js/lw-appearance-early.js"></script>
   <link rel="stylesheet" href="assets/css/lw-shell.css">
   <link rel="stylesheet" href="assets/css/lw-ui-foundation.css">
+  <link rel="stylesheet" href="assets/css/lw-library.css">
   <script defer src="assets/js/lw-shell.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; }
@@ -510,61 +511,61 @@
     }
   </style>
 </head>
-<body>
-  <header>
-    <div class="hero-inner">
-      <div class="saa-title-lockup">
-        <h1><span>Lone Wolf</span><span>Action Assistant</span></h1>
-        <p class="subtitle">Stand Alone Application</p>
-        <div class="series-divider" id="seriesDivider" data-series="kai" role="img" aria-label="Kai series emblem">
-          <span class="series-emblem" aria-hidden="true"></span>
-        </div>
-      </div>
-      <div class="series-mark" aria-label="Lone Wolf series mark">
-        <img
-          src="assets/images/title-banners/title1.png"
-          alt="Lone Wolf"
-          data-lw-title-banner
-          onerror="this.closest('.series-mark').classList.add('logo-missing')"
-        >
-        <span class="series-mark-text">Lone Wolf</span>
-      </div>
-      <script>window.LoneWolfReduxEarlyAppearance?.applyDocument();</script>
+<body class="lw-library-page">
+  <header class="library-hero">
+    <div class="library-hero__inner">
+      <p class="library-hero__eyebrow">Lone Wolf Action Assistant</p>
+      <h1>Your Lone Wolf Library</h1>
+      <p>Resume the story already in progress, choose another supported book, or manage your local Project Aon collection.</p>
     </div>
   </header>
 
-  <main>
-    <aside class="reader-panel" aria-label="Current campaign">
-      <h2>Current Campaign</h2>
-      <div class="reader-body">
-        <p class="muted" id="currentCampaignSummary">Loading your saved campaign...</p>
-        <div class="reader-actions">
-          <button id="currentBtn" type="button">Start Current Campaign</button>
-          <a href="assistant.html?surface=reader&amp;resume=1">Open Reader View</a>
-          <a href="assistant.html?campaign=new&amp;book=1">Start New Campaign</a>
-          <a href="library.html">Browse All Books</a>
-          <a href="install-books.html">Install Project Aon Books</a>
-          <button id="settingsBtn" type="button">Settings</button>
+  <main class="lw-ui-page library-layout">
+    <aside class="lw-ui-panel library-current" id="libraryCurrentCard" aria-label="Current campaign">
+      <div class="lw-ui-panel__title"><span class="lw-ui-eyebrow">Current campaign</span></div>
+      <div class="library-current__body">
+        <div class="library-current__state">
+          <span class="lw-ui-status lw-ui-status--reading" id="currentCampaignStatus">Reading</span>
+          <h2 id="currentCampaignTitle">Loading current campaign...</h2>
+          <p id="currentCampaignSummary">Checking your saved campaign.</p>
+          <div class="library-current__meta"><span id="currentCampaignMeta">Saved campaign</span></div>
         </div>
-        <p class="muted">Campaign, Reader, Tools, and Console all continue the same saved adventure.</p>
+        <div class="library-current__actions">
+          <button class="lw-ui-button lw-ui-button--primary" id="currentBtn" type="button">Start Current Campaign</button>
+          <a class="lw-ui-button" href="assistant.html?surface=reader&amp;resume=1">Open Reader View</a>
+          <a class="lw-ui-button" href="assistant.html?campaign=new&amp;book=1">Start New Campaign</a>
+          <button class="lw-ui-button" id="settingsBtn" type="button">Settings</button>
+        </div>
+        <p class="library-current__note">Campaign, Reader, Tools, and Console continue the same saved adventure.</p>
       </div>
     </aside>
-    <section class="series-board" aria-label="Lone Wolf books">
-      <section class="series-section" aria-labelledby="kaiSeriesHeading">
-        <h2 class="series-heading" id="kaiSeriesHeading">Kai Series</h2>
-        <div class="books" id="kaiBooks"></div>
+
+    <section class="library-catalog" aria-label="Lone Wolf books">
+      <nav class="library-series-tabs" id="seriesTabs" aria-label="Book series">
+        <button type="button" data-library-series="kai" aria-selected="false">Kai</button>
+        <button type="button" data-library-series="magnakai" aria-selected="false">Magnakai</button>
+        <button type="button" data-library-series="grand-master" aria-selected="false">Grand Master</button>
+        <button type="button" data-library-series="new-order" aria-selected="false">New Order</button>
+      </nav>
+      <section class="lw-ui-panel library-series-section" data-library-series-panel="kai" aria-labelledby="kaiSeriesHeading">
+        <div class="library-series-heading"><h2 id="kaiSeriesHeading">Kai Series</h2><span>Books 1-5</span></div>
+        <div class="library-books" id="kaiBooks"></div>
       </section>
-      <section class="series-section" aria-labelledby="magnakaiSeriesHeading">
-        <h2 class="series-heading" id="magnakaiSeriesHeading">Magnakai Series</h2>
-        <div class="books" id="magnakaiBooks"></div>
+      <section class="lw-ui-panel library-series-section" data-library-series-panel="magnakai" aria-labelledby="magnakaiSeriesHeading" hidden>
+        <div class="library-series-heading"><h2 id="magnakaiSeriesHeading">Magnakai Series</h2><span>Books 6-12</span></div>
+        <div class="library-books" id="magnakaiBooks"></div>
       </section>
-      <section class="series-section" aria-labelledby="grandMasterSeriesHeading">
-        <h2 class="series-heading" id="grandMasterSeriesHeading">Grand Master Series</h2>
-        <div class="books" id="grandMasterBooks"></div>
+      <section class="lw-ui-panel library-series-section" data-library-series-panel="grand-master" aria-labelledby="grandMasterSeriesHeading" hidden>
+        <div class="library-series-heading"><h2 id="grandMasterSeriesHeading">Grand Master Series</h2><span>Books 13-20</span></div>
+        <div class="library-books" id="grandMasterBooks"></div>
       </section>
-      <section class="series-section" aria-labelledby="newOrderSeriesHeading">
-        <h2 class="series-heading" id="newOrderSeriesHeading">New Order Series</h2>
-        <div class="books" id="newOrderBooks"></div>
+      <section class="lw-ui-panel library-series-section" data-library-series-panel="new-order" aria-labelledby="newOrderSeriesHeading" hidden>
+        <div class="library-series-heading"><h2 id="newOrderSeriesHeading">New Order Series</h2><span>Books 21-29</span></div>
+        <div class="library-books" id="newOrderBooks"></div>
+      </section>
+      <section class="lw-ui-panel library-manage" aria-label="Manage local books">
+        <div><h2>Manage your books</h2><p>Import, replace, or inspect your locally managed Project Aon library.</p></div>
+        <a class="lw-ui-button" href="install-books.html">Install or manage books</a>
       </section>
     </section>
   </main>
@@ -912,27 +913,26 @@
 
     function renderBookCard(book) {
       const card = document.createElement('article');
-      card.className = `book${book.enabled === false ? ' disabled' : ''}`;
+      card.className = `library-book${book.enabled === false ? ' disabled' : ''}`;
       card.dataset.bookNumber = book.number;
       if (book.enabled === false) {
         card.setAttribute('aria-disabled', 'true');
       }
       card.innerHTML = `
-        <button type="button" class="book-details-button" data-book-details="${book.number}" aria-label="Details for ${escapeHtml(book.title)}" title="Book details"></button>
-        <small>Book ${book.number}</small>
+        <span class="library-book__number">Book ${book.number}</span>
         <strong>${book.title}</strong>
-        <button type="button" class="cover-button" data-book-details="${book.number}" aria-label="Details for ${escapeHtml(book.title)}">
-          <span class="cover-frame ${book.cover ? '' : 'cover-missing'}" data-fallback="Book ${book.number}: ${book.title}">
-            <span class="book-read-badge ${isBookRead(book.number) ? 'is-read' : ''}" data-book-read-badge="${book.number}" aria-hidden="${isBookRead(book.number) ? 'false' : 'true'}">Read</span>
-            ${book.cover ? `<img
-                src="${book.cover}"
-                alt="Cover art for ${book.title}"
-                loading="lazy"
-                onerror="this.closest('.cover-frame').classList.add('cover-missing'); this.remove();"
-              >` : ''}
-          </span>
+        <button type="button" class="library-book__cover ${book.cover ? '' : 'cover-missing'}" data-book-details="${book.number}" aria-label="Details for ${escapeHtml(book.title)}">
+          ${book.cover ? `<img
+              src="${book.cover}"
+              alt="Cover art for ${book.title}"
+              loading="lazy"
+              onerror="this.closest('.library-book__cover').classList.add('cover-missing'); this.remove();"
+            >` : `Book ${book.number}: ${escapeHtml(book.title)}`}
         </button>
-        ${book.footer ? `<footer class="book-footer ${book.footerSpacer ? 'spacer' : ''}">${book.footer}</footer>` : ''}
+        <footer class="library-book__footer">
+          <small data-book-read-status="${book.number}">${isBookRead(book.number) ? 'Read' : 'Unread'}</small>
+          <button type="button" class="library-book__details" data-book-details="${book.number}" aria-label="Details for ${escapeHtml(book.title)}" title="Book details">i</button>
+        </footer>
       `;
       return card;
     }
@@ -968,16 +968,6 @@
         book.number <= 20 ? 'grandMaster' : 'newOrder'
       );
       return { ...fallback, ...detail, series };
-    }
-
-    const seriesDivider = document.getElementById('seriesDivider');
-
-    function setSeriesEmblem(bookNumber) {
-      const book = bookByNumber.get(Number(bookNumber));
-      if (!book || !seriesDivider) return;
-      const series = detailForBook(book).series;
-      seriesDivider.dataset.series = series;
-      seriesDivider.setAttribute('aria-label', `${seriesNames[series] || 'Lone Wolf'} emblem`);
     }
 
     function renderDetailItem(label, value) {
@@ -1072,9 +1062,37 @@
       }
     }
 
-    async function refreshSeriesEmblem() {
-      const position = await getCurrentPosition();
-      if (position && position.book) setSeriesEmblem(position.book);
+    function librarySeriesForBook(bookNumber) {
+      const number = Number(bookNumber);
+      if (number <= 5) return 'kai';
+      if (number <= 12) return 'magnakai';
+      if (number <= 20) return 'grand-master';
+      return 'new-order';
+    }
+
+    function selectLibrarySeries(series) {
+      const selected = ['kai', 'magnakai', 'grand-master', 'new-order'].includes(series) ? series : 'kai';
+      document.querySelectorAll('[data-library-series]').forEach((button) => {
+        button.setAttribute('aria-selected', button.dataset.librarySeries === selected ? 'true' : 'false');
+      });
+      document.querySelectorAll('[data-library-series-panel]').forEach((panel) => {
+        panel.hidden = panel.dataset.librarySeriesPanel !== selected;
+      });
+    }
+
+    function renderCurrentCampaign(position) {
+      const title = document.getElementById('currentCampaignTitle');
+      const summary = document.getElementById('currentCampaignSummary');
+      const meta = document.getElementById('currentCampaignMeta');
+      const status = document.getElementById('currentCampaignStatus');
+      if (!position || !title || !summary || !meta || !status) return;
+      const book = books.find((item) => item.number === Number(position.book));
+      if (!book) return;
+      title.textContent = `Book ${book.number}: ${book.title}`;
+      summary.textContent = `Your campaign is saved at section ${position.section}.`;
+      meta.textContent = `${book.sections} sections · saved campaign`;
+      status.textContent = 'Reading';
+      selectLibrarySeries(librarySeriesForBook(book.number));
     }
 
     async function openCurrentSection() {
@@ -1094,12 +1112,19 @@
 
     document.getElementById('currentBtn').addEventListener('click', openCurrentSection);
 
+    document.getElementById('seriesTabs').addEventListener('click', (event) => {
+      const button = event.target.closest('[data-library-series]');
+      if (button) selectLibrarySeries(button.dataset.librarySeries);
+    });
+
+    document.addEventListener('lonewolf:campaign-state', (event) => {
+      const state = event.detail?.state || {};
+      renderCurrentCampaign({ book: Number(state?.Character?.BookNumber), section: Number(state?.CurrentSection) });
+    });
+
     getCurrentPosition().then((position) => {
-      const summary = document.getElementById('currentCampaignSummary');
-      if (!summary || !position) return;
-      const book = books.find((item) => item.number === Number(position.book));
-      if (!book) return;
-      summary.textContent = `Reading Book ${book.number}: ${book.title}, section ${position.section}.`;
+      if (position) renderCurrentCampaign(position);
+      else selectLibrarySeries('kai');
     });
 
     bookDetailsModal.addEventListener('click', (event) => {
@@ -1260,10 +1285,12 @@
     function refreshHomeAppearance() {
       homeSettings = settingsApi.apply(settingsApi.readLocal());
       if (!settingsModal.hidden) renderSettingsContent();
-      refreshSeriesEmblem();
+      getCurrentPosition().then((position) => {
+        if (position) renderCurrentCampaign(position);
+      });
     }
 
-    refreshSeriesEmblem();
+    refreshHomeAppearance();
     window.addEventListener('pageshow', refreshHomeAppearance);
     window.addEventListener('focus', refreshHomeAppearance);
     window.addEventListener('storage', (event) => {

@@ -72,59 +72,9 @@
     if (title) title.insertAdjacentElement('afterend', status);
   }
 
-  function seriesForBook(book) {
-    if (book <= 5) return 'kai';
-    if (book <= 12) return 'magnakai';
-    if (book <= 20) return 'grand-master';
-    return 'new-order';
-  }
-
   function prepareLibrary(payload) {
     if (!indexPage) return;
-    const bookNumber = Number(payload?.state?.Character?.BookNumber);
-    if (!Number.isInteger(bookNumber)) return;
-    const activeSeries = seriesForBook(bookNumber);
-    const board = document.querySelector('.series-board');
-    const panel = document.querySelector('.reader-panel');
-    const card = document.querySelector('[data-book-number="' + bookNumber + '"]');
-    if (!board || !panel) return;
-    const title = card?.querySelector('strong')?.textContent?.trim() || ('Book ' + bookNumber);
-    const section = Number(payload?.state?.CurrentSection);
-    let overview = panel.querySelector('.lw-library-overview');
-    if (!overview) {
-      overview = document.createElement('section');
-      overview.className = 'lw-library-overview';
-      panel.prepend(overview);
-    }
-    overview.innerHTML = '<span class="lw-library-overview__eyebrow">Reading now</span><strong>Book ' + bookNumber + ': ' + title + '</strong><span>Section ' + (Number.isInteger(section) ? section : '1') + ' · saved campaign</span>';
-
-    let filters = board.querySelector('.lw-series-filter');
-    if (!filters) {
-      filters = document.createElement('nav');
-      filters.className = 'lw-series-filter';
-      filters.setAttribute('aria-label', 'Choose a book series');
-      filters.innerHTML = [
-        ['kai', 'Kai'], ['magnakai', 'Magnakai'], ['grand-master', 'Grand Master'], ['new-order', 'New Order']
-      ].map(([id, label]) => '<button type="button" data-series-filter="' + id + '">' + label + '</button>').join('');
-      board.prepend(filters);
-      filters.addEventListener('click', (event) => {
-        const button = event.target.closest('[data-series-filter]');
-        if (!button) return;
-        board.dataset.activeSeries = button.dataset.seriesFilter;
-        board.querySelectorAll('[data-series-filter]').forEach((item) => item.classList.toggle('active', item === button));
-        board.querySelectorAll('.series-section').forEach((sectionNode) => {
-          sectionNode.hidden = sectionNode.id !== button.dataset.seriesFilter + 'SeriesSection';
-        });
-      });
-    }
-    board.dataset.activeSeries = activeSeries;
-    filters.querySelectorAll('[data-series-filter]').forEach((button) => button.classList.toggle('active', button.dataset.seriesFilter === activeSeries));
-    board.querySelectorAll('.series-section').forEach((sectionNode) => {
-      const heading = sectionNode.querySelector('.series-heading')?.id || '';
-      const id = heading.replace('SeriesHeading', '').replace('grandMaster', 'grand-master').replace('newOrder', 'new-order').replace('kai', 'kai').replace('magnakai', 'magnakai');
-      sectionNode.id = id + 'SeriesSection';
-      sectionNode.hidden = id !== activeSeries;
-    });
+    document.dispatchEvent(new CustomEvent('lonewolf:campaign-state', { detail: payload }));
   }
 
   function syncCampaignStatus(payload) {

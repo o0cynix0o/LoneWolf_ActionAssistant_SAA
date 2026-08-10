@@ -48,7 +48,9 @@
   gap: 3px;
   min-width: 0;
   overflow-x: auto;
+  scrollbar-width: none;
 }
+.lw-global-nav__links::-webkit-scrollbar { display: none; }
 
 .lw-global-nav__links a {
   display: inline-flex;

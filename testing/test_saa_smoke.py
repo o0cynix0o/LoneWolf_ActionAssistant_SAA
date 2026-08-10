@@ -4185,27 +4185,21 @@ class CardLayoutInteractionTests(unittest.TestCase):
         self.assertIn("scroller.scrollBy", auto_scroll)
 
 
-class SeriesSigilTests(unittest.TestCase):
-    def test_all_series_share_the_theme_aware_wolf_mask(self) -> None:
+class LibraryProductionTests(unittest.TestCase):
+    def test_library_uses_the_campaign_command_layout(self) -> None:
         root = Path(saa_main.__file__).resolve().parent
         index_html = (root / "index.html").read_text(encoding="utf-8")
 
-        self.assertIn("assets/images/series-sigil-wolf-mask.png", index_html)
-        self.assertIn("background: currentColor;", index_html)
-        self.assertIn("-webkit-mask:", index_html)
-        self.assertIn("mask: url('assets/images/series-sigil-wolf-mask.png')", index_html)
-        self.assertIn('<span class="series-emblem" aria-hidden="true"></span>', index_html)
-        self.assertIn('data-series="kai" role="img" aria-label="Kai series emblem"', index_html)
-        self.assertIn("seriesDivider.dataset.series = series;", index_html)
-        self.assertNotIn("symbol-kai", index_html)
-        self.assertNotIn("symbol-magnakai", index_html)
-        self.assertNotIn("symbol-grand-master", index_html)
-        self.assertNotIn("symbol-new-order", index_html)
-        self.assertNotIn("series-sigil-wolf-source.png", index_html)
-
-        self.assertTrue((root / "assets" / "images" / "series-sigil-wolf-mask.png").is_file())
-        self.assertTrue((root / "design-assets" / "series-sigil-wolf-source.png").is_file())
-        self.assertTrue((root / "design-assets" / "README.md").is_file())
+        self.assertIn('href="assets/css/lw-library.css"', index_html)
+        self.assertIn("Your Lone Wolf Library", index_html)
+        self.assertIn('id="currentBtn"', index_html)
+        self.assertIn("Start Current Campaign", index_html)
+        self.assertIn('id="seriesTabs"', index_html)
+        self.assertIn('data-library-series-panel="magnakai"', index_html)
+        self.assertIn("function renderCurrentCampaign(position)", index_html)
+        self.assertIn("function selectLibrarySeries(series)", index_html)
+        self.assertIn("lonewolf:campaign-state", index_html)
+        self.assertTrue((root / "assets" / "css" / "lw-library.css").is_file())
 
 
 class DistributionNoticeTests(unittest.TestCase):
