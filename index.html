@@ -534,7 +534,7 @@
           <button class="lw-ui-button lw-ui-button--primary" id="currentBtn" type="button">Start Current Campaign</button>
           <a class="lw-ui-button" href="assistant.html?surface=reader&amp;resume=1">Open Reader View</a>
           <a class="lw-ui-button" href="assistant.html?campaign=new&amp;book=1">Start New Campaign</a>
-          <button class="lw-ui-button" id="settingsBtn" type="button">Settings</button>
+          <a class="lw-ui-button" href="assistant.html?surface=tools&amp;tool=settings&amp;resume=1">Settings</a>
         </div>
         <p class="library-current__note">Campaign, Reader, Tools, and Console continue the same saved adventure.</p>
       </div>
@@ -569,16 +569,6 @@
       </section>
     </section>
   </main>
-
-  <div class="settings-modal" id="settingsModal" hidden>
-    <section class="settings-dialog" aria-label="Settings">
-      <div class="controls">
-        <h2 style="margin-right:auto">Settings</h2>
-        <button type="button" id="closeSettingsBtn">Close</button>
-      </div>
-      <div id="settingsContent"></div>
-    </section>
-  </div>
 
   <div class="book-modal" id="bookDetailsModal" hidden>
     <section class="book-dialog" aria-label="Book details" role="dialog" aria-modal="true">
@@ -860,7 +850,6 @@
     let homeSettings = settingsApi.apply(settingsApi.readLocal());
     settingsApi.syncFromRemote().then((settings) => {
       homeSettings = settings;
-      renderSettingsContent();
     });
 
     function readBookReadList() {
@@ -1140,9 +1129,6 @@
       }
     });
 
-    const settingsModal = document.getElementById('settingsModal');
-    const settingsContent = document.getElementById('settingsContent');
-
     function escapeHtml(value) {
       return String(value ?? '').replace(/[&<>"']/g, (char) => ({
         '&': '&amp;',
@@ -1153,110 +1139,6 @@
       })[char]);
     }
 
-    function optionButton(kind, id, label, note, active, extra = '') {
-      return `
-        <button type="button" class="settings-option ${active ? 'active' : ''} ${escapeHtml(extra)}" data-setting-kind="${escapeHtml(kind)}" data-setting-id="${escapeHtml(id)}">
-          <strong>${escapeHtml(label)}</strong>
-          ${note ? `<small>${escapeHtml(note)}</small>` : ''}
-        </button>
-      `;
-    }
-
-    function saveSlotRow(slot) {
-      const title = slot.Occupied
-        ? `${slot.Name} - Book ${slot.BookNumber}, Sec ${slot.Section}`
-        : 'Empty';
-      const meta = slot.Occupied
-        ? `END ${slot.Endurance || '?'} | Gold ${slot.GoldCrowns || '?'} | ${slot.Modified || ''}`
-        : 'No save in this slot yet.';
-      return `
-        <div class="slot-row">
-          <div>
-            <strong>Slot ${escapeHtml(slot.Slot)}: ${escapeHtml(title)}</strong><br>
-            <small class="muted">${escapeHtml(meta)}</small>
-          </div>
-          <button type="button" data-slot-save="${escapeHtml(slot.Slot)}">Save</button>
-          <button type="button" data-slot-load="${escapeHtml(slot.Slot)}" ${slot.Occupied ? '' : 'disabled'}>Load</button>
-          <button type="button" data-slot-clear="${escapeHtml(slot.Slot)}" ${slot.Occupied ? '' : 'disabled'}>Clear</button>
-        </div>
-      `;
-    }
-
-    async function getSaveSlots() {
-      try {
-        const response = await fetch('/api/save-slots', { cache: 'no-store' });
-        if (!response.ok) return [];
-        return (await response.json()).slots || [];
-      } catch {
-        return [];
-      }
-    }
-
-    async function renderSettingsContent() {
-      const slots = await getSaveSlots();
-      const coverOn = homeSettings.coverArt !== 'off';
-      const readerOn = homeSettings.readerStyleEnabled === 'on';
-      settingsContent.innerHTML = `
-        <h3>Title Banner</h3>
-        <div class="settings-grid">
-          ${settingsApi.titleBanners.map((banner) => `
-            <button type="button" class="settings-option banner-option ${homeSettings.titleBanner === banner.id ? 'active' : ''}" data-setting-kind="titleBanner" data-setting-id="${escapeHtml(banner.id)}">
-              <img src="${escapeHtml(banner.path)}" alt="${escapeHtml(banner.name)}">
-              <strong>${escapeHtml(banner.name)}</strong>
-            </button>
-          `).join('')}
-        </div>
-        <h3>Book Covers</h3>
-        <div class="settings-grid">
-          ${optionButton('coverArt', 'on', 'Show Cover Art', 'Big book cards with cover art.', coverOn)}
-          ${optionButton('coverArt', 'off', 'Compact Books', 'Hide covers and tighten the book cards.', !coverOn)}
-        </div>
-        <h3>Color Theme</h3>
-        <div class="settings-grid">
-          ${settingsApi.themes.map((theme) => optionButton('theme', theme.id, theme.name, theme.note, homeSettings.theme === theme.id)).join('')}
-        </div>
-        <h3>Reader Page Styling</h3>
-        <div class="settings-grid">
-          ${optionButton('readerStyleEnabled', 'off', 'Project Aon Original', 'Leave the book iframe untouched.', !readerOn)}
-          ${optionButton('readerStyleEnabled', 'on', 'Apply Reader Theme', 'Restyle the local book iframe while you read.', readerOn)}
-        </div>
-        <div class="settings-grid" style="margin-top:.55rem">
-          ${settingsApi.readerThemes.map((theme) => optionButton('readerTheme', theme.id, theme.name, '', homeSettings.readerTheme === theme.id)).join('')}
-        </div>
-        <h3>Save Slots</h3>
-        ${slots.length ? slots.map(saveSlotRow).join('') : '<p class="muted">Start the local server to use save slots.</p>'}
-      `;
-    }
-
-    async function updateSetting(kind, id) {
-      homeSettings = await settingsApi.savePatch({ [kind]: id });
-      renderSettingsContent();
-    }
-
-    async function slotAction(actionName, slot) {
-      const response = await fetch('/api/action', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: actionName, slot: Number(slot) })
-      });
-      if (response.ok && actionName === 'load_slot') {
-        window.location.href = 'assistant.html';
-        return;
-      }
-      await renderSettingsContent();
-    }
-
-    document.getElementById('settingsBtn').addEventListener('click', async () => {
-      homeSettings = settingsApi.apply(settingsApi.readLocal());
-      await renderSettingsContent();
-      settingsModal.hidden = false;
-    });
-    document.getElementById('closeSettingsBtn').addEventListener('click', () => {
-      settingsModal.hidden = true;
-    });
-    settingsModal.addEventListener('click', (event) => {
-      if (event.target === settingsModal) settingsModal.hidden = true;
-    });
     bookDetailsModal.addEventListener('click', (event) => {
       if (event.target === bookDetailsModal || event.target.closest('[data-book-close]')) {
         closeBookDetails();
@@ -1265,26 +1147,11 @@
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') {
         if (!bookDetailsModal.hidden) closeBookDetails();
-        if (!settingsModal.hidden) settingsModal.hidden = true;
-      }
-    });
-    settingsContent.addEventListener('click', async (event) => {
-      const button = event.target.closest('button');
-      if (!button) return;
-      if (button.dataset.settingKind) {
-        await updateSetting(button.dataset.settingKind, button.dataset.settingId);
-        return;
-      }
-      if (button.dataset.slotSave) await slotAction('save_slot', button.dataset.slotSave);
-      if (button.dataset.slotLoad) await slotAction('load_slot', button.dataset.slotLoad);
-      if (button.dataset.slotClear && window.confirm(`Clear save slot ${button.dataset.slotClear}?`)) {
-        await slotAction('clear_slot', button.dataset.slotClear);
       }
     });
 
     function refreshHomeAppearance() {
       homeSettings = settingsApi.apply(settingsApi.readLocal());
-      if (!settingsModal.hidden) renderSettingsContent();
       getCurrentPosition().then((position) => {
         if (position) renderCurrentCampaign(position);
       });

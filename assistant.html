@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="assets/css/lw-ui-foundation.css">
   <link rel="stylesheet" href="assets/css/lw-campaign.css">
   <link rel="stylesheet" href="assets/css/lw-reader-tools.css">
+  <link rel="stylesheet" href="assets/css/lw-settings-install.css">
   <script defer src="assets/js/lw-shell.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css">
   <style>
@@ -3074,6 +3075,7 @@
       cancelCardDrag({ restore: true, announce: false });
       setModeIndicator();
       document.body.classList.toggle('lw-console-active', isCliMode());
+      document.body.classList.toggle('lw-settings-active', activeView === 'settings');
       renderStatus();
       renderCampaignRail();
       renderReaderCompanion();
@@ -6815,6 +6817,11 @@
       const currentCombatMode = text(run.CombatMode, 'DataFile');
       const permadeathAllowed = currentDifficulty !== 'Story';
       view.innerHTML = `
+        <section class="settings-command lw-ui-panel">
+          <div><p class="lw-ui-eyebrow">Preferences</p><h2>Campaign and reader settings</h2><p>Change game modes, appearance, saved layouts, and local save controls without leaving the current campaign.</p></div>
+          <div class="settings-command__actions"><a class="lw-ui-button" href="index.html">Library</a><a class="lw-ui-button" href="install-books.html">Manage books</a></div>
+        </section>
+        <div class="settings-workspace">
         <div class="panel">
           <h2>Game Modes</h2>
           <form id="runConfigurationForm" class="grid">
@@ -6862,6 +6869,7 @@
               <button type="button" data-card-open="${escapeHtml(entry.scope)}:${escapeHtml(entry.id)}">Re-add</button>
             </div>
           `).join('') : '<p class="muted">No cards are currently closed.</p>'}
+        </div>
         </div>
       `;
     }

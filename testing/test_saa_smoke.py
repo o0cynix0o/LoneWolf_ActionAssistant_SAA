@@ -4235,6 +4235,26 @@ class ReaderToolsProductionTests(unittest.TestCase):
         self.assertTrue((root / "assets" / "css" / "lw-reader-tools.css").is_file())
 
 
+class SettingsInstallProductionTests(unittest.TestCase):
+    def test_settings_and_book_manager_use_the_unified_production_surfaces(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        index_html = (root / "index.html").read_text(encoding="utf-8")
+        assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
+        installer_html = (root / "install-books.html").read_text(encoding="utf-8")
+
+        self.assertNotIn('id="settingsModal"', index_html)
+        self.assertIn('assistant.html?surface=tools&amp;tool=settings&amp;resume=1', index_html)
+        self.assertIn('href="assets/css/lw-settings-install.css"', assistant_html)
+        self.assertIn('class="settings-command lw-ui-panel"', assistant_html)
+        self.assertIn('class="settings-workspace"', assistant_html)
+        self.assertIn('class="lw-install-page"', installer_html)
+        self.assertIn('id="bookManager"', installer_html)
+        self.assertIn('async function loadBookStatus()', installer_html)
+        self.assertIn("'TheStormsOfChai'", installer_html)
+        self.assertIn("callNative('zips')", installer_html)
+        self.assertTrue((root / "assets" / "css" / "lw-settings-install.css").is_file())
+
+
 class DistributionNoticeTests(unittest.TestCase):
     def test_notice_matches_and_ships_with_the_authorized_release(self) -> None:
         root = Path(saa_main.__file__).resolve().parent
