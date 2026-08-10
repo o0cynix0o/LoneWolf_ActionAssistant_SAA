@@ -180,7 +180,10 @@ class RemoteCheatClient:
         try:
             with urllib.request.urlopen(request, timeout=3) as response:
                 result = json.load(response)
-        except Exception:
+        except Exception as exc:
+            close = getattr(exc, "close", None)
+            if callable(close):
+                close()
             return self._status
         if not isinstance(result, dict):
             return self._status

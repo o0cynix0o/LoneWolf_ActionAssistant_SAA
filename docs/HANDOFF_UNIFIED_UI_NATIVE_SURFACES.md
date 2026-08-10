@@ -1,7 +1,7 @@
 # Handoff: Native Unified-UI Surfaces + Console Cheat-Session Fix
 
 **Branch:** `unified-ui-native-surfaces` (branched from `main`)
-**State:** all work committed to the working tree but **NOT yet committed to git** (5 modified files). Nothing pushed.
+**State:** committed locally in `6002ba0`, `78cce6a`, and `8aa43de`; the working tree was clean when this handoff was refreshed. The branch is ahead of `main` but has no remote tracking branch, so it has not been pushed, merged, or released.
 **Author context:** continued from the Unified UI redesign. See `docs/UNIFIED_UI_IMPLEMENTATION_GUIDE.md` and `docs/UI_REDESIGN_CONTRACT.md` for the visual contract, and `design-prototypes/{campaign-desk,reader-first,tools,library-command}.html` for the target layouts.
 
 ---
@@ -14,7 +14,7 @@ This branch rebuilds all four play surfaces (Campaign / Reader / Tools / Console
 
 ---
 
-## Files changed (5)
+## Files changed (6)
 
 | File | Change |
 | --- | --- |
@@ -23,6 +23,7 @@ This branch rebuilds all four play surfaces (Campaign / Reader / Tools / Console
 | `assets/css/lw-reader-tools.css` | Reader First + Tools/Console layout (rewritten). |
 | `cheat_session.py` | Console crash-proofing + fresh-token file support. |
 | `saa_main.py` | Publishes live cheat url+token to a file for the CLI. |
+| `docs/HANDOFF_UNIFIED_UI_NATIVE_SURFACES.md` | This implementation and verification handoff. |
 
 ---
 
@@ -62,7 +63,7 @@ Both files target the new classes using `--lw-ui-*` role tokens (theme-safe). No
 - `cheat_session.py`: `RemoteCheatClient._request` now catches all network/HTTP errors and degrades to last-known status (never raises) — a cheat-sync hiccup can never kill the CLI. `provider_from_environment` prefers a fresh live-token **file** (`LONEWOLF_SAA_CHEAT_FILE`) over the env snapshot and falls back to a local `CheatSession()`.
 - `saa_main.py` `run_desktop`: writes `{url, token}` to `%LOCALAPPDATA%\Lone Wolf Action Assistant\data\cheat-session.json` on startup, sets `LONEWOLF_SAA_CHEAT_FILE`, and deletes it on exit. The CLI reads the current server's token even if env is stale.
 
-Verified at unit level: reproducing the exact 403 (wrong token vs a real `app_server`) now returns a working provider (no crash); file token beats env token; no-config → local session.
+Verified by `CheatSessionTests.test_remote_client_survives_a_stale_token_and_prefers_live_token_file`: a wrong token does not crash the remote client, and a current token file takes precedence over a stale environment token.
 
 ---
 
@@ -77,15 +78,15 @@ The app the user runs is the **PyInstaller onedir build** at `dist\Lone Wolf Act
 
 ## Verification status
 
-- **Done (functional, via `python app_server.py` on a scratch port):** all four surfaces render their prototype layouts; a Story choice routes and mutates shared `CurrentSection` through `action()`; Campaign tab-switch mounts real tool renderers; Console takeover renders; overlay hidden by default + Map open/Close works; no horizontal overflow; Quick Roll height matches summary at desktop width. Native parser validated against real Book 1 §1 and Book 6 §219 (illustration + 2 choices).
+- **Done (source and automated verification):** all four native surface roots and their renderer routing are covered by the smoke suite; Campaign uses the real story mount, choices route through `action()`, and the Console stale-token regression has an automated test. The source build and installer created on 2026-08-10 contain the native `assistant.html` module.
 - **Not done — needs the GUI / real save:** end-to-end check in the built desktop exe against the **actual Book 6 §219 Magnakai save** (the scratch server was Book 1 §1); Console open in the packaged exe post-rebuild; screenshots into `docs/ui-checkpoints/`. The in-app browser used for verification reports `innerWidth 0` and won't composite, so pixel/screenshot capture must be done in the real app.
 
 ## Remaining work for Codex
 
 1. Launch the freshly built exe; confirm Campaign/Reader/Tools/Console at the live Book 6 §219 save; capture fresh screenshots to `docs/ui-checkpoints/`.
-2. Commit the branch. **Suggested split:** (a) native-surface UI redesign (`assistant.html` + 2 CSS), (b) Console cheat-session crash fix (`cheat_session.py`, `saa_main.py`). End commit messages with the required `Co-Authored-By` trailer.
-3. Run the acceptance checklist in `docs/UNIFIED_UI_IMPLEMENTATION_GUIDE.md` across Book 1, a Book 5→6 handoff, Grand Master, New Order, permadeath, save/load, import, combat, achievements.
-4. Optional: `.gitignore` already excludes build artifacts; confirm `dist/` and `installer/output/` aren't staged.
+2. Run the acceptance checklist in `docs/UNIFIED_UI_IMPLEMENTATION_GUIDE.md` across Book 1, a Book 5→6 handoff, Grand Master, New Order, permadeath, save/load, import, combat, achievements.
+3. Commit the verification updates, push `unified-ui-native-surfaces`, merge it into `main`, and publish only after the desktop checks pass.
+4. Confirm `dist/` and `installer/output/` are not staged.
 
 ## Known caveats
 

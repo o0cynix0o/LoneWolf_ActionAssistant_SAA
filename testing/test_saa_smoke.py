@@ -3570,7 +3570,9 @@ class CampaignEntryPointTests(unittest.TestCase):
 
     def test_campaign_entry_keeps_setup_visible_and_protects_existing_campaigns(self) -> None:
         assistant_html = self.source_text("assistant.html")
-        self.assertIn("if (isCliMode() && !campaignStartRequested)", assistant_html)
+        self.assertIn("const cliActive = isCliMode() && !campaignStartRequested;", assistant_html)
+        self.assertIn("if (isNativeSurface) {", assistant_html)
+        self.assertIn("renderNativeSurface({", assistant_html)
         self.assertIn('data-campaign-cancel', assistant_html)
         self.assertIn("const campaignEntry = campaignStartRequested && card.dataset.campaignEntry === 'true';", assistant_html)
         self.assertGreaterEqual(assistant_html.count('if (!confirmCampaignReplacement()) return;'), 3)
@@ -4208,8 +4210,13 @@ class CampaignDeskProductionTests(unittest.TestCase):
         assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
 
         self.assertIn('href="assets/css/lw-campaign.css"', assistant_html)
-        self.assertIn('class="workspace lw-campaign-desk"', assistant_html)
+        self.assertIn('class="workspace lw-native" id="workspace"', assistant_html)
+        self.assertIn('id="campaignMain"', assistant_html)
+        self.assertIn('id="storyPanel"', assistant_html)
+        self.assertIn('id="campaignGlance"', assistant_html)
         self.assertIn('id="campaignRail"', assistant_html)
+        self.assertIn("function renderCampaignSurface()", assistant_html)
+        self.assertIn("function renderStoryInto(target, variant)", assistant_html)
         self.assertIn("function renderCampaignRail()", assistant_html)
         self.assertIn("function campaignSeriesForBook(bookNumber)", assistant_html)
         self.assertIn("data-rail-current", assistant_html)
@@ -4947,6 +4954,29 @@ class CheatSessionTests(unittest.TestCase):
                 urllib.request.urlopen(request, timeout=3)
             self.assertEqual(raised.exception.code, 403)
             raised.exception.close()
+        finally:
+            app_server.stop_server(server, thread)
+
+    def test_remote_client_survives_a_stale_token_and_prefers_live_token_file(self) -> None:
+        server, thread = app_server.start_server(port=0)
+        try:
+            url = f"http://127.0.0.1:{server.server_address[1]}/api/internal/session-cheats"
+            stale = cheat_session.RemoteCheatClient(url, "stale-token")
+            self.assertEqual(stale.status(), {})
+
+            with tempfile.TemporaryDirectory() as temp_dir:
+                token_file = Path(temp_dir) / "cheat-session.json"
+                token_file.write_text(
+                    json.dumps({"url": url, "token": app_server.CHEAT_SESSION.token}),
+                    encoding="utf-8",
+                )
+                provider = cheat_session.provider_from_environment({
+                    "LONEWOLF_SAA_CHEAT_FILE": str(token_file),
+                    "LONEWOLF_SAA_CHEAT_URL": url,
+                    "LONEWOLF_SAA_CHEAT_TOKEN": "stale-token",
+                })
+                self.assertIsInstance(provider, cheat_session.RemoteCheatClient)
+                self.assertEqual(provider.status()["active"], app_server.CHEAT_SESSION.status()["active"])
         finally:
             app_server.stop_server(server, thread)
 
