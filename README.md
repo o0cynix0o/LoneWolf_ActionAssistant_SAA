@@ -1,4 +1,4 @@
-# Lone Wolf Action Assistant 3.5.1 Internal Testing
+# Lone Wolf Action Assistant 3.5.2 Internal Testing
 
 Lone Wolf Action Assistant is a standalone Windows desktop play aid for the
 *Lone Wolf* gamebooks. It is a digital Action Chart, reader companion, and
@@ -8,7 +8,7 @@ server yourself.
 
 **Internal-testing release:** [download the current Windows installer](https://github.com/o0cynix0o/LoneWolf_ActionAssistant_SAA/releases/latest).
 
-Version: **3.5.1 Internal Testing**
+Version: **3.5.2 Internal Testing**
 
 ## What You Can Play
 

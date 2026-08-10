@@ -3560,7 +3560,9 @@
         const options = equipmentOptionsForBook(nextBook);
         const carriedItems = [
           ...weapons.map((item, index) => ['weapon', index, item]),
-          ...arr((completion.Summary || {}).BackpackItems).map((item, index) => ['backpack', index, item])
+          ...arr((completion.Summary || {}).BackpackItems).map((item, index) => ['backpack', index, item]),
+          ...arr((completion.Summary || {}).SpecialItems).map((item, index) => ['special', index, item]),
+          ...arr((completion.Summary || {}).PocketSpecialItems).map((item, index) => ['pocket', index, item])
         ];
         const disciplineControl = nextBook === 13
           ? `<div class="check-field"><span>Choose exactly 4 Grand Master Disciplines</span><div class="check-grid">${grandMasterChoices.map((name) => `<label class="check-option"><input type="checkbox" name="grandMasterDiscipline" value="${escapeHtml(name)}"><span>${escapeHtml(name)}</span></label>`).join('')}</div></div>`
@@ -3583,7 +3585,9 @@
         const knownGrandWeaponmastery = knownNewOrder.includes('Grand Weaponmastery');
         const carriedItems = [
           ...weapons.map((item, index) => ['weapon', index, item]),
-          ...arr((completion.Summary || {}).BackpackItems).map((item, index) => ['backpack', index, item])
+          ...arr((completion.Summary || {}).BackpackItems).map((item, index) => ['backpack', index, item]),
+          ...arr((completion.Summary || {}).SpecialItems).map((item, index) => ['special', index, item]),
+          ...arr((completion.Summary || {}).PocketSpecialItems).map((item, index) => ['pocket', index, item])
         ];
         return `
           <form id="continueBookForm" class="grid" data-next-book="${escapeHtml(nextBook)}">
@@ -3602,9 +3606,11 @@
         const issueCount = nextBook === 11 ? 0 : equipmentChoiceCountForBook(nextBook);
         const carriedItems = [
           ...weapons.map((item, index) => ['weapon', index, item]),
-          ...arr((completion.Summary || {}).BackpackItems).map((item, index) => ['backpack', index, item])
+          ...arr((completion.Summary || {}).BackpackItems).map((item, index) => ['backpack', index, item]),
+          ...arr((completion.Summary || {}).SpecialItems).map((item, index) => ['special', index, item]),
+          ...arr((completion.Summary || {}).PocketSpecialItems).map((item, index) => ['pocket', index, item])
         ];
-        const transitionDrops = issueCount && carriedItems.length ? `
+        const transitionDrops = carriedItems.length ? `
           <div class="check-field">
             <span>Leave Behind Before Field Issue</span>
             <div class="check-grid">${carriedItems.map(([container, index, item]) => `<label class="check-option"><input type="checkbox" name="transitionDrops" value="${escapeHtml(container)}:${escapeHtml(index)}"><span>${escapeHtml(item)} [${escapeHtml(container)}]</span></label>`).join('')}</div>
@@ -6120,21 +6126,25 @@
       const flags = app.state.Automation?.Flags || {};
       const weapons = arr(inv.Weapons);
       const specialItems = arr(inv.SpecialItems);
+      const pocketSpecialItems = arr(inv.PocketSpecialItems);
       const hasSommerswerd = specialItems.some((item) => text(item).toLowerCase() === 'sommerswerd');
       const displayWeapons = [
         ...(hasSommerswerd ? [{ item: 'Sommerswerd', type: 'special', readOnly: true }] : []),
         ...weapons.map((item, index) => ({ item, type: 'weapon', index, count: weapons.length }))
       ];
       const displaySpecialItems = specialItems.map((item, index) => ({ item, type: 'special', index, count: specialItems.length }));
+      const displayPocketSpecialItems = pocketSpecialItems.map((item, index) => ({ item, type: 'pocket', index, count: pocketSpecialItems.length }));
       const backpackCapacity = Number(inv.BackpackCapacity || 8);
       const backpackLabel = flags.backpackAvailable === false || flags.backpackItemsAvailable === false ? 'Unavailable' : `${itemSlotTotal(inv.BackpackItems)}/${backpackCapacity}`;
+      const specialTotal = specialItems.length + pocketSpecialItems.length;
+      const specialLabel = Number(currentCharacter().BookNumber || 1) >= 8 ? `${specialTotal}/12` : `${specialTotal} (no limit before Book 8)`;
       view.innerHTML = `
         <div class="panel">
           <h2>Inventory</h2>
           <div class="grid">
             ${field('Weapons', `${arr(inv.Weapons).length}/2`)}
             ${field('Backpack', backpackLabel)}
-            ${field('Special Items', arr(inv.SpecialItems).length)}
+            ${field('Special Items', specialLabel)}
             ${field('Meals', arr(inv.BackpackItems).filter((item) => text(item).toLowerCase() === 'meal').length)}
           </div>
         </div>
@@ -6145,11 +6155,12 @@
         ${storedGearPanel()}
         ${itemList('Weapons', 'weapon', displayWeapons)}
         ${itemList('Backpack', 'backpack', inv.BackpackItems)}
-        ${itemList('Special Items', 'special', displaySpecialItems)}
+        ${itemList(`Special Items (${specialLabel})`, 'special', displaySpecialItems)}
+        ${itemList(`Pocket Special Items (shared ${specialLabel})`, 'pocket', displayPocketSpecialItems)}
         <div class="panel">
           <h2>Add Item</h2>
           <form id="itemForm" class="controls">
-            <select name="type"><option value="weapon">Weapon</option><option value="backpack">Backpack</option><option value="special">Special</option></select>
+            <select name="type"><option value="weapon">Weapon</option><option value="backpack">Backpack</option><option value="special">Special</option><option value="pocket">Pocket Special</option></select>
             <input name="item" placeholder="Item name">
             <button type="submit">Add</button>
           </form>
@@ -6931,7 +6942,8 @@
       const groups = [
         ['W', 'weapon', inv.Weapons],
         ['B', 'backpack', inv.BackpackItems],
-        ['S', 'special', inv.SpecialItems]
+        ['S', 'special', inv.SpecialItems],
+        ['P', 'pocket', inv.PocketSpecialItems]
       ];
       const rows = groups.flatMap(([label, type, items]) => arr(items).map((item) => (
         `<div class="item-row"><small>${label}</small><span>${escapeHtml(item)}</span>${keyItemNote(item)}${itemActionButtons(type, item)}<button class="danger" data-drop="${type}:${encodeURIComponent(item)}">Drop</button></div>`
@@ -6950,6 +6962,7 @@
         Weapons: arr(equipment.Weapons),
         BackpackItems: arr(equipment.BackpackItems).length ? arr(equipment.BackpackItems) : arr(stored.confiscatedBackpackItems),
         SpecialItems: arr(equipment.SpecialItems),
+        PocketSpecialItems: arr(equipment.PocketSpecialItems),
         GoldCrowns: Number(equipment.GoldCrowns || 0),
         SafekeepingSpecialItems: arr(stored.safekeepingSpecialItems),
         SafekeepingRecords: arr(stored.safekeepingRecords).filter((item) => item && typeof item === 'object')
@@ -6959,7 +6972,7 @@
       const flags = app.state.Automation?.Flags || {};
       const gearUnavailable = flags.weaponsAvailable === false || flags.backpackAvailable === false || flags.backpackItemsAvailable === false || flags.specialItemsAvailable === false;
       const stored = storedEquipment();
-      if (!gearUnavailable && !stored.Weapons.length && !stored.BackpackItems.length && !stored.SpecialItems.length && !stored.GoldCrowns && !stored.SafekeepingSpecialItems.length) return '';
+      if (!gearUnavailable && !stored.Weapons.length && !stored.BackpackItems.length && !stored.SpecialItems.length && !stored.PocketSpecialItems.length && !stored.GoldCrowns && !stored.SafekeepingSpecialItems.length) return '';
       return `
         <div class="panel">
           <h2>Stored Gear</h2>
@@ -6974,13 +6987,14 @@
       const weaponRows = stored.Weapons.map((item) => `<div class="item-row"><small>W</small><span>${escapeHtml(item)}</span></div>`);
       const backpackRows = stored.BackpackItems.map((item, index) => `<div class="item-row"><small>${index + 1}</small><span>${escapeHtml(item)}</span></div>`);
       const specialRows = stored.SpecialItems.map((item) => `<div class="item-row"><small>S</small><span>${escapeHtml(item)}</span></div>`);
+      const pocketRows = stored.PocketSpecialItems.map((item) => `<div class="item-row"><small>P</small><span>${escapeHtml(item)}</span></div>`);
       const safekeepingRows = stored.SafekeepingSpecialItems.map((item) => {
         const record = stored.SafekeepingRecords.find((entry) => text(entry.Item).toLowerCase() === text(item).toLowerCase());
         const place = text(record?.Place, 'Safekeeping');
         return `<div class="item-row"><small>${escapeHtml(place)}</small><span>${escapeHtml(item)}</span></div>`;
       });
       const goldRow = stored.GoldCrowns ? `<div class="item-row"><small>Gold</small><span>${escapeHtml(stored.GoldCrowns)} Crown(s)</span></div>` : '';
-      const rows = weaponRows.concat(backpackRows, specialRows, goldRow ? [goldRow] : [], safekeepingRows).join('');
+      const rows = weaponRows.concat(backpackRows, specialRows, pocketRows, goldRow ? [goldRow] : [], safekeepingRows).join('');
       return `
         <p class="muted">${gearUnavailable ? 'Unavailable until the book restores your gear.' : 'Recovered gear and safekeeping record.'}</p>
         ${rows || (showEmpty ? '<div class="item-row"><span>No stored gear recorded.</span></div>' : '')}

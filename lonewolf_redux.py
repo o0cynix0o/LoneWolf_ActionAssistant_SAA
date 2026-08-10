@@ -1877,6 +1877,42 @@ def backpack_capacity(inventory: dict[str, Any]) -> int:
     return max(1, min(20, int(inventory.get("BackpackCapacity") or 8)))
 
 
+SPECIAL_ITEM_LIMIT = 12
+
+
+def special_item_limit(book_number: Any) -> int | None:
+    """Return the printed Special Item limit for the active Lone Wolf book."""
+    try:
+        return SPECIAL_ITEM_LIMIT if int(book_number) >= 8 else None
+    except (TypeError, ValueError):
+        return None
+
+
+def special_item_count(inventory: dict[str, Any]) -> int:
+    """Count Action Chart Special Items, including those carried in a pocket."""
+    return len(as_list(inventory.get("SpecialItems"))) + len(
+        as_list(inventory.get("PocketSpecialItems"))
+    )
+
+
+def special_item_capacity_text(inventory: dict[str, Any], book_number: Any) -> str:
+    limit = special_item_limit(book_number)
+    count = special_item_count(inventory)
+    return f"{count}/{limit}" if limit is not None else f"{count} (no limit before Book 8)"
+
+
+def validate_special_item_capacity(state: dict[str, Any]) -> None:
+    """Reject a new Book 8+ setup that exceeds the published carrying limit."""
+    book_number = int(state.get("Character", {}).get("BookNumber") or 0)
+    limit = special_item_limit(book_number)
+    count = special_item_count(state.get("Inventory", {}))
+    if limit is not None and count > limit:
+        raise ValueError(
+            f"Book {book_number} permits at most {limit} Special Items; "
+            f"leave {count - limit} behind before continuing."
+        )
+
+
 def lore_circle_key(value: Any) -> str:
     """Normalize V1's full lore-circle names and compact route-data names."""
     name = str(value or "").strip().lower()
@@ -2555,6 +2591,7 @@ def prepare_book6_state(
     }
     sync_magnakai_lore_circle_bonuses(prepared)
     prepared["CurrentBookStats"]["StartingEnduranceMax"] = int(character["EnduranceMax"])
+    validate_special_item_capacity(prepared)
     return normalize_state(prepared)
 
 
@@ -2756,8 +2793,10 @@ def clean_later_magnakai_transition_drops(values: Any) -> list[tuple[str, int]]:
     for value in as_list(values):
         container, separator, raw_index = str(value or "").partition(":")
         container = container.strip().lower()
-        if separator != ":" or container not in {"weapon", "backpack"}:
-            raise ValueError("Transition drops must identify a carried weapon or Backpack slot.")
+        if separator != ":" or container not in {"weapon", "backpack", "special", "pocket"}:
+            raise ValueError(
+                "Transition drops must identify a carried Weapon, Backpack, or Special Item slot."
+            )
         try:
             index = int(raw_index)
         except ValueError as exc:
@@ -2773,12 +2812,22 @@ def apply_later_magnakai_transition_drops(
 ) -> list[str]:
     """Leave chosen carried items behind before applying a new field issue."""
     drops = clean_later_magnakai_transition_drops(values)
-    by_container: dict[str, list[int]] = {"weapon": [], "backpack": []}
+    by_container: dict[str, list[int]] = {
+        "weapon": [],
+        "backpack": [],
+        "special": [],
+        "pocket": [],
+    }
     for container, index in drops:
         by_container[container].append(index)
     messages: list[str] = []
     for container, indexes in by_container.items():
-        key = "Weapons" if container == "weapon" else "BackpackItems"
+        key = {
+            "weapon": "Weapons",
+            "backpack": "BackpackItems",
+            "special": "SpecialItems",
+            "pocket": "PocketSpecialItems",
+        }[container]
         items = as_list(inventory.get(key))
         for index in sorted(indexes, reverse=True):
             if index >= len(items):
@@ -2994,6 +3043,7 @@ def create_grand_master_character_state(
         f"Book{book_number}GoldRoll": gold_digit,
         f"Book{book_number}EquipmentChoices": list(choice_ids),
     }
+    validate_special_item_capacity(state)
     return normalize_state(state)
 
 
@@ -3107,6 +3157,7 @@ def prepare_grand_master_state(
         "EquipmentChoices": choice_ids,
         "StartingEnduranceMax": int(character["EnduranceMax"]),
     }
+    validate_special_item_capacity(prepared)
     return normalize_state(prepared)
 
 
@@ -3259,6 +3310,7 @@ def create_new_order_character_state(
         "StartingGoldCrowns": int(inventory["GoldCrowns"]), f"Book{book_number}GoldRoll": gold_digit,
         f"Book{book_number}KaiWeapon": kai_weapon["Name"], f"Book{book_number}EquipmentChoices": list(choices),
     }
+    validate_special_item_capacity(state)
     return normalize_state(state)
 
 
@@ -3335,6 +3387,7 @@ def prepare_new_order_state(
         "BookGoldRoll": gold_digit, "EquipmentChoices": choices,
         "StartingEnduranceMax": int(character["EnduranceMax"]),
     }
+    validate_special_item_capacity(prepared)
     return normalize_state(prepared)
 
 
@@ -3491,6 +3544,7 @@ def create_magnakai_character_state(
     }
     sync_magnakai_lore_circle_bonuses(state)
     state["CurrentBookStats"]["StartingEnduranceMax"] = int(character["EnduranceMax"])
+    validate_special_item_capacity(state)
     return normalize_state(state)
 
 
@@ -4790,6 +4844,7 @@ class LoneWolfReduxAssistant:
             "Weapons": as_list(inventory.get("Weapons")),
             "BackpackItems": as_list(inventory.get("BackpackItems")),
             "SpecialItems": as_list(inventory.get("SpecialItems")),
+            "PocketSpecialItems": as_list(inventory.get("PocketSpecialItems")),
             "NotesCount": len(as_list(self.character.get("Notes"))),
             "DeathCount": self.death_count_for_book(book_number),
             "Difficulty": self.difficulty(),
@@ -5609,6 +5664,13 @@ class LoneWolfReduxAssistant:
             return False
         if key in {"SpecialItems", "PocketSpecialItems"} and item in as_list(self.inventory[key]):
             return True
+        if (
+            key in {"SpecialItems", "PocketSpecialItems"}
+            and not unlimited
+            and (limit := special_item_limit(self.character.get("BookNumber"))) is not None
+            and special_item_count(self.inventory) >= limit
+        ):
+            return False
 
         self.inventory[key] = as_list(self.inventory[key]) + [item]
         if key == "Weapons":
@@ -8202,9 +8264,8 @@ class LoneWolfReduxAssistant:
         if not bool(self.automation_flags.get("book5SommerswerdLost")):
             return "Sommerswerd recovery not needed"
         if not self.has_item("Sommerswerd", ["special"], "exact"):
-            self.inventory["SpecialItems"] = add_unique_item(
-                self.inventory.get("SpecialItems"), "Sommerswerd"
-            )
+            if not self.add_inventory_item("special", "Sommerswerd"):
+                return "Sommerswerd recovery needs a free Special Item slot"
         self.automation_flags["book5SommerswerdLost"] = False
         return "Sommerswerd recovered"
 
@@ -8623,7 +8684,14 @@ class LoneWolfReduxAssistant:
                 added = self.add_inventory_item(container, name)
             if added:
                 self.record_item_seen(name, container)
-            return f"added {name}" if added else f"could not add {name}"
+            if added:
+                return f"added {name}"
+            if (
+                self.container_key(container) in {"SpecialItems", "PocketSpecialItems"}
+                and (limit := special_item_limit(self.character.get("BookNumber"))) is not None
+            ):
+                return f"could not add {name}: Special Item limit is {limit}; choose an item to leave behind"
+            return f"could not add {name}"
         if action_type == "flag":
             key = str(action.get("key") or "")
             self.automation_flags[key] = action.get("value")
@@ -9591,9 +9659,8 @@ class LoneWolfReduxAssistant:
         self.inventory["HasHerbPouch"] = False
         self.inventory["HerbPouchItems"] = []
 
-    def add_special_item(self, item: str) -> None:
-        if item not in as_list(self.inventory["SpecialItems"]):
-            self.inventory["SpecialItems"] = as_list(self.inventory["SpecialItems"]) + [item]
+    def add_special_item(self, item: str) -> bool:
+        return self.add_inventory_item("special", item)
 
     def start_new_game(self) -> None:
         print("")
@@ -9804,7 +9871,7 @@ class LoneWolfReduxAssistant:
             else capacity_text(self.inventory["BackpackItems"], backpack_capacity(self.inventory))
         )
         panel_pair_row("Weapons", capacity_text(self.inventory["Weapons"], 2), "Backpack", backpack_status)
-        panel_pair_row("Special Items", str(len(as_list(self.inventory["SpecialItems"]))), "Gold Crowns", self.inventory.get("GoldCrowns", 0))
+        panel_pair_row("Special Items", special_item_capacity_text(self.inventory, self.character.get("BookNumber")), "Gold Crowns", self.inventory.get("GoldCrowns", 0))
         panel_row("Ready Weapon", as_list(self.inventory["Weapons"])[0] if as_list(self.inventory["Weapons"]) else "None")
         panel_footer()
         self.show_helpful_commands("sheet")
@@ -9812,12 +9879,13 @@ class LoneWolfReduxAssistant:
     def show_inventory_screen(self) -> None:
         panel_header("Inventory", accent=SCREEN_ACCENTS["inventory"])
         panel_pair_row("Gold Crowns", self.inventory.get("GoldCrowns", 0), "Weapons", capacity_text(self.inventory["Weapons"], 2))
-        panel_pair_row("Backpack", capacity_text(self.inventory["BackpackItems"], backpack_capacity(self.inventory)), "Special Items", str(len(as_list(self.inventory["SpecialItems"]))))
+        panel_pair_row("Backpack", capacity_text(self.inventory["BackpackItems"], backpack_capacity(self.inventory)), "Special Items", special_item_capacity_text(self.inventory, self.character.get("BookNumber")))
         panel_row("Meals", as_list(self.inventory["BackpackItems"]).count("Meal"))
         panel_footer()
         self.show_inventory_slots("Weapons", self.inventory["Weapons"], 2)
         self.show_inventory_slots("Backpack", self.inventory["BackpackItems"], backpack_capacity(self.inventory))
         self.show_inventory_slots("Special Items", self.inventory["SpecialItems"], None)
+        self.show_inventory_slots("Pocket Special Items", self.inventory["PocketSpecialItems"], None)
         self.show_stored_gear()
         self.show_helpful_commands("inventory")
 
@@ -10108,10 +10176,12 @@ class LoneWolfReduxAssistant:
         print(f"Consumed one Meal. Backpack: {format_list(items)}")
 
     def inventory_type_choices(self) -> dict[str, dict[str, Any]]:
+        special_capacity = special_item_limit(self.character.get("BookNumber"))
         return {
             "weapon": {"key": "Weapons", "label": "Weapons", "capacity": 2},
             "backpack": {"key": "BackpackItems", "label": "Backpack", "capacity": backpack_capacity(self.inventory)},
-            "special": {"key": "SpecialItems", "label": "Special Items", "capacity": None},
+            "special": {"key": "SpecialItems", "label": "Special Items", "capacity": special_capacity},
+            "pocket": {"key": "PocketSpecialItems", "label": "Pocket Special Items", "capacity": special_capacity},
         }
 
     def resolve_inventory_type(self, value: str) -> str | None:
@@ -10129,6 +10199,10 @@ class LoneWolfReduxAssistant:
             "special": "special",
             "specials": "special",
             "specialitems": "special",
+            "p": "pocket",
+            "pocket": "pocket",
+            "pocketspecial": "pocket",
+            "pocketspecialitems": "pocket",
         }
         return aliases.get(text)
 
@@ -10143,6 +10217,7 @@ class LoneWolfReduxAssistant:
             "Weapons": "weapon",
             "BackpackItems": "backpack",
             "SpecialItems": "special",
+            "PocketSpecialItems": "pocket",
         }
         return reverse.get(key, "")
 
@@ -10151,7 +10226,7 @@ class LoneWolfReduxAssistant:
         return (
             f"Weapons {capacity_text(self.inventory['Weapons'], 2)} | "
             f"Backpack {backpack} | "
-            f"Special {len(as_list(self.inventory['SpecialItems']))}"
+            f"Special {special_item_capacity_text(self.inventory, self.character.get('BookNumber'))}"
         )
 
     def resolve_inventory_selection(self, key: str, selection: str) -> tuple[int | None, str | None]:
@@ -10187,6 +10262,13 @@ class LoneWolfReduxAssistant:
         if not spec:
             write_warn("Type must be weapon, backpack, or special.")
             return
+        if self.resolve_inventory_type(item_type) in {"special", "pocket"}:
+            self.show_inventory_slots(
+                f"{spec['label']} ({special_item_capacity_text(self.inventory, self.character.get('BookNumber'))})",
+                self.inventory.get(str(spec["key"])),
+                None,
+            )
+            return
         self.show_inventory_slots(str(spec["label"]), self.inventory.get(str(spec["key"])), spec.get("capacity"))
 
     def interactive_drop_item(self, item_type: str = "") -> None:
@@ -10194,11 +10276,11 @@ class LoneWolfReduxAssistant:
         if not resolved:
             panel_header("Drop Item", accent=SCREEN_ACCENTS["inventory"])
             panel_text("Choose a container to remove from.", color="Gray")
-            for index, key in enumerate(["weapon", "backpack", "special"], 1):
+            for index, key in enumerate(["weapon", "backpack", "special", "pocket"], 1):
                 spec = self.inventory_type_choices()[key]
                 panel_row(str(index), spec["label"], label_width=4)
             panel_footer()
-            raw = input("Container (weapon/backpack/special): ").strip()
+            raw = input("Container (weapon/backpack/special/pocket): ").strip()
             resolved = self.resolve_inventory_type(raw)
         if not resolved:
             write_warn("Type must be weapon, backpack, or special.")
@@ -10225,7 +10307,7 @@ class LoneWolfReduxAssistant:
 
     def add_item(self, tokens: list[str]) -> None:
         if len(tokens) < 3:
-            print("Use: add <weapon|backpack|special> <item>")
+            print("Use: add <weapon|backpack|special|pocket> <item>")
             return
         item_type = tokens[1].lower()
         item = rest_of_line(tokens, 2)
@@ -10243,8 +10325,20 @@ class LoneWolfReduxAssistant:
                 print(f"Backpack limit is {backpack_capacity(self.inventory)} items. Drop an item first.")
                 return
             self.inventory["BackpackItems"] = as_list(self.inventory["BackpackItems"]) + [item]
-        elif item_type == "special":
-            self.inventory["SpecialItems"] = as_list(self.inventory["SpecialItems"]) + [item]
+        elif item_type in {"special", "pocket"}:
+            key = "SpecialItems" if item_type == "special" else "PocketSpecialItems"
+            if item in as_list(self.inventory[key]):
+                print(f"Already carrying: {item}")
+                return
+            if not self.add_inventory_item(item_type, item):
+                limit = special_item_limit(self.character.get("BookNumber"))
+                if limit is not None:
+                    print(
+                        f"Special Item limit is {limit}. Drop or leave behind a Special Item first."
+                    )
+                else:
+                    print(f"Could not add: {item}")
+                return
         else:
             print(f"Unknown item type: {item_type}")
             return
@@ -10256,6 +10350,7 @@ class LoneWolfReduxAssistant:
             "weapon": "Weapons",
             "backpack": "BackpackItems",
             "special": "SpecialItems",
+            "pocket": "PocketSpecialItems",
         }
         key = mapping.get(str(item_type or "").lower())
         if not key:

@@ -1,4 +1,4 @@
-# Lone Wolf Action Assistant 3.5.1 Internal Testing
+# Lone Wolf Action Assistant 3.5.2 Internal Testing
 
 ## Installation
 
@@ -50,6 +50,18 @@ fresh or continued within the New Order series. Book 20 deliberately ends the
 original Grand Master campaign; Book 21 begins a different New Order Kai Grand
 Master and is not a direct character handoff.
 
+## Carrying limits
+
+- You may carry two Weapons.
+- Backpack capacity is eight items in Books 1-12 and ten items in Books 13-29.
+- Books 1-7 have no stated Special Item limit. From Book 8 onward, you may
+  carry twelve Special Items total. Items recorded as **Pocket Special Items**
+  share that same twelve-item allowance.
+
+When a Book 8+ transition or a newly found item would exceed the Special Item
+limit, choose what to leave behind before adding another item. The assistant
+does not silently discard an item for you.
+
 Use **Open Managed Books Folder** when you need direct access to the selected storage location.
 
 ## Arranging assistant cards
@@ -84,4 +96,4 @@ The app automatically creates missing state folders on launch. Diagnostic logs a
 
 ## Embedded terminal
 
-The Assistant page retains the original Lone Wolf command-line terminal. It runs inside the desktop application through a local WebSocket and Windows pseudo-terminal. No separate Python installation is required.
+The Assistant page retains the original Lone Wolf command-line terminal. It runs inside the desktop application through a local WebSocket and a pipe-backed child process. No separate Python installation is required.

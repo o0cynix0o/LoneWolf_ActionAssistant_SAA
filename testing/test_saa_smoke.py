@@ -3926,7 +3926,7 @@ class CardLayoutInteractionTests(unittest.TestCase):
                     return cls.assistant_html[match.start():index + 1]
         raise AssertionError(f"JavaScript function {name!r} has no closing brace")
 
-    def test_release_metadata_is_3_5_1_internal_testing(self) -> None:
+    def test_release_metadata_is_3_5_2_internal_testing(self) -> None:
         readme = (self.root / "README.md").read_text(encoding="utf-8")
         building = (self.root / "docs" / "BUILDING.md").read_text(encoding="utf-8")
         user_guide = (self.root / "docs" / "USER_GUIDE.md").read_text(encoding="utf-8")
@@ -3936,16 +3936,16 @@ class CardLayoutInteractionTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         version_info = (self.root / "version_info.txt").read_text(encoding="utf-8")
 
-        self.assertIn("# Lone Wolf Action Assistant 3.5.1 Internal Testing", readme)
-        self.assertIn("Version: **3.5.1 Internal Testing**", readme)
-        self.assertIn("# Building Lone Wolf Action Assistant 3.5.1 Internal Testing", building)
-        self.assertIn("# Lone Wolf Action Assistant 3.5.1 Internal Testing", user_guide)
-        self.assertIn("## 3.5.1 - Internal Testing", changelog)
-        self.assertIn('#define AppVersion "3.5.1"', installer)
-        self.assertIn("filevers=(3, 5, 1, 0)", version_info)
-        self.assertIn("prodvers=(3, 5, 1, 0)", version_info)
-        self.assertIn("StringStruct(u'FileVersion', u'3.5.1')", version_info)
-        self.assertIn("StringStruct(u'ProductVersion', u'3.5.1')", version_info)
+        self.assertIn("# Lone Wolf Action Assistant 3.5.2 Internal Testing", readme)
+        self.assertIn("Version: **3.5.2 Internal Testing**", readme)
+        self.assertIn("# Building Lone Wolf Action Assistant 3.5.2 Internal Testing", building)
+        self.assertIn("# Lone Wolf Action Assistant 3.5.2 Internal Testing", user_guide)
+        self.assertIn("## 3.5.2 - Internal Testing", changelog)
+        self.assertIn('#define AppVersion "3.5.2"', installer)
+        self.assertIn("filevers=(3, 5, 2, 0)", version_info)
+        self.assertIn("prodvers=(3, 5, 2, 0)", version_info)
+        self.assertIn("StringStruct(u'FileVersion', u'3.5.2')", version_info)
+        self.assertIn("StringStruct(u'ProductVersion', u'3.5.2')", version_info)
 
     def test_movable_cards_get_a_dedicated_drag_handle(self) -> None:
         self.assertIn("data-card-drag-handle", self.assistant_html)
@@ -4479,6 +4479,72 @@ class SavePathContainmentTests(unittest.TestCase):
         for attempt in ("../../../pwned.json", "..\\..\\pwned.json"):
             with self.assertRaisesRegex(ValueError, "stay inside the saves folder"):
                 app_server.confine_save_path(attempt)
+
+
+class SpecialItemCapacityTests(unittest.TestCase):
+    def assistant(self, temp_dir: str) -> lonewolf_redux.LoneWolfReduxAssistant:
+        root = Path(lonewolf_redux.__file__).resolve().parent
+        return lonewolf_redux.LoneWolfReduxAssistant(
+            save_dir=Path(temp_dir) / "saves",
+            data_dir=root / "data",
+            state_data_dir=Path(temp_dir) / "state",
+            books_dir=Path(temp_dir) / "books",
+        )
+
+    def test_book_eight_limit_counts_pocket_special_items(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            assistant = self.assistant(temp_dir)
+            assistant.character["BookNumber"] = 8
+            assistant.inventory["SpecialItems"] = [f"Special {index}" for index in range(11)]
+            assistant.inventory["PocketSpecialItems"] = ["Pass"]
+
+            self.assertEqual(lonewolf_redux.special_item_count(assistant.inventory), 12)
+            self.assertEqual(
+                lonewolf_redux.special_item_capacity_text(assistant.inventory, 8), "12/12"
+            )
+            self.assertFalse(assistant.add_inventory_item("special", "Grey Crystal Ring"))
+            self.assertFalse(assistant.add_inventory_item("pocket", "Giak Scroll"))
+            self.assertIn(
+                "could not add Grey Crystal Ring",
+                assistant.apply_automation_action(
+                    {"type": "add_item", "container": "special", "name": "Grey Crystal Ring"}
+                ),
+            )
+
+    def test_books_before_eight_keep_the_original_no_cap_rule(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            assistant = self.assistant(temp_dir)
+            assistant.character["BookNumber"] = 7
+            assistant.inventory["SpecialItems"] = [f"Special {index}" for index in range(12)]
+
+            self.assertIsNone(lonewolf_redux.special_item_limit(7))
+            self.assertTrue(assistant.add_inventory_item("special", "Kazan-Oud Platinum Amulet"))
+            self.assertEqual(lonewolf_redux.special_item_count(assistant.inventory), 13)
+
+    def test_transition_drops_can_leave_special_and_pocket_items_behind(self) -> None:
+        inventory = {
+            "Weapons": ["Sword"],
+            "BackpackItems": ["Rope"],
+            "SpecialItems": ["Sommerswerd", "Silver Helm"],
+            "PocketSpecialItems": ["Pass"],
+        }
+
+        messages = lonewolf_redux.apply_later_magnakai_transition_drops(
+            inventory, ["special:1", "pocket:0"]
+        )
+
+        self.assertEqual(inventory["SpecialItems"], ["Sommerswerd"])
+        self.assertEqual(inventory["PocketSpecialItems"], [])
+        self.assertEqual(messages, ["Left behind: Silver Helm", "Left behind: Pass"])
+
+    def test_new_setup_rejects_more_than_twelve_special_items(self) -> None:
+        state = lonewolf_redux.default_state()
+        state["Character"]["BookNumber"] = 8
+        state["Inventory"]["SpecialItems"] = [f"Special {index}" for index in range(12)]
+        state["Inventory"]["PocketSpecialItems"] = ["Pass"]
+
+        with self.assertRaisesRegex(ValueError, "at most 12 Special Items"):
+            lonewolf_redux.validate_special_item_capacity(state)
 
 
 class CorruptSaveTests(unittest.TestCase):

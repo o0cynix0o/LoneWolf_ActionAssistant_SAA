@@ -1,4 +1,4 @@
-# Building Lone Wolf Action Assistant 3.5.1 Internal Testing
+# Building Lone Wolf Action Assistant 3.5.2 Internal Testing
 
 ## Requirements
 

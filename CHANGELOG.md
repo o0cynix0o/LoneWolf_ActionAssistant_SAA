@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.5.2 - Internal Testing
+
+- Enforced the published twelve-Special-Item carrying limit from Book 8 onward.
+  Pocket-carried Special Items share that limit, while Books 1-7 retain their
+  original no-limit rule.
+- Added Special Item capacity to the inventory displays, exposed pocket-carried
+  items, and allowed either kind of Special Item to be left behind during book
+  transitions before new equipment is issued.
+
 ## 3.5.1 - Internal Testing
 
 - Released the completed Books 13-29 direct-effect, route-filter, campaign,
