@@ -4218,6 +4218,23 @@ class CampaignDeskProductionTests(unittest.TestCase):
         self.assertTrue((root / "assets" / "css" / "lw-campaign.css").is_file())
 
 
+class ReaderToolsProductionTests(unittest.TestCase):
+    def test_reader_and_tools_share_the_existing_campaign_state(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
+        shell_js = (root / "assets" / "js" / "lw-shell.js").read_text(encoding="utf-8")
+
+        self.assertIn('href="assets/css/lw-reader-tools.css"', assistant_html)
+        self.assertIn('id="readerCompanion"', assistant_html)
+        self.assertIn('id="toolsNavigation"', assistant_html)
+        self.assertIn("function renderReaderCompanion()", assistant_html)
+        self.assertIn("function renderToolsNavigation()", assistant_html)
+        self.assertIn("document.body.classList.toggle('lw-console-active', isCliMode())", assistant_html)
+        self.assertIn('data-view="${id}"', assistant_html)
+        self.assertIn("Command console", shell_js)
+        self.assertTrue((root / "assets" / "css" / "lw-reader-tools.css").is_file())
+
+
 class DistributionNoticeTests(unittest.TestCase):
     def test_notice_matches_and_ships_with_the_authorized_release(self) -> None:
         root = Path(saa_main.__file__).resolve().parent

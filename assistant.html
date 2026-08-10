@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="assets/css/lw-shell.css">
   <link rel="stylesheet" href="assets/css/lw-ui-foundation.css">
   <link rel="stylesheet" href="assets/css/lw-campaign.css">
+  <link rel="stylesheet" href="assets/css/lw-reader-tools.css">
   <script defer src="assets/js/lw-shell.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css">
   <style>
@@ -1622,15 +1623,21 @@
     <section class="app-pane" aria-label="Lone Wolf web assistant">
       <button class="app-menu-button" type="button" id="appMenuButton" data-app-menu-toggle aria-label="Assistant menu" title="Assistant menu"></button>
       <div class="menu-popover app-menu-popover" id="appMenu" hidden></div>
-      <section class="lw-production-context" id="productionContext" aria-label="Campaign context"></section>
-      <div class="status-grid" id="statusGrid"></div>
-      <section class="quick-panel" id="quickPanel" aria-label="Quick actions"></section>
-      <div class="quick-tabs-divider" id="quickTabsDivider" aria-hidden="true"></div>
-      <nav class="tabs" id="tabs"></nav>
-      <section id="view"></section>
-      <div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="false"></div>
-      <div class="visually-hidden" id="cardLayoutStatus" aria-live="polite" aria-atomic="true"></div>
-      <div class="message" id="message">Ready.</div>
+      <div class="tools-layout-shell">
+        <nav class="tools-navigation" id="toolsNavigation" aria-label="Campaign tools"></nav>
+        <div class="tools-main">
+          <section class="lw-production-context" id="productionContext" aria-label="Campaign context"></section>
+          <div class="status-grid" id="statusGrid"></div>
+          <section class="reader-companion" id="readerCompanion" aria-label="Reader companion"></section>
+          <section class="quick-panel" id="quickPanel" aria-label="Quick actions"></section>
+          <div class="quick-tabs-divider" id="quickTabsDivider" aria-hidden="true"></div>
+          <nav class="tabs" id="tabs"></nav>
+          <section id="view"></section>
+          <div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="false"></div>
+          <div class="visually-hidden" id="cardLayoutStatus" aria-live="polite" aria-atomic="true"></div>
+          <div class="message" id="message">Ready.</div>
+        </div>
+      </div>
     </section>
   </main>
   <aside class="lw-console-drawer" id="consoleDrawer" aria-label="Command console" hidden>
@@ -1809,9 +1816,11 @@
     const readerTitle = document.getElementById('readerTitle');
     const serverStatus = document.getElementById('serverStatus');
     const statusGrid = document.getElementById('statusGrid');
+    const readerCompanion = document.getElementById('readerCompanion');
     const quickPanel = document.getElementById('quickPanel');
     const quickTabsDivider = document.getElementById('quickTabsDivider');
     const tabs = document.getElementById('tabs');
+    const toolsNavigation = document.getElementById('toolsNavigation');
     const view = document.getElementById('view');
     const toastStack = document.getElementById('toastStack');
     const cardLayoutStatus = document.getElementById('cardLayoutStatus');
@@ -3064,8 +3073,11 @@
       cancelCardResize({ restore: true, announce: false });
       cancelCardDrag({ restore: true, announce: false });
       setModeIndicator();
+      document.body.classList.toggle('lw-console-active', isCliMode());
       renderStatus();
       renderCampaignRail();
+      renderReaderCompanion();
+      renderToolsNavigation();
       if (isCliMode() && !campaignStartRequested) {
         renderCliPanel();
         return;
@@ -3121,6 +3133,64 @@
         ['Gold', currentInventory().GoldCrowns ?? 0, 'status-gold'],
         ['CS', c.CombatSkillCurrent, 'status-cs']
       ].map(([label, value, className]) => `<div class="stat-card ${className}"><span>${label}</span><strong>${escapeHtml(value)}</strong></div>`).join('');
+    }
+
+    function renderReaderCompanion() {
+      if (!readerCompanion) return;
+      if (!document.body.classList.contains('lw-surface-reader')) {
+        readerCompanion.innerHTML = '';
+        return;
+      }
+      const character = currentCharacter();
+      const run = app.run || {};
+      readerCompanion.innerHTML = `
+        <section class="lw-ui-panel reader-companion__panel">
+          <h3>Section tools</h3>
+          <div class="reader-companion__actions">
+            <button class="lw-ui-button" type="button" data-automation-apply ${manualDisabledAttributes('section effects')}>Apply effects</button>
+            <button class="lw-ui-button" type="button" data-roll ${manualDisabledAttributes('roll helper')}>Roll 0-9</button>
+          </div>
+        </section>
+        <section class="lw-ui-panel reader-companion__panel">
+          <h3>Campaign</h3>
+          <p>Book ${escapeHtml(character.BookNumber)}, section ${escapeHtml(app.state.CurrentSection)} · ${escapeHtml(text(run.Difficulty, 'Normal'))} difficulty.</p>
+        </section>
+        <section class="lw-ui-panel reader-companion__panel">
+          <h3>Choice check</h3>
+          <p>Read and choose from the book text. Audited requirements remain visible in the reader so your story choice stays in context.</p>
+        </section>
+        <section class="lw-ui-panel reader-companion__panel">
+          <h3>Assistant</h3>
+          <div class="reader-companion__actions">
+            <a class="lw-ui-button" href="assistant.html?surface=tools&tool=inventory&resume=1">Inventory</a>
+            <a class="lw-ui-button" href="assistant.html?surface=tools&tool=combat&resume=1">Combat</a>
+            <a class="lw-ui-button" href="assistant.html?surface=tools&tool=notes&resume=1">Notes</a>
+            <a class="lw-ui-button" href="assistant.html?surface=tools&tool=saves&resume=1">Saves</a>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderToolsNavigation() {
+      if (!toolsNavigation) return;
+      if (!document.body.classList.contains('lw-surface-tools')) {
+        toolsNavigation.innerHTML = '';
+        return;
+      }
+      const items = [
+        ['sheet', 'Action Chart', 'Character, rank, and current campaign'],
+        ['inventory', 'Inventory', 'Weapons, backpack, and special items'],
+        ['disciplines', 'Disciplines', 'Kai, Magnakai, Grand Master, or New Order'],
+        ['sections', 'Sections', 'Audited section and route work'],
+        ['combat', 'Combat', 'Tracked fights and recent rounds'],
+        ['achievements', 'Achievements', 'Campaign progress and unlocks'],
+        ['saves', 'Saves', 'Checkpoints and backups'],
+        ['notes', 'Notes', 'Campaign memory'],
+        ['settings', 'Settings', 'Themes and reader preferences']
+      ];
+      toolsNavigation.innerHTML = '<span class="tools-navigation__label">Campaign tools</span>' + items.map(([id, label, note]) =>
+        `<button type="button" class="${activeView === id ? 'active' : ''}" data-view="${id}"><strong>${label}</strong><small>${note}</small></button>`
+      ).join('');
     }
 
     function campaignSeriesForBook(bookNumber) {

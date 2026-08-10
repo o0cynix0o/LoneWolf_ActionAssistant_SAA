@@ -98,6 +98,10 @@
       : '';
     const readableBook = Number.isInteger(book) ? 'Book ' + book + (title ? ' · ' + title : '') : 'Current campaign';
     const readableSection = Number.isInteger(section) ? 'Section ' + section : 'Preparing campaign';
+    if (surface === 'tools' && params.get('console') === '1') {
+      target.innerHTML = '<div><span class="lw-production-context__eyebrow">Command console</span><h2>Keyboard-driven campaign control</h2><p>' + readableBook + ' · ' + readableSection + ' · commands use this same live save.</p></div><div class="lw-production-context__actions"><a href="assistant.html?surface=tools&resume=1">Back to tools</a><a href="assistant.html?surface=campaign&resume=1">Campaign desk</a></div>';
+      return;
+    }
     if (surface === 'tools') {
       target.innerHTML = '<div><span class="lw-production-context__eyebrow">Campaign tools</span><h2>Everything that supports this adventure</h2><p>' + readableBook + ' · ' + readableSection + '</p></div><div class="lw-production-context__actions"><a href="assistant.html?surface=campaign&resume=1">Return to campaign</a><a href="assistant.html?surface=reader&resume=1">Reader view</a></div>';
       return;

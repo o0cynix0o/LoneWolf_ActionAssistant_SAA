@@ -1,0 +1,79 @@
+/* Reader First and Tools production modes share the existing assistant
+   renderers without sharing Campaign Desk's three-pane layout. */
+.tools-layout-shell { display: contents; }
+.tools-navigation { display: none; }
+.reader-companion { display: none; }
+
+body.lw-shell-assistant.lw-surface-reader .workspace {
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 340px);
+}
+body.lw-shell-assistant.lw-surface-reader .campaign-rail { display: none; }
+body.lw-shell-assistant.lw-surface-reader .reader-pane { padding: 16px; background: var(--lw-ui-canvas); }
+body.lw-shell-assistant.lw-surface-reader .toolbar { min-height: 54px; }
+body.lw-shell-assistant.lw-surface-reader .toolbar-book-series { display: none !important; }
+body.lw-shell-assistant.lw-surface-reader .reader-title { margin-left: 0; max-width: none; color: var(--lw-ui-accent); font: 700 1rem var(--lw-ui-serif); }
+body.lw-shell-assistant.lw-surface-reader #book-frame { border-color: var(--lw-ui-border); box-shadow: 0 18px 42px rgba(0,0,0,.22); }
+body.lw-shell-assistant.lw-surface-reader .app-pane { padding: 14px; background: color-mix(in srgb, var(--lw-ui-canvas) 92%, #000); }
+body.lw-shell-assistant.lw-surface-reader .lw-production-context { min-height: 0; padding: 14px 40px 13px 14px; }
+body.lw-shell-assistant.lw-surface-reader .lw-production-context h2 { font-size: 1.22rem !important; }
+body.lw-shell-assistant.lw-surface-reader .status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+body.lw-shell-assistant.lw-surface-reader .status-book { grid-column: 1 / -1; }
+body.lw-shell-assistant.lw-surface-reader .stat-card { min-height: 62px; }
+body.lw-shell-assistant.lw-surface-reader .quick-panel,
+body.lw-shell-assistant.lw-surface-reader .quick-tabs-divider,
+body.lw-shell-assistant.lw-surface-reader .tabs,
+body.lw-shell-assistant.lw-surface-reader #view { display: none; }
+body.lw-shell-assistant.lw-surface-reader .reader-companion { display: grid; gap: 10px; }
+.reader-companion__panel { padding: 14px; }
+.reader-companion__panel h3 { margin: 0 0 10px; color: var(--lw-ui-accent); font: 700 1rem var(--lw-ui-serif); }
+.reader-companion__panel p { margin: 0; color: var(--lw-ui-muted); font-size: .8rem; line-height: 1.45; }
+.reader-companion__actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.reader-companion__actions .lw-ui-button { min-height: 46px; padding: 8px; text-align: center; }
+
+body.lw-shell-assistant.lw-surface-tools .workspace { grid-template-columns: minmax(0, 1fr); }
+body.lw-shell-assistant.lw-surface-tools .campaign-rail,
+body.lw-shell-assistant.lw-surface-tools .reader-pane { display: none; }
+body.lw-shell-assistant.lw-surface-tools .app-pane { width: min(1500px, 100%); margin: 0 auto; padding: 16px; overflow: hidden; background: var(--lw-ui-canvas); }
+body.lw-shell-assistant.lw-surface-tools .tools-layout-shell { display: grid; grid-template-columns: 224px minmax(0, 1fr); gap: 16px; height: 100%; min-height: 0; }
+body.lw-shell-assistant.lw-surface-tools .tools-navigation { display: grid; align-content: start; gap: 5px; padding: 9px; overflow: auto; border: 1px solid var(--lw-ui-border); border-radius: var(--lw-ui-radius); background: var(--lw-ui-surface); }
+.tools-navigation__label { padding: 7px 8px 5px; color: var(--lw-ui-gold); font: 800 .68rem var(--lw-ui-sans); letter-spacing: .1em; text-transform: uppercase; }
+.tools-navigation button { width: 100%; min-height: 42px; padding: 9px; border: 1px solid transparent; border-radius: 4px; background: transparent; color: var(--lw-ui-muted); text-align: left; font: 700 .8rem var(--lw-ui-sans); cursor: pointer; }
+.tools-navigation button:hover, .tools-navigation button.active { border-color: var(--lw-ui-border); background: var(--lw-ui-selected); color: var(--lw-ui-accent); }
+.tools-navigation button small { display: block; margin-top: 3px; color: var(--lw-ui-muted); font-size: .7rem; font-weight: 400; }
+body.lw-shell-assistant.lw-surface-tools .tools-main { min-width: 0; min-height: 0; overflow: auto; }
+body.lw-shell-assistant.lw-surface-tools .lw-production-context { min-height: 0; margin-bottom: 12px; }
+body.lw-shell-assistant.lw-surface-tools .status-grid { grid-template-columns: minmax(180px, 1.6fr) repeat(4, minmax(80px, .72fr)); margin-bottom: 12px; }
+body.lw-shell-assistant.lw-surface-tools .quick-panel { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: 12px; }
+body.lw-shell-assistant.lw-surface-tools .quick-panel > .quick-card { width: auto !important; min-height: 0 !important; }
+body.lw-shell-assistant.lw-surface-tools .quick-panel > .quick-card:nth-child(n + 4) { display: none; }
+body.lw-shell-assistant.lw-surface-tools .quick-tabs-divider,
+body.lw-shell-assistant.lw-surface-tools .tabs { display: none; }
+body.lw-shell-assistant.lw-surface-tools #view { min-height: 0; padding-bottom: 20px; }
+body.lw-shell-assistant.lw-surface-tools.lw-console-active .tools-layout-shell { grid-template-columns: minmax(0, 1fr); }
+body.lw-shell-assistant.lw-surface-tools.lw-console-active .tools-navigation,
+body.lw-shell-assistant.lw-surface-tools.lw-console-active .quick-panel,
+body.lw-shell-assistant.lw-surface-tools.lw-console-active .status-grid { display: none; }
+body.lw-shell-assistant.lw-surface-tools.lw-console-active .lw-production-context { margin-bottom: 0; }
+body.lw-shell-assistant.lw-surface-tools.lw-console-active #view { height: calc(100% - 96px); }
+
+@media (max-width: 860px) {
+  body.lw-shell-assistant.lw-surface-reader .workspace { grid-template-columns: 1fr; height: auto; }
+  body.lw-shell-assistant.lw-surface-reader .reader-pane { min-height: 68vh; border-right: 0; border-bottom: 1px solid var(--lw-ui-border); }
+  body.lw-shell-assistant.lw-surface-reader .app-pane { min-height: 0; overflow: visible; }
+  body.lw-shell-assistant.lw-surface-tools .workspace { height: auto; }
+  body.lw-shell-assistant.lw-surface-tools .app-pane { overflow: visible; }
+  body.lw-shell-assistant.lw-surface-tools .tools-layout-shell { grid-template-columns: 1fr; }
+  body.lw-shell-assistant.lw-surface-tools .tools-navigation { display: flex; overflow-x: auto; }
+  body.lw-shell-assistant.lw-surface-tools .tools-navigation__label { display: none; }
+  body.lw-shell-assistant.lw-surface-tools .tools-navigation button { flex: 0 0 142px; }
+}
+
+@media (max-width: 560px) {
+  body.lw-shell-assistant.lw-surface-reader .reader-pane,
+  body.lw-shell-assistant.lw-surface-reader .app-pane { padding: 8px; }
+  .reader-companion__actions { grid-template-columns: 1fr; }
+  body.lw-shell-assistant.lw-surface-tools .app-pane { padding: 8px; }
+  body.lw-shell-assistant.lw-surface-tools .quick-panel { grid-template-columns: 1fr; }
+  body.lw-shell-assistant.lw-surface-tools .status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  body.lw-shell-assistant.lw-surface-tools .status-book { grid-column: 1 / -1; }
+}
