@@ -78,7 +78,7 @@ The app the user runs is the **PyInstaller onedir build** at `dist\Lone Wolf Act
 
 ## Verification status
 
-- **Done (source and automated verification):** all four native surface roots and their renderer routing are covered by the smoke suite; Campaign uses the real story mount, choices route through `action()`, and the Console stale-token regression has an automated test. The source build and installer created on 2026-08-10 contain the native `assistant.html` module.
+- **Done (source, automated, and packaged-startup verification):** all four native surface roots and their renderer routing are covered by the smoke suite; Campaign uses the real story mount, choices route through `action()`, and the Console stale-token regression has an automated test. The source build and installer created on 2026-08-10 contain the native `assistant.html` module. The rebuilt frozen EXE was started successfully, published a live cheat-session URL/token file, and shut down cleanly.
 - **Not done — needs the GUI / real save:** end-to-end check in the built desktop exe against the **actual Book 6 §219 Magnakai save** (the scratch server was Book 1 §1); Console open in the packaged exe post-rebuild; screenshots into `docs/ui-checkpoints/`. The in-app browser used for verification reports `innerWidth 0` and won't composite, so pixel/screenshot capture must be done in the real app.
 
 ## Remaining work for Codex
