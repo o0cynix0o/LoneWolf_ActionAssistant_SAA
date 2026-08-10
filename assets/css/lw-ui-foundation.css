@@ -1,0 +1,95 @@
+/*
+ * Production UI foundation. New screens opt into these classes as they are
+ * rebuilt; this file does not restyle the legacy application by selector.
+ */
+:root {
+  --lw-ui-canvas: var(--lw-bg, #0c1214);
+  --lw-ui-surface: var(--lw-panel, #131e21);
+  --lw-ui-raised: var(--lw-panel-2, #18272b);
+  --lw-ui-selected: #1e3337;
+  --lw-ui-border: var(--lw-border, #36545a);
+  --lw-ui-border-strong: var(--lw-accent-2, #78abb3);
+  --lw-ui-ink: var(--lw-text, #edf5f2);
+  --lw-ui-muted: var(--lw-muted-2, #9aafb0);
+  --lw-ui-accent: var(--lw-accent, #bfeeff);
+  --lw-ui-gold: #f0ca70;
+  --lw-ui-green: #87d6ad;
+  --lw-ui-danger: var(--lw-danger, #ff9a85);
+  --lw-ui-serif: Georgia, "Times New Roman", serif;
+  --lw-ui-sans: "Segoe UI", Arial, sans-serif;
+  --lw-ui-radius: 6px;
+  --lw-ui-page-width: 1480px;
+}
+
+.lw-ui-page {
+  width: min(var(--lw-ui-page-width), calc(100% - 40px));
+  margin: 0 auto;
+  padding: 28px 0 56px;
+  color: var(--lw-ui-ink);
+  font-family: var(--lw-ui-sans);
+}
+
+.lw-ui-eyebrow {
+  margin: 0 0 7px;
+  color: var(--lw-ui-gold);
+  font: 800 .72rem var(--lw-ui-sans);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.lw-ui-panel {
+  border: 1px solid var(--lw-ui-border);
+  border-radius: var(--lw-ui-radius);
+  background: var(--lw-ui-surface);
+}
+
+.lw-ui-panel__title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--lw-ui-border);
+}
+
+.lw-ui-panel__body { padding: 16px; }
+
+.lw-ui-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 8px 13px;
+  border: 1px solid var(--lw-ui-border-strong);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--lw-ui-accent);
+  font: 700 .86rem var(--lw-ui-sans);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.lw-ui-button:hover { border-color: var(--lw-ui-accent); background: var(--lw-ui-selected); }
+.lw-ui-button--primary { border-color: var(--lw-ui-accent); background: var(--lw-ui-accent); color: #102025; }
+.lw-ui-button--danger { border-color: var(--lw-ui-danger); color: var(--lw-ui-danger); }
+
+.lw-ui-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border: 1px solid var(--lw-ui-border);
+  border-radius: 999px;
+  color: var(--lw-ui-muted);
+  font: 700 .73rem var(--lw-ui-sans);
+  white-space: nowrap;
+}
+
+.lw-ui-status--reading { border-color: #44886b; color: var(--lw-ui-green); background: rgba(61, 133, 98, .12); }
+.lw-ui-status--ready { border-color: #9d7427; color: var(--lw-ui-gold); background: rgba(157, 116, 39, .13); }
+.lw-ui-status--locked { color: #64787b; }
+.lw-ui-status--completed { border-color: var(--lw-ui-border-strong); color: var(--lw-ui-accent); }
+
+@media (max-width: 800px) {
+  .lw-ui-page { width: min(100% - 24px, var(--lw-ui-page-width)); padding-top: 18px; }
+}
