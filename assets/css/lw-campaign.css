@@ -157,6 +157,21 @@ body.lw-surface-campaign .workspace.lw-native {
 .lw-glance__tools .lw-ui-button span { color: var(--lw-ui-muted); font: 400 .72rem var(--lw-ui-sans); }
 .lw-glance__tools .lw-ui-button--primary span { color: #24434c !important; }
 
+/* Recovery is snapshot-based: make the earlier decision visible without making
+   it compete with the immediate story choice or pretending it is a route. */
+.lw-recovery-path { display: grid; gap: 10px; padding: 14px 16px; border-top: 1px solid var(--lw-ui-border); background: rgba(61, 133, 98, .07); }
+.lw-recovery-path__head { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
+.lw-recovery-path__head .lw-eyebrow { margin-bottom: 3px; }
+.lw-recovery-path__head h2 { font-size: 1.05rem; }
+.lw-recovery-path > .lw-muted { margin: 0; font-size: .82rem; }
+.lw-recovery-path > .lw-ui-button { justify-self: start; }
+.lw-recovery-path__hint { margin: 0; color: var(--lw-ui-muted); font-size: .76rem; }
+.lw-recovery-path details { color: var(--lw-ui-muted); font: 700 .76rem var(--lw-ui-sans); }
+.lw-recovery-path summary { cursor: pointer; }
+.lw-recovery-path__timeline { display: grid; gap: 6px; margin-top: 8px; }
+.lw-recovery-path__timeline .lw-ui-button { display: flex; justify-content: space-between; gap: 12px; text-align: left; }
+.lw-recovery-path__timeline .lw-ui-button span { color: var(--lw-ui-muted); font-size: .72rem; }
+
 /* Native Combat Mode: the encounter is the work surface. The dense legacy
    renderer remains available in Tools; Campaign gets one compact decision flow. */
 .lw-combat-screen { display: grid; gap: 14px; }

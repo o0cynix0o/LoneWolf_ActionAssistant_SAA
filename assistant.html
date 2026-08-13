@@ -1948,6 +1948,7 @@
     function currentCombat() { return app.state.Combat; }
     function currentFlow() { return app.sectionFlow || {}; }
     function currentDeath() { return app.death || app.state.Automation?.DeathState || { Active: false }; }
+    function currentRecoveryTimeline() { return app.recoveryTimeline || { Available: false, Timeline: [], Recommended: null }; }
     function currentBookComplete() { return app.bookComplete || { Active: false }; }
     function currentAchievements() { return app.achievements || app.state.Achievements || {}; }
 
@@ -2848,6 +2849,21 @@
         };
       }
 
+      if (actionName === 'checkpoint_recovery') {
+        return {
+          summary: `Recovery - restored section ${text(stateFrom(afterSnapshot).CurrentSection, '?')}`,
+          title: 'Checkpoint Recovery',
+          details: [
+            receiptDetail('Restored', locationLabel(afterSnapshot)),
+            ...changes.details,
+            receiptDetail('Why', 'You returned to an earlier saved decision point after a route no longer offered a viable way forward.'),
+            receiptDetail('How', 'The assistant restored the full section snapshot, including the Action Chart and inventory, then saved the new campaign branch.'),
+            output,
+            ...achievements
+          ].filter(Boolean)
+        };
+      }
+
       if (['complete_book', 'continue_book', 'repeat_book'].includes(actionName)) {
         const completion = afterSnapshot?.bookComplete || {};
         const summary = completion.Summary || {};
@@ -3538,7 +3554,8 @@
             <button class="lw-ui-button" type="button" data-save-current><strong>Save</strong><span>Create a checkpoint</span></button>
           </div>
         </div>
-        ${encounterPanel}`;
+        ${encounterPanel}
+        ${recoveryTimelineHtml(true)}`;
     }
     function disciplineScreenGroup(title, eyebrow, disciplines, options = {}) {
       const known = arr(disciplines).filter(Boolean);
@@ -4630,6 +4647,7 @@
               <button type="button" data-death-recovery="rewind" ${death.CanRewind ? '' : 'disabled'}>Rewind</button>
             </article>
           </div>
+          ${recoveryTimelineHtml()}
         </div>
       `;
     }
@@ -6172,6 +6190,22 @@
         choiceGroup('Section Roll', sectionRollRows(entry))
       ].filter(Boolean);
       return groups.join('') || '<p class="muted">No section choices recorded for this section.</p>';
+    }
+
+    function recoveryTimelineHtml(compact = false) {
+      const recovery = currentRecoveryTimeline();
+      const recommended = recovery.Recommended;
+      if (!recommended || Number(recommended.Section) === Number(app?.state?.CurrentSection)) return '';
+      const routeHint = arr(recommended.Routes).map((route) => `Section ${text(route.Section, '?')}`).join(' or ');
+      const timeline = compact ? [] : arr(recovery.Timeline).filter((entry) => entry.Key !== recommended.Key).slice(0, 5);
+      return `
+        <section class="lw-recovery-path">
+          <div class="lw-recovery-path__head"><div><p class="lw-eyebrow">Recovery path</p><h2>Return to an earlier decision</h2></div><span class="lw-ui-status">Snapshot</span></div>
+          <p class="lw-muted">Restores the Action Chart exactly as it was at section ${escapeHtml(recommended.Section)}, before the route that led here.</p>
+          <button class="lw-ui-button lw-ui-button--primary" type="button" data-checkpoint-recovery="${escapeHtml(recommended.Key)}">Return to section ${escapeHtml(recommended.Section)}</button>
+          ${routeHint ? `<p class="lw-recovery-path__hint">Available routes there: ${escapeHtml(routeHint)}.</p>` : ''}
+          ${timeline.length ? `<details><summary>Other recent checkpoints</summary><div class="lw-recovery-path__timeline">${timeline.map((entry) => `<button class="lw-ui-button" type="button" data-checkpoint-recovery="${escapeHtml(entry.Key)}"><strong>Section ${escapeHtml(entry.Section)}</strong><span>${escapeHtml(entry.DecisionPoint ? 'Decision point' : 'Earlier snapshot')}</span></button>`).join('')}</div></details>` : ''}
+        </section>`;
     }
 
     function renderChoicesPanel() {
@@ -8079,6 +8113,7 @@
         return;
       }
       if (button.dataset.deathRecovery) await action({ action: 'death_recovery', mode: button.dataset.deathRecovery });
+      if (button.dataset.checkpointRecovery) await action({ action: 'checkpoint_recovery', key: button.dataset.checkpointRecovery });
       if (button.dataset.completeBook !== undefined) await action({ action: 'complete_book' });
       if (button.dataset.openNextBook) {
         const nextBook = Number(button.dataset.openNextBook);

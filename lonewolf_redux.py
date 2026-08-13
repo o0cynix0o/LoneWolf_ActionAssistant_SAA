@@ -5430,6 +5430,63 @@ class LoneWolfReduxAssistant:
         death["RewindTarget"] = self.checkpoint_summary(rewind)
         return death
 
+    def checkpoint_available_routes(self, checkpoint: dict[str, Any]) -> list[dict[str, Any]]:
+        """Read a checkpoint's legal printed routes against its saved Action Chart."""
+        snapshot = checkpoint.get("Snapshot") if isinstance(checkpoint, dict) else None
+        if not isinstance(snapshot, dict):
+            return []
+        original_state = self.state
+        try:
+            self.state = normalize_state(json_clone(snapshot))
+            book_number = int(checkpoint.get("BookNumber") or self.character.get("BookNumber") or 1)
+            section = int(checkpoint.get("Section") or self.state.get("CurrentSection") or 1)
+            return [
+                route
+                for route in self.section_source_route_payload(book_number, section)
+                if self.route_availability_payload(route).get("Available", True)
+            ]
+        finally:
+            self.state = original_state
+
+    def section_is_terminal_failure(self, book_number: int, section: int) -> bool:
+        entry = self.section_automation_entry(book_number, section) or {}
+        for action in as_list(entry.get("actions")):
+            if not isinstance(action, dict) or str(action.get("type") or "").lower() != "ending":
+                continue
+            if str(action.get("ending") or "").lower() in {"death", "failure", "combat"}:
+                return True
+        return False
+
+    def recovery_timeline_payload(self, limit: int = 10) -> dict[str, Any]:
+        """Expose recent restorable snapshots and the latest meaningful fork."""
+        locked = self.permadeath_enabled()
+        checkpoints = self.section_checkpoints()
+        timeline: list[dict[str, Any]] = []
+        for checkpoint in reversed(checkpoints[-max(1, int(limit)):]):
+            routes = self.checkpoint_available_routes(checkpoint)
+            forced_terminal = (
+                len(routes) == 1
+                and self.section_is_terminal_failure(
+                    int(checkpoint.get("BookNumber") or 1),
+                    int(routes[0].get("Section") or 0),
+                )
+            )
+            timeline.append({
+                **(self.checkpoint_summary(checkpoint) or {}),
+                "Key": str(checkpoint.get("Key") or ""),
+                "CanRestore": not locked,
+                "Routes": [{"Section": route.get("Section"), "Label": route.get("Label", "")} for route in routes],
+                "DecisionPoint": len(routes) > 1,
+                "ForcedTerminalRoute": forced_terminal,
+            })
+        recommended = next((item for item in timeline if item.get("DecisionPoint")), None)
+        return {
+            "Available": bool(checkpoints) and not locked,
+            "Permadeath": locked,
+            "Timeline": timeline,
+            "Recommended": recommended,
+        }
+
     def register_death(self, death_type: str = "death", cause: str = "") -> None:
         if self.cheat_active("unkillable"):
             checkpoints = self.section_checkpoints()
@@ -5500,34 +5557,20 @@ class LoneWolfReduxAssistant:
         history_entry.pop("Active", None)
         self.automation["DeathHistory"] = (history + [history_entry])[-100:]
 
-    def restore_death_checkpoint(self, mode: str = "repeat") -> None:
-        if not self.death_active():
-            print("No active death or failed mission to recover from.")
-            return
+    def restore_section_checkpoint(self, checkpoint_key: str, action_label: str = "Recovered") -> None:
+        """Restore one exact section snapshot, retaining only its valid past timeline."""
         if self.permadeath_enabled():
             print("Permadeath is enabled for this run; recovery checkpoints are unavailable.")
             return
-
-        mode = str(mode or "repeat").lower()
         checkpoints = self.section_checkpoints()
         if not checkpoints:
             print("No recovery checkpoint is available.")
             return
-
-        if mode == "rewind":
-            if len(checkpoints) < 2:
-                print("No previous section checkpoint is available.")
-                return
-            target_index = len(checkpoints) - 2
-            action_label = "Rewound"
-        else:
-            target_index = len(checkpoints) - 1
-            action_label = "Repeated"
-
-        target = checkpoints[target_index]
-        if mode != "rewind" and str(target.get("Stage") or "ready") == "entry":
-            print("Repeat is not available for this death; rewind to the previous section instead.")
+        target_index = next((index for index, checkpoint in enumerate(checkpoints) if str(checkpoint.get("Key") or "") == str(checkpoint_key or "")), -1)
+        if target_index < 0:
+            print("That recovery checkpoint is no longer available.")
             return
+        target = checkpoints[target_index]
         snapshot = target.get("Snapshot")
         if isinstance(snapshot, str):
             restored = json.loads(snapshot)
@@ -5554,6 +5597,33 @@ class LoneWolfReduxAssistant:
         self.write_current_position()
         self.autosave()
         print(f"{action_label} to Book {self.character['BookNumber']}, section {self.state['CurrentSection']}.")
+
+    def restore_death_checkpoint(self, mode: str = "repeat") -> None:
+        if not self.death_active():
+            print("No active death or failed mission to recover from.")
+            return
+        if self.permadeath_enabled():
+            print("Permadeath is enabled for this run; recovery checkpoints are unavailable.")
+            return
+
+        mode = str(mode or "repeat").lower()
+        checkpoints = self.section_checkpoints()
+        if not checkpoints:
+            print("No recovery checkpoint is available.")
+            return
+        if mode == "rewind":
+            if len(checkpoints) < 2:
+                print("No previous section checkpoint is available.")
+                return
+            target = checkpoints[-2]
+            action_label = "Rewound"
+        else:
+            target = checkpoints[-1]
+            if str(target.get("Stage") or "ready") == "entry":
+                print("Repeat is not available for this death; rewind to the previous section instead.")
+                return
+            action_label = "Repeated"
+        self.restore_section_checkpoint(str(target.get("Key") or ""), action_label)
 
     def section_automation_entry(self, book_number: int, section: int) -> dict[str, Any] | None:
         book_entries = self.section_automation.get(str(book_number), {})
@@ -5756,6 +5826,7 @@ class LoneWolfReduxAssistant:
 
         choices: list[dict[str, Any]] = []
         seen: set[int] = set()
+        prior_item_condition: dict[str, Any] | None = None
         choice_pattern = re.compile(
             r"<p\b[^>]*class=[\"'][^\"']*\bchoice\b[^\"']*[\"'][^>]*>(.*?)</p>",
             flags=re.IGNORECASE | re.DOTALL,
@@ -5772,9 +5843,18 @@ class LoneWolfReduxAssistant:
                 seen.add(target)
                 payload = {"Section": target, "Label": label or f"Go to {target}"}
                 condition, blocked_reason = self.infer_source_route_condition(payload["Label"])
+                if (
+                    condition is None
+                    and prior_item_condition
+                    and re.match(r"^if (?:you )?(?:do not|don't) (?:have|possess) (?:this|the) (?:special )?item\b", label, flags=re.IGNORECASE)
+                ):
+                    condition = {"type": "no_item", "name": prior_item_condition["name"], "match": prior_item_condition.get("match", "exact")}
+                    blocked_reason = f"Requires that you do not have {prior_item_condition['name']}."
                 if condition:
                     payload["Condition"] = condition
                     payload["BlockedReason"] = blocked_reason
+                    if condition.get("type") == "item" and condition.get("name"):
+                        prior_item_condition = condition
                 choices.append(payload)
 
         if choices:
@@ -5872,6 +5952,8 @@ class LoneWolfReduxAssistant:
             ("Bow", "exact"),
         )
         item_clause = re.match(r"^if (?:you )?(?P<verb>have|possess|purchased)\b", lowered)
+        no_item_clause = re.match(r"^if (?:you )?(?:do not|don't) (?:have|possess)\b", lowered)
+        item_clause = item_clause or no_item_clause
         if item_clause:
             item_conditions: list[dict[str, Any]] = []
             item_names: list[str] = []
@@ -5881,7 +5963,8 @@ class LoneWolfReduxAssistant:
                 if not match or any(match.start() < end and start < match.end() for start, end in claimed_spans):
                     continue
                 claimed_spans.append(match.span())
-                condition_type = "item_history" if item_clause.group("verb") == "purchased" else "item"
+                verb = item_clause.groupdict().get("verb") or ""
+                condition_type = "no_item" if no_item_clause else ("item_history" if verb == "purchased" else "item")
                 item_conditions.append({"type": condition_type, "name": item, "match": match_mode})
                 item_names.append(item)
             if item_conditions:
@@ -5891,7 +5974,7 @@ class LoneWolfReduxAssistant:
                     "conditions": item_conditions,
                 }
                 requirement = " or ".join(item_names) if item_uses_or else " and ".join(item_names)
-                return item_condition, f"Requires {requirement}."
+                return item_condition, (f"Requires that you do not have {requirement}." if no_item_clause else f"Requires {requirement}.")
 
         discipline_pattern = re.compile(
             r"(?:^if\s+you\s+|\bor\s+if\s+you\s+)(?:have|possess)\s+the\s+magnakai\s+disciplines?\s+of\s+",

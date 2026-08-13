@@ -4204,6 +4204,51 @@ class LibraryProductionTests(unittest.TestCase):
         self.assertTrue((root / "assets" / "css" / "lw-library.css").is_file())
 
 
+class RecoveryTimelineTests(unittest.TestCase):
+    def test_book6_terminal_loop_recovers_to_the_last_real_decision(self) -> None:
+        root = Path(lonewolf_redux.__file__).resolve().parent
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            book_dir = base / "books" / "06tkot"
+            book_dir.mkdir(parents=True)
+            (book_dir / "sect146.htm").write_text(
+                "<p class='choice'>Ride to Amory. <a href='sect96.htm'>Turn to 96</a>.</p>"
+                "<p class='choice'>Head for Soren. <a href='sect247.htm'>Turn to 247</a>.</p>",
+                encoding="utf-8",
+            )
+            (book_dir / "sect96.htm").write_text(
+                "<p class='choice'>If you possess a Cess, <a href='sect49.htm'>turn to 49</a>.</p>"
+                "<p class='choice'>If you do not possess this Special Item, <a href='sect221.htm'>turn to 221</a>.</p>",
+                encoding="utf-8",
+            )
+            (book_dir / "sect49.htm").write_text(
+                "<p class='choice'><a href='sect129.htm'>Turn to 129</a>.</p>", encoding="utf-8"
+            )
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=root / "data", state_data_dir=base / "state", books_dir=base / "books"
+            )
+            assistant.state["RuleSet"] = "Magnakai"
+            assistant.state["Character"].update({"BookNumber": 6, "MagnakaiDisciplines": ["Curing"]})
+            assistant.state["Inventory"]["SpecialItems"] = ["Cess"]
+
+            assistant.set_section(146)
+            assistant.set_section(96)
+            routes = assistant.current_section_flow_payload()["SourceRoutes"]
+            self.assertEqual([(route["Section"], route["Available"]) for route in routes], [(49, True), (221, False)])
+            assistant.set_section(49)
+            assistant.set_section(129)
+            self.assertTrue(assistant.death_active())
+
+            recovery = assistant.recovery_timeline_payload()
+            self.assertTrue(recovery["Timeline"][1]["ForcedTerminalRoute"])
+            self.assertEqual(recovery["Recommended"]["Section"], 146)
+            with redirect_stdout(io.StringIO()):
+                assistant.restore_section_checkpoint(recovery["Recommended"]["Key"])
+            self.assertFalse(assistant.death_active())
+            self.assertEqual(assistant.state["CurrentSection"], 146)
+            self.assertIn("Cess", assistant.inventory["SpecialItems"])
+
+
 class CampaignDeskProductionTests(unittest.TestCase):
     def test_campaign_desk_keeps_reader_and_live_assistant_together(self) -> None:
         root = Path(saa_main.__file__).resolve().parent
@@ -4236,6 +4281,9 @@ class CampaignDeskProductionTests(unittest.TestCase):
         )
         self.assertIn("function renderStoryInto(target, variant)", assistant_html)
         self.assertIn("function renderCampaignRail()", assistant_html)
+        self.assertIn("function recoveryTimelineHtml(compact = false)", assistant_html)
+        self.assertIn("data-checkpoint-recovery", assistant_html)
+        self.assertNotIn("choiceGroup('Story Routes'", assistant_html)
         self.assertIn("function campaignSeriesForBook(bookNumber)", assistant_html)
         self.assertIn("data-rail-current", assistant_html)
         self.assertIn("data-rail-book", assistant_html)

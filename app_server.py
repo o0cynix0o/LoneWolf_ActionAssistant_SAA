@@ -319,6 +319,7 @@ def state_payload(message: str = "", achievement_unlocks: list[dict] | None = No
         "run": ASSISTANT.run_payload(),
         "sectionFlow": ASSISTANT.current_section_flow_payload(),
         "death": ASSISTANT.death_recovery_payload(),
+        "recoveryTimeline": ASSISTANT.recovery_timeline_payload(),
         "bookComplete": ASSISTANT.book_completion_payload(),
         "pendingBookSetup": ASSISTANT.pending_book_setup_payload(),
         "achievements": ASSISTANT.achievement_payload(),
@@ -737,6 +738,8 @@ def handle_action(payload: dict) -> str:
         return capture_output(lambda: ASSISTANT.finish_karmo_potion())
     if action == "death_recovery":
         return capture_output(lambda: ASSISTANT.restore_death_checkpoint(str(payload.get("mode") or "repeat")))
+    if action == "checkpoint_recovery":
+        return capture_output(lambda: ASSISTANT.restore_section_checkpoint(str(payload.get("key") or "")))
     if action == "meal":
         tokens = ["meal", "missed"] if payload.get("missed") else ["meal"]
         return capture_output(lambda: ASSISTANT.meal_command(tokens))
