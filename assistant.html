@@ -3305,7 +3305,7 @@
     const nativeConsole = pageParams.get('console') === '1';
     const isNativeSurface = ['campaign', 'reader', 'tools'].includes(nativeSurface);
     const workspaceEl = document.getElementById('workspace');
-    const CAMPAIGN_TABS = [['story', 'Story'], ['sheet', 'Action Chart'], ['inventory', 'Inventory'], ['combat', 'Combat'], ['notes', 'Notes']];
+    const CAMPAIGN_TABS = [['story', 'Story'], ['sheet', 'Action Chart'], ['disciplines', 'Disciplines'], ['inventory', 'Inventory'], ['combat', 'Combat'], ['notes', 'Notes']];
     let campaignTab = 'story';
     let browseSection = requestedBrowseSection;
     let storyRenderToken = 0;
@@ -3466,6 +3466,64 @@
           <div class="lw-glance__body">${choicesPanelBody()}</div>
         </div>`;
     }
+    function disciplineScreenGroup(title, eyebrow, disciplines, options = {}) {
+      const known = arr(disciplines).filter(Boolean);
+      const detailRows = arr(options.details).filter(([label, value]) => text(value)).map(([label, value]) => `
+        <div class="lw-discipline-detail"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`).join('');
+      return `
+        <section class="lw-discipline-group lw-ui-panel${options.current ? ' is-current' : ''}">
+          <header class="lw-discipline-group__head">
+            <div>
+              <p class="lw-eyebrow">${escapeHtml(eyebrow)}</p>
+              <h2>${escapeHtml(title)}</h2>
+            </div>
+            <span class="lw-ui-status${options.current ? ' lw-ui-status--reading' : ''}">${known.length} known</span>
+          </header>
+          <div class="lw-discipline-group__body">
+            ${detailRows ? `<div class="lw-discipline-detail-grid">${detailRows}</div>` : ''}
+            ${known.length
+              ? `<div class="lw-discipline-list">${known.map((discipline) => `<span class="lw-discipline-chip">${escapeHtml(discipline)}</span>`).join('')}</div>`
+              : '<p class="lw-muted">No disciplines are recorded for this campaign tier.</p>'}
+          </div>
+        </section>`;
+    }
+    function renderCampaignDisciplines() {
+      const c = currentCharacter();
+      const bookNumber = Number(c.BookNumber || 1);
+      const groups = [];
+      if (bookNumber >= 21) {
+        groups.push(disciplineScreenGroup('New Order Disciplines', 'Current disciplines', c.NewOrderDisciplines, {
+          current: true,
+          details: [['New Order rank', c.NewOrderRank || arr(c.NewOrderDisciplines).length], ['Grand Weaponmastery', arr(c.GrandWeaponmasteryWeapons).join(', ') || 'None']]
+        }));
+      } else if (bookNumber >= 13) {
+        groups.push(disciplineScreenGroup('Grand Master Disciplines', 'Current disciplines', c.GrandMasterDisciplines, {
+          current: true,
+          details: [['Grand Master rank', c.GrandMasterRank || arr(c.GrandMasterDisciplines).length], ['Grand Weaponmastery', arr(c.GrandWeaponmasteryWeapons).join(', ') || 'None']]
+        }));
+      } else if (bookNumber >= 6) {
+        groups.push(disciplineScreenGroup('Magnakai Disciplines', 'Current disciplines', c.MagnakaiDisciplines, {
+          current: true,
+          details: [['Magnakai rank', c.MagnakaiRank || arr(c.MagnakaiDisciplines).length], ['Weaponmastery', arr(c.WeaponmasteryWeapons).join(', ') || 'None']]
+        }));
+      }
+      groups.push(disciplineScreenGroup(bookNumber >= 6 ? 'Kai Disciplines' : 'Kai Disciplines', bookNumber >= 6 ? 'Legacy disciplines' : 'Current disciplines', c.KaiDisciplines, {
+        current: bookNumber <= 5,
+        details: [['Weaponskill', c.WeaponskillWeapon || 'None']]
+      }));
+      const title = bookNumber >= 6 ? 'Your discipline legacy' : 'Your Kai disciplines';
+      const subtitle = bookNumber >= 6
+        ? 'Your current training stays visible beside the Kai disciplines that still define your campaign.'
+        : 'Every Kai Discipline you have learned in this campaign.';
+      nativeEl('campaignToolMount').innerHTML = `
+        <section class="lw-discipline-screen" aria-labelledby="disciplineScreenTitle">
+          <header class="lw-discipline-screen__intro">
+            <div><p class="lw-eyebrow">Action Chart</p><h1 id="disciplineScreenTitle">${escapeHtml(title)}</h1></div>
+            <p class="lw-muted">${escapeHtml(subtitle)}</p>
+          </header>
+          <div class="lw-discipline-grid">${groups.join('')}</div>
+        </section>`;
+    }
     function renderCampaignSurface() {
       renderCampaignHead();
       renderCampaignMetrics();
@@ -3479,9 +3537,13 @@
         renderStoryInto(storyPanel, 'campaign');
       } else {
         if (storyPanel) storyPanel.hidden = true;
-        if (toolMount) { toolMount.hidden = false; mountView(toolMount); }
-        activeView = campaignTab;
-        runToolRenderer(campaignTab);
+        if (toolMount) toolMount.hidden = false;
+        if (campaignTab === 'disciplines') renderCampaignDisciplines();
+        else {
+          if (toolMount) mountView(toolMount);
+          activeView = campaignTab;
+          runToolRenderer(campaignTab);
+        }
       }
     }
 

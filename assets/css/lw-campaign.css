@@ -120,6 +120,25 @@ body.lw-surface-campaign .workspace.lw-native {
 .lw-tool-mount { min-width: 0; }
 .lw-tool-mount > #view { display: block; }
 
+/* Disciplines is a native Campaign view: it keeps earned training tiers together
+   instead of making Magnakai-era players hunt through the legacy Action Chart. */
+.lw-discipline-screen { display: grid; gap: 14px; }
+.lw-discipline-screen__intro { display: grid; gap: 6px; padding: 4px 2px 2px; }
+.lw-discipline-screen__intro .lw-muted { max-width: 680px; margin: 0; }
+.lw-discipline-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 12px; align-items: start; }
+.lw-discipline-group { overflow: hidden; }
+.lw-discipline-group.is-current { border-color: var(--lw-ui-green); box-shadow: inset 3px 0 0 var(--lw-ui-green); }
+.lw-discipline-group__head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; padding: 15px 16px 13px; border-bottom: 1px solid var(--lw-ui-border); }
+.lw-discipline-group__head .lw-eyebrow { margin-bottom: 4px; }
+.lw-discipline-group__head h2 { font-size: 1.18rem; }
+.lw-discipline-group__body { display: grid; gap: 14px; padding: 14px 16px 16px; }
+.lw-discipline-detail-grid { display: grid; gap: 8px; }
+.lw-discipline-detail { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 10px; font-size: .8rem; }
+.lw-discipline-detail span { color: var(--lw-ui-muted); }
+.lw-discipline-detail strong { color: var(--lw-ui-ink); overflow-wrap: anywhere; text-align: right; }
+.lw-discipline-list { display: flex; flex-wrap: wrap; gap: 7px; }
+.lw-discipline-chip { padding: 6px 8px; border: 1px solid var(--lw-ui-border); border-radius: 4px; background: rgba(0, 0, 0, .12); color: var(--lw-ui-ink); font: 700 .8rem var(--lw-ui-sans); }
+
 /* Right "at a glance" rail */
 .lw-glance { display: grid; gap: 12px; align-content: start; min-width: 0; }
 .lw-glance__panel { padding: 0; overflow: hidden; }
@@ -166,6 +185,7 @@ body.lw-native-takeover .workspace.lw-native > #view { display: block; }
   body.lw-surface-campaign #campaignRail { display: block; margin-bottom: 14px; }
   body.lw-surface-campaign #campaignGlance { margin-top: 14px; }
   .lw-metric-grid { grid-template-columns: repeat(2, 1fr); }
+  .lw-discipline-grid { grid-template-columns: 1fr; }
   .lw-workspace-head { display: block; }
   .lw-section-no { margin-top: 8px; }
 }
