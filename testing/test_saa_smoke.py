@@ -4219,6 +4219,7 @@ class CampaignDeskProductionTests(unittest.TestCase):
         self.assertIn("function renderCampaignDisciplines()", assistant_html)
         self.assertIn("'Magnakai Disciplines'", assistant_html)
         self.assertIn("'Kai Disciplines'", assistant_html)
+        self.assertIn("if (isNativeSurface && nativeSurface === 'campaign') campaignTab = 'combat';", assistant_html)
         self.assertIn("function renderCampaignSurface()", assistant_html)
         self.assertIn("function renderStoryInto(target, variant)", assistant_html)
         self.assertIn("function renderCampaignRail()", assistant_html)

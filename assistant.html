@@ -7924,6 +7924,9 @@
       if (button.dataset.adganaPrepare !== undefined) await action({ action: 'adgana_prepare' });
       if (button.dataset.sectionCombatStart !== undefined) {
         activeView = 'combat';
+        // Native Campaign owns its visible tab separately from the legacy tool
+        // renderer. Keep them in sync before the action re-renders the live fight.
+        if (isNativeSurface && nativeSurface === 'campaign') campaignTab = 'combat';
         await action({ action: 'section_combat_start', id: button.dataset.sectionCombatStart });
         return;
       }
