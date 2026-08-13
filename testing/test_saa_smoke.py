@@ -4279,6 +4279,16 @@ class SettingsInstallProductionTests(unittest.TestCase):
         self.assertIn("callNative('zips')", installer_html)
         self.assertTrue((root / "assets" / "css" / "lw-settings-install.css").is_file())
 
+    def test_selected_and_primary_controls_keep_nested_labels_legible(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        foundation_css = (root / "assets" / "css" / "lw-ui-foundation.css").read_text(encoding="utf-8")
+        shell_css = (root / "assets" / "css" / "lw-shell.css").read_text(encoding="utf-8")
+
+        self.assertIn(".lw-ui-button--primary > strong", foundation_css)
+        self.assertIn(".lw-ui-button--primary > small", foundation_css)
+        self.assertIn("button.active > strong", shell_css)
+        self.assertIn("button.active > small", shell_css)
+
 
 class DistributionNoticeTests(unittest.TestCase):
     def test_notice_matches_and_ships_with_the_authorized_release(self) -> None:

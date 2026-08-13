@@ -71,6 +71,9 @@
 
 .lw-ui-button:hover { border-color: var(--lw-ui-accent); background: var(--lw-ui-selected); }
 .lw-ui-button--primary { border-color: var(--lw-ui-accent) !important; background: var(--lw-ui-accent) !important; color: #102025 !important; }
+.lw-ui-button--primary > strong,
+.lw-ui-button--primary > span,
+.lw-ui-button--primary > small { color: #102025 !important; }
 .lw-ui-button--danger { border-color: var(--lw-ui-danger); color: var(--lw-ui-danger); }
 
 .lw-ui-status {

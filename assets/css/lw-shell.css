@@ -473,6 +473,12 @@ body.lw-shell-assistant button.active {
   color: #102025;
 }
 
+/* Selected controls use a light accent surface. Their nested labels must not
+   retain the normal light-on-dark text colors used by option-card content. */
+body.lw-shell-assistant button.active > strong,
+body.lw-shell-assistant button.active > span { color: #102025 !important; }
+body.lw-shell-assistant button.active > small { color: #24434c !important; }
+
 body.lw-shell-utility main {
   padding-top: 28px;
 }
