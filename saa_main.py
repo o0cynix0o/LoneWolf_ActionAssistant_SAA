@@ -160,6 +160,10 @@ def run_self_test() -> int:
             payload = json.load(response)
         if "Books" not in payload:
             raise RuntimeError("Book-files API returned an invalid response.")
+        with urllib.request.urlopen(f"{base_url}/api/state", timeout=3) as response:
+            state_payload = json.load(response)
+        if not isinstance(state_payload.get("recoveryTimeline"), dict):
+            raise RuntimeError("State API did not provide the checkpoint recovery timeline.")
         with urllib.request.urlopen(
             f"{base_url}/assets/images/series-sigil-wolf-mask.png",
             timeout=3,
