@@ -3611,6 +3611,8 @@
       const ratio = active && combat.CombatRatio !== null && combat.CombatRatio !== undefined ? formatSigned(combat.CombatRatio) : '—';
       const rounds = arr(combat.Log).slice(-6).reverse();
       const history = arr(app.state.CombatHistory).slice(-5).reverse();
+      const latestFight = history[0] || null;
+      const latestFightRounds = arr(latestFight?.Rounds).slice().reverse();
       const sommswerdPermission = text(run.Difficulty) === 'Veteran' && (text(combat.ActiveWeapon) === 'Sommerswerd' || arr(currentInventory().Weapons).includes('Sommerswerd'));
       const settings = `
         <details class="lw-combat-settings">
@@ -3626,6 +3628,13 @@
       if (!active) {
         mount.innerHTML = `
           <section class="lw-combat-screen">
+            ${latestFight ? `
+              <section class="lw-ui-panel lw-combat-result">
+                <header><div><p class="lw-eyebrow">Most recent encounter</p><h2>Fight complete: ${escapeHtml(text(latestFight.Outcome, 'Resolved'))}</h2></div><span class="lw-ui-status lw-ui-status--reading">${escapeHtml(text(latestFight.RoundCount, latestFightRounds.length))} rounds</span></header>
+                <div class="lw-combat-result__summary"><strong>${escapeHtml(text(latestFight.EnemyName, 'Enemy'))}</strong><span>CS ${escapeHtml(text(latestFight.EnemyCombatSkill, '0'))} · Your END ${escapeHtml(text(latestFight.PlayerEnduranceCurrent, '?'))} / ${escapeHtml(text(latestFight.PlayerEnduranceMax, '?'))}</span>${latestFight.VictoryRoute ? `<span>Victory route: section ${escapeHtml(latestFight.VictoryRoute)}</span>` : ''}${latestFight.EvadeRoute && text(latestFight.Outcome).toLowerCase() === 'evaded' ? `<span>Evade route: section ${escapeHtml(latestFight.EvadeRoute)}</span>` : ''}</div>
+                <div class="lw-combat-result__rounds"><h3>Round record</h3>${latestFightRounds.length ? latestFightRounds.map((round) => `<p><strong>Round ${escapeHtml(text(round.Round, '?'))}</strong><span>Roll ${escapeHtml(text(round.Roll, '?'))} · Ratio ${escapeHtml(formatSigned(round.Ratio || 0))} · Enemy -${escapeHtml(text(round.EnemyLoss, '0'))} · Lone Wolf -${escapeHtml(text(round.PlayerLoss ?? round.LoneWolfReduxLoss, '0'))}</span></p>`).join('') : '<p class="lw-muted">This encounter ended without a resolved combat round.</p>'}</div>
+                <footer><button class="lw-ui-button lw-ui-button--primary" type="button" data-campaign-tab="story">Return to current section</button></footer>
+              </section>` : ''}
             <header class="lw-combat-screen__intro"><div><p class="lw-eyebrow">Combat</p><h1>Start a tracked fight</h1><p class="lw-muted">Use this only when the current section calls for combat. The assistant will keep the encounter and campaign state together.</p></div></header>
             <section class="lw-ui-panel lw-combat-start">
               <form id="combatForm" class="lw-combat-start__form">

@@ -199,6 +199,16 @@ body.lw-surface-campaign .workspace.lw-native {
 .lw-combat-start__form > .lw-ui-button { justify-self: start; }
 .lw-combat-start__more { grid-column: 1 / -1; }
 .lw-combat-start__more > div { display: grid; grid-template-columns: repeat(5, minmax(120px, 1fr)); gap: 8px; margin-top: 10px; }
+.lw-combat-result { overflow: hidden; padding: 0; border-color: #4b896d; }
+.lw-combat-result > header { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; align-items: center; padding: 14px 15px; border-bottom: 1px solid var(--lw-ui-border); background: rgba(61, 133, 98, .08); }
+.lw-combat-result > header .lw-eyebrow { margin-bottom: 3px; }
+.lw-combat-result__summary { display: flex; flex-wrap: wrap; gap: 7px 14px; padding: 12px 15px; border-bottom: 1px solid rgba(120,171,179,.16); color: var(--lw-ui-muted); font-size: .83rem; }
+.lw-combat-result__summary strong { color: var(--lw-ui-ink); }
+.lw-combat-result__rounds { padding: 0 15px; }
+.lw-combat-result__rounds h3 { margin: 13px 0 5px; }
+.lw-combat-result__rounds p { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; padding: 9px 0; border-top: 1px solid rgba(120,171,179,.16); color: var(--lw-ui-muted); font-size: .84rem; }
+.lw-combat-result__rounds p strong { color: var(--lw-ui-ink); }
+.lw-combat-result > footer { padding: 0 15px 14px; }
 
 /* The bottom status bar is a shared, expandable replacement for the legacy
    receipt footer. It is intentionally tied to live section-flow state. */

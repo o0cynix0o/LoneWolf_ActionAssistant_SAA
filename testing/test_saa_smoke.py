@@ -4219,6 +4219,8 @@ class CampaignDeskProductionTests(unittest.TestCase):
         self.assertIn("function renderCampaignDisciplines()", assistant_html)
         self.assertIn("function renderCampaignCombat()", assistant_html)
         self.assertIn("Combat in progress", assistant_html)
+        self.assertIn("Fight complete:", assistant_html)
+        self.assertIn("Round record", assistant_html)
         self.assertIn("id=\"sectionActivity\"", assistant_html)
         self.assertIn("function renderSectionActivity()", assistant_html)
         self.assertIn("function stashLegacyView()", assistant_html)
