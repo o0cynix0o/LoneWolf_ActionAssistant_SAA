@@ -4560,6 +4560,26 @@
       return genericDeathScenes.default;
     }
 
+    function deathCombatRecord(death) {
+      if (text(death?.Type).toLowerCase() !== 'combat') return '';
+      const bookNumber = Number(currentCharacter().BookNumber || 0);
+      const section = Number(death?.Section || app?.state?.CurrentSection || 0);
+      const records = arr(app?.state?.CombatHistory).slice().reverse();
+      const fight = records.find((entry) => Number(entry?.BookNumber || 0) === bookNumber && Number(entry?.Section || 0) === section) || records[0];
+      if (!fight) return '';
+      const rounds = arr(fight.Rounds);
+      return `
+        <div class="panel death-combat-record">
+          <h2>Combat Record</h2>
+          <p class="muted">${escapeHtml(text(fight.EnemyName, 'Enemy'))} · ${escapeHtml(text(fight.Outcome, 'Defeat'))} · ${escapeHtml(text(fight.RoundCount, rounds.length))} rounds</p>
+          <div class="death-combat-rounds">
+            ${rounds.length ? rounds.map((round) => `
+              <div class="item-row"><small>Round ${escapeHtml(text(round.Round, '?'))}</small><span>Roll ${escapeHtml(text(round.Roll, '?'))} | Ratio ${escapeHtml(formatSigned(round.Ratio || 0))} | Enemy -${escapeHtml(text(round.EnemyLoss, '0'))} END | Lone Wolf -${escapeHtml(text(round.PlayerLoss ?? round.LoneWolfReduxLoss, '0'))} END</span></div>
+            `).join('') : '<p class="muted">No combat rounds were recorded before the defeat.</p>'}
+          </div>
+        </div>`;
+    }
+
     function renderDeathScreen() {
       const death = currentDeath();
       const scene = deathSceneFor(death);
@@ -4589,6 +4609,7 @@
             ${field('Recorded', escapeHtml(text(death.RecordedAt, 'Now')))}
           </div>
         </div>
+        ${deathCombatRecord(death)}
         <div class="panel">
           <h2>Recovery</h2>
           <div class="death-options">

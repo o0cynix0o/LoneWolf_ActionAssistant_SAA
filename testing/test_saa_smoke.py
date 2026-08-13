@@ -4224,6 +4224,8 @@ class CampaignDeskProductionTests(unittest.TestCase):
         self.assertIn("id=\"sectionActivity\"", assistant_html)
         self.assertIn("function renderSectionActivity()", assistant_html)
         self.assertIn("function stashLegacyView()", assistant_html)
+        self.assertIn("function deathCombatRecord(death)", assistant_html)
+        self.assertIn("Combat Record", assistant_html)
         self.assertIn("'Magnakai Disciplines'", assistant_html)
         self.assertIn("'Kai Disciplines'", assistant_html)
         self.assertIn("if (isNativeSurface && nativeSurface === 'campaign') campaignTab = 'combat';", assistant_html)
