@@ -4799,6 +4799,19 @@ class GreyStarResidueRemovedTests(unittest.TestCase):
             assistant.finish_karmo_potion()
         self.assertEqual(assistant.character["EnduranceCurrent"], 10)
 
+    def test_alether_berries_are_consumed_for_their_combat_skill_bonus(self) -> None:
+        import contextlib
+
+        assistant = app_server.ASSISTANT
+        with contextlib.redirect_stdout(io.StringIO()):
+            app_server.apply_new_game({"bookNumber": 1, "autoGenerate": True})
+        before = assistant.character["CombatSkillCurrent"]
+        assistant.inventory["BackpackItems"] = ["Alether Berries"]
+        with contextlib.redirect_stdout(io.StringIO()):
+            assistant.use_item("backpack", "Alether Berries")
+        self.assertEqual(assistant.character["CombatSkillCurrent"], before + 2)
+        self.assertNotIn("Alether Berries", assistant.inventory["BackpackItems"])
+
     def test_willpower_and_staff_helpers_are_gone(self) -> None:
         for attr in (
             "combat_uses_magical_staff",

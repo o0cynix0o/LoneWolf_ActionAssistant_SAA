@@ -7659,11 +7659,15 @@
     }
     function itemUseHelp(item) {
       const name = text(item).toLowerCase();
+      if (name.includes('karmo potion')) return 'Use: double your current Endurance; Book 2 Karmo timing and side effects are then tracked.';
       if (name.includes('potion of healing') || name.includes('healing potion')) return 'Use: restore 4 Endurance.';
       if (name.includes('rendalim')) return 'Use: restore 6 Endurance.';
       if (name.includes('potion of invulnerability')) return 'Use: mark invulnerability protection active and return an Empty Vial.';
-      if (name.includes('potion of alether')) return 'Use: add 2 Combat Skill.';
+      if (name.includes('alether')) return 'Use: consume this Alether item and add 2 Combat Skill.';
+      if (name.includes('baknar oil')) return 'Use: apply Baknar Oil and mark its section effect active.';
+      if (name.includes('tarama seed')) return 'Use: prepare the Tarama Seed for its section effect.';
       if (name.includes('laumspur')) return 'Use: restore the Endurance amount recorded by this Laumspur item.';
+      if (name.includes('oede')) return 'Use: consume Oede Herb and restore 10 Endurance.';
       return '';
     }
     function canUseItem(item) {
