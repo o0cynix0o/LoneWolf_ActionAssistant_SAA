@@ -3683,6 +3683,10 @@
         else if (campaignTab === 'combat') renderCampaignCombat();
         else {
           if (toolMount) {
+            // Move the singleton out first. Clearing the mount while #view is
+            // inside it removes the element from the document and leaves this
+            // tab blank until a full page reload.
+            stashLegacyView();
             toolMount.innerHTML = '';
             mountView(toolMount);
           }

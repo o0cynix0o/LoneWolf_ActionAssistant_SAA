@@ -4230,6 +4230,10 @@ class CampaignDeskProductionTests(unittest.TestCase):
         self.assertIn("'Kai Disciplines'", assistant_html)
         self.assertIn("if (isNativeSurface && nativeSurface === 'campaign') campaignTab = 'combat';", assistant_html)
         self.assertIn("function renderCampaignSurface()", assistant_html)
+        self.assertRegex(
+            assistant_html,
+            r"stashLegacyView\(\);\s*toolMount\.innerHTML\s*=\s*'';\s*mountView\(toolMount\);",
+        )
         self.assertIn("function renderStoryInto(target, variant)", assistant_html)
         self.assertIn("function renderCampaignRail()", assistant_html)
         self.assertIn("function campaignSeriesForBook(bookNumber)", assistant_html)
