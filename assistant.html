@@ -1612,6 +1612,10 @@
     <!-- Reused singleton: tool renderers write here; re-homed into the active surface's mount -->
     <section id="view"></section>
 
+    <!-- Persistent native status drawer. It reports the same live section-flow data
+         previously exposed only through the legacy footer. -->
+    <section class="lw-section-activity" id="sectionActivity" aria-label="Section activity"></section>
+
     <!-- Shell hero target (populated by lw-shell.js) kept for compatibility -->
     <div id="productionContext" hidden aria-hidden="true"></div>
 
@@ -1627,6 +1631,7 @@
 
     <!-- Hidden legacy singletons retained for null-safety of legacy renderers -->
     <div class="lw-legacy-hidden" hidden aria-hidden="true">
+      <div id="legacyViewStash"></div>
       <div class="status-grid" id="statusGrid"></div>
       <section class="quick-panel" id="quickPanel"></section>
       <div class="quick-tabs-divider" id="quickTabsDivider"></div>
@@ -3313,6 +3318,14 @@
 
     function nativeEl(id) { return document.getElementById(id); }
     function mountView(target) { const v = nativeEl('view'); if (target && v && v.parentElement !== target) target.appendChild(v); }
+    function stashLegacyView() {
+      const v = nativeEl('view');
+      const stash = nativeEl('legacyViewStash');
+      if (v && stash && v.parentElement !== stash) stash.appendChild(v);
+      // Native views own their markup. Clear a previously rendered legacy tool so
+      // forms and IDs cannot remain active while the native screen is visible.
+      if (v) v.innerHTML = '';
+    }
     function runToolRenderer(viewName) {
       const map = { sheet: renderSheet, inventory: renderInventory, disciplines: renderDisciplines, sections: renderSections, combat: renderCombat, achievements: renderAchievements, saves: renderSaves, notes: renderNotes, settings: renderSettings };
       (map[viewName] || renderSheet)();
@@ -3329,6 +3342,51 @@
       const bp = (inv.BackpackItems || []).length;
       const sp = (inv.SpecialItems || []).length;
       return `${w} weapon${w === 1 ? '' : 's'} · ${bp} / ${cap} backpack · ${sp} special item${sp === 1 ? '' : 's'}`;
+    }
+    function sectionActivitySummary() {
+      const c = currentCharacter();
+      const combat = currentCombat();
+      const automation = currentFlow().Automation || {};
+      const location = `Book ${text(c.BookNumber, '?')} · Section ${text(app?.state?.CurrentSection, '?')}`;
+      if (combat?.Active) return `${location} · Combat in progress · ${text(combat.EnemyName, 'Enemy')} · ${arr(combat.Log).length} rounds`;
+      if (automation.Summary) return `${location} · ${automation.Applied ? 'Applied' : 'Ready'}: ${automation.Summary}`;
+      return `${location} · No automatic effect recorded`;
+    }
+    function renderSectionActivity() {
+      const el = nativeEl('sectionActivity');
+      if (!el || !app || !isNativeSurface) return;
+      const c = currentCharacter();
+      const combat = currentCombat();
+      const flow = currentFlow();
+      const automation = flow.Automation || {};
+      const sectionDetails = sectionStatusReceiptDetails();
+      const latest = currentReceipt && currentReceipt.summary !== sectionStatusReceipt().summary ? currentReceipt : null;
+      const encounter = combat?.Active ? [
+        ['Encounter', `${text(combat.EnemyName, 'Enemy')} · CS ${text(combat.EnemyCombatSkillEffective ?? combat.EnemyCombatSkill, '0')}`],
+        ['Round status', `${arr(combat.Log).length} resolved · ${text(combat.CanEvade) ? 'Evade available' : 'Evade not available'}`]
+      ] : [];
+      const pending = [];
+      if (combat?.Active) pending.push(['Next action', 'Resolve a round, auto resolve, evade when permitted, or stop tracking the fight.']);
+      if (automation.Summary && !automation.Applied) pending.push(['Entry effect', 'Apply the ready section effect before taking a dependent route.']);
+      arr(flow.RouteChecks).filter((check) => !check.Ready).forEach((check) => pending.push(['Route check', `${text(check.Label, 'Route check')}: ${text(check.BlockedReason, 'Apply the entry effect first.')}`]));
+      const rows = [
+        ['Location', `${bookByNumber(c.BookNumber).title} · Book ${c.BookNumber}, section ${app.state.CurrentSection}`],
+        ['Automation', automation.Summary ? `${automation.Applied ? 'Applied' : 'Ready'}: ${automation.Summary}` : 'No entry automation recorded for this section.'],
+        ...encounter,
+        ...sectionDetails.map((item) => [item.label, item.value]),
+        ...pending,
+        ...(latest ? [['Latest result', latest.summary]] : [])
+      ];
+      const uniqueRows = rows.filter(([label, value], index, all) => value && all.findIndex(([otherLabel, otherValue]) => otherLabel === label && otherValue === value) === index);
+      el.innerHTML = `
+        <details class="lw-section-activity__drawer">
+          <summary><span class="lw-section-activity__eyebrow">Section activity</span><strong>${escapeHtml(sectionActivitySummary())}</strong><span class="lw-section-activity__hint">Details</span></summary>
+          <div class="lw-section-activity__body">
+            <div class="lw-section-activity__grid">
+              ${uniqueRows.map(([label, value]) => `<div><small>${escapeHtml(label)}</small><span>${escapeHtml(value)}</span></div>`).join('')}
+            </div>
+          </div>
+        </details>`;
     }
 
     // ---- Native Project Aon section parser -----------------------------------
@@ -3425,7 +3483,11 @@
     // ---- Campaign Desk -------------------------------------------------------
     function renderCampaignHead() {
       const el = nativeEl('campaignHead'); if (!el) return;
-      el.innerHTML = `<div class="lw-workspace-head__text"><p class="lw-eyebrow">Current campaign</p><h1>Continue your journey</h1><p class="lw-muted">Your current section is ready. The assistant opens the reader and Action Chart in the place you left them.</p></div><div class="lw-section-no">Section ${escapeHtml(app.state.CurrentSection)}</div>`;
+      const combat = currentCombat();
+      const active = Boolean(combat?.Active);
+      el.innerHTML = active
+        ? `<div class="lw-workspace-head__text"><p class="lw-eyebrow">Current encounter</p><h1>Combat in progress</h1><p class="lw-muted">${escapeHtml(text(combat.EnemyName, 'Enemy'))} is engaged. Resolve the encounter here, then return to the current section when it is finished.</p></div><div class="lw-section-no">Section ${escapeHtml(app.state.CurrentSection)}</div>`
+        : `<div class="lw-workspace-head__text"><p class="lw-eyebrow">Current campaign</p><h1>Continue your journey</h1><p class="lw-muted">Your current section is ready. The assistant opens the reader and Action Chart in the place you left them.</p></div><div class="lw-section-no">Section ${escapeHtml(app.state.CurrentSection)}</div>`;
     }
     function renderCampaignMetrics() {
       const el = nativeEl('campaignMetrics'); if (!el) return;
@@ -3446,6 +3508,21 @@
       const c = currentCharacter(); const inv = currentInventory();
       const disc = knownDisciplines(c);
       const seriesLabel = campaignSeriesForBook(c.BookNumber).label.replace(' Series', '');
+      const combat = currentCombat();
+      const fightActive = Boolean(combat?.Active);
+      const encounterPanel = fightActive ? `
+        <div class="lw-ui-panel lw-glance__panel lw-glance__encounter">
+          <div class="lw-glance__head"><h2>Current encounter</h2><span class="lw-ui-status lw-ui-status--reading">In progress</span></div>
+          <div class="lw-glance__body">
+            <div class="lw-glance__row"><strong>${escapeHtml(text(combat.EnemyName, 'Enemy'))}</strong><span>CS ${escapeHtml(text(combat.EnemyCombatSkillEffective ?? combat.EnemyCombatSkill, '0'))} · END ${escapeHtml(text(combat.EnemyEnduranceCurrent, '0'))} / ${escapeHtml(text(combat.EnemyEnduranceMax, '0'))}</span></div>
+            <div class="lw-glance__row"><strong>Fight status</strong><span>${arr(combat.Log).length} rounds resolved · ${combat.CanEvade ? 'Evade available' : 'No evade option'}</span></div>
+          </div>
+          <div class="lw-glance__tools"><button class="lw-ui-button lw-ui-button--primary" type="button" data-campaign-tab="combat"><strong>Continue combat</strong><span>Resolve the next round</span></button></div>
+        </div>` : `
+        <div class="lw-ui-panel lw-glance__panel lw-glance__choices">
+          <div class="lw-glance__head"><h2>Choices</h2></div>
+          <div class="lw-glance__body">${choicesPanelBody()}</div>
+        </div>`;
       el.innerHTML = `
         <div class="lw-ui-panel lw-glance__panel">
           <div class="lw-glance__head"><h2>At a glance</h2><span class="lw-ui-status">Saved</span></div>
@@ -3456,15 +3533,12 @@
           </div>
           <div class="lw-glance__tools">
             <button class="lw-ui-button" type="button" data-roll ${manualDisabledAttributes('roll helper')}><strong>Roll</strong><span>Random Number Table</span></button>
-            <button class="lw-ui-button" type="button" data-campaign-tab="combat"><strong>Combat</strong><span>Start tracked fight</span></button>
+            <button class="lw-ui-button" type="button" data-campaign-tab="combat"><strong>Combat</strong><span>${fightActive ? 'Fight in progress' : 'Start tracked fight'}</span></button>
             <button class="lw-ui-button" type="button" data-open-map><strong>Map</strong><span>View the map</span></button>
             <button class="lw-ui-button" type="button" data-save-current><strong>Save</strong><span>Create a checkpoint</span></button>
           </div>
         </div>
-        <div class="lw-ui-panel lw-glance__panel lw-glance__choices">
-          <div class="lw-glance__head"><h2>Choices</h2></div>
-          <div class="lw-glance__body">${choicesPanelBody()}</div>
-        </div>`;
+        ${encounterPanel}`;
     }
     function disciplineScreenGroup(title, eyebrow, disciplines, options = {}) {
       const known = arr(disciplines).filter(Boolean);
@@ -3488,6 +3562,7 @@
         </section>`;
     }
     function renderCampaignDisciplines() {
+      stashLegacyView();
       const c = currentCharacter();
       const bookNumber = Number(c.BookNumber || 1);
       const groups = [];
@@ -3524,6 +3599,63 @@
           <div class="lw-discipline-grid">${groups.join('')}</div>
         </section>`;
     }
+    function renderCampaignCombat() {
+      stashLegacyView();
+      const mount = nativeEl('campaignToolMount');
+      if (!mount) return;
+      const combat = currentCombat();
+      const c = currentCharacter();
+      const run = app.run || {};
+      const active = Boolean(combat.Active);
+      const manualCrt = text(run.CombatMode, 'DataFile') === 'ManualCRT';
+      const ratio = active && combat.CombatRatio !== null && combat.CombatRatio !== undefined ? formatSigned(combat.CombatRatio) : '—';
+      const rounds = arr(combat.Log).slice(-6).reverse();
+      const history = arr(app.state.CombatHistory).slice(-5).reverse();
+      const sommswerdPermission = text(run.Difficulty) === 'Veteran' && (text(combat.ActiveWeapon) === 'Sommerswerd' || arr(currentInventory().Weapons).includes('Sommerswerd'));
+      const settings = `
+        <details class="lw-combat-settings">
+          <summary>Fight settings</summary>
+          <div class="lw-combat-settings__body">
+            <form id="combatModeForm" class="lw-combat-settings__form">
+              <label>Resolution<select name="combatMode"><option value="DataFile" ${manualCrt ? '' : 'selected'}>Automatic CRT</option><option value="ManualCRT" ${manualCrt ? 'selected' : ''}>Manual CRT</option></select></label>
+              <button class="lw-ui-button" type="submit">Apply</button>
+            </form>
+            ${sommswerdPermission ? `<form id="sommerswerdPermissionForm" class="lw-combat-settings__form"><label class="check-option"><input name="allowed" type="checkbox" ${combat.SommerswerdAllowed ? 'checked' : ''}><span>Section explicitly allows Sommerswerd</span></label><button class="lw-ui-button" type="submit">Record</button></form>` : ''}
+          </div>
+        </details>`;
+      if (!active) {
+        mount.innerHTML = `
+          <section class="lw-combat-screen">
+            <header class="lw-combat-screen__intro"><div><p class="lw-eyebrow">Combat</p><h1>Start a tracked fight</h1><p class="lw-muted">Use this only when the current section calls for combat. The assistant will keep the encounter and campaign state together.</p></div></header>
+            <section class="lw-ui-panel lw-combat-start">
+              <form id="combatForm" class="lw-combat-start__form">
+                <label>Enemy<input name="name" value="Enemy"></label><label>Enemy CS<input name="cs" type="number" value="10"></label><label>Enemy END<input name="endurance" type="number" value="10"></label><label>Weapon<select name="activeWeapon">${combatWeaponOptions(combat)}</select></label>
+                <details class="lw-combat-start__more"><summary>Optional encounter rules</summary><div><label>CS modifier<input name="modifier" type="number" value="0"></label><label>Evade after rounds<input name="evadeAfterRounds" type="number" min="0" value="0"></label><label>Victory section<input name="victoryRoute" type="number" min="1" placeholder="Optional"></label><label>Evade section<input name="evadeRoute" type="number" min="1" placeholder="Optional"></label><label>Can evade<select name="canEvade"><option value="">No</option><option value="true">Yes</option></select></label></div></details>
+                <button class="lw-ui-button lw-ui-button--primary" type="submit">Start combat</button>
+              </form>
+            </section>
+            ${settings}
+            ${history.length ? `<details class="lw-combat-history"><summary>Recent fights</summary><div>${history.map((entry) => `<p><strong>${escapeHtml(text(entry.Outcome, '?'))}</strong> · ${escapeHtml(text(entry.EnemyName, 'Enemy'))} · ${escapeHtml(text(entry.RoundCount, '0'))} rounds</p>`).join('')}</div></details>` : ''}
+          </section>`;
+        return;
+      }
+      mount.innerHTML = `
+        <section class="lw-combat-screen">
+          <header class="lw-combat-screen__intro"><div><p class="lw-eyebrow">Section combat</p><h1>${escapeHtml(text(combat.EnemyName, 'Enemy'))}</h1><p class="lw-muted">Round ${arr(combat.Log).length + 1}. The fight resolves against the current Action Chart and game-mode rules.</p></div><div class="lw-combat-ratio"><small>Combat ratio</small><strong>${escapeHtml(ratio)}</strong></div></header>
+          ${renderCombatDuelMeters(combat)}
+          <section class="lw-ui-panel lw-combat-actions-panel">
+            <form id="roundForm" class="lw-combat-actions">
+              <label><small>Active weapon</small><select name="activeWeapon" title="Active combat weapon">${combatWeaponOptions(combat)}</select></label>
+              ${manualCrt ? `<label><small>Enemy loss</small><input name="enemyLoss" type="number" min="0" placeholder="0"></label><label><small>Your loss</small><input name="playerLoss" type="number" min="0" placeholder="0"></label><button class="lw-ui-button lw-ui-button--primary" type="submit">Record result</button>` : `<label><small>Roll</small><input name="roll" type="number" min="0" max="9" placeholder="0–9"></label><button class="lw-ui-button lw-ui-button--primary" type="submit">Resolve round</button>`}
+              <button class="lw-ui-button" type="button" data-combat-auto ${manualDisabledAttributes('combat auto-resolve')} title="${isManualMode() ? 'Manual mode: click for combat round advice. No combat rounds will be resolved.' : 'Resolve the fight automatically using the current combat setup.'}">Auto resolve</button>
+              ${combat.CanEvade ? '<button class="lw-ui-button" type="button" data-combat-evade>Evade</button>' : ''}
+            </form>
+            <div class="lw-combat-actions__secondary">${settings}<button class="lw-ui-button lw-ui-button--danger" type="button" data-combat-stop>Stop</button></div>
+          </section>
+          <section class="lw-ui-panel lw-combat-rounds"><header><h2>Recent rounds</h2><span>${arr(combat.Log).length} total</span></header>${rounds.length ? `<div>${rounds.map((round) => `<p><strong>Round ${escapeHtml(text(round.Round, '?'))}</strong><span>Roll ${escapeHtml(text(round.Roll, '?'))} · Ratio ${escapeHtml(formatSigned(round.Ratio || 0))} · Enemy -${escapeHtml(text(round.EnemyLoss, '0'))} · Lone Wolf -${escapeHtml(text(round.PlayerLoss ?? round.LoneWolfReduxLoss, '0'))}</span></p>`).join('')}</div>` : '<p class="lw-muted">No rounds resolved yet. Enter the book’s Random Number Table result, or auto resolve this encounter.</p>'}</section>
+          <details class="lw-combat-history"><summary>Fight details and raw log</summary><div class="lw-combat-history__grid"><span>Difficulty<strong>${escapeHtml(text(run.Difficulty, 'Normal'))}</strong></span><span>Permadeath<strong>${run.Permadeath ? 'On' : 'Off'}</strong></span><span>Resolution<strong>${manualCrt ? 'Manual CRT' : 'Automatic CRT'}</strong></span><span>Entry source<strong>Section ${escapeHtml(app.state.CurrentSection)} combat</strong></span></div></details>
+        </section>`;
+    }
     function renderCampaignSurface() {
       renderCampaignHead();
       renderCampaignMetrics();
@@ -3539,8 +3671,12 @@
         if (storyPanel) storyPanel.hidden = true;
         if (toolMount) toolMount.hidden = false;
         if (campaignTab === 'disciplines') renderCampaignDisciplines();
+        else if (campaignTab === 'combat') renderCampaignCombat();
         else {
-          if (toolMount) mountView(toolMount);
+          if (toolMount) {
+            toolMount.innerHTML = '';
+            mountView(toolMount);
+          }
           activeView = campaignTab;
           runToolRenderer(campaignTab);
         }
@@ -3685,6 +3821,8 @@
       // deferred shell script (which may add lw-surface-* after the first render).
       document.body.classList.add('lw-shell-assistant', 'lw-surface-' + nativeSurface);
       if (f.takeover) {
+        const activity = nativeEl('sectionActivity');
+        if (activity) activity.innerHTML = '';
         mountView(workspaceEl);
         if (f.deathActive) renderDeathScreen();
         else if (f.setupActive) { renderBookSetupScreen(); syncBook6SetupRequirements(view.querySelector('#continueBookForm')); }
@@ -3694,6 +3832,7 @@
       if (nativeSurface === 'campaign') renderCampaignSurface();
       else if (nativeSurface === 'reader') renderReaderSurface();
       else if (nativeSurface === 'tools') renderToolsSurface(f);
+      renderSectionActivity();
     }
 
     // Native surface event delegation (bound once).

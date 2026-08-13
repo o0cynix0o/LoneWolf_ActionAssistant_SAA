@@ -156,6 +156,65 @@ body.lw-surface-campaign .workspace.lw-native {
 .lw-glance__tools .lw-ui-button strong { font: 700 .86rem var(--lw-ui-sans); }
 .lw-glance__tools .lw-ui-button span { color: var(--lw-ui-muted); font: 400 .72rem var(--lw-ui-sans); }
 
+/* Native Combat Mode: the encounter is the work surface. The dense legacy
+   renderer remains available in Tools; Campaign gets one compact decision flow. */
+.lw-combat-screen { display: grid; gap: 14px; }
+.lw-combat-screen__intro { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px 24px; padding: 2px 2px 0; }
+.lw-combat-screen__intro .lw-muted { max-width: 680px; margin: 6px 0 0; }
+.lw-combat-ratio { min-width: 112px; padding: 10px 12px; border: 1px solid var(--lw-ui-border); border-radius: 5px; background: rgba(0,0,0,.14); text-align: right; }
+.lw-combat-ratio small { display: block; color: var(--lw-ui-muted); font: 700 .68rem var(--lw-ui-sans); letter-spacing: .06em; text-transform: uppercase; }
+.lw-combat-ratio strong { color: var(--lw-ui-gold); font: 700 1.35rem var(--lw-ui-serif); }
+.lw-combat-screen .combat-meter-panel { margin: 0; }
+.lw-combat-actions-panel { display: grid; gap: 10px; padding: 14px; }
+.lw-combat-actions { display: grid; grid-template-columns: minmax(210px, 1.35fr) minmax(100px, .32fr) repeat(2, auto); gap: 8px; align-items: end; }
+.lw-combat-actions label, .lw-combat-start__form > label, .lw-combat-settings__form label { display: grid; gap: 5px; min-width: 0; color: var(--lw-ui-muted); font: 700 .68rem var(--lw-ui-sans); letter-spacing: .04em; text-transform: uppercase; }
+.lw-combat-actions select, .lw-combat-actions input, .lw-combat-start__form input, .lw-combat-start__form select, .lw-combat-settings__form select { width: 100%; min-height: 38px; box-sizing: border-box; border: 1px solid var(--lw-ui-border); border-radius: 4px; background: #0c1417; color: var(--lw-ui-ink); padding: 7px 9px; font: 400 .9rem var(--lw-ui-sans); }
+.lw-combat-actions .lw-ui-button { min-height: 38px; white-space: nowrap; }
+.lw-combat-actions__secondary { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.lw-combat-settings { position: relative; }
+.lw-combat-settings > summary, .lw-combat-history > summary, .lw-combat-start__more > summary { color: var(--lw-ui-muted); cursor: pointer; font: 700 .8rem var(--lw-ui-sans); }
+.lw-combat-settings__body { display: grid; gap: 8px; margin-top: 10px; padding: 10px; border: 1px solid var(--lw-ui-border); border-radius: 4px; background: rgba(0,0,0,.15); }
+.lw-combat-settings__form { display: flex; flex-wrap: wrap; gap: 8px; align-items: end; }
+.lw-combat-settings__form label { flex: 1 1 210px; }
+.lw-combat-settings__form .check-option { display: flex; align-items: center; gap: 8px; color: var(--lw-ui-ink); font-size: .8rem; letter-spacing: 0; text-transform: none; }
+.lw-combat-settings__form .check-option input { width: auto; min-height: auto; }
+.lw-combat-rounds { overflow: hidden; padding: 0; }
+.lw-combat-rounds > header { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 13px 15px; border-bottom: 1px solid var(--lw-ui-border); }
+.lw-combat-rounds > header span { color: var(--lw-ui-muted); font: .75rem var(--lw-ui-sans); }
+.lw-combat-rounds > div, .lw-combat-rounds > p { margin: 0; padding: 12px 15px; }
+.lw-combat-rounds > div { display: grid; gap: 0; }
+.lw-combat-rounds p { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; border-bottom: 1px solid rgba(120,171,179,.16); color: var(--lw-ui-muted); font-size: .84rem; }
+.lw-combat-rounds p:last-child { border-bottom: 0; }
+.lw-combat-rounds strong { color: var(--lw-ui-ink); }
+.lw-combat-history { padding: 12px 14px; border: 1px solid var(--lw-ui-border); border-radius: 5px; background: var(--lw-ui-surface); }
+.lw-combat-history > div { display: grid; gap: 8px; margin-top: 10px; color: var(--lw-ui-muted); font-size: .84rem; }
+.lw-combat-history p { margin: 0; }
+.lw-combat-history strong { color: var(--lw-ui-ink); }
+.lw-combat-history__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.lw-combat-history__grid span { display: grid; gap: 3px; color: var(--lw-ui-muted); font-size: .74rem; }
+.lw-combat-history__grid strong { color: var(--lw-ui-ink); font: 700 .86rem var(--lw-ui-sans); }
+.lw-combat-start { padding: 14px; }
+.lw-combat-start__form { display: grid; grid-template-columns: minmax(180px, 1.25fr) repeat(3, minmax(110px, .6fr)); gap: 10px; align-items: end; }
+.lw-combat-start__form > .lw-ui-button { justify-self: start; }
+.lw-combat-start__more { grid-column: 1 / -1; }
+.lw-combat-start__more > div { display: grid; grid-template-columns: repeat(5, minmax(120px, 1fr)); gap: 8px; margin-top: 10px; }
+
+/* The bottom status bar is a shared, expandable replacement for the legacy
+   receipt footer. It is intentionally tied to live section-flow state. */
+.lw-section-activity { position: fixed; right: 0; bottom: 0; left: 0; z-index: 54; padding: 0 16px; pointer-events: none; }
+.lw-section-activity__drawer { width: min(1180px, calc(100vw - 32px)); margin: 0 auto; border: 1px solid var(--lw-ui-border); border-bottom: 0; border-radius: 7px 7px 0 0; background: #142126; box-shadow: 0 -10px 28px rgba(0,0,0,.24); pointer-events: auto; }
+.lw-section-activity__drawer > summary { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; min-height: 38px; padding: 0 12px; cursor: pointer; list-style: none; }
+.lw-section-activity__drawer > summary::-webkit-details-marker { display: none; }
+.lw-section-activity__eyebrow { color: var(--lw-ui-gold); font: 800 .66rem var(--lw-ui-sans); letter-spacing: .08em; text-transform: uppercase; }
+.lw-section-activity__drawer strong { overflow: hidden; color: var(--lw-ui-ink); font: 700 .78rem var(--lw-ui-sans); text-overflow: ellipsis; white-space: nowrap; }
+.lw-section-activity__hint { color: var(--lw-ui-accent); font: 700 .72rem var(--lw-ui-sans); }
+.lw-section-activity__body { max-height: min(42vh, 370px); overflow: auto; border-top: 1px solid var(--lw-ui-border); }
+.lw-section-activity__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; }
+.lw-section-activity__grid > div { display: grid; gap: 3px; min-height: 52px; padding: 10px 12px; border-right: 1px solid rgba(120,171,179,.16); border-bottom: 1px solid rgba(120,171,179,.16); }
+.lw-section-activity__grid > div:nth-child(2n) { border-right: 0; }
+.lw-section-activity__grid small { color: var(--lw-ui-muted); font: 800 .65rem var(--lw-ui-sans); letter-spacing: .05em; text-transform: uppercase; }
+.lw-section-activity__grid span { color: var(--lw-ui-ink); font-size: .8rem; line-height: 1.35; }
+
 /* Special-screen takeover (death / book setup / book complete). */
 body.lw-native-takeover #campaignMain > :not(.lw-tool-mount),
 body.lw-native-takeover #campaignRail,
@@ -188,4 +247,18 @@ body.lw-native-takeover .workspace.lw-native > #view { display: block; }
   .lw-discipline-grid { grid-template-columns: 1fr; }
   .lw-workspace-head { display: block; }
   .lw-section-no { margin-top: 8px; }
+  .lw-combat-actions { grid-template-columns: minmax(170px, 1fr) minmax(96px, .42fr) repeat(2, auto); }
+  .lw-combat-start__form { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lw-combat-start__more > div { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .lw-combat-actions { grid-template-columns: 1fr 1fr; }
+  .lw-combat-actions label:first-child { grid-column: 1 / -1; }
+  .lw-combat-actions .lw-ui-button { width: 100%; }
+  .lw-combat-history__grid, .lw-section-activity__grid { grid-template-columns: 1fr; }
+  .lw-section-activity { padding: 0 8px; }
+  .lw-section-activity__drawer { width: calc(100vw - 16px); }
+  .lw-section-activity__drawer > summary { grid-template-columns: minmax(0, 1fr) auto; }
+  .lw-section-activity__eyebrow { display: none; }
+  .lw-section-activity__grid > div { border-right: 0; }
 }
