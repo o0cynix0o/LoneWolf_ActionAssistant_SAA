@@ -93,6 +93,22 @@
 .lw-ui-status--locked { color: #64787b; }
 .lw-ui-status--completed { border-color: var(--lw-ui-border-strong); color: var(--lw-ui-accent); }
 
+html.lw-surface-borderless {
+  --lw-ui-radius: 0px;
+}
+
+html.lw-surface-borderless .lw-ui-panel,
+html.lw-surface-borderless .lw-ui-panel__title,
+html.lw-surface-borderless .lw-ui-button,
+html.lw-surface-borderless .lw-ui-status {
+  border: 0;
+  box-shadow: none;
+}
+
+html.lw-surface-borderless .lw-ui-panel__title { border-bottom: 0; }
+html.lw-surface-borderless .lw-ui-button { background: var(--lw-ui-raised); }
+html.lw-surface-borderless .lw-ui-button:hover { background: var(--lw-ui-selected); }
+
 @media (max-width: 800px) {
   .lw-ui-page { width: min(100% - 24px, var(--lw-ui-page-width)); padding-top: 18px; }
 }

@@ -3,6 +3,7 @@
     titleBanner: 'lonewolf_redux.appearance.titleBanner.v1',
     coverArt: 'lonewolf_redux.appearance.coverArt.v1',
     theme: 'lonewolf_redux.appearance.theme.v1',
+    surfaceStyle: 'lonewolf_redux.appearance.surfaceStyle.v1',
     readerStyleEnabled: 'lonewolf_redux.reader.styleEnabled.v1',
     readerTheme: 'lonewolf_redux.reader.theme.v1'
   };
@@ -422,6 +423,7 @@
     titleBanner: 'title1',
     coverArt: 'on',
     theme: 'kai-gold',
+    surfaceStyle: 'borderless',
     readerStyleEnabled: 'off',
     readerTheme: 'original'
   };
@@ -435,6 +437,7 @@
       titleBanner: localStorage.getItem(STORAGE_KEYS.titleBanner) || defaults.titleBanner,
       coverArt: localStorage.getItem(STORAGE_KEYS.coverArt) || defaults.coverArt,
       theme: localStorage.getItem(STORAGE_KEYS.theme) || defaults.theme,
+      surfaceStyle: localStorage.getItem(STORAGE_KEYS.surfaceStyle) || defaults.surfaceStyle,
       readerStyleEnabled: localStorage.getItem(STORAGE_KEYS.readerStyleEnabled) || defaults.readerStyleEnabled,
       readerTheme: localStorage.getItem(STORAGE_KEYS.readerTheme) || defaults.readerTheme
     };
@@ -445,6 +448,7 @@
       [STORAGE_KEYS.titleBanner]: settings.titleBanner,
       [STORAGE_KEYS.coverArt]: settings.coverArt,
       [STORAGE_KEYS.theme]: settings.theme,
+      [STORAGE_KEYS.surfaceStyle]: settings.surfaceStyle,
       [STORAGE_KEYS.readerStyleEnabled]: settings.readerStyleEnabled,
       [STORAGE_KEYS.readerTheme]: settings.readerTheme
     };
@@ -460,6 +464,7 @@
       titleBanner: values[STORAGE_KEYS.titleBanner] || defaults.titleBanner,
       coverArt: values[STORAGE_KEYS.coverArt] || defaults.coverArt,
       theme: values[STORAGE_KEYS.theme] || defaults.theme,
+      surfaceStyle: values[STORAGE_KEYS.surfaceStyle] || defaults.surfaceStyle,
       readerStyleEnabled: values[STORAGE_KEYS.readerStyleEnabled] || defaults.readerStyleEnabled,
       readerTheme: values[STORAGE_KEYS.readerTheme] || defaults.readerTheme
     };
@@ -470,6 +475,7 @@
     settings.titleBanner = byId(titleBanners, settings.titleBanner, defaults.titleBanner).id;
     settings.coverArt = settings.coverArt === 'off' ? 'off' : 'on';
     settings.theme = byId(themes, settings.theme, defaults.theme).id;
+    settings.surfaceStyle = settings.surfaceStyle === 'bordered' ? 'bordered' : 'borderless';
     settings.readerStyleEnabled = settings.readerStyleEnabled === 'on' ? 'on' : 'off';
     settings.readerTheme = byId(readerThemes, settings.readerTheme, defaults.readerTheme).id;
     return settings;
@@ -480,6 +486,7 @@
     localStorage.setItem(STORAGE_KEYS.titleBanner, clean.titleBanner);
     localStorage.setItem(STORAGE_KEYS.coverArt, clean.coverArt);
     localStorage.setItem(STORAGE_KEYS.theme, clean.theme);
+    localStorage.setItem(STORAGE_KEYS.surfaceStyle, clean.surfaceStyle);
     localStorage.setItem(STORAGE_KEYS.readerStyleEnabled, clean.readerStyleEnabled);
     localStorage.setItem(STORAGE_KEYS.readerTheme, clean.readerTheme);
     return clean;
@@ -732,6 +739,63 @@
         flex-wrap: wrap;
         margin-top: 0.65rem;
       }
+      html.lw-surface-borderless header,
+      html.lw-surface-borderless .toolbar,
+      html.lw-surface-borderless .tabs,
+      html.lw-surface-borderless .panel,
+      html.lw-surface-borderless .book,
+      html.lw-surface-borderless .stat-card,
+      html.lw-surface-borderless .quick-card,
+      html.lw-surface-borderless .quick-tabs-divider,
+      html.lw-surface-borderless .item-row,
+      html.lw-surface-borderless .status-grid,
+      html.lw-surface-borderless .quick-panel,
+      html.lw-surface-borderless .top-dashboard,
+      html.lw-surface-borderless .layout-bar,
+      html.lw-surface-borderless .menu-popover,
+      html.lw-surface-borderless .death-option,
+      html.lw-surface-borderless .combat-meter-card,
+      html.lw-surface-borderless .cartwheel-game,
+      html.lw-surface-borderless .message,
+      html.lw-surface-borderless .file-mode-lock,
+      html.lw-surface-borderless .reader-panel,
+      html.lw-surface-borderless .series-section,
+      html.lw-surface-borderless .lw-library-overview,
+      html.lw-surface-borderless .lw-ui-panel,
+      html.lw-surface-borderless .lw-global-nav,
+      html.lw-surface-borderless .lw-global-nav__links a,
+      html.lw-surface-borderless .lw-global-nav__campaign,
+      html.lw-surface-borderless button,
+      html.lw-surface-borderless input,
+      html.lw-surface-borderless select,
+      html.lw-surface-borderless textarea,
+      html.lw-surface-borderless .settings-option,
+      html.lw-surface-borderless .lw-ui-button,
+      html.lw-surface-borderless .lw-ui-status {
+        border: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+      }
+      html.lw-surface-borderless .panel-title,
+      html.lw-surface-borderless .lw-ui-panel__title {
+        border-bottom: 0 !important;
+      }
+      html.lw-surface-borderless button,
+      html.lw-surface-borderless .settings-option,
+      html.lw-surface-borderless .lw-ui-button {
+        background-color: var(--lw-panel-2) !important;
+      }
+      html.lw-surface-borderless button:hover,
+      html.lw-surface-borderless .settings-option:hover,
+      html.lw-surface-borderless .lw-ui-button:hover {
+        background-color: var(--lw-panel-3) !important;
+      }
+      html.lw-surface-borderless button.active,
+      html.lw-surface-borderless .settings-option.active,
+      html.lw-surface-borderless .lw-ui-button--primary {
+        background-color: var(--lw-accent) !important;
+        color: var(--lw-bg) !important;
+      }
       @media (max-width: 620px) {
         .slot-row {
           grid-template-columns: 1fr;
@@ -763,10 +827,14 @@
     ensureRuntimeStyle();
     applyTheme(clean);
     document.documentElement.classList.toggle('lw-cover-art-off', clean.coverArt === 'off');
+    document.documentElement.classList.toggle('lw-surface-borderless', clean.surfaceStyle === 'borderless');
     document.documentElement.dataset.lwCoverArt = clean.coverArt;
+    document.documentElement.dataset.lwSurfaceStyle = clean.surfaceStyle;
     document.documentElement.dataset.lwReaderTheme = clean.readerTheme;
     document.body.classList.toggle('lw-cover-art-off', clean.coverArt === 'off');
+    document.body.classList.toggle('lw-surface-borderless', clean.surfaceStyle === 'borderless');
     document.body.dataset.lwCoverArt = clean.coverArt;
+    document.body.dataset.lwSurfaceStyle = clean.surfaceStyle;
     document.body.dataset.lwReaderTheme = clean.readerTheme;
     document.querySelectorAll('[data-lw-title-banner]').forEach((image) => {
       const banner = byId(titleBanners, clean.titleBanner, defaults.titleBanner);

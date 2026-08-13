@@ -3,6 +3,7 @@
     titleBanner: 'lonewolf_redux.appearance.titleBanner.v1',
     coverArt: 'lonewolf_redux.appearance.coverArt.v1',
     theme: 'lonewolf_redux.appearance.theme.v1',
+    surfaceStyle: 'lonewolf_redux.appearance.surfaceStyle.v1',
     readerStyleEnabled: 'lonewolf_redux.reader.styleEnabled.v1',
     readerTheme: 'lonewolf_redux.reader.theme.v1'
   };
@@ -11,6 +12,7 @@
     titleBanner: 'title1',
     coverArt: 'on',
     theme: 'kai-gold',
+    surfaceStyle: 'borderless',
     readerStyleEnabled: 'off',
     readerTheme: 'original'
   };
@@ -177,6 +179,7 @@
       titleBanner: localValue(STORAGE_KEYS.titleBanner, defaults.titleBanner),
       coverArt: localValue(STORAGE_KEYS.coverArt, defaults.coverArt),
       theme: localValue(STORAGE_KEYS.theme, defaults.theme),
+      surfaceStyle: localValue(STORAGE_KEYS.surfaceStyle, defaults.surfaceStyle),
       readerStyleEnabled: localValue(STORAGE_KEYS.readerStyleEnabled, defaults.readerStyleEnabled),
       readerTheme: localValue(STORAGE_KEYS.readerTheme, defaults.readerTheme)
     });
@@ -187,6 +190,7 @@
     if (!titleBanners[settings.titleBanner]) settings.titleBanner = defaults.titleBanner;
     settings.coverArt = settings.coverArt === 'off' ? 'off' : 'on';
     if (!themes[settings.theme]) settings.theme = defaults.theme;
+    settings.surfaceStyle = settings.surfaceStyle === 'bordered' ? 'bordered' : 'borderless';
     settings.readerStyleEnabled = settings.readerStyleEnabled === 'on' ? 'on' : 'off';
     settings.readerTheme = settings.readerTheme || defaults.readerTheme;
     return settings;
@@ -200,8 +204,10 @@
     });
     root.dataset.lwTheme = clean.theme;
     root.dataset.lwCoverArt = clean.coverArt;
+    root.dataset.lwSurfaceStyle = clean.surfaceStyle;
     root.dataset.lwReaderTheme = clean.readerTheme;
     root.classList.toggle('lw-cover-art-off', clean.coverArt === 'off');
+    root.classList.toggle('lw-surface-borderless', clean.surfaceStyle === 'borderless');
     return clean;
   }
 
@@ -210,8 +216,10 @@
     if (document.body) {
       document.body.dataset.lwTheme = clean.theme;
       document.body.dataset.lwCoverArt = clean.coverArt;
+      document.body.dataset.lwSurfaceStyle = clean.surfaceStyle;
       document.body.dataset.lwReaderTheme = clean.readerTheme;
       document.body.classList.toggle('lw-cover-art-off', clean.coverArt === 'off');
+      document.body.classList.toggle('lw-surface-borderless', clean.surfaceStyle === 'borderless');
     }
     const banner = titleBanners[clean.titleBanner] || titleBanners[defaults.titleBanner];
     document.querySelectorAll('[data-lw-title-banner]').forEach((image) => {

@@ -473,6 +473,27 @@ body.lw-shell-assistant button.active {
   color: #102025;
 }
 
+html.lw-surface-borderless .lw-global-nav,
+html.lw-surface-borderless .lw-global-nav__links a,
+html.lw-surface-borderless .lw-global-nav__campaign,
+html.lw-surface-borderless .lw-library-overview,
+html.lw-surface-borderless .lw-series-filter button,
+html.lw-surface-borderless body.lw-shell-index .series-section,
+html.lw-surface-borderless body.lw-shell-index .reader-panel,
+html.lw-surface-borderless body.lw-shell-index .book,
+html.lw-surface-borderless .lw-current-book-status {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+html.lw-surface-borderless .lw-global-nav__links a:hover,
+html.lw-surface-borderless .lw-global-nav__links a[aria-current="page"],
+html.lw-surface-borderless .lw-series-filter button:hover,
+html.lw-surface-borderless .lw-series-filter button.active {
+  background: var(--lw-shell-raised);
+}
+
 /* Selected controls use a light accent surface. Their nested labels must not
    retain the normal light-on-dark text colors used by option-card content. */
 body.lw-shell-assistant button.active > strong,

@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <base href="http://localhost:8766/design-prototypes/">
   <title>Combat Mode study</title>
-  <link rel="stylesheet" href="common.css">
+  <link rel="stylesheet" href="common.css?v=borderless-20260813">
   <style>
     .combat-desk { display:grid; grid-template-columns:230px minmax(0,1fr) 300px; gap:16px; align-items:start; }
     .campaign-rail { overflow:hidden; }.campaign-rail__cover { height:170px; background:#091113; }.campaign-rail__cover img { width:100%; height:100%; object-fit:cover; object-position:50% 26%; opacity:.78; }.campaign-rail__body { display:grid; gap:9px; padding:14px; }.campaign-rail__body h2 { margin:0; font-size:1.32rem; }.campaign-rail__body p { margin:0; font-size:.8rem; }.series-label { margin:16px 8px 7px; color:var(--muted); font-size:.7rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; }.book-list { display:grid; gap:5px; padding:0 7px 12px; }.book-list .book-row { grid-template-columns:32px minmax(0,1fr); padding:7px; }.book-list .book-row img { width:27px; height:36px; }.book-list .book-row strong { font-size:.8rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -16,6 +17,8 @@
     .outcome { display:none; padding:12px; border:1px solid #44886b; border-radius:5px; background:rgba(61,133,98,.11); }.outcome strong { display:block; color:var(--green); }.outcome span { display:block; margin-top:4px; color:var(--muted); font-size:.8rem; }.is-victory .outcome { display:block; }.is-victory .active-encounter,.is-victory .battle-hud,.is-victory .combat-ratio,.is-victory .round-controls { display:none; }.is-victory .battle-head h1::after { content:' won'; }.is-victory .recent-title { display:none; }
     @media(max-width:1120px){.combat-desk{grid-template-columns:220px minmax(0,1fr)}.combat-aside{grid-column:2}.combat-aside .panel-body{grid-template-columns:1fr 1fr;align-items:start}.encounter-name{grid-column:1/-1}.outcome{grid-column:1/-1}}@media(max-width:780px){.combat-desk{grid-template-columns:1fr}.combat-aside{grid-column:auto}.combat-aside .panel-body{grid-template-columns:1fr}.battle-head{display:block}.battle-head .section-no{margin-top:8px}.battle-hud{grid-template-columns:1fr}.round-controls{grid-template-columns:1fr 90px}.round-controls .button{width:100%}.fight-details__body{grid-template-columns:1fr}}
   </style>
+  <link rel="stylesheet" href="borderless.css">
+  <script defer src="prototype-nav.js?revision=borderless-live"></script>
 </head>
 <body>
   <div class="app-shell" id="app">

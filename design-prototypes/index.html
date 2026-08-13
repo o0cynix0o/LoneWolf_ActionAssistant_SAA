@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <base href="http://localhost:8766/design-prototypes/">
   <title>Lone Wolf redesign studies</title>
-  <link rel="stylesheet" href="common.css">
+  <link rel="stylesheet" href="common.css?v=borderless-20260813">
   <style>
     .intro { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 24px; align-items: end; margin: 34px 0 30px; }
     .intro p { max-width: 760px; }
@@ -18,12 +19,14 @@
     .study ul { margin: 4px 0 18px; padding-left: 19px; color: var(--muted); line-height: 1.55; font-size: .9rem; }
     @media (max-width: 900px) { .studies, .intro { grid-template-columns: 1fr; } }
   </style>
+  <link rel="stylesheet" href="borderless.css">
+  <script defer src="prototype-nav.js?revision=borderless-live"></script>
 </head>
 <body>
   <div class="app-shell">
     <header class="topbar">
       <a class="brand" href="index.html"><span class="brand-mark"></span><span>Lone Wolf</span></a>
-      <nav class="main-nav" aria-label="Prototype navigation"><a aria-current="page" href="index.html">Design studies</a><a href="campaign-desk.html">Campaign Desk</a><a href="combat-mode.html">Combat Mode</a><a href="reader-first.html">Reader First</a><a href="library-command.html">Library Command</a><a href="tools.html">Tools</a></nav>
+      <nav class="main-nav" aria-label="Prototype navigation"><a aria-current="page" href="index.html">Design studies</a><a href="campaign-desk.html">Campaign Desk</a><a href="borderless-surfaces.html">Borderless Surfaces</a><a href="combat-mode.html">Combat Mode</a><a href="reader-first.html">Reader First</a><a href="library-command.html">Library Command</a><a href="tools.html">Tools</a></nav>
       <div class="campaign-chip"><span class="live-dot"></span> Book 6, section 219</div>
     </header>
     <main class="page">

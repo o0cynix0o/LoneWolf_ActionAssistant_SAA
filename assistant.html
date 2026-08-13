@@ -7433,6 +7433,11 @@
           <div class="settings-grid">
             ${settingsApi.themes.map((theme) => settingsOptionButton('theme', theme.id, theme.name, theme.note, current.theme === theme.id)).join('')}
           </div>
+          <h3 class="section-subtitle">Surface Framing</h3>
+          <div class="settings-grid">
+            ${settingsOptionButton('surfaceStyle', 'borderless', 'Borderless', 'Use surface contrast and spacing instead of panel outlines.', current.surfaceStyle === 'borderless')}
+            ${settingsOptionButton('surfaceStyle', 'bordered', 'Bordered', 'Restore framed panels, controls, and status surfaces.', current.surfaceStyle === 'bordered')}
+          </div>
         </div>
         <div class="panel">
           <h2>Reader Page Styling</h2>

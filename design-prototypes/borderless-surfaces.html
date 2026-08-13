@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <base href="http://localhost:8766/design-prototypes/">
+  <title>Borderless Surface Study</title>
+  <link rel="stylesheet" href="common.css?v=borderless-20260813">
+  <style>
+    .study-layout { display:grid; grid-template-columns:260px minmax(0,1fr) 320px; gap:16px; align-items:start; }
+    .topbar, .panel, .panel-title, .tabbar, .campaign-chip, .status, .button, .metric, .book-row, .choice { border:0; }
+    .panel, .tabbar, .campaign-chip, .status, .button, .metric, .book-row, .choice { border-radius:0; }
+    .campaign-chip { background:#101a1a; }.status { background:#152523; }.status.reading { background:rgba(61,133,98,.16); }.status.ready { background:rgba(157,116,39,.18); }
+    .button { background:#26393f; }.button:hover { background:#314d55; }.button.primary { background:var(--accent); }.button.primary:hover { background:#e0f8ff; }.tabbar { background:#101a1a; padding:5px 0; gap:5px; }.tabbar button { border-radius:0; }.tabbar button.active, .tabbar button:hover { background:#26393f; }
+    .campaign-card { overflow:hidden; }.campaign-cover { height:190px; background:#0b1315; }.campaign-cover img { display:block; width:100%; height:100%; object-fit:cover; object-position:50% 32%; opacity:.76; }.campaign-info { padding:15px; }.campaign-info h2 { margin:7px 0 3px; }.series-label { margin:14px 16px 7px; color:var(--muted); font-size:.75rem; font-family:var(--sans); text-transform:uppercase; letter-spacing:.08em; }.book-list { padding:7px; }
+    .workspace-head { display:flex; justify-content:space-between; gap:18px; align-items:flex-start; padding:0 0 16px; }.workspace-head p { margin-bottom:0; }.section-no { color:var(--gold); font-family:var(--serif); font-size:1.35rem; white-space:nowrap; }
+    .borderless-stack { display:grid; gap:12px; }.surface-block { padding:16px; background:#101a1a; }.surface-kicker { margin:0 0 4px; color:var(--gold); font-size:.72rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; }.surface-title-row { display:flex; align-items:start; justify-content:space-between; gap:12px; }.surface-title-row h2 { margin:0; font-size:1.16rem; }.surface-copy { margin:9px 0 0; color:var(--ink); font-size:.86rem; line-height:1.5; }
+    .metric-strip { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; background:transparent; }.metric-plain { min-width:0; padding:12px; background:#101a1a; }.metric-plain small { display:block; color:var(--muted); font-size:.68rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; }.metric-plain strong { display:block; margin-top:4px; color:var(--accent); font-size:1.05rem; }
+    .story { margin-top:14px; padding:22px clamp(18px,3vw,38px); min-height:370px; }.story .panel-title { padding:0 0 14px; border:0; }.story .story-copy { max-width:690px; color:#d9e3df; font-family:var(--serif); font-size:1.12rem; line-height:1.75; }.story .story-copy p:last-child { margin-bottom:0; }.choice-list { display:grid; gap:8px; padding-top:17px; }.choice { display:flex; justify-content:space-between; gap:16px; align-items:center; padding:12px 13px; background:#26393f; color:var(--ink); text-align:left; }.choice:hover { background:#314d55; }.choice small { color:var(--gold); white-space:nowrap; }
+    .activity-row { display:grid; grid-template-columns:1fr; gap:12px; }.activity-row div { padding:0; }.activity-row strong,.activity-row span { display:block; }.activity-row span { margin-top:3px; color:var(--muted); font-size:.78rem; }
+    .tool-list { display:grid; gap:5px; margin-top:13px; }.tool-link { display:flex; justify-content:space-between; align-items:center; gap:12px; width:100%; padding:11px 10px; border:0; background:#18272b; color:var(--ink); text-align:left; }.tool-link strong { color:var(--accent); }.tool-link span { color:var(--muted); font-size:.78rem; }.tool-link:hover { background:#26393f; }.tool-link:hover strong { color:var(--gold); }
+    .recovery { background:#101a16; }.recovery .surface-copy { max-width:34rem; }.recovery-routes { margin:11px 0 0; color:var(--ink); font-size:.78rem; }.recovery .button { margin-top:11px; }
+    .note { margin-top:16px; color:var(--muted); font-size:.79rem; line-height:1.45; }.note strong { color:var(--gold); }
+    @media(max-width:1100px){.study-layout{grid-template-columns:240px minmax(0,1fr)}.right-rail{grid-column:2}.right-rail .borderless-stack{grid-template-columns:1fr 1fr}.metric-strip{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:760px){.study-layout{grid-template-columns:1fr}.right-rail{grid-column:auto}.right-rail .borderless-stack{grid-template-columns:1fr}.workspace-head{display:block}.section-no{margin-top:8px}.metric-strip{grid-template-columns:repeat(2,1fr)}}
+  </style><link rel="stylesheet" href="borderless.css"><script defer src="prototype-nav.js?revision=borderless-live"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar"><a class="brand" href="index.html"><span class="brand-mark"></span><span>Lone Wolf</span></a><nav class="main-nav"><a href="library-command.html">Library</a><a aria-current="page" href="borderless-surfaces.html">Campaign</a><a href="reader-first.html">Reader</a><a href="tools.html">Tools</a></nav><div class="campaign-chip"><span class="live-dot"></span> Reading Book 6</div></header>
+    <main class="page">
+      <div class="study-layout">
+        <aside class="panel campaign-card">
+          <div class="campaign-cover"><img src="../assets/images/book-covers/lw06.jpg" alt="The Kingdoms of Terror cover"></div>
+          <div class="campaign-info"><span class="status reading">Reading</span><h2>The Kingdoms of Terror</h2><p class="muted">Magnakai Series · Book 6</p><button class="button primary launch" style="width:100%">Return to current section</button></div>
+          <p class="series-label">Magnakai series</p>
+          <div class="book-list"><a class="book-row active" href="#"><img src="../assets/images/book-covers/lw06.jpg" alt=""><div><strong>6. Kingdoms of Terror</strong><span>Section 56 · Reading</span></div></a><a class="book-row" href="#"><img src="../assets/images/book-covers/lw07.jpg" alt=""><div><strong>7. Castle of Death</strong><span>Browse book</span></div></a><a class="book-row" href="#"><img src="../assets/images/book-covers/lw08.jpg" alt=""><div><strong>8. Jungle of Horrors</strong><span>Browse book</span></div></a></div>
+        </aside>
+        <section>
+          <div class="workspace-head"><div><p class="eyebrow">Current campaign</p><h1>Continue your journey</h1><p class="muted">The story remains central. Supporting campaign information sits on calm surfaces instead of competing outlined panels.</p></div><div class="section-no">Section 56</div></div>
+          <div class="metric-strip" style="margin-top:14px"><div class="metric-plain"><small>Endurance</small><strong>17 / 32</strong></div><div class="metric-plain"><small>Combat Skill</small><strong>14</strong></div><div class="metric-plain"><small>Gold</small><strong>14</strong></div><div class="metric-plain"><small>Game mode</small><strong>Normal</strong></div></div>
+          <div class="tabbar" role="tablist" style="margin-top:14px"><button class="active">Story</button><button>Action Chart</button><button>Disciplines</button><button>Inventory</button><button>Combat</button><button>Notes</button></div>
+          <article class="panel story"><div class="panel-title"><div><p class="eyebrow">The Kingdoms of Terror</p><h2>Section 56</h2></div><span class="status reading">Current section</span></div><div class="story-copy"><p>You draw an Arrow, aim, and fire a split second before the bolt of energy hits your chest. Your Arrow pierces the leader's heart, killing him instantly, but the wound that you yourself suffer knocks you to the ground.</p><p>If you are still alive, you scramble to your feet and run as fast as you can through the undergrowth towards your horse.</p></div><div class="choice-list"><button class="choice"><span>Turn to 182.</span><small>Turn to 182</small></button></div></article>
+        </section>
+        <aside class="right-rail">
+          <div class="borderless-stack">
+            <section class="surface-block"><div class="surface-title-row"><h2>At a glance</h2><span class="status">Saved</span></div><div class="activity-row" style="margin-top:14px"><div><strong>Last action</strong><span>Arrived at section 56</span></div><div><strong>Known Magnakai</strong><span>Weaponmastery · Curing · Huntmastery</span></div><div><strong>Inventory</strong><span>2 weapons · 6 / 8 backpack · 12 special items</span></div></div></section>
+            <section class="surface-block"><p class="surface-kicker">Quick tools</p><div class="tool-list"><button class="tool-link"><strong>Roll</strong><span>Random Number Table</span></button><button class="tool-link"><strong>Combat</strong><span>Start tracked fight</span></button><button class="tool-link"><strong>Map</strong><span>View the map</span></button><button class="tool-link"><strong>Save</strong><span>Create a checkpoint</span></button></div></section>
+            <section class="surface-block recovery"><div class="surface-title-row"><div><p class="surface-kicker">Recovery path</p><h2>Return to an earlier decision</h2></div><span class="status">Snapshot</span></div><p class="surface-copy">Restores the Action Chart exactly as it was at section 13, before the route that led here.</p><button class="button primary launch">Return to section 13</button><p class="recovery-routes">Available routes there: Section 56 or Section 295 or Section 182.</p></section>
+          </div>
+          <p class="note"><strong>What changed in this study:</strong> outlined cards are reserved for persistent structure and direct interaction. Informational blocks have no enclosing border or radius, so the eye lands on the story and the next decision first.</p>
+        </aside>
+      </div>
+    </main>
+    <div class="toast" id="toast">This is a visual study only. The campaign state is unchanged.</div>
+  </div>
+  <script>document.querySelectorAll('.launch').forEach(button => button.onclick = () => document.querySelector('#toast').classList.add('show'));</script>
+</body>
+</html>

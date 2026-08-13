@@ -85,6 +85,7 @@ UI_PREFERENCE_KEYS = {
     "lonewolf_redux.appearance.titleBanner.v1",
     "lonewolf_redux.appearance.coverArt.v1",
     "lonewolf_redux.appearance.theme.v1",
+    "lonewolf_redux.appearance.surfaceStyle.v1",
     "lonewolf_redux.reader.styleEnabled.v1",
     "lonewolf_redux.reader.theme.v1",
 }
