@@ -155,6 +155,7 @@ body.lw-surface-campaign .workspace.lw-native {
 .lw-glance__tools .lw-ui-button { flex-direction: column; align-items: flex-start; min-height: 66px; padding: 10px; text-align: left; gap: 3px; }
 .lw-glance__tools .lw-ui-button strong { font: 700 .86rem var(--lw-ui-sans); }
 .lw-glance__tools .lw-ui-button span { color: var(--lw-ui-muted); font: 400 .72rem var(--lw-ui-sans); }
+.lw-glance__tools .lw-ui-button--primary span { color: #24434c !important; }
 
 /* Native Combat Mode: the encounter is the work surface. The dense legacy
    renderer remains available in Tools; Campaign gets one compact decision flow. */
