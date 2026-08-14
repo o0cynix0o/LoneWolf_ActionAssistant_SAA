@@ -780,15 +780,15 @@
       html.lw-surface-borderless .lw-ui-panel__title {
         border-bottom: 0 !important;
       }
-      html.lw-surface-borderless button,
-      html.lw-surface-borderless .settings-option,
-      html.lw-surface-borderless .lw-ui-button {
+      html.lw-surface-borderless button:not(.book-choice),
+      html.lw-surface-borderless .settings-option:not(.book-choice),
+      html.lw-surface-borderless .lw-ui-button:not(.book-choice) {
         background-color: transparent !important;
         transition: background-color 120ms ease, color 120ms ease;
       }
-      html.lw-surface-borderless button:hover,
-      html.lw-surface-borderless .settings-option:hover,
-      html.lw-surface-borderless .lw-ui-button:hover {
+      html.lw-surface-borderless button:not(.book-choice):hover,
+      html.lw-surface-borderless .settings-option:not(.book-choice):hover,
+      html.lw-surface-borderless .lw-ui-button:not(.book-choice):hover {
         background-color: var(--lw-ui-selected) !important;
       }
       html.lw-surface-borderless button.active,

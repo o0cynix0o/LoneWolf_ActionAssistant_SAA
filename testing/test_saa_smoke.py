@@ -4357,6 +4357,8 @@ class ReaderToolsProductionTests(unittest.TestCase):
         reader_css = (root / "assets" / "css" / "lw-reader-tools.css").read_text(encoding="utf-8")
         self.assertIn("html.lw-surface-borderless .lw-reading-surface .book-choice", reader_css)
         self.assertIn("color: #263334 !important;", reader_css)
+        foundation_css = (root / "assets" / "css" / "lw-ui-foundation.css").read_text(encoding="utf-8")
+        self.assertIn(":not(.book-choice):not(.active)", foundation_css)
         self.assertTrue((root / "assets" / "css" / "lw-reader-tools.css").is_file())
 
 
