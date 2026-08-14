@@ -4301,6 +4301,13 @@ class CampaignDeskProductionTests(unittest.TestCase):
         self.assertIn("function renderCampaignSurface()", assistant_html)
         self.assertIn("function campaignResumeCopy()", assistant_html)
         self.assertIn("function campaignObjectiveCopy()", assistant_html)
+        self.assertIn("const BOOK_OBJECTIVES = Object.freeze({", assistant_html)
+        for book_number in range(1, 30):
+            self.assertRegex(assistant_html, rf"\n\s*{book_number}: '[^']+")
+        self.assertIn("Prepare to confront ${enemy}", assistant_html)
+        self.assertIn("Resolve the section check", assistant_html)
+        self.assertIn("Choose what you leave behind", assistant_html)
+        self.assertIn("Decide what to take with you", assistant_html)
         self.assertIn("campaignAdvancedThisVisit", assistant_html)
         self.assertIn("Last time", assistant_html)
         self.assertIn("Current objective", assistant_html)

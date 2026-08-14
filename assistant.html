@@ -3338,6 +3338,37 @@
     const isNativeSurface = ['campaign', 'reader', 'tools'].includes(nativeSurface);
     const workspaceEl = document.getElementById('workspace');
     const CAMPAIGN_TABS = [['story', 'Story'], ['sheet', 'Action Chart'], ['disciplines', 'Disciplines'], ['inventory', 'Inventory'], ['combat', 'Combat'], ['notes', 'Notes']];
+    const BOOK_OBJECTIVES = Object.freeze({
+      1: 'Carry the warning to the King',
+      2: 'Seek the Sommerswerd in Durenor',
+      3: 'Endure the perils of Kalte',
+      4: 'Survive the Chasm of Doom',
+      5: 'Keep the Darklords from the desert',
+      6: 'Investigate the new Darklord threat',
+      7: 'Find a way through Castle Death',
+      8: 'Survive the jungle and continue the Magnakai quest',
+      9: 'Pursue the threat in Dessi',
+      10: 'Escape the Dungeons of Torgar',
+      11: 'Untangle the crisis across time',
+      12: 'Confront the Masters of Darkness',
+      13: 'Stop the Plague Lords of Ruel',
+      14: 'Free the Captives of Kaag',
+      15: 'Survive the Darke Crusade',
+      16: 'Uncover Vashna\'s legacy',
+      17: 'Defeat the Deathlord of Ixia',
+      18: 'Answer the call of the dragons',
+      19: 'Break the Wolf\'s Bane',
+      20: 'End the Curse of Naar',
+      21: 'Protect the Moonstone voyage',
+      22: 'Outmaneuver the Buccaneers of Shadaki',
+      23: 'Carry the fight through Mydnight\'s ordeal',
+      24: 'Survive the Rune War',
+      25: 'Follow the Trail of the Wolf',
+      26: 'Prevent the fall of Blood Mountain',
+      27: 'Survive Vampirium',
+      28: 'End the Hunger of Sejanoz',
+      29: 'Weather the Storms of Chai'
+    });
     let campaignTab = 'story';
     let browseSection = requestedBrowseSection;
     let storyRenderToken = 0;
@@ -3542,8 +3573,12 @@
       const book = bookByNumber(c.BookNumber);
       const section = Number(app.state.CurrentSection);
       const flow = currentFlow();
+      const entry = flow.Entry || {};
       const automation = flow.Automation || {};
       const storyIsCurrent = lastStory.book === Number(c.BookNumber) && lastStory.section === section;
+      const sectionCombat = arr(entry.combat)[0];
+      const enemy = text(arr(sectionCombat?.enemies)[0]?.name);
+      const rollSummary = text(entry.roll?.summary || entry.stagedRoll?.summary);
       if (automation.Summary && !automation.Applied) {
         return {
           eyebrow: 'Current objective',
@@ -3551,23 +3586,52 @@
           description: `${text(automation.Summary)} Then continue when the book presents the next path.`
         };
       }
+      if (enemy) {
+        return {
+          eyebrow: 'Current objective',
+          title: `Prepare to confront ${enemy}`,
+          description: `Section ${section} calls for a tracked encounter. Choose a weapon and resolve the fight when you are ready.`
+        };
+      }
+      if (rollSummary && !flow.LastRoll) {
+        return {
+          eyebrow: 'Current objective',
+          title: 'Resolve the section check',
+          description: rollSummary
+        };
+      }
+      if (arr(flow.LossChoices).length) {
+        return {
+          eyebrow: 'Current objective',
+          title: 'Choose what you leave behind',
+          description: 'This section requires a carried item decision before the story can continue.'
+        };
+      }
+      if (arr(flow.Loot).some((option) => option?.Available !== false && !option?.Applied)) {
+        return {
+          eyebrow: 'Current objective',
+          title: 'Decide what to take with you',
+          description: 'This section offers an item or resource decision. Review it before taking the next route.'
+        };
+      }
+      const bookObjective = BOOK_OBJECTIVES[Number(c.BookNumber)] || `Continue ${book.title}`;
       if (storyIsCurrent && lastStory.choices.length > 1) {
         return {
           eyebrow: 'Current objective',
-          title: 'Choose your next path',
-          description: `${lastStory.choices.length} routes are open in ${book.title}. Read the section, then decide where Lone Wolf goes next.`
+          title: bookObjective,
+          description: `${lastStory.choices.length} routes are open at section ${section}. Read the passage, then decide where Lone Wolf goes next.`
         };
       }
       if (storyIsCurrent && lastStory.choices.length === 1) {
         return {
           eyebrow: 'Current objective',
-          title: 'Follow the only path forward',
-          description: `${book.title} directs you onward from section ${section}.`
+          title: bookObjective,
+          description: `${book.title} directs you along the only printed path from section ${section}.`
         };
       }
       return {
         eyebrow: 'Current objective',
-        title: `Continue ${book.title}`,
+        title: bookObjective,
         description: `Read section ${section} to discover the next legal action.`
       };
     }
