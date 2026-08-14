@@ -1,4 +1,4 @@
-# Lone Wolf Action Assistant 3.6.0 Internal Testing
+# Lone Wolf Action Assistant 3.7.0 Internal Testing
 
 Lone Wolf Action Assistant is a standalone Windows desktop play aid for the
 *Lone Wolf* gamebooks. It is a digital Action Chart, reader companion, and
@@ -8,7 +8,7 @@ server yourself.
 
 **Internal-testing release:** [download the current Windows installer](https://github.com/o0cynix0o/LoneWolf_ActionAssistant_SAA/releases/latest).
 
-Version: **3.6.0 Internal Testing**
+Version: **3.7.0 Internal Testing**
 
 ## What You Can Play
 
@@ -66,6 +66,10 @@ The importer expects a valid folder containing at least `title.htm` and
 - **Console** opens the keyboard-first CLI against that same active save.
 - **Settings** is part of Tools, so campaign modes, themes, reader preferences,
   saves, and layout preferences have one canonical home.
+- **Soundtrack** is optional background music. Campaign includes a compact
+  Player card, Reader includes companion controls, and Tools provides the
+  full playlist, transport, volume, and attribution view. Music starts off,
+  never alters campaign state, and is not included as a separate download.
 - **Manage Your Books** is the Library's live collection view. It shows the
   installed state of all 29 supported books and keeps ZIP/folder import tools
   beside the collection they update.
@@ -121,3 +125,7 @@ and release checks.
 Project Aon book files are not part of this project or its build artifacts. See
 [NOTICE.md](NOTICE.md) and the [Project Aon license](https://www.projectaon.org/en/Main/License)
 before distributing any material derived from the books.
+
+Bundled background music is documented in
+[THIRD_PARTY_MUSIC.md](THIRD_PARTY_MUSIC.md). The individual attribution and
+license records are included in both the source tree and installed application.

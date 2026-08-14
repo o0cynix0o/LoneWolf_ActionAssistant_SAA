@@ -1,4 +1,4 @@
-# Lone Wolf Action Assistant 3.6.0 Internal Testing
+# Lone Wolf Action Assistant 3.7.0 Internal Testing
 
 ## Installation
 
@@ -76,6 +76,10 @@ The top navigation always works with the same active save and current section:
   wider book pane. It does not create another campaign or save.
 - **Tools** expands the Action Chart, inventory, combat, achievements, saves,
   notes, game modes, and settings into one workspace.
+- **Soundtrack** is optional background music. The Player card in Campaign,
+  Reader companion controls, and Tools soundtrack workspace all control the
+  same local playback session. It is off until you explicitly start it and has
+  no effect on book rules, saves, combat, or automation.
 - **Console** opens the embedded terminal against the same campaign state.
 - **Settings** lives in Tools, so game modes, themes, reader preferences, save
   slots, and layout controls are managed in one place.
@@ -84,6 +88,17 @@ The top navigation always works with the same active save and current section:
 
 Switching layouts never changes the current book, section, character, or
 campaign mode. It only changes how the same game is presented.
+
+## Background music
+
+Use the Campaign Player card for quick play, pause, previous/next, and volume
+controls. Reader offers the same compact controls beneath its campaign details.
+For playlist selection, shuffle, repeat, queue position, and credits, open
+**Tools** and select **Soundtrack**.
+
+Music is disabled on a fresh installation. Its selected playlist and volume are
+saved as local preferences, while a new app launch never starts audio by itself.
+The installed application includes [third-party music credits](../THIRD_PARTY_MUSIC.md).
 
 ## Arranging Tools cards
 

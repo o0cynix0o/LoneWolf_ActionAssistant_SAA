@@ -1,4 +1,4 @@
-# Building Lone Wolf Action Assistant 3.6.0 Internal Testing
+# Building Lone Wolf Action Assistant 3.7.0 Internal Testing
 
 ## Requirements
 
@@ -74,7 +74,8 @@ The installer records the selected books location in the current installation sc
 
 Before distributing:
 
-1. Confirm `git status` contains no `books`, saves, logs, or WebView2 bootstrapper.
+1. Confirm `git status` contains no `books`, saves, logs, WebView2 bootstrapper,
+   or locally sourced music masters under `music/`.
 2. Run all source tests and the frozen self-test.
 3. Confirm the frozen desktop window opens at the home page.
 4. Confirm the frozen embedded terminal accepts input and exits cleanly.
@@ -85,3 +86,5 @@ Before distributing:
 9. Test upgrade over the previous 3.x installer.
 10. Confirm uninstall leaves books and per-user saves intact.
 11. Test the final installer on a clean Windows machine without Python.
+12. Confirm the installed application contains `THIRD_PARTY_MUSIC.md` and every
+    audio file listed in `assets/audio/music-manifest.json`.

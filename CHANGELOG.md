@@ -1,5 +1,19 @@
 # Changelog
 
+## 3.7.0 - Internal Testing
+
+- Added an optional, bundled background soundtrack. Playback is disabled by
+  default, never affects campaign state, and resumes the selected track and
+  queue when moving between the Campaign, Reader, and Tools views.
+- Added a Campaign Player card, Reader companion controls, and a full Tools
+  soundtrack workspace with transport, volume, playlist, shuffle, repeat,
+  queue position, and per-track attribution.
+- Packaged the approved MP3 masters and `THIRD_PARTY_MUSIC.md` with both the
+  frozen app and Windows installer. No music download, export, or raw asset
+  path is exposed in the application.
+- Completed source-suite, source self-test, frozen self-test, installer build,
+  and package asset-integrity checks for the release candidate.
+
 ## 3.6.0 - Internal Testing
 
 - Rebuilt the production Library, Campaign, Reader, Tools, Console, Settings,

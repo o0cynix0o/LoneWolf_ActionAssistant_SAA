@@ -1,15 +1,15 @@
-# Soundtrack Design Contract
+# Soundtrack Design and Player Contract
 
 ## Purpose
 
-The soundtrack is optional background music for a Lone Wolf campaign. It is a
-single player shared by Library, Campaign, Reader, Tools, and Console. It must
-never change campaign state, interrupt a combat action, or obscure the book
-text. The bundled source files remain the approved MP3 masters in `music/`.
+The soundtrack is optional background music for a Lone Wolf campaign. It is
+available in Campaign, Reader, and Tools, and it must never change campaign
+state, interrupt a combat action, or obscure the book text. The bundled source
+files remain the approved MP3 masters in `music/`.
 
-This document defines the behavior before the player and packaged assets are
-implemented. Licensing evidence and the attribution ledger live in
-`music/MUSIC_LICENSE_AUDIT.md`.
+This is the implemented 3.7.0 player contract. Licensing evidence and the
+attribution ledger live in `music/MUSIC_LICENSE_AUDIT.md`; the distributed
+attribution notice is `THIRD_PARTY_MUSIC.md`.
 
 ## Player Contract
 
@@ -28,8 +28,9 @@ implemented. Licensing evidence and the attribution ledger live in
 
 ### Navigation and persistence
 
-- Campaign, Reader, Tools, and Console all operate on the same live save and
-  expose the same player state.
+- Campaign, Reader, and Tools expose the same shared player state. Library and
+  Console retain the same application preferences but do not render player
+  controls.
 - Before a document navigation, the player records the source track, elapsed
   position, queue order, and whether it was playing in session storage.
 - On the next page, the controller restores the selected track and seek
@@ -67,22 +68,21 @@ testing.
 | `Dark Roads` | Danger, Darklords, infiltration, hostile terrain | Firesong; Shamanistic; Rites; Ritual; Fantasy Medieval Epic; Mountain Knight/Castle |
 | `All Approved Tracks` | Long sessions where the player wants variety | Every ledger-approved track, shuffled by default |
 
-The manifest must use the human-readable names above and keep the source
-filenames internal. Each manifest entry will include the attribution identifier
-from the audit ledger, artist, source, mood groups, duration, and a package-safe
-relative asset path.
+The manifest uses human-readable track names while keeping package filenames
+internal. Each entry records the attribution identifier, artist, source, mood
+groups, and package-safe relative asset path.
 
 ## UI Surfaces
 
 ### Compact player
 
-Every main page receives the same compact control in the shared app shell:
+Campaign and Reader receive compact controls:
 
 - Track title and current playlist.
 - Play/Pause, Previous, Next, and a volume/mute control.
 - A small status label: `Off`, `Playing`, `Paused`, `Resume available`, or a
   plain-language error.
-- A link or button opening the full Music panel in Tools.
+- A link or button opening the full Soundtrack panel in Tools.
 
 The compact control is deliberately secondary to campaign navigation. It uses
 the established action-ribbon visual treatment, remains keyboard accessible,
@@ -90,10 +90,10 @@ and keeps its text visible in both Borderless and Bordered surface styles.
 
 ### Campaign and Reader
 
-- Campaign shows the compact player in the right-hand utility area, beside
-  Roll, Combat, Map, and Save, without displacing choices or recovery actions.
-- Reader shows the compact player in the companion rail beneath Campaign
-  information. Reader controls do not alter the book iframe styling.
+- Campaign shows a Player card in the right-hand utility area, beside Roll,
+  Combat, Map, and Save, without displacing choices or recovery actions.
+- Reader shows compact player controls in the companion rail beneath Campaign
+  information. Those controls do not alter the book iframe styling.
 - Both surfaces open the same Tools Music panel for queue and credits.
 
 ### Tools Music panel
@@ -101,11 +101,11 @@ and keeps its text visible in both Borderless and Bordered surface styles.
 The full panel lives under Tools, alongside existing Settings and campaign
 tools. It contains:
 
-- On/Off and volume controls.
+- Enabled/disabled and volume controls.
 - Playlist selector, track selector, shuffle, repeat, and transport controls.
-- Now playing title, elapsed time, and a compact queue.
-- The source/artist/license credit for the current item and a link to the
-  bundled attribution notice.
+- Now-playing title and queue position in the active playlist.
+- Per-track source, artist, and license credit, with the bundled attribution
+  notice included beside the installed executable.
 - A concise explanation that the music is optional background audio.
 
 No download, export, copy-file, or raw asset-path controls are exposed.
@@ -142,7 +142,7 @@ without a fresh Play action.
 
 ## Scope Boundary
 
-Phase 3 adds the music manifest, credits, packaging rules, and local asset
-staging. Phase 4 adds the actual controller and compact controls. Version one
-does not include combat-driven music, per-book soundtracks, crossfades, or a
+The 3.7.0 implementation includes the manifest, credits, packaging rules,
+controller, compact controls, and full Tools panel. It does not include
+combat-driven music, per-book soundtracks, crossfades, a duration display, or a
 gapless native audio service.
