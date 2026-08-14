@@ -19,7 +19,15 @@ body.lw-surface-reader .workspace.lw-native {
 }
 
 #readerRoot { min-width: 0; display: grid; gap: 16px; align-content: start; }
-.lw-reader-head { display: flex; justify-content: space-between; gap: 20px; align-items: flex-end; }
+.lw-reader-head {
+  display: flex;
+  min-height: 0;
+  height: auto;
+  padding: 14px 16px 16px;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: flex-end;
+}
 .lw-reader-head__text p.lw-muted { margin: 0; }
 .lw-reader-nav { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .lw-reader-nav .lw-ui-button { white-space: nowrap; }
@@ -77,7 +85,15 @@ body.lw-surface-tools #readerCompanion { display: none; }
 
 body.lw-surface-tools .workspace.lw-native { display: block; }
 .lw-tools { display: grid; gap: 18px; }
-.lw-tools-head { display: flex; justify-content: space-between; gap: 20px; align-items: flex-end; }
+.lw-tools-head {
+  display: flex;
+  min-height: 0;
+  height: auto;
+  padding: 14px 16px 16px;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: flex-end;
+}
 .lw-tools-head__text p.lw-muted { margin: 0; max-width: 720px; }
 .lw-tools-head__actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
