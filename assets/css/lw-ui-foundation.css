@@ -98,8 +98,10 @@ html.lw-surface-borderless {
   /* The frameless layout relies on one quiet surface, not a stack of near-black
      card shades. This matches the recovery snapshot treatment. */
   --lw-borderless-surface: color-mix(in srgb, #3d8562 7%, var(--lw-bg));
-  --lw-borderless-control: color-mix(in srgb, var(--lw-ui-accent) 6%, var(--lw-borderless-surface));
-  --lw-borderless-control-hover: color-mix(in srgb, var(--lw-ui-accent) 14%, var(--lw-borderless-surface));
+  /* Action controls use the campaign ribbon's dark-blue tile. It is distinct
+     enough to scan without bringing framed-button noise back to the layout. */
+  --lw-borderless-control: var(--lw-ui-selected);
+  --lw-borderless-control-hover: color-mix(in srgb, var(--lw-ui-accent) 16%, var(--lw-ui-selected));
   --lw-panel: var(--lw-borderless-surface);
   --lw-panel-2: var(--lw-borderless-surface);
   --lw-panel-3: var(--lw-borderless-surface);
@@ -148,8 +150,8 @@ html.lw-surface-borderless .lw-recovery-path {
   background: var(--lw-borderless-surface);
 }
 
-/* Borderless uses ghost controls: enough surface to identify an action, but
-   deliberately quieter than the old framed buttons. */
+/* Borderless actions share the campaign ribbon treatment: a calm dark tile at
+   rest, a brighter hover tile, and the light accent only for the active mode. */
 html.lw-surface-borderless :is(button, .lw-ui-button, .settings-option):not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger):not([aria-current="page"]):not([aria-selected="true"]) {
   background: var(--lw-borderless-control) !important;
   transition: background-color 120ms ease, color 120ms ease;
@@ -159,17 +161,29 @@ html.lw-surface-borderless :is(button, .lw-ui-button, .settings-option):not(.boo
   background: var(--lw-borderless-control-hover) !important;
 }
 
-/* Primary commands use the stronger ghost surface, not the old light fill.
-   This keeps their hierarchy while retaining readable light-on-dark text. */
-html.lw-surface-borderless .lw-ui-button--primary,
-html.lw-surface-borderless #currentBtn {
-  background: var(--lw-borderless-control-hover) !important;
-  color: var(--lw-ui-accent) !important;
+/* Selected tabs, persistent primary commands, and option cards use the same
+   clear light-blue focus state as the campaign action ribbon. */
+html.lw-surface-borderless :is(button.active, .settings-option.active, .lw-ui-button--primary, #currentBtn, [aria-selected="true"]):not(.book-choice) {
+  background: var(--lw-ui-accent) !important;
+  color: #102025 !important;
 }
-html.lw-surface-borderless .lw-ui-button--primary > strong,
-html.lw-surface-borderless .lw-ui-button--primary > span,
-html.lw-surface-borderless .lw-ui-button--primary > small {
-  color: var(--lw-ui-accent) !important;
+html.lw-surface-borderless :is(button.active, .settings-option.active, .lw-ui-button--primary, #currentBtn, [aria-selected="true"]):not(.book-choice) > :is(strong, span) {
+  color: #102025 !important;
+}
+html.lw-surface-borderless :is(button.active, .settings-option.active, .lw-ui-button--primary, #currentBtn, [aria-selected="true"]):not(.book-choice) > small {
+  color: #24434c !important;
+}
+
+/* Destructive commands remain easy to identify, but their tile and hover
+   behavior match every other action rather than falling back to the legacy
+   outline treatment. */
+html.lw-surface-borderless :is(button.danger, .lw-ui-button--danger) {
+  background: var(--lw-borderless-control) !important;
+  color: var(--lw-ui-danger) !important;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+html.lw-surface-borderless :is(button.danger, .lw-ui-button--danger):is(:hover, :focus-visible) {
+  background: color-mix(in srgb, var(--lw-ui-danger) 16%, var(--lw-ui-selected)) !important;
 }
 
 @media (max-width: 800px) {

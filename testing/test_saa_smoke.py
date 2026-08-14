@@ -4283,12 +4283,13 @@ class CampaignDeskProductionTests(unittest.TestCase):
         self.assertIn("--lw-ui-surface: var(--lw-borderless-surface);", foundation_css)
         self.assertIn(".lw-recovery-path", foundation_css)
         self.assertIn(".lw-section-activity__drawer", foundation_css)
-        self.assertIn("--lw-borderless-control:", foundation_css)
-        self.assertIn("Borderless uses ghost controls", foundation_css)
+        self.assertIn("--lw-borderless-control: var(--lw-ui-selected);", foundation_css)
+        self.assertIn("Borderless actions share the campaign ribbon treatment", foundation_css)
         self.assertIn("background: var(--lw-borderless-control) !important;", foundation_css)
         self.assertIn("background: var(--lw-borderless-control-hover) !important;", foundation_css)
-        self.assertIn("Primary commands use the stronger ghost surface", foundation_css)
-        self.assertIn("html.lw-surface-borderless #currentBtn", foundation_css)
+        self.assertIn("Selected tabs, persistent primary commands", foundation_css)
+        self.assertIn("#currentBtn, [aria-selected=\"true\"]", foundation_css)
+        self.assertIn("button.danger, .lw-ui-button--danger", foundation_css)
 
     def test_campaign_desk_keeps_reader_and_live_assistant_together(self) -> None:
         root = Path(saa_main.__file__).resolve().parent

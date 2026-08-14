@@ -793,9 +793,25 @@
       }
       html.lw-surface-borderless button.active,
       html.lw-surface-borderless .settings-option.active,
-      html.lw-surface-borderless .lw-ui-button--primary {
-        background-color: var(--lw-borderless-control-hover) !important;
-        color: var(--lw-accent) !important;
+      html.lw-surface-borderless .lw-ui-button--primary,
+      html.lw-surface-borderless #currentBtn,
+      html.lw-surface-borderless [aria-selected="true"]:not(.book-choice) {
+        background-color: var(--lw-accent) !important;
+        color: #102025 !important;
+      }
+      html.lw-surface-borderless :is(button.active, .settings-option.active, .lw-ui-button--primary, #currentBtn, [aria-selected="true"]):not(.book-choice) > :is(strong, span) {
+        color: #102025 !important;
+      }
+      html.lw-surface-borderless :is(button.active, .settings-option.active, .lw-ui-button--primary, #currentBtn, [aria-selected="true"]):not(.book-choice) > small {
+        color: #24434c !important;
+      }
+      html.lw-surface-borderless :is(button.danger, .lw-ui-button--danger) {
+        background-color: var(--lw-borderless-control) !important;
+        color: var(--lw-danger) !important;
+        transition: background-color 120ms ease, color 120ms ease;
+      }
+      html.lw-surface-borderless :is(button.danger, .lw-ui-button--danger):is(:hover, :focus-visible) {
+        background-color: color-mix(in srgb, var(--lw-danger) 16%, var(--lw-ui-selected)) !important;
       }
       /* Keep the borderless choice honest across legacy and native surfaces.
          Transparent borders retain existing layout measurements while removing
