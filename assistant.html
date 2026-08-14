@@ -3078,6 +3078,14 @@
       });
       app = await response.json();
       if (!response.ok) throw new Error(app.error || 'Action failed');
+      const beforeBook = Number(beforeAction?.state?.Character?.BookNumber);
+      const beforeSection = Number(beforeAction?.state?.CurrentSection);
+      const afterBook = Number(app?.state?.Character?.BookNumber);
+      const afterSection = Number(app?.state?.CurrentSection);
+      if (beforeBook !== afterBook || beforeSection !== afterSection) {
+        campaignAdvancedThisVisit = true;
+        lastStory = { book: null, section: null, choices: [], title: '' };
+      }
       syncUiPreferences(app.uiPreferences);
       setReceipt(withSectionStatus(buildActionReceipt(payload, beforeAction, app)));
       showAchievementUnlocks(app.achievementUnlocks);
@@ -3334,6 +3342,7 @@
     let browseSection = requestedBrowseSection;
     let storyRenderToken = 0;
     let lastStory = { book: null, section: null, choices: [], title: '' };
+    let campaignAdvancedThisVisit = false;
 
     function nativeEl(id) { return document.getElementById(id); }
     function mountView(target) { const v = nativeEl('view'); if (target && v && v.parentElement !== target) target.appendChild(v); }
@@ -3483,6 +3492,7 @@
       }
       const parsed = parseSectionDocument(result.doc, showBook);
       lastStory = { book: showBook, section: showSection, choices: parsed.choices, title: parsed.title };
+      if (variant === 'campaign' && campaignAdvancedThisVisit) renderCampaignHead();
       const bookMeta = bookByNumber(showBook);
       const heading = parsed.title && parsed.title !== String(showSection) ? escapeHtml(parsed.title) : escapeHtml(bookMeta.title);
       const head = variant === 'reader'
@@ -3500,13 +3510,76 @@
     }
 
     // ---- Campaign Desk -------------------------------------------------------
+    function latestCampaignJournalEntry(bookNumber) {
+      const journal = arr(app?.state?.Automation?.Journal);
+      return journal.slice().reverse().find((entry) => (
+        entry && Number(entry.BookNumber) === Number(bookNumber) && text(entry.Summary)
+      )) || null;
+    }
+
+    function campaignResumeCopy() {
+      const c = currentCharacter();
+      const book = bookByNumber(c.BookNumber);
+      const section = Number(app.state.CurrentSection);
+      const journal = latestCampaignJournalEntry(c.BookNumber);
+      const history = arr(app.state.SectionHistory).slice().reverse();
+      const previous = history.find((entry) => (
+        Number(entry?.BookNumber) === Number(c.BookNumber) && Number(entry?.Section) !== section
+      ));
+      const details = [];
+      if (journal) details.push(text(journal.Summary));
+      if (previous) details.push(`You arrived from section ${previous.Section}.`);
+      details.push(`${book.title} is saved at section ${section}.`);
+      return {
+        eyebrow: 'Last time',
+        title: `You left off at Section ${section}`,
+        description: details.join(' ')
+      };
+    }
+
+    function campaignObjectiveCopy() {
+      const c = currentCharacter();
+      const book = bookByNumber(c.BookNumber);
+      const section = Number(app.state.CurrentSection);
+      const flow = currentFlow();
+      const automation = flow.Automation || {};
+      const storyIsCurrent = lastStory.book === Number(c.BookNumber) && lastStory.section === section;
+      if (automation.Summary && !automation.Applied) {
+        return {
+          eyebrow: 'Current objective',
+          title: 'Resolve the section requirement',
+          description: `${text(automation.Summary)} Then continue when the book presents the next path.`
+        };
+      }
+      if (storyIsCurrent && lastStory.choices.length > 1) {
+        return {
+          eyebrow: 'Current objective',
+          title: 'Choose your next path',
+          description: `${lastStory.choices.length} routes are open in ${book.title}. Read the section, then decide where Lone Wolf goes next.`
+        };
+      }
+      if (storyIsCurrent && lastStory.choices.length === 1) {
+        return {
+          eyebrow: 'Current objective',
+          title: 'Follow the only path forward',
+          description: `${book.title} directs you onward from section ${section}.`
+        };
+      }
+      return {
+        eyebrow: 'Current objective',
+        title: `Continue ${book.title}`,
+        description: `Read section ${section} to discover the next legal action.`
+      };
+    }
+
     function renderCampaignHead() {
       const el = nativeEl('campaignHead'); if (!el) return;
       const combat = currentCombat();
       const active = Boolean(combat?.Active);
+      const campaignCopy = campaignAdvancedThisVisit ? campaignObjectiveCopy() : campaignResumeCopy();
       el.innerHTML = active
         ? `<div class="lw-workspace-head__text"><p class="lw-eyebrow">Current encounter</p><h1>Combat in progress</h1><p class="lw-muted">${escapeHtml(text(combat.EnemyName, 'Enemy'))} is engaged. Resolve the encounter here, then return to the current section when it is finished.</p></div><div class="lw-section-no">Section ${escapeHtml(app.state.CurrentSection)}</div>`
-        : `<div class="lw-workspace-head__text"><p class="lw-eyebrow">Current campaign</p><h1>Continue your journey</h1><p class="lw-muted">Your current section is ready. The assistant opens the reader and Action Chart in the place you left them.</p></div><div class="lw-section-no">Section ${escapeHtml(app.state.CurrentSection)}</div>`;
+        : `<div class="lw-workspace-head__text"><p class="lw-eyebrow">${escapeHtml(campaignCopy.eyebrow)}</p><h1>${escapeHtml(campaignCopy.title)}</h1><p class="lw-muted">${escapeHtml(campaignCopy.description)}</p></div><div class="lw-section-no">Section ${escapeHtml(app.state.CurrentSection)}</div>`;
     }
     function renderCampaignMetrics() {
       const el = nativeEl('campaignMetrics'); if (!el) return;

@@ -4299,6 +4299,11 @@ class CampaignDeskProductionTests(unittest.TestCase):
         self.assertIn("'Kai Disciplines'", assistant_html)
         self.assertIn("if (isNativeSurface && nativeSurface === 'campaign') campaignTab = 'combat';", assistant_html)
         self.assertIn("function renderCampaignSurface()", assistant_html)
+        self.assertIn("function campaignResumeCopy()", assistant_html)
+        self.assertIn("function campaignObjectiveCopy()", assistant_html)
+        self.assertIn("campaignAdvancedThisVisit", assistant_html)
+        self.assertIn("Last time", assistant_html)
+        self.assertIn("Current objective", assistant_html)
         self.assertRegex(
             assistant_html,
             r"stashLegacyView\(\);\s*toolMount\.innerHTML\s*=\s*'';\s*mountView\(toolMount\);",
