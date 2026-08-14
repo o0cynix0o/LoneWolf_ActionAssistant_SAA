@@ -188,6 +188,22 @@ body.lw-surface-campaign .workspace.lw-native {
 .lw-music-compact__volume input { width: 100%; min-height: 0; accent-color: var(--lw-ui-accent); cursor: pointer; }
 .lw-music-compact__message { min-height: 1.1em; color: var(--lw-ui-muted); font: .7rem/1.35 var(--lw-ui-sans); }
 
+/* Campaign gives music its own quiet card, so it is discoverable without
+   being mixed into story choices or the at-a-glance tool grid. */
+.lw-music-player-card { display: grid; gap: 10px; padding: 15px 16px 16px; min-width: 0; }
+.lw-music-player-card__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.lw-music-player-card__head .lw-eyebrow { margin-bottom: 3px; }
+.lw-music-player-card__head h2 { font-size: 1.12rem; }
+.lw-music-player-card__now { display: grid; gap: 2px; min-width: 0; }
+.lw-music-player-card__now strong { overflow: hidden; color: var(--lw-ui-ink); font: 700 .98rem var(--lw-ui-sans); text-overflow: ellipsis; white-space: nowrap; }
+.lw-music-player-card__now span, .lw-music-player-card__message { color: var(--lw-ui-muted); font: .77rem/1.4 var(--lw-ui-sans); }
+.lw-music-player-card__controls { display: grid; grid-template-columns: 36px 42px 36px minmax(92px, 1fr); gap: 8px; align-items: end; }
+.lw-music-player-card__controls .lw-ui-button { min-height: 36px; padding: 4px; font-size: 1.15rem; justify-content: center; }
+.lw-music-player-card__volume { display: grid; gap: 5px; color: var(--lw-ui-muted); font: 700 .65rem var(--lw-ui-sans); letter-spacing: .05em; text-transform: uppercase; }
+.lw-music-player-card__volume input { width: 100%; min-height: 0; accent-color: var(--lw-ui-accent); cursor: pointer; }
+.lw-music-player-card__message { min-height: 1.1em; margin: 0; }
+.lw-music-player-card__more { justify-self: start; min-height: 34px; font-size: .78rem; }
+
 /* Recovery is snapshot-based: make the earlier decision visible without making
    it compete with the immediate story choice or pretending it is a route. */
 .lw-recovery-path { display: grid; gap: 10px; padding: 14px 16px; border-top: 1px solid var(--lw-ui-border); background: rgba(61, 133, 98, .07); }

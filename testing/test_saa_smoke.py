@@ -4468,7 +4468,7 @@ class SoundtrackPlayerTests(unittest.TestCase):
         self.assertIn("sessionStorage", player)
         self.assertIn("beforeunload", player)
         self.assertIn("data-lw-music-action", player)
-        self.assertIn("compactMarkup('campaign')", assistant)
+        self.assertIn("playerCardMarkup('campaign')", assistant)
         self.assertIn("compactMarkup('reader')", assistant)
         for preference in (
             "lonewolf_redux.music.enabled.v1",
@@ -4479,6 +4479,18 @@ class SoundtrackPlayerTests(unittest.TestCase):
         ):
             self.assertIn(preference, settings)
             self.assertIn(preference, app_server.UI_PREFERENCE_KEYS)
+
+    def test_tools_and_campaign_expose_full_soundtrack_player(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        player = (root / "assets" / "js" / "lw-music.js").read_text(encoding="utf-8")
+        assistant = (root / "assistant.html").read_text(encoding="utf-8")
+        build = (root / "build.ps1").read_text(encoding="utf-8")
+        self.assertIn("['soundtrack', 'Soundtrack'", assistant)
+        self.assertIn("playerCardMarkup('campaign')", assistant)
+        self.assertIn("playerCardMarkup('tools')", assistant)
+        for control in ("setPlaylist", "setShuffle", "setRepeat", "selectTrack", "Music credits and licenses"):
+            self.assertIn(control, player)
+        self.assertIn("THIRD_PARTY_MUSIC.md", build)
 
 
 class ServiceTests(unittest.TestCase):

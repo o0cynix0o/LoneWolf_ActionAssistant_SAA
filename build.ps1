@@ -43,6 +43,9 @@ try {
     Copy-Item -LiteralPath (Join-Path $ProjectRoot 'NOTICE.md') `
         -Destination (Join-Path (Split-Path -Parent $PackagedExe) 'NOTICE.md') `
         -Force
+    Copy-Item -LiteralPath (Join-Path $ProjectRoot 'THIRD_PARTY_MUSIC.md') `
+        -Destination (Join-Path (Split-Path -Parent $PackagedExe) 'THIRD_PARTY_MUSIC.md') `
+        -Force
 
     & $PackagedExe --self-test
     if ($LASTEXITCODE -ne 0) { throw 'Frozen executable self-test failed.' }

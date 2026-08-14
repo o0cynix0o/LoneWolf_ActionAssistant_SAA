@@ -1879,7 +1879,7 @@
     let assistantSettings = settingsApi.apply(settingsApi.readLocal());
     let app = null;
     const requestedToolView = new URLSearchParams(window.location.search).get('tool');
-    let activeView = ['sheet', 'inventory', 'disciplines', 'sections', 'combat', 'achievements', 'saves', 'notes', 'settings'].includes(requestedToolView) ? requestedToolView : 'sheet';
+    let activeView = ['sheet', 'inventory', 'disciplines', 'sections', 'combat', 'achievements', 'saves', 'notes', 'settings', 'soundtrack'].includes(requestedToolView) ? requestedToolView : 'sheet';
     let activeBook = 1;
     let activeSection = null;
     let book1Creation = null;
@@ -3273,6 +3273,7 @@
         ['achievements', 'Achievements', 'Campaign progress and unlocks'],
         ['saves', 'Saves', 'Checkpoints and backups'],
         ['notes', 'Notes', 'Campaign memory'],
+        ['soundtrack', 'Soundtrack', 'Background music, playlists, and credits'],
         ['settings', 'Settings', 'Themes and reader preferences']
       ];
       toolsNavigation.innerHTML = '<span class="tools-navigation__label">Campaign tools</span>' + items.map(([id, label, note]) =>
@@ -3387,7 +3388,7 @@
       if (v) v.innerHTML = '';
     }
     function runToolRenderer(viewName) {
-      const map = { sheet: renderSheet, inventory: renderInventory, disciplines: renderDisciplines, sections: renderSections, combat: renderCombat, achievements: renderAchievements, saves: renderSaves, notes: renderNotes, settings: renderSettings };
+      const map = { sheet: renderSheet, inventory: renderInventory, disciplines: renderDisciplines, sections: renderSections, combat: renderCombat, achievements: renderAchievements, saves: renderSaves, notes: renderNotes, settings: renderSettings, soundtrack: renderSoundtrack };
       (map[viewName] || renderSheet)();
     }
     function knownDisciplines(c) {
@@ -3694,8 +3695,8 @@
             <button class="lw-ui-button" type="button" data-open-map><strong>Map</strong><span>View the map</span></button>
             <button class="lw-ui-button" type="button" data-save-current><strong>Save</strong><span>Create a checkpoint</span></button>
           </div>
-          ${window.LoneWolfMusic?.compactMarkup('campaign') || ''}
         </div>
+        ${window.LoneWolfMusic?.playerCardMarkup('campaign') || ''}
         ${encounterPanel}
         ${recoveryTimelineHtml(true)}`;
     }
@@ -3949,6 +3950,12 @@
       const rollLabel = flow.Entry?.roll || flow.Entry?.stagedRoll ? 'Section Roll' : 'Roll 0-9';
       const shown = (last === 0 || last) ? last : '–';
       el.innerHTML = `<p class="lw-eyebrow">Quick roll</p><div class="lw-quick-roll__number">${escapeHtml(shown)}</div><p class="lw-muted">Last Random Number Table result</p><button class="lw-ui-button lw-ui-button--primary" type="button" data-roll ${manualDisabledAttributes('roll helper')}>${rollLabel}</button>`;
+    }
+    function renderSoundtrack() {
+      stashLegacyView();
+      const mount = nativeEl('toolsActiveMount');
+      if (!mount) return;
+      mount.innerHTML = window.LoneWolfMusic?.playerCardMarkup('tools') || '<p class="lw-muted">Preparing the soundtrack controls.</p>';
     }
     function renderToolsSurface(f) {
       renderToolsHead();
