@@ -521,6 +521,25 @@ body.lw-shell-utility .book-link {
   .lw-production-context { align-items: start; flex-direction: column; padding-right: 42px; }
 }
 
+/* Final fallback for the borderless preference. The runtime settings sheet
+   repeats this rule after page-specific styles, but this keeps library and
+   navigation surfaces clean from the first paint as well. */
+html.lw-surface-borderless :where(header, main, section, article, aside, nav, footer, div, button, input, select, textarea, a, details, summary),
+html.lw-surface-borderless :where(header, main, section, article, aside, nav, footer, div, button, input, select, textarea, a, details, summary)::before,
+html.lw-surface-borderless :where(header, main, section, article, aside, nav, footer, div, button, input, select, textarea, a, details, summary)::after {
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+html.lw-surface-borderless :where(header, main, section, article, aside, nav, footer, div, button, input, select, textarea, a, details, summary) {
+  border-radius: 0 !important;
+}
+
+html.lw-surface-borderless :where(button, input, select, textarea, a, summary):focus-visible {
+  outline: 2px solid var(--lw-shell-accent) !important;
+  outline-offset: 2px;
+}
+
 @media (max-width: 680px) {
   body.lw-shell-assistant.lw-surface-reader .workspace,
   body.lw-shell-assistant .workspace { grid-template-columns: minmax(0, 1fr); }

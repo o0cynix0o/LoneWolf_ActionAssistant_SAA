@@ -796,6 +796,22 @@
         background-color: var(--lw-accent) !important;
         color: var(--lw-bg) !important;
       }
+      /* Keep the borderless choice honest across legacy and native surfaces.
+         Transparent borders retain existing layout measurements while removing
+         every visible frame that individual page styles may add later. */
+      html.lw-surface-borderless :where(header, main, section, article, aside, nav, footer, div, button, input, select, textarea, a, details, summary),
+      html.lw-surface-borderless :where(header, main, section, article, aside, nav, footer, div, button, input, select, textarea, a, details, summary)::before,
+      html.lw-surface-borderless :where(header, main, section, article, aside, nav, footer, div, button, input, select, textarea, a, details, summary)::after {
+        border-color: transparent !important;
+        box-shadow: none !important;
+      }
+      html.lw-surface-borderless :where(header, main, section, article, aside, nav, footer, div, button, input, select, textarea, a, details, summary) {
+        border-radius: 0 !important;
+      }
+      html.lw-surface-borderless :where(button, input, select, textarea, a, summary):focus-visible {
+        outline: 2px solid var(--lw-accent) !important;
+        outline-offset: 2px;
+      }
       @media (max-width: 620px) {
         .slot-row {
           grid-template-columns: 1fr;
