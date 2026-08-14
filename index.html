@@ -842,6 +842,7 @@
     const allBookCards = [...kaiBooks, ...magnakaiBooks, ...grandMasterBooks, ...newOrderBooks];
     const bookByNumber = new Map(allBookCards.map((book) => [book.number, book]));
     const readBooksStorageKey = 'lonewolf_redux.library.readBooks.v1';
+    const readBooksMigrationKey = 'lonewolf_redux.library.readBooks.saveMigration.v2';
 
     const quoteEl = document.getElementById('loreQuote');
     if (quoteEl) quoteEl.textContent = loreLines[Math.floor(Math.random() * loreLines.length)];
@@ -863,12 +864,13 @@
 
     let readBooks = readBookReadList();
 
-    function writeBookReadList() {
-      localStorage.setItem(readBooksStorageKey, JSON.stringify([...readBooks].sort((a, b) => a - b)));
-    }
-
     function isBookRead(bookNumber) {
       return readBooks.has(Number(bookNumber));
+    }
+
+    function readBooksFromCampaign(state) {
+      const values = Array.isArray(state?.LibraryReadBooks) ? state.LibraryReadBooks : [];
+      return new Set(values.map((item) => Number(item)).filter((item) => bookByNumber.has(item)));
     }
 
     function syncBookReadStatus(bookNumber) {
@@ -887,17 +889,62 @@
       });
     }
 
-    function setBookRead(bookNumber, read) {
+    function applyBookReadStatus(values) {
+      readBooks = new Set(values);
+      allBookCards.forEach((book) => syncBookReadStatus(book.number));
+    }
+
+    async function setBookRead(bookNumber, read) {
       const number = Number(bookNumber);
       if (!Number.isFinite(number)) return;
-      readBooks = readBookReadList();
+      const before = new Set(readBooks);
       if (read) {
         readBooks.add(number);
       } else {
         readBooks.delete(number);
       }
-      writeBookReadList();
       syncBookReadStatus(number);
+      try {
+        const response = await fetch('/api/action', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'set_library_book_read', bookNumber: number, read })
+        });
+        const payload = await response.json();
+        if (!response.ok || payload.error) throw new Error(payload.error || 'Could not save the reading mark.');
+        applyBookReadStatus(readBooksFromCampaign(payload.state));
+      } catch {
+        applyBookReadStatus(before);
+      }
+    }
+
+    async function loadCampaignReadStatus() {
+      try {
+        const response = await fetch('/api/state?ts=' + Date.now(), { cache: 'no-store' });
+        if (!response.ok) return;
+        const payload = await response.json();
+        const savedReadBooks = readBooksFromCampaign(payload.state);
+        if (!localStorage.getItem(readBooksMigrationKey)) {
+          readBookReadList().forEach((bookNumber) => savedReadBooks.add(bookNumber));
+          const currentReadBooks = readBooksFromCampaign(payload.state);
+          if (savedReadBooks.size !== currentReadBooks.size) {
+            const saveResponse = await fetch('/api/action', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ action: 'set_library_read_books', bookNumbers: [...savedReadBooks] })
+            });
+            const savedPayload = await saveResponse.json();
+            if (saveResponse.ok && !savedPayload.error) {
+              localStorage.setItem(readBooksMigrationKey, '1');
+              applyBookReadStatus(readBooksFromCampaign(savedPayload.state));
+              return;
+            }
+            return;
+          }
+          localStorage.setItem(readBooksMigrationKey, '1');
+        }
+        applyBookReadStatus(savedReadBooks);
+      } catch {}
     }
 
     function renderBookCard(book) {
@@ -1109,6 +1156,7 @@
     document.addEventListener('lonewolf:campaign-state', (event) => {
       const state = event.detail?.state || {};
       renderCurrentCampaign({ book: Number(state?.Character?.BookNumber), section: Number(state?.CurrentSection) });
+      applyBookReadStatus(readBooksFromCampaign(state));
     });
 
     getCurrentPosition().then((position) => {
@@ -1116,7 +1164,7 @@
       else selectLibrarySeries('kai');
     });
 
-    bookDetailsModal.addEventListener('click', (event) => {
+    bookDetailsModal.addEventListener('click', async (event) => {
       if (event.target.closest('[data-open-current-section]')) {
         event.preventDefault();
         openCurrentSection();
@@ -1125,7 +1173,7 @@
       if (readToggle) {
         event.preventDefault();
         const bookNumber = Number(readToggle.dataset.bookReadToggle);
-        setBookRead(bookNumber, !isBookRead(bookNumber));
+        await setBookRead(bookNumber, !isBookRead(bookNumber));
       }
     });
 
@@ -1155,6 +1203,7 @@
       getCurrentPosition().then((position) => {
         if (position) renderCurrentCampaign(position);
       });
+      loadCampaignReadStatus();
     }
 
     refreshHomeAppearance();
@@ -1162,10 +1211,6 @@
     window.addEventListener('focus', refreshHomeAppearance);
     window.addEventListener('storage', (event) => {
       if (settingsApi.appearanceStorageKeys().includes(event.key)) refreshHomeAppearance();
-      if (event.key === readBooksStorageKey) {
-        readBooks = readBookReadList();
-        allBookCards.forEach((book) => syncBookReadStatus(book.number));
-      }
     });
   </script>
 </body>

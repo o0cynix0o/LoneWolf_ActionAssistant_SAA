@@ -617,6 +617,16 @@ def handle_action(payload: dict) -> str:
             f"{'permadeath on' if ASSISTANT.permadeath_enabled() else 'permadeath off'}, "
             f"and {ASSISTANT.combat_mode()} combat."
         )
+    if action == "set_library_book_read":
+        return capture_output(
+            lambda: ASSISTANT.set_library_book_read(
+                payload.get("bookNumber"), truthy(payload.get("read"))
+            )
+        )
+    if action == "set_library_read_books":
+        return capture_output(
+            lambda: ASSISTANT.set_library_read_books(payload.get("bookNumbers"))
+        )
     if action == "set_combat_mode":
         mode = payload.get("combatMode") or "DataFile"
         ASSISTANT.set_combat_mode(mode)

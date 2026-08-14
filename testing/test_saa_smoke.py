@@ -4193,7 +4193,7 @@ class LibraryProductionTests(unittest.TestCase):
         index_html = (root / "index.html").read_text(encoding="utf-8")
 
         self.assertIn('href="assets/css/lw-library.css"', index_html)
-        self.assertIn("Your Lone Wolf Library", index_html)
+        self.assertIn("Stand Alone Application", index_html)
         self.assertIn('id="currentBtn"', index_html)
         self.assertIn("Start Current Campaign", index_html)
         self.assertIn('id="seriesTabs"', index_html)
@@ -4201,7 +4201,31 @@ class LibraryProductionTests(unittest.TestCase):
         self.assertIn("function renderCurrentCampaign(position)", index_html)
         self.assertIn("function selectLibrarySeries(series)", index_html)
         self.assertIn("lonewolf:campaign-state", index_html)
+        self.assertIn("set_library_book_read", index_html)
+        self.assertIn("loadCampaignReadStatus", index_html)
         self.assertTrue((root / "assets" / "css" / "lw-library.css").is_file())
+
+    def test_library_read_marks_are_saved_with_the_campaign(self) -> None:
+        root = Path(lonewolf_redux.__file__).resolve().parent
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=root / "data", state_data_dir=base / "state", books_dir=base / "books"
+            )
+            with redirect_stdout(io.StringIO()):
+                assistant.set_library_book_read(6, True)
+            self.assertEqual(assistant.state["LibraryReadBooks"], [6])
+            path = base / "save.json"
+            assistant.save_game(str(path), quiet=True)
+
+            loaded = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "other-saves", data_dir=root / "data", state_data_dir=base / "other-state", books_dir=base / "books"
+            )
+            self.assertTrue(loaded.load_game(str(path), quiet=True))
+            self.assertEqual(loaded.state["LibraryReadBooks"], [6])
+
+        normalized = lonewolf_redux.normalize_state({"LibraryReadBooks": [6, "6", 0, 99, "bad"]})
+        self.assertEqual(normalized["LibraryReadBooks"], [6])
 
 
 class RecoveryTimelineTests(unittest.TestCase):

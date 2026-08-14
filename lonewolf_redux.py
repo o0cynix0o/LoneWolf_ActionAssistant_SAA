@@ -1254,6 +1254,7 @@ def default_state() -> dict[str, Any]:
     return {
         "Version": "0.2.0",
         "RuleSet": "Lone Wolf",
+        "LibraryReadBooks": [],
         "CurrentSection": 1,
         "SectionHistory": [
             {"BookNumber": 1, "BookTitle": "Flight from the Dark", "Section": 1}
@@ -1383,6 +1384,19 @@ def as_list(value: Any) -> list[Any]:
     if isinstance(value, list):
         return list(value)
     return [value]
+
+
+def clean_library_read_books(values: Any) -> list[int]:
+    """Keep the library's per-save reading marks valid and deterministic."""
+    marked: set[int] = set()
+    for value in as_list(values):
+        try:
+            book_number = int(value)
+        except (TypeError, ValueError):
+            continue
+        if book_number in BOOKS:
+            marked.add(book_number)
+    return sorted(marked)
 
 
 def json_clone(value: Any) -> Any:
@@ -1554,6 +1568,7 @@ def normalize_state(state: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(state.get("CurrentBookStats"), dict):
         state["CurrentBookStats"] = base["CurrentBookStats"]
     state["BookHistory"] = as_list(state.get("BookHistory"))
+    state["LibraryReadBooks"] = clean_library_read_books(state.get("LibraryReadBooks"))
 
     for key, value in base["Character"].items():
         state["Character"].setdefault(key, value)
@@ -4489,6 +4504,31 @@ class LoneWolfReduxAssistant:
     ) -> None:
         self.state["Run"] = new_run_state(difficulty, permadeath, combat_mode=combat_mode)
         self.settings["CombatMode"] = self.state["Run"]["CombatMode"]
+
+    def set_library_book_read(self, book_number: Any, read: Any) -> None:
+        """Persist a Library reading mark with this campaign save."""
+        try:
+            number = int(book_number)
+        except (TypeError, ValueError) as exc:
+            raise ValueError("Choose a valid Lone Wolf book.") from exc
+        if number not in BOOKS:
+            raise ValueError("Choose a valid Lone Wolf book.")
+        marked = set(clean_library_read_books(self.state.get("LibraryReadBooks")))
+        if bool(read):
+            marked.add(number)
+            message = f"Marked Book {number} as read."
+        else:
+            marked.discard(number)
+            message = f"Marked Book {number} as unread."
+        self.state["LibraryReadBooks"] = sorted(marked)
+        self.autosave()
+        print(message)
+
+    def set_library_read_books(self, values: Any) -> None:
+        """Replace this save's reading list while migrating legacy browser marks."""
+        self.state["LibraryReadBooks"] = clean_library_read_books(values)
+        self.autosave()
+        print("Library reading marks saved.")
 
     def apply_gameplay_endurance_loss(self, loss: int) -> tuple[int, int, str]:
         """Apply V1 Story/Easy loss rules while leaving manual sheet edits alone."""
