@@ -104,6 +104,26 @@
       '--lw-shadow': 'rgba(0, 0, 0, 0.40)',
       '--lw-hero-glow': 'rgba(135, 205, 224, 0.28)'
     },
+    'paper': {
+      '--lw-bg': '#ebe5d5',
+      '--lw-bg-soft': '#e2dac8',
+      '--lw-panel': '#f4efe3',
+      '--lw-panel-2': '#ebe3d2',
+      '--lw-panel-3': '#dfd4bc',
+      '--lw-border': '#c5b995',
+      '--lw-border-strong': '#9c8a60',
+      '--lw-text': '#17333c',
+      '--lw-muted': '#6b5a40',
+      '--lw-muted-2': '#4b453b',
+      '--lw-accent': '#8a571c',
+      '--lw-accent-2': '#a36d28',
+      '--lw-danger': '#9c3f35',
+      '--lw-danger-border': '#b67b70',
+      '--lw-reader-shell': '#e3dccb',
+      '--lw-reader-page': '#f3eddd',
+      '--lw-shadow': 'rgba(55, 42, 20, 0.18)',
+      '--lw-hero-glow': 'rgba(184, 147, 76, 0.20)'
+    },
     'vassagonian-ruby': {
       '--lw-bg': '#170f12',
       '--lw-bg-soft': '#211418',

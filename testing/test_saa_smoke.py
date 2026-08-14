@@ -4194,6 +4194,8 @@ class LibraryProductionTests(unittest.TestCase):
 
         self.assertIn('href="assets/css/lw-library.css"', index_html)
         self.assertIn("Stand Alone Application", index_html)
+        self.assertIn('class="library-hero__mark"', index_html)
+        self.assertIn('assets/images/lone-wolf-title-banner.png', index_html)
         self.assertIn('id="currentBtn"', index_html)
         self.assertIn("Start Current Campaign", index_html)
         self.assertIn('id="seriesTabs"', index_html)
@@ -4204,6 +4206,17 @@ class LibraryProductionTests(unittest.TestCase):
         self.assertIn("set_library_book_read", index_html)
         self.assertIn("loadCampaignReadStatus", index_html)
         self.assertTrue((root / "assets" / "css" / "lw-library.css").is_file())
+
+    def test_paper_theme_is_available_before_and_after_runtime_settings_load(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        settings_js = (root / "assets" / "js" / "lw-settings.js").read_text(encoding="utf-8")
+        early_appearance_js = (root / "assets" / "js" / "lw-appearance-early.js").read_text(encoding="utf-8")
+
+        self.assertIn("id: 'paper'", settings_js)
+        self.assertIn("name: 'Paper'", settings_js)
+        self.assertIn("'paper': {", early_appearance_js)
+        self.assertIn("'--lw-reader-page': '#f3eddd'", settings_js)
+        self.assertIn("if (clean.theme === 'paper')", settings_js)
 
     def test_library_read_marks_are_saved_with_the_campaign(self) -> None:
         root = Path(lonewolf_redux.__file__).resolve().parent

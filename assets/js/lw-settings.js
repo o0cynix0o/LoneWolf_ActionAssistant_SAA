@@ -116,6 +116,31 @@
       }
     },
     {
+      id: 'paper',
+      name: 'Paper',
+      note: 'A quiet printed-page look for the whole assistant.',
+      vars: {
+        '--lw-bg': '#ebe5d5',
+        '--lw-bg-soft': '#e2dac8',
+        '--lw-panel': '#f4efe3',
+        '--lw-panel-2': '#ebe3d2',
+        '--lw-panel-3': '#dfd4bc',
+        '--lw-border': '#c5b995',
+        '--lw-border-strong': '#9c8a60',
+        '--lw-text': '#17333c',
+        '--lw-muted': '#6b5a40',
+        '--lw-muted-2': '#4b453b',
+        '--lw-accent': '#8a571c',
+        '--lw-accent-2': '#a36d28',
+        '--lw-danger': '#9c3f35',
+        '--lw-danger-border': '#b67b70',
+        '--lw-reader-shell': '#e3dccb',
+        '--lw-reader-page': '#f3eddd',
+        '--lw-shadow': 'rgba(55, 42, 20, 0.18)',
+        '--lw-hero-glow': 'rgba(184, 147, 76, 0.20)'
+      }
+    },
+    {
       id: 'vassagonian-ruby',
       name: 'Vassagonian Ruby',
       note: 'Court intrigue, red glass, sharp knives.',
@@ -919,6 +944,24 @@
 
   function readerCss(settings = readLocal()) {
     const clean = normalize(settings);
+    // Paper is a complete reading environment. Unlike the dark themes, it
+    // intentionally carries through into the book iframe without requiring a
+    // second appearance choice.
+    if (clean.theme === 'paper') {
+      return readerBookCss({
+        shell: '#e3dccb',
+        page: '#f3eddd',
+        panel: '#fffaf0',
+        panelAlt: '#e5dcc8',
+        text: '#17333c',
+        muted: '#6b5a40',
+        accent: '#8a571c',
+        accentHover: '#eee0c8',
+        border: '#c5b995',
+        header: '#17333c',
+        subtitle: '#a36d28'
+      });
+    }
     if (clean.readerStyleEnabled !== 'on') return '';
     const readerTheme = byId(readerThemes, clean.readerTheme, defaults.readerTheme);
     if (readerTheme.id === 'redux-dark') {
