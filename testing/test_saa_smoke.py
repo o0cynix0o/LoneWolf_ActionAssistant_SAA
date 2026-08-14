@@ -4217,6 +4217,8 @@ class LibraryProductionTests(unittest.TestCase):
         self.assertIn("'paper': {", early_appearance_js)
         self.assertIn("'--lw-reader-page': '#f3eddd'", settings_js)
         self.assertIn("if (clean.theme === 'paper')", settings_js)
+        campaign_css = (root / "assets" / "css" / "lw-campaign.css").read_text(encoding="utf-8")
+        self.assertIn(".lw-story-panel .story-prose { max-width: 700px; color: var(--lw-ui-ink);", campaign_css)
 
     def test_library_read_marks_are_saved_with_the_campaign(self) -> None:
         root = Path(lonewolf_redux.__file__).resolve().parent
@@ -4298,6 +4300,8 @@ class CampaignDeskProductionTests(unittest.TestCase):
         self.assertIn(".lw-section-activity__drawer", foundation_css)
         self.assertIn("--lw-borderless-control: var(--lw-ui-selected);", foundation_css)
         self.assertIn("Borderless actions share the campaign ribbon treatment", foundation_css)
+        self.assertIn('html[data-lw-theme="paper"]', foundation_css)
+        self.assertIn("--lw-borderless-control: #e1d7c1;", foundation_css)
         self.assertIn("background: var(--lw-borderless-control) !important;", foundation_css)
         self.assertIn("background: var(--lw-borderless-control-hover) !important;", foundation_css)
         self.assertIn("Selected tabs, persistent primary commands", foundation_css)

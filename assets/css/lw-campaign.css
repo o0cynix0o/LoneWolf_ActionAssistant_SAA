@@ -134,7 +134,7 @@ body.lw-surface-campaign .workspace.lw-native {
 .lw-tab:hover, .lw-tab.active { background: var(--lw-ui-selected); color: var(--lw-ui-accent); }
 .lw-story-panel { padding: 22px clamp(18px, 3vw, 38px); }
 .lw-story-panel__head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--lw-ui-border); }
-.lw-story-panel .story-prose { max-width: 700px; color: #d9e3df; font: 1.1rem/1.72 var(--lw-ui-serif); }
+.lw-story-panel .story-prose { max-width: 700px; color: var(--lw-ui-ink); font: 1.1rem/1.72 var(--lw-ui-serif); }
 .lw-tool-mount { min-width: 0; }
 .lw-tool-mount > #view { display: block; }
 

@@ -21,6 +21,15 @@
   --lw-ui-page-width: 1480px;
 }
 
+/* Paper needs quieter controls than the dark themes. Keep the same interaction
+   hierarchy, but use ink, parchment, and an earned gold accent instead of
+   dropping dark blue islands into a printed-page palette. */
+html[data-lw-theme="paper"] {
+  --lw-ui-selected: #e1d7c1;
+  --lw-ui-gold: #9a6724;
+  --lw-ui-green: #317453;
+}
+
 .lw-ui-page {
   width: min(var(--lw-ui-page-width), calc(100% - 40px));
   margin: 0 auto;
@@ -109,6 +118,12 @@ html.lw-surface-borderless {
   --lw-ui-raised: var(--lw-borderless-surface);
   --lw-shell-surface: var(--lw-borderless-surface);
   --lw-shell-raised: var(--lw-borderless-surface);
+}
+
+html.lw-surface-borderless[data-lw-theme="paper"] {
+  --lw-borderless-surface: #e7e0cf;
+  --lw-borderless-control: #e1d7c1;
+  --lw-borderless-control-hover: #d6c8ad;
 }
 
 html.lw-surface-borderless .lw-ui-panel,
