@@ -4274,6 +4274,16 @@ class RecoveryTimelineTests(unittest.TestCase):
 
 
 class CampaignDeskProductionTests(unittest.TestCase):
+    def test_borderless_surfaces_share_the_recovery_background(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        foundation_css = (root / "assets" / "css" / "lw-ui-foundation.css").read_text(encoding="utf-8")
+
+        self.assertIn("--lw-borderless-surface: color-mix(in srgb, #3d8562 7%, var(--lw-bg));", foundation_css)
+        self.assertIn("--lw-panel: var(--lw-borderless-surface);", foundation_css)
+        self.assertIn("--lw-ui-surface: var(--lw-borderless-surface);", foundation_css)
+        self.assertIn(".lw-recovery-path", foundation_css)
+        self.assertIn(".lw-section-activity__drawer", foundation_css)
+
     def test_campaign_desk_keeps_reader_and_live_assistant_together(self) -> None:
         root = Path(saa_main.__file__).resolve().parent
         assistant_html = (root / "assistant.html").read_text(encoding="utf-8")

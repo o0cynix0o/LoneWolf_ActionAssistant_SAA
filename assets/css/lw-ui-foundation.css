@@ -95,6 +95,16 @@
 
 html.lw-surface-borderless {
   --lw-ui-radius: 0px;
+  /* The frameless layout relies on one quiet surface, not a stack of near-black
+     card shades. This matches the recovery snapshot treatment. */
+  --lw-borderless-surface: color-mix(in srgb, #3d8562 7%, var(--lw-bg));
+  --lw-panel: var(--lw-borderless-surface);
+  --lw-panel-2: var(--lw-borderless-surface);
+  --lw-panel-3: var(--lw-borderless-surface);
+  --lw-ui-surface: var(--lw-borderless-surface);
+  --lw-ui-raised: var(--lw-borderless-surface);
+  --lw-shell-surface: var(--lw-borderless-surface);
+  --lw-shell-raised: var(--lw-borderless-surface);
 }
 
 html.lw-surface-borderless .lw-ui-panel,
@@ -108,6 +118,33 @@ html.lw-surface-borderless .lw-ui-status {
 html.lw-surface-borderless .lw-ui-panel__title { border-bottom: 0; }
 html.lw-surface-borderless .lw-ui-button { background: var(--lw-ui-raised); }
 html.lw-surface-borderless .lw-ui-button:hover { background: var(--lw-ui-selected); }
+
+/* A few live campaign primitives use legacy literal fills. Bring them into
+   the same borderless surface contract without flattening book pages, cover
+   frames, or stateful selected/primary controls. */
+html.lw-surface-borderless :where(
+  .lw-metric,
+  .lw-token-row span,
+  .story-combat,
+  .lw-tabbar,
+  .lw-discipline-chip,
+  .lw-combat-ratio,
+  .lw-combat-actions-panel,
+  .lw-combat-settings__body,
+  .lw-combat-history,
+  .lw-combat-rounds,
+  .lw-combat-start,
+  .lw-section-activity__drawer,
+  .tools-navigation,
+  .install-book,
+  .install-details code
+) {
+  background: var(--lw-borderless-surface) !important;
+}
+
+html.lw-surface-borderless .lw-recovery-path {
+  background: var(--lw-borderless-surface);
+}
 
 @media (max-width: 800px) {
   .lw-ui-page { width: min(100% - 24px, var(--lw-ui-page-width)); padding-top: 18px; }
