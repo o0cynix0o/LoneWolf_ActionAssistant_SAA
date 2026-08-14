@@ -4283,9 +4283,10 @@ class CampaignDeskProductionTests(unittest.TestCase):
         self.assertIn("--lw-ui-surface: var(--lw-borderless-surface);", foundation_css)
         self.assertIn(".lw-recovery-path", foundation_css)
         self.assertIn(".lw-section-activity__drawer", foundation_css)
-        self.assertIn("Borderless is a text-first mode.", foundation_css)
-        self.assertIn("background: transparent !important;", foundation_css)
-        self.assertIn("background: var(--lw-ui-selected) !important;", foundation_css)
+        self.assertIn("--lw-borderless-control:", foundation_css)
+        self.assertIn("Borderless uses ghost controls", foundation_css)
+        self.assertIn("background: var(--lw-borderless-control) !important;", foundation_css)
+        self.assertIn("background: var(--lw-borderless-control-hover) !important;", foundation_css)
 
     def test_campaign_desk_keeps_reader_and_live_assistant_together(self) -> None:
         root = Path(saa_main.__file__).resolve().parent

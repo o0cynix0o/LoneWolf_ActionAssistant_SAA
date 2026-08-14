@@ -37,6 +37,19 @@ body.lw-install-page {
 .install-book__actions { display: flex; gap: 10px; margin-top: 2px; }
 .install-book__actions a { color: var(--lw-ui-accent); font-size: .76rem; font-weight: 700; text-decoration: none; }
 .install-book__actions a:hover { color: var(--lw-ui-gold); text-decoration: underline; }
+html.lw-surface-borderless .install-book__actions a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 4px 7px;
+  background: var(--lw-borderless-control);
+}
+html.lw-surface-borderless .install-book__actions a:hover,
+html.lw-surface-borderless .install-book__actions a:focus-visible {
+  background: var(--lw-borderless-control-hover);
+  color: var(--lw-ui-gold);
+  text-decoration: none;
+}
 
 .install-details { overflow: hidden; }
 .install-details summary { padding: 14px 16px; color: var(--lw-ui-accent); font: 700 1rem var(--lw-ui-serif); cursor: pointer; }

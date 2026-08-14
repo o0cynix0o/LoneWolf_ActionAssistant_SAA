@@ -98,6 +98,8 @@ html.lw-surface-borderless {
   /* The frameless layout relies on one quiet surface, not a stack of near-black
      card shades. This matches the recovery snapshot treatment. */
   --lw-borderless-surface: color-mix(in srgb, #3d8562 7%, var(--lw-bg));
+  --lw-borderless-control: color-mix(in srgb, var(--lw-ui-accent) 6%, var(--lw-borderless-surface));
+  --lw-borderless-control-hover: color-mix(in srgb, var(--lw-ui-accent) 14%, var(--lw-borderless-surface));
   --lw-panel: var(--lw-borderless-surface);
   --lw-panel-2: var(--lw-borderless-surface);
   --lw-panel-3: var(--lw-borderless-surface);
@@ -146,16 +148,15 @@ html.lw-surface-borderless .lw-recovery-path {
   background: var(--lw-borderless-surface);
 }
 
-/* Borderless is a text-first mode. Routine actions keep their full hit area,
-   but only draw a surface while the pointer or keyboard focus is on them.
-   State-bearing and consequential controls remain visible at rest. */
+/* Borderless uses ghost controls: enough surface to identify an action, but
+   deliberately quieter than the old framed buttons. */
 html.lw-surface-borderless :is(button, .lw-ui-button, .settings-option):not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger):not([aria-current="page"]):not([aria-selected="true"]) {
-  background: transparent !important;
+  background: var(--lw-borderless-control) !important;
   transition: background-color 120ms ease, color 120ms ease;
 }
 
 html.lw-surface-borderless :is(button, .lw-ui-button, .settings-option):not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger):not([aria-current="page"]):not([aria-selected="true"]):is(:hover, :focus-visible) {
-  background: var(--lw-ui-selected) !important;
+  background: var(--lw-borderless-control-hover) !important;
 }
 
 @media (max-width: 800px) {

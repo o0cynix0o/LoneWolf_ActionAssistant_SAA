@@ -783,13 +783,13 @@
       html.lw-surface-borderless button:not(.book-choice),
       html.lw-surface-borderless .settings-option:not(.book-choice),
       html.lw-surface-borderless .lw-ui-button:not(.book-choice) {
-        background-color: transparent !important;
+        background-color: var(--lw-borderless-control) !important;
         transition: background-color 120ms ease, color 120ms ease;
       }
       html.lw-surface-borderless button:not(.book-choice):hover,
       html.lw-surface-borderless .settings-option:not(.book-choice):hover,
       html.lw-surface-borderless .lw-ui-button:not(.book-choice):hover {
-        background-color: var(--lw-ui-selected) !important;
+        background-color: var(--lw-borderless-control-hover) !important;
       }
       html.lw-surface-borderless button.active,
       html.lw-surface-borderless .settings-option.active,
