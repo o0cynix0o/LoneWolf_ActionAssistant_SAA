@@ -146,6 +146,18 @@ html.lw-surface-borderless .lw-recovery-path {
   background: var(--lw-borderless-surface);
 }
 
+/* Borderless is a text-first mode. Routine actions keep their full hit area,
+   but only draw a surface while the pointer or keyboard focus is on them.
+   State-bearing and consequential controls remain visible at rest. */
+html.lw-surface-borderless :is(button, .lw-ui-button, .settings-option):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger):not([aria-current="page"]):not([aria-selected="true"]) {
+  background: transparent !important;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+html.lw-surface-borderless :is(button, .lw-ui-button, .settings-option):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger):not([aria-current="page"]):not([aria-selected="true"]):is(:hover, :focus-visible) {
+  background: var(--lw-ui-selected) !important;
+}
+
 @media (max-width: 800px) {
   .lw-ui-page { width: min(100% - 24px, var(--lw-ui-page-width)); padding-top: 18px; }
 }

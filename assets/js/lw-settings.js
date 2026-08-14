@@ -783,12 +783,13 @@
       html.lw-surface-borderless button,
       html.lw-surface-borderless .settings-option,
       html.lw-surface-borderless .lw-ui-button {
-        background-color: var(--lw-panel-2) !important;
+        background-color: transparent !important;
+        transition: background-color 120ms ease, color 120ms ease;
       }
       html.lw-surface-borderless button:hover,
       html.lw-surface-borderless .settings-option:hover,
       html.lw-surface-borderless .lw-ui-button:hover {
-        background-color: var(--lw-panel-3) !important;
+        background-color: var(--lw-ui-selected) !important;
       }
       html.lw-surface-borderless button.active,
       html.lw-surface-borderless .settings-option.active,
