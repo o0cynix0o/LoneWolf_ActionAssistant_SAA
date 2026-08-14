@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import io
 import json
 import re
@@ -4425,6 +4426,35 @@ class DistributionNoticeTests(unittest.TestCase):
         self.assertNotIn("do not redistribute the Lone Wolf book text, illustrations", notice)
         self.assertIn('("NOTICE.md", ".")', spec)
         self.assertIn("'NOTICE.md'", build_script)
+
+
+class SoundtrackPackagingTests(unittest.TestCase):
+    def test_manifest_matches_packaged_mp3_masters_and_credits(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        manifest_path = root / "assets" / "audio" / "music-manifest.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        spec = (root / "LoneWolf_ActionAssistant.spec").read_text(encoding="utf-8")
+        credits = (root / "THIRD_PARTY_MUSIC.md").read_text(encoding="utf-8")
+
+        self.assertEqual(manifest.get("version"), 1)
+        self.assertEqual(len(manifest.get("tracks", [])), 16)
+        self.assertIn('("assets", "assets")', spec)
+        self.assertIn('("THIRD_PARTY_MUSIC.md", ".")', spec)
+        self.assertIn("Creative Commons Attribution 4.0", credits)
+        self.assertIn("Pixabay Content License", credits)
+
+        for track in manifest["tracks"]:
+            asset = root / track["path"]
+            self.assertTrue(asset.is_file(), track["id"])
+            self.assertEqual(asset.stat().st_size, track["bytes"], track["id"])
+            self.assertEqual(
+                hashlib.sha256(asset.read_bytes()).hexdigest(),
+                track["sha256"],
+                track["id"],
+            )
+            self.assertTrue(track["sourceUrl"].startswith("https://"), track["id"])
+            self.assertTrue(track["licenseUrl"].startswith("https://"), track["id"])
+            self.assertIn("all-approved-tracks", track["playlists"], track["id"])
 
 
 class ServiceTests(unittest.TestCase):

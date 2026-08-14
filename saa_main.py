@@ -144,7 +144,10 @@ def run_self_test() -> int:
             PATHS.resource_root / "index.html",
             PATHS.resource_root / "assistant.html",
             PATHS.resource_root / "NOTICE.md",
+            PATHS.resource_root / "THIRD_PARTY_MUSIC.md",
             PATHS.resource_root / "assets" / "images" / "series-sigil-wolf-mask.png",
+            PATHS.resource_root / "assets" / "audio" / "music-manifest.json",
+            PATHS.resource_root / "assets" / "audio" / "Firesong.mp3",
             PATHS.resource_data / "crt.json",
         )
         missing = [str(path) for path in required if not path.is_file()]
@@ -172,6 +175,21 @@ def run_self_test() -> int:
             sigil_signature = response.read(8)
         if sigil_type != "image/png" or sigil_signature != b"\x89PNG\r\n\x1a\n":
             raise RuntimeError("Series sigil asset was not served as a valid PNG.")
+        with urllib.request.urlopen(
+            f"{base_url}/assets/audio/music-manifest.json",
+            timeout=3,
+        ) as response:
+            manifest = json.load(response)
+        if not isinstance(manifest.get("tracks"), list) or len(manifest["tracks"]) != 16:
+            raise RuntimeError("Music manifest did not provide the packaged soundtrack.")
+        with urllib.request.urlopen(
+            f"{base_url}/assets/audio/Firesong.mp3",
+            timeout=3,
+        ) as response:
+            audio_type = response.headers.get_content_type()
+            audio_probe = response.read(3)
+        if audio_type != "audio/mpeg" or not audio_probe:
+            raise RuntimeError("Packaged soundtrack asset was not served as MP3 audio.")
         result = {
             "ok": True,
             "httpPort": http_port,

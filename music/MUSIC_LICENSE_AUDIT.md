@@ -85,6 +85,6 @@ Incompetech attribution text for each of the nine tracks is:
 
 | Group | Files | Bytes | Current outcome |
 |---|---:|---:|---|
-| Kevin MacLeod / Incompetech candidates | 9 | 106,676,624 | Approved for packaging with attribution |
-| DeusLower / Pixabay candidates | 7 | 43,735,186 | Approved for integrated background-music packaging |
-| Total | 16 | 150,411,810 | Approved, subject to the release rules above |
+| Kevin MacLeod / Incompetech candidates | 9 | 111,848,323 | Approved for packaging with attribution |
+| DeusLower / Pixabay candidates | 7 | 42,961,186 | Approved for integrated background-music packaging |
+| Total | 16 | 154,809,509 | Approved, subject to the release rules above |
