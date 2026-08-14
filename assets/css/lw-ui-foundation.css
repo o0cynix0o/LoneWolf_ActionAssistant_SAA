@@ -159,6 +159,19 @@ html.lw-surface-borderless :is(button, .lw-ui-button, .settings-option):not(.boo
   background: var(--lw-borderless-control-hover) !important;
 }
 
+/* Primary commands use the stronger ghost surface, not the old light fill.
+   This keeps their hierarchy while retaining readable light-on-dark text. */
+html.lw-surface-borderless .lw-ui-button--primary,
+html.lw-surface-borderless #currentBtn {
+  background: var(--lw-borderless-control-hover) !important;
+  color: var(--lw-ui-accent) !important;
+}
+html.lw-surface-borderless .lw-ui-button--primary > strong,
+html.lw-surface-borderless .lw-ui-button--primary > span,
+html.lw-surface-borderless .lw-ui-button--primary > small {
+  color: var(--lw-ui-accent) !important;
+}
+
 @media (max-width: 800px) {
   .lw-ui-page { width: min(100% - 24px, var(--lw-ui-page-width)); padding-top: 18px; }
 }

@@ -780,22 +780,22 @@
       html.lw-surface-borderless .lw-ui-panel__title {
         border-bottom: 0 !important;
       }
-      html.lw-surface-borderless button:not(.book-choice),
-      html.lw-surface-borderless .settings-option:not(.book-choice),
-      html.lw-surface-borderless .lw-ui-button:not(.book-choice) {
+      html.lw-surface-borderless button:not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger),
+      html.lw-surface-borderless .settings-option:not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger),
+      html.lw-surface-borderless .lw-ui-button:not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger) {
         background-color: var(--lw-borderless-control) !important;
         transition: background-color 120ms ease, color 120ms ease;
       }
-      html.lw-surface-borderless button:not(.book-choice):hover,
-      html.lw-surface-borderless .settings-option:not(.book-choice):hover,
-      html.lw-surface-borderless .lw-ui-button:not(.book-choice):hover {
+      html.lw-surface-borderless button:not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger):hover,
+      html.lw-surface-borderless .settings-option:not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger):hover,
+      html.lw-surface-borderless .lw-ui-button:not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger):hover {
         background-color: var(--lw-borderless-control-hover) !important;
       }
       html.lw-surface-borderless button.active,
       html.lw-surface-borderless .settings-option.active,
       html.lw-surface-borderless .lw-ui-button--primary {
-        background-color: var(--lw-accent) !important;
-        color: var(--lw-bg) !important;
+        background-color: var(--lw-borderless-control-hover) !important;
+        color: var(--lw-accent) !important;
       }
       /* Keep the borderless choice honest across legacy and native surfaces.
          Transparent borders retain existing layout measurements while removing
