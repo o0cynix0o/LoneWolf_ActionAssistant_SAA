@@ -4335,6 +4335,7 @@ class CampaignDeskProductionTests(unittest.TestCase):
         self.assertIn("function renderStoryInto(target, variant)", assistant_html)
         self.assertIn("function renderCampaignRail()", assistant_html)
         self.assertIn("function recoveryTimelineHtml(compact = false)", assistant_html)
+        self.assertIn("if (!currentDeath().Active) return '';", assistant_html)
         self.assertIn("data-checkpoint-recovery", assistant_html)
         self.assertNotIn("choiceGroup('Story Routes'", assistant_html)
         self.assertIn("function campaignSeriesForBook(bookNumber)", assistant_html)

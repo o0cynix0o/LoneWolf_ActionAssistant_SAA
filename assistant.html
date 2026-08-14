@@ -6333,6 +6333,9 @@
     }
 
     function recoveryTimelineHtml(compact = false) {
+      // Checkpoints are retained during play, but recovery choices belong on
+      // the defeat screen rather than competing with the live campaign.
+      if (!currentDeath().Active) return '';
       const recovery = currentRecoveryTimeline();
       const recommended = recovery.Recommended;
       if (!recommended || Number(recommended.Section) === Number(app?.state?.CurrentSection)) return '';
