@@ -220,6 +220,20 @@
     emit();
   }
 
+  async function setEnabled(enabled) {
+    await persistPreferences({ musicEnabled: enabled ? 'on' : 'off' });
+    if (!enabled) {
+      audio.pause();
+      state.status = 'off';
+      state.error = '';
+      state.restorePending = false;
+      saveSession();
+    } else if (audio.paused) {
+      state.status = 'paused';
+    }
+    emit();
+  }
+
   async function selectTrack(trackId) {
     const track = trackById(trackId);
     if (!track || !playlistTracks().some((entry) => entry.id === track.id)) return;
@@ -250,6 +264,9 @@
       playlist: prefs.musicPlaylist,
       playlistName: PLAYLIST_NAMES[prefs.musicPlaylist] || 'Soundtrack',
       volume: prefs.musicVolume,
+      enabled: prefs.musicEnabled === 'on',
+      queueIndex: state.queueIndex,
+      queueLength: state.queue.length,
       playing: state.status === 'playing'
     };
   }
@@ -309,12 +326,13 @@
         <p class="lw-music-player-card__message" data-lw-music-message>${escapeHtml(player.error || 'Optional background music. You control when it starts.')}</p>
         ${isTools ? `
           <div class="lw-music-player-card__settings">
+            <label class="lw-music-player-card__shuffle"><input type="checkbox" data-lw-music-enabled ${player.enabled ? 'checked' : ''}><span>Background music enabled</span></label>
             <label>Playlist<select data-lw-music-playlist>${playlistOptions}</select></label>
             <label>Repeat<select data-lw-music-repeat><option value="playlist" ${preferences().musicRepeat === 'playlist' ? 'selected' : ''}>Repeat playlist</option><option value="track" ${preferences().musicRepeat === 'track' ? 'selected' : ''}>Repeat track</option><option value="off" ${preferences().musicRepeat === 'off' ? 'selected' : ''}>Stop after queue</option></select></label>
             <label class="lw-music-player-card__shuffle"><input type="checkbox" data-lw-music-shuffle ${preferences().musicShuffle === 'on' ? 'checked' : ''}><span>Shuffle this playlist</span></label>
           </div>
           <section class="lw-music-player-card__tracks" aria-label="${escapeHtml(player.playlistName)} tracks">
-            <header><h3>${escapeHtml(player.playlistName)}</h3><span data-lw-music-track-count>${tracks.length} tracks</span></header>
+            <header><h3>${escapeHtml(player.playlistName)}</h3><span data-lw-music-track-count>${tracks.length} tracks · ${player.queueIndex + 1} of ${player.queueLength || tracks.length}</span></header>
             <div>${tracks.map((entry) => `<button class="lw-ui-button${entry.id === track.id ? ' is-current' : ''}" type="button" data-lw-music-track="${escapeHtml(entry.id)}"><span><strong>${escapeHtml(entry.title)}</strong><small>${escapeHtml(entry.artist)}</small></span><span>${entry.id === track.id ? 'Playing now' : 'Play track'}</span></button>`).join('')}</div>
           </section>
           <details class="lw-music-player-card__credits"><summary>Music credits and licenses</summary><p>All tracks are integrated optional background music. The application does not offer audio downloads or exports.</p><ul>${creditRows}</ul></details>
@@ -334,6 +352,7 @@
       const artist = root.querySelector('[data-lw-music-artist]');
       const playlistSelect = root.querySelector('select[data-lw-music-playlist]');
       const repeatSelect = root.querySelector('[data-lw-music-repeat]');
+      const enabled = root.querySelector('[data-lw-music-enabled]');
       const shuffle = root.querySelector('[data-lw-music-shuffle]');
       const trackCount = root.querySelector('[data-lw-music-track-count]');
       if (title) title.textContent = player.track?.title || 'Preparing soundtrack';
@@ -350,8 +369,9 @@
       if (volume) volume.value = String(player.volume);
       if (playlistSelect) playlistSelect.value = player.playlist;
       if (repeatSelect) repeatSelect.value = preferences().musicRepeat;
+      if (enabled) enabled.checked = player.enabled;
       if (shuffle) shuffle.checked = preferences().musicShuffle === 'on';
-      if (trackCount) trackCount.textContent = `${playlistTracks(player.playlist).length} tracks`;
+      if (trackCount) trackCount.textContent = `${playlistTracks(player.playlist).length} tracks · ${player.queueIndex + 1} of ${player.queueLength || playlistTracks(player.playlist).length}`;
       root.querySelectorAll('[data-lw-music-track]').forEach((button) => {
         const current = button.dataset.lwMusicTrack === player.track?.id;
         button.classList.toggle('is-current', current);
@@ -426,6 +446,8 @@
     if (playlist && playlist.tagName === 'SELECT') setPlaylist(playlist.value);
     const repeat = event.target.closest('[data-lw-music-repeat]');
     if (repeat) setRepeat(repeat.value);
+    const enabled = event.target.closest('[data-lw-music-enabled]');
+    if (enabled) setEnabled(enabled.checked);
     const shuffle = event.target.closest('[data-lw-music-shuffle]');
     if (shuffle) setShuffle(shuffle.checked);
   });
@@ -451,6 +473,7 @@
     setPlaylist,
     setShuffle,
     setRepeat,
+    setEnabled,
     selectTrack
   };
 

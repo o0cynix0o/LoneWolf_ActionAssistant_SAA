@@ -4488,7 +4488,7 @@ class SoundtrackPlayerTests(unittest.TestCase):
         self.assertIn("['soundtrack', 'Soundtrack'", assistant)
         self.assertIn("playerCardMarkup('campaign')", assistant)
         self.assertIn("playerCardMarkup('tools')", assistant)
-        for control in ("setPlaylist", "setShuffle", "setRepeat", "selectTrack", "Music credits and licenses"):
+        for control in ("setPlaylist", "setShuffle", "setRepeat", "setEnabled", "selectTrack", "Music credits and licenses"):
             self.assertIn(control, player)
         self.assertIn("THIRD_PARTY_MUSIC.md", build)
 

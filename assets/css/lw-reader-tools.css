@@ -125,7 +125,7 @@ body.lw-surface-tools .workspace.lw-native { display: block; }
 .lw-quick-roll__number { color: var(--lw-ui-gold); font: 700 3rem/1 var(--lw-ui-serif); }
 
 .lw-music-player-card--tools { max-width: 980px; }
-.lw-music-player-card--tools .lw-music-player-card__settings { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; padding-top: 4px; }
+.lw-music-player-card--tools .lw-music-player-card__settings { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; padding-top: 4px; }
 .lw-music-player-card__settings label { display: grid; gap: 5px; color: var(--lw-ui-muted); font: 700 .68rem var(--lw-ui-sans); letter-spacing: .05em; text-transform: uppercase; }
 .lw-music-player-card__settings select { width: 100%; min-height: 38px; border: 1px solid var(--lw-ui-border); border-radius: 4px; background: var(--lw-ui-raised); color: var(--lw-ui-ink); padding: 7px 9px; font: .86rem var(--lw-ui-sans); }
 .lw-music-player-card__settings .lw-music-player-card__shuffle { display: flex; min-height: 38px; align-items: center; gap: 8px; border: 1px solid var(--lw-ui-border); border-radius: 4px; padding: 0 10px; letter-spacing: 0; text-transform: none; }
