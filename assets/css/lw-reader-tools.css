@@ -53,6 +53,18 @@ body.lw-surface-reader .workspace.lw-native {
 .book-choice:hover { border-color: #2a6977; background: #e7f5f4; }
 .book-choice small { color: #7f5522; font-family: var(--lw-ui-sans); white-space: nowrap; }
 
+/* The Reader is an intentionally light book page. Borderless app chrome must
+   never turn its printed choices into pale text on parchment. */
+html.lw-surface-borderless .lw-reading-surface .book-choice {
+  background: #fffaf0 !important;
+  color: #263334 !important;
+}
+html.lw-surface-borderless .lw-reading-surface .book-choice small { color: #7f5522 !important; }
+html.lw-surface-borderless .lw-reading-surface .book-choice:is(:hover, :focus-visible) {
+  background: #e7f5f4 !important;
+  color: #263334 !important;
+}
+
 .lw-reader-companion-stack { display: grid; gap: 12px; align-content: start; }
 .lw-companion__panel { padding: 14px; }
 .lw-companion__head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; }

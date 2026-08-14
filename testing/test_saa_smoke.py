@@ -4354,6 +4354,9 @@ class ReaderToolsProductionTests(unittest.TestCase):
         self.assertIn("document.body.classList.toggle('lw-console-active', isCliMode())", assistant_html)
         self.assertIn('data-view="${id}"', assistant_html)
         self.assertIn("Command console", shell_js)
+        reader_css = (root / "assets" / "css" / "lw-reader-tools.css").read_text(encoding="utf-8")
+        self.assertIn("html.lw-surface-borderless .lw-reading-surface .book-choice", reader_css)
+        self.assertIn("color: #263334 !important;", reader_css)
         self.assertTrue((root / "assets" / "css" / "lw-reader-tools.css").is_file())
 
 
