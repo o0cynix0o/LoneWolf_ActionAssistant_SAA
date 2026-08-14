@@ -7865,7 +7865,17 @@
 
     document.addEventListener('click', async (event) => {
       const button = event.target.closest('button');
-      if (!button || !app) return;
+      if (!button) return;
+      if (button.dataset.appMenuToggle !== undefined) {
+        const wasHidden = appMenu.hidden;
+        closeMenus();
+        if (wasHidden) {
+          renderAppMenu();
+          appMenu.hidden = false;
+        }
+        return;
+      }
+      if (!app) return;
       if (button.dataset.creationMode) {
         if (button.dataset.creationMode === 'guided') resetBook1Creation('guided');
         render();
@@ -7909,15 +7919,6 @@
       }
       if (button.dataset.creationRoll) {
         await rollBook1Creation(button.dataset.creationRoll);
-        return;
-      }
-      if (button.dataset.appMenuToggle !== undefined) {
-        const wasHidden = appMenu.hidden;
-        closeMenus();
-        if (wasHidden) {
-          renderAppMenu();
-          appMenu.hidden = false;
-        }
         return;
       }
       if (button.dataset.settingKind) {

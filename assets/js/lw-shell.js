@@ -31,7 +31,6 @@
       navLink('Reader', 'assistant.html?surface=reader&resume=1', active === 'reader') +
       navLink('Tools', 'assistant.html?surface=tools&resume=1', active === 'tools') +
       navLink('Console', 'assistant.html?surface=tools&console=1&resume=1', active === 'console') +
-      navLink('Settings', 'assistant.html?surface=tools&tool=settings&resume=1', active === 'settings') +
       '</div><span class="lw-global-nav__campaign" data-lw-campaign-status>Loading campaign</span>';
     document.body.prepend(nav);
     return nav;
@@ -48,8 +47,7 @@
       navLink('Campaign', 'assistant.html?surface=campaign&resume=1', surface === 'campaign') +
       navLink('Reader', 'assistant.html?surface=reader&resume=1', surface === 'reader') +
       navLink('Tools', 'assistant.html?surface=tools&resume=1', surface === 'tools') +
-      navLink('Console', 'assistant.html?surface=tools&console=1&resume=1', params.get('console') === '1') +
-      navLink('Settings', 'assistant.html?surface=tools&tool=settings&resume=1', params.get('tool') === 'settings');
+      navLink('Console', 'assistant.html?surface=tools&console=1&resume=1', params.get('console') === '1');
     const title = header.querySelector('h1');
     if (title) title.insertAdjacentElement('afterend', nav);
     else header.prepend(nav);
