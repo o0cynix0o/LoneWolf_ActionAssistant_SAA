@@ -107,7 +107,14 @@ body.lw-surface-campaign .workspace.lw-native {
 
 /* Centre workspace */
 .lw-campaign-main { min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; align-content: start; }
-.lw-workspace-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 18px; align-items: flex-start; }
+.lw-workspace-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 18px;
+  align-items: flex-start;
+  padding: 14px 16px 16px;
+}
 .lw-workspace-head__text { flex: 1 1 300px; min-width: 0; }
 .lw-workspace-head__text p.lw-muted { margin: 0; max-width: 640px; }
 .lw-section-no { flex: 0 0 auto; color: var(--lw-ui-gold); font: 700 1.4rem var(--lw-ui-serif); white-space: nowrap; }
