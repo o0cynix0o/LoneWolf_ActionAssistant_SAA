@@ -5832,6 +5832,24 @@ class LoneWolfReduxAssistant:
     def has_power(self, name: str) -> bool:
         return name in self.effective_disciplines()
 
+    def quiver_count(self) -> int:
+        """Return the number of ordinary six-arrow Quivers on the Action Chart."""
+        return self.count_items("Quiver", ["special"])
+
+    def quiver_arrow_capacity(self) -> int:
+        return self.quiver_count() * 6
+
+    def arrow_inventory_payload(self) -> dict[str, int]:
+        arrows = max(0, int(self.inventory.get("QuiverArrows") or 0))
+        quivers = self.quiver_count()
+        capacity = self.quiver_arrow_capacity()
+        return {
+            "Arrows": arrows,
+            "Quivers": quivers,
+            "Capacity": capacity,
+            "OpenSlots": max(0, capacity - arrows),
+        }
+
     def section_source_routes(self, book_number: int | None = None, section: int | None = None) -> list[int]:
         book_number = int(book_number or self.character["BookNumber"])
         section = int(section or self.state["CurrentSection"])
@@ -7748,6 +7766,9 @@ class LoneWolfReduxAssistant:
     def current_healing_payload(self) -> dict[str, Any]:
         current = int(self.character["EnduranceCurrent"])
         maximum = int(self.character["EnduranceMax"])
+        book_stats = self.state.get("CurrentBookStats")
+        original_maximum = int(book_stats.get("StartingEnduranceMax") or maximum) if isinstance(book_stats, dict) else maximum
+        target_maximum = max(1, min(maximum, original_maximum))
         applied = self.healing_visit_key() in as_list(self.automation.get("AppliedHealing"))
         combat_present = bool(self.flow_combat_entries())
         book_number = int(self.character.get("BookNumber") or 0)
@@ -7770,34 +7791,49 @@ class LoneWolfReduxAssistant:
         elif self.death_active():
             blocked_reason = "Healing is unavailable during death recovery."
         elif combat_present:
-            blocked_reason = "This section has combat; apply Healing only in non-combat sections."
-        elif current >= maximum:
-            blocked_reason = "Endurance is already at maximum."
+            blocked_reason = f"This section has combat; {healing_name} only applies in non-combat sections."
         elif applied:
-            blocked_reason = "Healing already applied for this section visit."
+            blocked_reason = f"{healing_name} already applied for this section visit."
+        elif current >= target_maximum:
+            blocked_reason = f"END is already at this book's original score ({target_maximum})."
+
+        journal_entry = next(
+            (
+                item for item in reversed(as_list(self.automation.get("Journal")))
+                if isinstance(item, dict)
+                and str(item.get("Kind") or "") == "healing"
+                and str(item.get("VisitKey") or "") == self.current_visit_key()
+            ),
+            None,
+        )
 
         return {
+            "Name": healing_name or "Curing",
             "Available": bool(healing_name) and self.has_power(healing_name),
             "Ready": blocked_reason == "",
             "Applied": applied,
             "BlockedReason": blocked_reason,
             "CurrentEndurance": current,
             "MaximumEndurance": maximum,
+            "TargetEndurance": target_maximum,
             "Amount": 1,
-            "Summary": f"{healing_name or 'Curing'} restores 1 END in an eligible non-combat section.",
+            "Messages": as_list(journal_entry.get("Messages")) if journal_entry else [],
+            "Summary": f"{healing_name or 'Curing'} restores 1 END after each eligible non-combat numbered section, up to {target_maximum} END.",
         }
 
-    def apply_healing(self) -> None:
+    def apply_healing(self, automatic: bool = False) -> str:
         payload = self.current_healing_payload()
         if not bool(payload.get("Ready")):
             reason = str(payload.get("BlockedReason") or "Healing is not available.")
-            print(f"Healing not available: {reason}")
-            return
+            if not automatic:
+                print(f"Healing not available: {reason}")
+            return ""
 
         amount, cap_note = self.apply_healing_cap(1)
         if amount <= 0:
-            print(f"Healing not available: {cap_note or 'Healing is capped for this book.'}")
-            return
+            if not automatic:
+                print(f"Healing not available: {cap_note or 'Healing is capped for this book.'}")
+            return ""
         message = self.change_endurance(amount, gameplay=False)
         if cap_note:
             message = f"{message}; {cap_note}"
@@ -7812,13 +7848,15 @@ class LoneWolfReduxAssistant:
                 "VisitKey": self.current_visit_key(),
                 "BookNumber": int(self.character["BookNumber"]),
                 "Section": int(self.state["CurrentSection"]),
-                "Summary": "Magnakai Curing" if payload.get("Summary", "").startswith("Curing") else "Kai Healing",
+                "Summary": f"Magnakai {payload['Name']}" if payload.get("Name") == "Curing" else "Kai Healing",
                 "Messages": [message],
             }
         )
         self.automation["Journal"] = journal[-100:]
         self.autosave()
-        print(f"Healing: {message}")
+        if not automatic:
+            print(f"{payload['Name']}: {message}")
+        return f"{payload['Name']}: {message}"
 
     def loss_choice_entries(self, entry: dict[str, Any] | None = None) -> list[dict[str, Any]]:
         flow = entry if isinstance(entry, dict) else (self.current_section_flow_entry() or {})
@@ -7849,6 +7887,17 @@ class LoneWolfReduxAssistant:
             )
             option_payload["Repeatable"] = bool(option.get("repeatable"))
             payload.append(option_payload)
+        if int(self.character.get("BookNumber") or 0) == 6 and int(self.state.get("CurrentSection") or 0) == 98:
+            arrows = self.arrow_inventory_payload()
+            can_buy = int(self.inventory.get("GoldCrowns") or 0) >= 1 and arrows["OpenSlots"] >= 2
+            payload.append({
+                "id": "buy-arrows",
+                "label": "Buy 2 Arrows (1 Gold Crown)",
+                "Ready": can_buy,
+                "Applied": False,
+                "Repeatable": True,
+                "BlockedReason": "" if can_buy else "You need 1 Gold Crown and room for two arrows in a Quiver.",
+            })
         return payload
 
     def current_shop_payload(self, entry: dict[str, Any] | None = None) -> dict[str, Any] | None:
@@ -7859,7 +7908,7 @@ class LoneWolfReduxAssistant:
             if section == 98:
                 shop = {"title": "Section 98 Weaponsmith", "sales": [
                     *[{"container": "weapon", "name": name, "price": price} for name, price in (("Broadsword", 6), ("Dagger", 1), ("Short Sword", 2), ("Warhammer", 5), ("Spear", 4), ("Mace", 3), ("Axe", 2), ("Bow", 6), ("Quarterstaff", 2), ("Sword", 3))],
-                    {"container": "special", "name": "Quiver", "price": 2}, {"container": "special", "name": "Large Quiver", "price": 4}, {"kind": "arrows", "quantity": 3, "price": 1, "label": "3 Arrows [DE]"},
+                    {"kind": "arrows", "quantity": 4, "price": 1, "label": "4 Arrows"},
                 ]}
             elif section == 275:
                 shop = {"title": "Section 275 Cartographer", "sales": [{"container": "backpack", "name": "Map of Sommerlund", "price": 4}, {"container": "backpack", "name": "Map of Tekaro", "price": 3}, {"container": "backpack", "name": "Map of Luyen", "price": 2}]}
@@ -8140,6 +8189,7 @@ class LoneWolfReduxAssistant:
             "Portholes": self.current_portholes_payload(entry),
             "GoldDistraction": self.current_gold_distraction_payload(entry),
             "Healing": self.current_healing_payload(),
+            "Arrows": self.arrow_inventory_payload(),
             "LossChoices": self.current_loss_choices_payload(entry),
             "Loot": self.current_flow_loot_payload(entry),
             "Shop": self.current_shop_payload(entry),
@@ -8886,6 +8936,29 @@ class LoneWolfReduxAssistant:
         return f"unknown automation action: {action_type}"
 
     def apply_flow_loot(self, option_id: str) -> None:
+        if (
+            option_id == "buy-arrows"
+            and int(self.character.get("BookNumber") or 0) == 6
+            and int(self.state.get("CurrentSection") or 0) == 98
+        ):
+            arrows = self.arrow_inventory_payload()
+            if int(self.inventory.get("GoldCrowns") or 0) < 1 or arrows["OpenSlots"] < 2:
+                print("Arrows are unavailable: you need 1 Gold Crown and room for two arrows in a Quiver.")
+                return
+            before = arrows["Arrows"]
+            self.inventory["QuiverArrows"] = before + 2
+            gold = self.change_gold_crowns(-1)
+            message = f"Arrows {before}->{before + 2}; {gold}"
+            journal = as_list(self.automation.get("Journal"))
+            journal.append({
+                "Kind": "loot", "AppliedAt": datetime.now().isoformat(timespec="seconds"),
+                "VisitKey": self.current_visit_key(), "BookNumber": 6, "Section": 98,
+                "Summary": "Buy 2 Arrows (1 Gold Crown)", "Messages": [message],
+            })
+            self.automation["Journal"] = journal[-100:]
+            self.autosave()
+            print(f"Loot: Buy 2 Arrows (1 Gold Crown). {message}")
+            return
         flow = self.current_section_flow_entry() or {}
         options = [option for option in as_list(flow.get("loot")) if isinstance(option, dict)]
         option = next((item for item in options if str(item.get("id") or "") == option_id), None)
@@ -10178,6 +10251,9 @@ class LoneWolfReduxAssistant:
             self.save_section_checkpoint("entry")
         automation_messages = self.apply_section_automation(visit_changed=visit_changed)
         automation_messages.extend(self.apply_global_section_effects(visit_changed=visit_changed))
+        healing_message = self.apply_healing(automatic=True) if int(self.character.get("BookNumber") or 0) == 6 else ""
+        if healing_message:
+            automation_messages.append(healing_message)
         if checkpoint_needed and not self.death_active():
             self.save_section_checkpoint("ready")
         self.write_current_position()
@@ -10213,6 +10289,9 @@ class LoneWolfReduxAssistant:
             self.save_section_checkpoint("entry")
         automation_messages = self.apply_section_automation(visit_changed=visit_changed)
         automation_messages.extend(self.apply_global_section_effects(visit_changed=visit_changed))
+        healing_message = self.apply_healing(automatic=True) if int(self.character.get("BookNumber") or 0) == 6 else ""
+        if healing_message:
+            automation_messages.append(healing_message)
         if checkpoint_needed and not self.death_active():
             self.save_section_checkpoint("ready")
         self.write_current_position()

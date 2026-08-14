@@ -2443,7 +2443,7 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
             assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
-            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 6}, "Inventory": {"GoldCrowns": 0, "QuiverArrows": 3}, "CurrentSection": 98})
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 6}, "Inventory": {"GoldCrowns": 0, "SpecialItems": ["Quiver"], "QuiverArrows": 4}, "CurrentSection": 98})
             assistant.apply_shop_sale("arrows")
             assistant.set_section(275)
             assistant.inventory["BackpackItems"] = ["Map of Tekaro"]
@@ -2453,6 +2453,49 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
         self.assertEqual(assistant.inventory["QuiverArrows"], 0)
         self.assertEqual(assistant.inventory["BackpackItems"], [])
         self.assertEqual(assistant.inventory["GoldCrowns"], 4)
+
+    def test_book6_curing_applies_on_each_eligible_section_and_stops_at_original_end(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 6, "EnduranceCurrent": 10, "EnduranceMax": 32, "MagnakaiDisciplines": ["Curing"]},
+                "Inventory": {"SpecialItems": ["Quiver"], "QuiverArrows": 5},
+                "CurrentBookStats": {"BookNumber": 6, "StartingEnduranceMax": 24},
+                "CurrentSection": 97,
+            })
+            assistant.set_section(98)
+            flow = assistant.current_section_flow_payload()
+            assistant.set_section(100)
+            after_second_section = assistant.character["EnduranceCurrent"]
+            assistant.character["EnduranceCurrent"] = 24
+            assistant.set_section(101)
+
+        self.assertTrue(flow["Healing"]["Applied"])
+        self.assertEqual(flow["Healing"]["Name"], "Curing")
+        self.assertEqual(flow["Healing"]["TargetEndurance"], 24)
+        self.assertEqual(after_second_section, 12)
+        self.assertEqual(assistant.character["EnduranceCurrent"], 24)
+        self.assertEqual(assistant.arrow_inventory_payload(), {"Arrows": 5, "Quivers": 1, "Capacity": 6, "OpenSlots": 1})
+
+    def test_book6_weaponsmith_uses_source_arrow_prices_and_quiver_capacity(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 6},
+                "Inventory": {"GoldCrowns": 2, "SpecialItems": ["Quiver"], "QuiverArrows": 4},
+                "CurrentSection": 98,
+            })
+            flow = assistant.current_section_flow_payload()
+            assistant.apply_flow_loot("buy-arrows")
+            assistant.apply_shop_sale("arrows")
+
+        self.assertTrue(any(item["id"] == "buy-arrows" and item["Ready"] for item in flow["Loot"]))
+        self.assertFalse(any("Quiver" in item["Label"] for item in flow["Shop"]["Sales"]))
+        self.assertIn({"Id": "arrows", "Label": "4 Arrows", "Price": 1, "Kind": "arrows", "Quantity": 4}, flow["Shop"]["Sales"])
+        self.assertEqual(assistant.inventory["QuiverArrows"], 2)
+        self.assertEqual(assistant.inventory["GoldCrowns"], 2)
 
     def test_book6_final_section_records_campaign_completion(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:

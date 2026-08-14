@@ -2306,10 +2306,11 @@
         details.push(receiptDetail('How to do it', 'Roll two 0-9 dice for each other player and two for Lone Wolf. Add 6 Gold if Lone Wolf wins, subtract 3 Gold if either other player beats him, and leave ties unchanged.'));
       } else if (kind === 'healing') {
         const healing = flow.Healing || {};
-        summary = 'Manual Advice - Kai Healing';
-        title = 'Manual Healing';
-        details.push(receiptDetail('Why', text(healing.Summary, 'Kai Healing can restore 1 END in an eligible non-combat section.')));
-        details.push(receiptDetail('How to do it', 'Vitals card: add 1 END, capped at maximum END. Apply it only once for this numbered section visit.'));
+        const healingName = text(healing.Name, 'Healing');
+        summary = `Manual Advice - ${healingName}`;
+        title = `Manual ${healingName}`;
+        details.push(receiptDetail('Why', text(healing.Summary, `${healingName} can restore 1 END after an eligible non-combat numbered section.`)));
+        details.push(receiptDetail('How to do it', `Vitals card: add 1 END, capped at this book's original END score (${text(healing.TargetEndurance, healing.MaximumEndurance)}). Record it once for this numbered section visit.`));
       } else if (kind === 'section loss') {
         const choice = arr(flow.LossChoices).find((item) => text(item.Id) === text(options.id)) || arr(flow.LossChoices)[0];
         const replacement = choice?.Replacement || null;
@@ -2798,14 +2799,16 @@
       }
 
       if (actionName === 'healing') {
+        const healing = afterSnapshot?.sectionFlow?.Healing || currentFlow().Healing || {};
+        const healingName = text(healing.Name, 'Healing');
         return {
-          summary: `Healing - ${changes.short || text(afterSnapshot?.message, 'Applied')}`,
-          title: 'Healing Receipt',
+          summary: `${healingName} - ${changes.short || text(afterSnapshot?.message, 'Applied')}`,
+          title: `${healingName} Receipt`,
           details: [
             receiptDetail('Where', locationLabel(afterSnapshot)),
             ...changes.details,
-            receiptDetail('Why', 'Kai Healing can restore 1 END in an eligible non-combat section.'),
-            receiptDetail('How', 'You clicked Apply in the Kai Healing helper. The assistant capped END at maximum and saved.'),
+            receiptDetail('Why', `${healingName} restores 1 END after an eligible non-combat numbered section.`),
+            receiptDetail('How', `The assistant capped END at this book's original END score (${text(healing.TargetEndurance, healing.MaximumEndurance)}) and saved.`),
             output,
             ...achievements
           ].filter(Boolean)
@@ -2851,6 +2854,17 @@
             ...achievements
           ].filter(Boolean)
         };
+      }
+
+      const healing = flow.Healing || {};
+      if (healing.Available) {
+        const name = text(healing.Name, 'Curing');
+        const value = healing.Applied
+          ? `Applied: ${arr(healing.Messages).join('; ') || `${name} restored 1 END.`}`
+          : (healing.Ready
+            ? `Ready: +${text(healing.Amount, 1)} END, up to ${text(healing.TargetEndurance, healing.MaximumEndurance)} END.`
+            : text(healing.BlockedReason, 'Unavailable.'));
+        details.push(receiptDetail(name, value));
       }
 
       if (actionName === 'checkpoint_recovery') {
@@ -3402,15 +3416,21 @@
       const cap = inv.BackpackCapacity || 8;
       const bp = (inv.BackpackItems || []).length;
       const sp = (inv.SpecialItems || []).length;
-      return `${w} weapon${w === 1 ? '' : 's'} · ${bp} / ${cap} backpack · ${sp} special item${sp === 1 ? '' : 's'}`;
+      const quivers = arr(inv.SpecialItems).filter((item) => text(item).trim().toLowerCase() === 'quiver').length;
+      const arrows = Math.max(0, Number(inv.QuiverArrows || 0));
+      const arrowText = quivers ? `${arrows}/${quivers * 6} arrows` : `${arrows} arrows · no Quiver`;
+      return `${w} weapon${w === 1 ? '' : 's'} · ${bp} / ${cap} backpack · ${sp} special item${sp === 1 ? '' : 's'} · ${arrowText}`;
     }
     function sectionActivitySummary() {
       const c = currentCharacter();
       const combat = currentCombat();
       const automation = currentFlow().Automation || {};
+      const healing = currentFlow().Healing || {};
       const location = `Book ${text(c.BookNumber, '?')} · Section ${text(app?.state?.CurrentSection, '?')}`;
       if (combat?.Active) return `${location} · Combat in progress · ${text(combat.EnemyName, 'Enemy')} · ${arr(combat.Log).length} rounds`;
       if (automation.Summary) return `${location} · ${automation.Applied ? 'Applied' : 'Ready'}: ${automation.Summary}`;
+      if (healing.Applied) return `${location} · ${text(healing.Name, 'Curing')} applied: ${arr(healing.Messages).join('; ')}`;
+      if (healing.Ready) return `${location} · ${text(healing.Name, 'Curing')} ready: +${text(healing.Amount, 1)} END`;
       return `${location} · No automatic effect recorded`;
     }
     function renderSectionActivity() {
@@ -3420,6 +3440,7 @@
       const combat = currentCombat();
       const flow = currentFlow();
       const automation = flow.Automation || {};
+      const healing = flow.Healing || {};
       const sectionDetails = sectionStatusReceiptDetails();
       const latest = currentReceipt && currentReceipt.summary !== sectionStatusReceipt().summary ? currentReceipt : null;
       const encounter = combat?.Active ? [
@@ -3433,6 +3454,7 @@
       const rows = [
         ['Location', `${bookByNumber(c.BookNumber).title} · Book ${c.BookNumber}, section ${app.state.CurrentSection}`],
         ['Automation', automation.Summary ? `${automation.Applied ? 'Applied' : 'Ready'}: ${automation.Summary}` : 'No entry automation recorded for this section.'],
+        ...(healing.Available ? [[text(healing.Name, 'Curing'), healing.Applied ? `Applied: ${arr(healing.Messages).join('; ')}` : (healing.Ready ? `Ready: +${text(healing.Amount, 1)} END, up to ${text(healing.TargetEndurance, healing.MaximumEndurance)} END.` : text(healing.BlockedReason, 'Unavailable.'))]] : []),
         ...encounter,
         ...sectionDetails.map((item) => [item.label, item.value]),
         ...pending,
@@ -7118,6 +7140,12 @@
       const backpackLabel = flags.backpackAvailable === false || flags.backpackItemsAvailable === false ? 'Unavailable' : `${itemSlotTotal(inv.BackpackItems)}/${backpackCapacity}`;
       const specialTotal = specialItems.length + pocketSpecialItems.length;
       const specialLabel = Number(currentCharacter().BookNumber || 1) >= 8 ? `${specialTotal}/12` : `${specialTotal} (no limit before Book 8)`;
+      const quivers = specialItems.filter((item) => text(item).trim().toLowerCase() === 'quiver').length;
+      const arrows = Math.max(0, Number(inv.QuiverArrows || 0));
+      const arrowCapacity = quivers * 6;
+      const arrowLabel = quivers
+        ? `${arrows}/${arrowCapacity} · ${quivers} Quiver${quivers === 1 ? '' : 's'} · ${Math.max(0, arrowCapacity - arrows)} open`
+        : `${arrows} carried · no Quiver recorded`;
       view.innerHTML = `
         <div class="panel">
           <h2>Inventory</h2>
@@ -7126,6 +7154,7 @@
             ${field('Backpack', backpackLabel)}
             ${field('Special Items', specialLabel)}
             ${field('Meals', arr(inv.BackpackItems).filter((item) => text(item).toLowerCase() === 'meal').length)}
+            ${field('Arrows', arrowLabel)}
           </div>
         </div>
         <div class="panel">
@@ -7329,11 +7358,12 @@
           ${modeActionButton(`data-shop-sale="${escapeHtml(text(sale.Id))}"`, 'Sell', 'section loot')}
         </div>
       `).join('');
+      const healingName = text(healing.Name, 'Curing');
       const healingRows = healing.Available ? `
         <div class="item-row">
           <small>${healing.Applied ? 'Applied' : (healing.Ready ? 'Ready' : 'Wait')}</small>
-          <span class="wrap">${escapeHtml(healing.Ready ? text(healing.Summary, 'Kai Healing') : text(healing.BlockedReason, 'Healing not available'))}</span>
-          ${healing.Ready ? modeActionButton('data-healing', 'Apply', 'healing') : ''}
+          <span class="wrap">${escapeHtml(healing.Applied ? (arr(healing.Messages).join('; ') || `${healingName} restored 1 END.`) : (healing.Ready ? text(healing.Summary, healingName) : text(healing.BlockedReason, `${healingName} not available`)))}</span>
+          ${healing.Ready ? modeActionButton('data-healing', isManualMode() ? `Record ${healingName}` : `Apply ${healingName}`, 'healing') : ''}
         </div>
       ` : '';
       const lossRows = arr(flow.LossChoices).map((choice) => {
@@ -7382,7 +7412,7 @@
         ${combatRows ? `<div class="panel"><h2>Section Combat</h2>${combatRows}</div>` : ''}
         ${lootRows ? `<div class="panel"><h2>Loot And Section Items</h2>${lootRows}</div>` : ''}
         ${shopRows ? `<div class="panel"><h2>${escapeHtml(text(flow.Shop?.Title, 'Shop'))}</h2>${shopRows}</div>` : ''}
-        ${healingRows ? `<div class="panel"><h2>Kai Healing</h2>${healingRows}</div>` : ''}
+        ${healingRows ? `<div class="panel"><h2>${escapeHtml(healingName)}</h2>${healingRows}</div>` : ''}
         ${lossRows ? `<div class="panel"><h2>Choose Inventory Change</h2>${lossRows}</div>` : ''}
         ${statusRows ? `<div class="panel"><h2>Status Flags</h2>${statusRows}</div>` : ''}
       `;
