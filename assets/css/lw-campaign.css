@@ -175,6 +175,19 @@ body.lw-surface-campaign .workspace.lw-native {
 .lw-glance__tools .lw-ui-button span { color: var(--lw-ui-muted); font: 400 .72rem var(--lw-ui-sans); }
 .lw-glance__tools .lw-ui-button--primary span { color: #24434c !important; }
 
+/* Optional soundtrack controls stay small enough to support play rather than
+   competing with the current section, choices, or recovery state. */
+.lw-music-compact { display: grid; gap: 5px; padding: 14px 16px 16px; }
+.lw-music-compact__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.lw-music-compact__head .lw-eyebrow { margin: 0; }
+.lw-music-compact > strong { overflow: hidden; color: var(--lw-ui-ink); font: 700 .92rem var(--lw-ui-sans); text-overflow: ellipsis; white-space: nowrap; }
+.lw-music-compact > small { color: var(--lw-ui-muted); font: .74rem var(--lw-ui-sans); }
+.lw-music-compact__controls { display: grid; grid-template-columns: 34px 38px 34px minmax(74px, 1fr); gap: 7px; align-items: center; margin-top: 5px; }
+.lw-music-compact__controls .lw-ui-button { min-height: 34px; padding: 4px; font-size: 1.1rem; justify-content: center; }
+.lw-music-compact__volume { display: grid; align-items: center; min-height: 34px; }
+.lw-music-compact__volume input { width: 100%; min-height: 0; accent-color: var(--lw-ui-accent); cursor: pointer; }
+.lw-music-compact__message { min-height: 1.1em; color: var(--lw-ui-muted); font: .7rem/1.35 var(--lw-ui-sans); }
+
 /* Recovery is snapshot-based: make the earlier decision visible without making
    it compete with the immediate story choice or pretending it is a route. */
 .lw-recovery-path { display: grid; gap: 10px; padding: 14px 16px; border-top: 1px solid var(--lw-ui-border); background: rgba(61, 133, 98, .07); }

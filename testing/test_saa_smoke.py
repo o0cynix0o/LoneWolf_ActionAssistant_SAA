@@ -4457,6 +4457,30 @@ class SoundtrackPackagingTests(unittest.TestCase):
             self.assertIn("all-approved-tracks", track["playlists"], track["id"])
 
 
+class SoundtrackPlayerTests(unittest.TestCase):
+    def test_shared_player_uses_manifest_preferences_and_compact_surfaces(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        player = (root / "assets" / "js" / "lw-music.js").read_text(encoding="utf-8")
+        settings = (root / "assets" / "js" / "lw-settings.js").read_text(encoding="utf-8")
+        assistant = (root / "assistant.html").read_text(encoding="utf-8")
+
+        self.assertIn("assets/audio/music-manifest.json", player)
+        self.assertIn("sessionStorage", player)
+        self.assertIn("beforeunload", player)
+        self.assertIn("data-lw-music-action", player)
+        self.assertIn("compactMarkup('campaign')", assistant)
+        self.assertIn("compactMarkup('reader')", assistant)
+        for preference in (
+            "lonewolf_redux.music.enabled.v1",
+            "lonewolf_redux.music.volume.v1",
+            "lonewolf_redux.music.playlist.v1",
+            "lonewolf_redux.music.shuffle.v1",
+            "lonewolf_redux.music.repeat.v1",
+        ):
+            self.assertIn(preference, settings)
+            self.assertIn(preference, app_server.UI_PREFERENCE_KEYS)
+
+
 class ServiceTests(unittest.TestCase):
     def test_service_self_test(self) -> None:
         self.assertEqual(saa_main.run_self_test(), 0)

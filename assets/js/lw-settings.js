@@ -5,7 +5,12 @@
     theme: 'lonewolf_redux.appearance.theme.v1',
     surfaceStyle: 'lonewolf_redux.appearance.surfaceStyle.v1',
     readerStyleEnabled: 'lonewolf_redux.reader.styleEnabled.v1',
-    readerTheme: 'lonewolf_redux.reader.theme.v1'
+    readerTheme: 'lonewolf_redux.reader.theme.v1',
+    musicEnabled: 'lonewolf_redux.music.enabled.v1',
+    musicVolume: 'lonewolf_redux.music.volume.v1',
+    musicPlaylist: 'lonewolf_redux.music.playlist.v1',
+    musicShuffle: 'lonewolf_redux.music.shuffle.v1',
+    musicRepeat: 'lonewolf_redux.music.repeat.v1'
   };
 
   const titleBanners = [
@@ -450,8 +455,27 @@
     theme: 'kai-gold',
     surfaceStyle: 'borderless',
     readerStyleEnabled: 'off',
-    readerTheme: 'original'
+    readerTheme: 'original',
+    musicEnabled: 'off',
+    musicVolume: 0.35,
+    musicPlaylist: 'journey',
+    musicShuffle: 'off',
+    musicRepeat: 'playlist'
   };
+
+  const musicPlaylists = Object.freeze([
+    { id: 'journey', name: 'Journey' },
+    { id: 'tavern-and-rest', name: 'Tavern and Rest' },
+    { id: 'ancient-mysteries', name: 'Ancient Mysteries' },
+    { id: 'dark-roads', name: 'Dark Roads' },
+    { id: 'all-approved-tracks', name: 'All Approved Tracks' }
+  ]);
+
+  const musicRepeatModes = Object.freeze([
+    { id: 'playlist', name: 'Repeat playlist' },
+    { id: 'track', name: 'Repeat track' },
+    { id: 'off', name: 'Stop after queue' }
+  ]);
 
   function byId(list, id, fallbackId) {
     return list.find((entry) => entry.id === id) || list.find((entry) => entry.id === fallbackId) || list[0];
@@ -464,7 +488,12 @@
       theme: localStorage.getItem(STORAGE_KEYS.theme) || defaults.theme,
       surfaceStyle: localStorage.getItem(STORAGE_KEYS.surfaceStyle) || defaults.surfaceStyle,
       readerStyleEnabled: localStorage.getItem(STORAGE_KEYS.readerStyleEnabled) || defaults.readerStyleEnabled,
-      readerTheme: localStorage.getItem(STORAGE_KEYS.readerTheme) || defaults.readerTheme
+      readerTheme: localStorage.getItem(STORAGE_KEYS.readerTheme) || defaults.readerTheme,
+      musicEnabled: localStorage.getItem(STORAGE_KEYS.musicEnabled) || defaults.musicEnabled,
+      musicVolume: localStorage.getItem(STORAGE_KEYS.musicVolume) || defaults.musicVolume,
+      musicPlaylist: localStorage.getItem(STORAGE_KEYS.musicPlaylist) || defaults.musicPlaylist,
+      musicShuffle: localStorage.getItem(STORAGE_KEYS.musicShuffle) || defaults.musicShuffle,
+      musicRepeat: localStorage.getItem(STORAGE_KEYS.musicRepeat) || defaults.musicRepeat
     };
   }
 
@@ -475,7 +504,12 @@
       [STORAGE_KEYS.theme]: settings.theme,
       [STORAGE_KEYS.surfaceStyle]: settings.surfaceStyle,
       [STORAGE_KEYS.readerStyleEnabled]: settings.readerStyleEnabled,
-      [STORAGE_KEYS.readerTheme]: settings.readerTheme
+      [STORAGE_KEYS.readerTheme]: settings.readerTheme,
+      [STORAGE_KEYS.musicEnabled]: settings.musicEnabled,
+      [STORAGE_KEYS.musicVolume]: settings.musicVolume,
+      [STORAGE_KEYS.musicPlaylist]: settings.musicPlaylist,
+      [STORAGE_KEYS.musicShuffle]: settings.musicShuffle,
+      [STORAGE_KEYS.musicRepeat]: settings.musicRepeat
     };
   }
 
@@ -491,7 +525,12 @@
       theme: values[STORAGE_KEYS.theme] || defaults.theme,
       surfaceStyle: values[STORAGE_KEYS.surfaceStyle] || defaults.surfaceStyle,
       readerStyleEnabled: values[STORAGE_KEYS.readerStyleEnabled] || defaults.readerStyleEnabled,
-      readerTheme: values[STORAGE_KEYS.readerTheme] || defaults.readerTheme
+      readerTheme: values[STORAGE_KEYS.readerTheme] || defaults.readerTheme,
+      musicEnabled: values[STORAGE_KEYS.musicEnabled] || defaults.musicEnabled,
+      musicVolume: values[STORAGE_KEYS.musicVolume] || defaults.musicVolume,
+      musicPlaylist: values[STORAGE_KEYS.musicPlaylist] || defaults.musicPlaylist,
+      musicShuffle: values[STORAGE_KEYS.musicShuffle] || defaults.musicShuffle,
+      musicRepeat: values[STORAGE_KEYS.musicRepeat] || defaults.musicRepeat
     };
   }
 
@@ -503,6 +542,12 @@
     settings.surfaceStyle = settings.surfaceStyle === 'bordered' ? 'bordered' : 'borderless';
     settings.readerStyleEnabled = settings.readerStyleEnabled === 'on' ? 'on' : 'off';
     settings.readerTheme = byId(readerThemes, settings.readerTheme, defaults.readerTheme).id;
+    settings.musicEnabled = settings.musicEnabled === 'on' ? 'on' : 'off';
+    const musicVolume = Number(settings.musicVolume);
+    settings.musicVolume = Number.isFinite(musicVolume) ? Math.min(1, Math.max(0, musicVolume)) : defaults.musicVolume;
+    settings.musicPlaylist = byId(musicPlaylists, settings.musicPlaylist, defaults.musicPlaylist).id;
+    settings.musicShuffle = settings.musicShuffle === 'on' ? 'on' : 'off';
+    settings.musicRepeat = byId(musicRepeatModes, settings.musicRepeat, defaults.musicRepeat).id;
     return settings;
   }
 
@@ -514,6 +559,11 @@
     localStorage.setItem(STORAGE_KEYS.surfaceStyle, clean.surfaceStyle);
     localStorage.setItem(STORAGE_KEYS.readerStyleEnabled, clean.readerStyleEnabled);
     localStorage.setItem(STORAGE_KEYS.readerTheme, clean.readerTheme);
+    localStorage.setItem(STORAGE_KEYS.musicEnabled, clean.musicEnabled);
+    localStorage.setItem(STORAGE_KEYS.musicVolume, String(clean.musicVolume));
+    localStorage.setItem(STORAGE_KEYS.musicPlaylist, clean.musicPlaylist);
+    localStorage.setItem(STORAGE_KEYS.musicShuffle, clean.musicShuffle);
+    localStorage.setItem(STORAGE_KEYS.musicRepeat, clean.musicRepeat);
     return clean;
   }
 
@@ -1005,6 +1055,8 @@
     titleBanners,
     themes,
     readerThemes,
+    musicPlaylists,
+    musicRepeatModes,
     readLocal,
     writeLocal,
     normalize,

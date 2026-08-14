@@ -1714,6 +1714,7 @@
   <script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.js"></script>
   <script src="assets/js/lw-settings.js"></script>
+  <script src="assets/js/lw-music.js"></script>
   <script>
     if (window.LONEWOLF_REDUX_FILE_MODE_BLOCKED) {
       throw new Error('Lone Wolf assistant must be opened from localhost.');
@@ -3693,6 +3694,7 @@
             <button class="lw-ui-button" type="button" data-open-map><strong>Map</strong><span>View the map</span></button>
             <button class="lw-ui-button" type="button" data-save-current><strong>Save</strong><span>Create a checkpoint</span></button>
           </div>
+          ${window.LoneWolfMusic?.compactMarkup('campaign') || ''}
         </div>
         ${encounterPanel}
         ${recoveryTimelineHtml(true)}`;
@@ -3884,6 +3886,7 @@
             <div><span>Difficulty</span><span>${escapeHtml(text(run.Difficulty, 'Normal'))}</span></div>
           </div>
         </section>
+        ${window.LoneWolfMusic?.compactMarkup('reader') || ''}
         <section class="lw-ui-panel lw-companion__panel">
           <h3>Assistant</h3>
           <div class="lw-companion__grid">
@@ -4851,6 +4854,7 @@
       uiPreferencesReady = true;
       assistantSettings = settingsApi.apply(settingsApi.readLocal());
       settingsApi.injectReaderTheme(bookFrame, assistantSettings);
+      window.LoneWolfMusic?.refreshPreferences();
       if (Object.keys(preservedAppearance).length) persistUiPreferences(true);
     }
 
@@ -8838,6 +8842,7 @@
     function refreshAssistantAppearance(settings = settingsApi.readLocal()) {
       assistantSettings = settingsApi.apply(settings);
       settingsApi.injectReaderTheme(bookFrame, assistantSettings);
+      window.LoneWolfMusic?.refreshPreferences();
       if (cliTerminal) cliTerminal.options.theme = cliTheme();
       if (app && activeView === 'settings') render();
     }
