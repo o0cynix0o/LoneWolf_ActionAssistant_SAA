@@ -6,6 +6,11 @@ This folder contains candidate background music only. No MP3 in this folder is
 included by the application or installer yet. A file may be packaged only when
 its status is `approved-for-packaging`.
 
+The approved playback and persistence contract is documented in
+`docs/SOUNDTRACK_DESIGN.md`. It keeps music optional, preserves the original
+MP3 masters, and prohibits player features that expose the tracks as standalone
+downloads or raw files.
+
 ## Decision
 
 The candidate music can support a background soundtrack, subject to the separate
