@@ -4396,6 +4396,8 @@ class CampaignDeskProductionTests(unittest.TestCase):
         self.assertIn("function renderStoryInto(target, variant)", assistant_html)
         self.assertIn("async function routeStoryChoice(section)", assistant_html)
         self.assertIn("await routeStoryChoice(Number(button.dataset.storyRoute || button.dataset.storyJump))", assistant_html)
+        self.assertIn("if (isNativeSurface) {\n        activeBook = Number(character.BookNumber);", assistant_html)
+        self.assertNotIn("if (target && !target.hidden) await renderStoryInto(target, variant);", assistant_html)
         self.assertIn("function renderCampaignRail()", assistant_html)
         self.assertIn("function recoveryTimelineHtml(compact = false)", assistant_html)
         self.assertIn("if (!currentDeath().Active) return '';", assistant_html)

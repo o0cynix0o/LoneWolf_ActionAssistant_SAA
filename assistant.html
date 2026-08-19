@@ -3144,6 +3144,15 @@
     function syncBookToState() {
       const character = currentCharacter();
       const section = Number(app.state.CurrentSection);
+      // Native Campaign and Reader render section text directly. Keeping the
+      // legacy iframe synchronized here would load the same section a second
+      // time on every route, even though it is not visible.
+      if (isNativeSurface) {
+        activeBook = Number(character.BookNumber);
+        activeSection = section;
+        renderReaderTitle();
+        return;
+      }
       if (activeBook !== Number(character.BookNumber) || activeSection !== section) {
         loadBook(Number(character.BookNumber), section);
       }
@@ -3577,9 +3586,6 @@
       storyRenderToken += 1;
       try {
         await action({ action: 'route', section });
-        const target = nativeSurface === 'reader' ? nativeEl('readerSurface') : nativeEl('storyPanel');
-        const variant = nativeSurface === 'reader' ? 'reader' : 'campaign';
-        if (target && !target.hidden) await renderStoryInto(target, variant);
       } catch (error) {
         setReceipt({
           summary: `Could not turn to section ${section}.`,
