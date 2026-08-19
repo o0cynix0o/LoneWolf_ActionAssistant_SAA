@@ -2,8 +2,9 @@
   const assistantPage = /\/assistant\.html$/i.test(location.pathname);
   const indexPage = /\/(?:index\.html)?$/i.test(location.pathname);
   const utilityPage = /\/(?:library|install-books)\.html$/i.test(location.pathname);
-  const params = new URLSearchParams(location.search);
-  const surface = params.get('surface') || (assistantPage ? 'campaign' : 'library');
+  let params = new URLSearchParams(location.search);
+  let surface = params.get('surface') || (assistantPage ? 'campaign' : 'library');
+  let latestCampaignPayload = null;
 
   function navLink(label, href, active) {
     return '<a href="' + href + '"' + (active ? ' aria-current="page"' : '') + '>' + label + '</a>';
@@ -76,11 +77,43 @@
   }
 
   function syncCampaignStatus(payload) {
+    latestCampaignPayload = payload;
     const label = campaignLabel(payload);
     document.querySelectorAll('[data-lw-campaign-status]').forEach((node) => { node.textContent = label; });
     markCurrentBook(payload);
     prepareLibrary(payload);
     renderProductionContext(payload);
+  }
+
+  function updateSurfaceNavigation() {
+    const consoleActive = params.get('console') === '1';
+    const active = consoleActive ? 'console' : surface;
+    document.body.classList.remove('lw-surface-campaign', 'lw-surface-reader', 'lw-surface-tools');
+    if (assistantPage) document.body.classList.add('lw-surface-' + surface);
+    document.querySelectorAll('.lw-global-nav__links a, .lw-inline-nav a').forEach((link) => {
+      const linkUrl = new URL(link.href, location.href);
+      const linkSurface = linkUrl.searchParams.get('surface');
+      const linkIsConsole = linkUrl.searchParams.get('console') === '1';
+      const isActive = linkIsConsole ? active === 'console' : linkSurface === active;
+      if (isActive) link.setAttribute('aria-current', 'page');
+      else link.removeAttribute('aria-current');
+    });
+    if (latestCampaignPayload) renderProductionContext(latestCampaignPayload);
+  }
+
+  function navigateAssistantSurface(url, options = {}) {
+    if (!assistantPage) return false;
+    const target = new URL(url, location.href);
+    if (target.origin !== location.origin || !/\/assistant\.html$/i.test(target.pathname)) return false;
+    const nextSurface = target.searchParams.get('surface');
+    if (!['campaign', 'reader', 'tools'].includes(nextSurface)) return false;
+    if (options.replace) history.replaceState({}, '', target.pathname + target.search + target.hash);
+    else history.pushState({}, '', target.pathname + target.search + target.hash);
+    params = new URLSearchParams(target.search);
+    surface = nextSurface;
+    updateSurfaceNavigation();
+    document.dispatchEvent(new CustomEvent('lonewolf:navigate-surface', { detail: { url: target.href, source: options.source || 'link' } }));
+    return true;
   }
 
   function renderProductionContext(payload) {
@@ -128,12 +161,34 @@
     });
   }
 
+  function bindSurfaceNavigation() {
+    if (!assistantPage) return;
+    document.addEventListener('click', (event) => {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const link = event.target.closest('a[href]');
+      if (!link || link.target || link.hasAttribute('download')) return;
+      const target = new URL(link.href, location.href);
+      if (target.origin !== location.origin || !/\/assistant\.html$/i.test(target.pathname) || !target.searchParams.has('surface')) return;
+      if (navigateAssistantSurface(target.href)) event.preventDefault();
+    });
+    window.addEventListener('popstate', () => {
+      const target = new URL(location.href);
+      const nextSurface = target.searchParams.get('surface');
+      if (!['campaign', 'reader', 'tools'].includes(nextSurface)) return;
+      params = new URLSearchParams(target.search);
+      surface = nextSurface;
+      updateSurfaceNavigation();
+      document.dispatchEvent(new CustomEvent('lonewolf:navigate-surface', { detail: { url: target.href, source: 'history' } }));
+    });
+  }
+
   function boot() {
     document.body.classList.add(assistantPage ? 'lw-shell-assistant' : (utilityPage ? 'lw-shell-utility' : 'lw-shell-index'));
     document.body.classList.add('lw-surface-' + surface);
     if (assistantPage) addAssistantNav();
     else addGlobalNav();
     bindConsoleDrawer();
+    bindSurfaceNavigation();
     fetch('/api/state', { cache: 'no-store' })
       .then((response) => response.ok ? response.json() : null)
       .then((payload) => { if (payload) syncCampaignStatus(payload); })

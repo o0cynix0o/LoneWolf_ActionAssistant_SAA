@@ -3349,9 +3349,9 @@
     //  prototype layouts. Reuses action(), bookUrl(), the tool
     //  renderers, and app.state throughout. No engine/save changes.
     // ============================================================
-    const nativeSurface = pageParams.get('surface') || 'campaign';
-    const nativeConsole = pageParams.get('console') === '1';
-    const isNativeSurface = ['campaign', 'reader', 'tools'].includes(nativeSurface);
+    let nativeSurface = pageParams.get('surface') || 'campaign';
+    let nativeConsole = pageParams.get('console') === '1';
+    let isNativeSurface = ['campaign', 'reader', 'tools'].includes(nativeSurface);
     const workspaceEl = document.getElementById('workspace');
     const CAMPAIGN_TABS = [['story', 'Story'], ['sheet', 'Action Chart'], ['disciplines', 'Disciplines'], ['inventory', 'Inventory'], ['combat', 'Combat'], ['notes', 'Notes']];
     const BOOK_OBJECTIVES = Object.freeze({
@@ -3983,7 +3983,7 @@
       renderToolsHead();
       renderToolsNavigation();
       const mount = nativeEl('toolsActiveMount');
-      if ((f && f.cliActive) || (isCliMode() && !campaignStartRequested)) {
+      if (nativeConsole || (f && f.cliActive) || (isCliMode() && !campaignStartRequested)) {
         document.body.classList.add('lw-console-active');
         mountView(mount);
         renderCliPanel();
@@ -4021,6 +4021,7 @@
       const f = flags || {};
       // Assert the shell classes ourselves so surface rendering never races the
       // deferred shell script (which may add lw-surface-* after the first render).
+      document.body.classList.remove('lw-surface-campaign', 'lw-surface-reader', 'lw-surface-tools');
       document.body.classList.add('lw-shell-assistant', 'lw-surface-' + nativeSurface);
       if (f.takeover) {
         const activity = nativeEl('sectionActivity');
@@ -4037,9 +4038,30 @@
       renderSectionActivity();
     }
 
+    function applyNativeSurfaceNavigation(url) {
+      const target = new URL(url, window.location.href);
+      const nextSurface = target.searchParams.get('surface');
+      if (!['campaign', 'reader', 'tools'].includes(nextSurface)) return;
+      const nextTool = target.searchParams.get('tool');
+      nativeSurface = nextSurface;
+      nativeConsole = target.searchParams.get('console') === '1';
+      isNativeSurface = true;
+      campaignStartRequested = false;
+      campaignEntryFocusPending = false;
+      if (nativeSurface === 'tools') {
+        activeView = ['sheet', 'inventory', 'disciplines', 'sections', 'combat', 'achievements', 'saves', 'notes', 'settings', 'soundtrack'].includes(nextTool) ? nextTool : 'sheet';
+      }
+      if (!nativeConsole) stopCliTerminal();
+      closeFrontMatter();
+      render();
+    }
+
     // Native surface event delegation (bound once).
     if (!window.__lwNativeBound) {
       window.__lwNativeBound = true;
+      document.addEventListener('lonewolf:navigate-surface', (event) => {
+        applyNativeSurfaceNavigation(event.detail?.url || window.location.href);
+      });
       document.addEventListener('click', (event) => {
         const jump = event.target.closest('[data-story-route],[data-story-jump]');
         if (jump) {

@@ -4523,6 +4523,18 @@ class SoundtrackPlayerTests(unittest.TestCase):
             self.assertIn(preference, settings)
             self.assertIn(preference, app_server.UI_PREFERENCE_KEYS)
 
+    def test_surface_navigation_preserves_the_shared_music_player(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        assistant = (root / "assistant.html").read_text(encoding="utf-8")
+        shell = (root / "assets" / "js" / "lw-shell.js").read_text(encoding="utf-8")
+
+        self.assertIn("function navigateAssistantSurface(url, options = {})", shell)
+        self.assertIn("lonewolf:navigate-surface", shell)
+        self.assertIn("history.pushState", shell)
+        self.assertIn("function applyNativeSurfaceNavigation(url)", assistant)
+        self.assertIn("document.addEventListener('lonewolf:navigate-surface'", assistant)
+        self.assertIn("let nativeSurface", assistant)
+
     def test_tools_and_campaign_expose_full_soundtrack_player(self) -> None:
         root = Path(saa_main.__file__).resolve().parent
         player = (root / "assets" / "js" / "lw-music.js").read_text(encoding="utf-8")
