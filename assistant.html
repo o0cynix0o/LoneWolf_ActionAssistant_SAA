@@ -3399,6 +3399,8 @@
     let storyRenderToken = 0;
     let lastStory = { book: null, section: null, choices: [], title: '' };
     let campaignAdvancedThisVisit = false;
+    const sectionFetchCache = new Map();
+    const SECTION_FETCH_CACHE_LIMIT = 48;
 
     function nativeEl(id) { return document.getElementById(id); }
     function mountView(target) { const v = nativeEl('view'); if (target && v && v.parentElement !== target) target.appendChild(v); }
@@ -3522,13 +3524,45 @@
       clone.querySelectorAll('p.signpost').forEach((p) => p.classList.add('story-signpost'));
       return { title, prose: clone.innerHTML, choices };
     }
+    function sectionFetchCacheKey(bookNumber, section) {
+      return `${Number(bookNumber)}:${Number(section)}`;
+    }
+    function retainSectionFetch(key, request) {
+      sectionFetchCache.set(key, request);
+      while (sectionFetchCache.size > SECTION_FETCH_CACHE_LIMIT) {
+        sectionFetchCache.delete(sectionFetchCache.keys().next().value);
+      }
+      request.catch(() => {
+        if (sectionFetchCache.get(key) === request) sectionFetchCache.delete(key);
+      });
+      return request;
+    }
     async function fetchSection(bookNumber, section) {
       const url = bookUrl(bookNumber, section);
       if (!/sect\d+\.htm$/i.test(url)) return { error: 'not-installed', url };
-      const res = await fetch(url, { cache: 'no-store' });
-      if (!res.ok) return { error: 'missing', url };
-      const doc = new DOMParser().parseFromString(await res.text(), 'text/html');
-      return { doc };
+      const key = sectionFetchCacheKey(bookNumber, section);
+      const cached = sectionFetchCache.get(key);
+      if (cached) {
+        // Refresh insertion order so frequently revisited sections survive.
+        sectionFetchCache.delete(key);
+        sectionFetchCache.set(key, cached);
+        return cached;
+      }
+      const request = (async () => {
+        const res = await fetch(url, { cache: 'force-cache' });
+        if (!res.ok) return { error: 'missing', url };
+        const doc = new DOMParser().parseFromString(await res.text(), 'text/html');
+        return { doc };
+      })();
+      return retainSectionFetch(key, request);
+    }
+    function prefetchStoryChoices(bookNumber, choices) {
+      const sections = Array.from(new Set(choices.map((choice) => Number(choice.section)).filter(Number.isInteger))).slice(0, 6);
+      if (!sections.length) return;
+      const schedule = window.requestIdleCallback || ((callback) => window.setTimeout(callback, 120));
+      schedule(() => {
+        sections.forEach((section) => { void fetchSection(bookNumber, section); });
+      });
     }
     function storyChoiceButtonsHtml(choices, variant) {
       if (!choices.length) return `<p class="story-no-choice">No further choices are printed for this section. If the section calls for combat, a roll, or an ending, use the campaign tools.</p>`;
@@ -3565,6 +3599,7 @@
       target.innerHTML = head + `<div class="prose story-prose">${parsed.prose}</div>` + (variant === 'reader' ? `<div class="rule"></div>` : '') + storyChoiceButtonsHtml(parsed.choices, variant);
       if (variant === 'reader') renderReaderCompanionNative();
       updateChoiceCheck(parsed.choices.length);
+      prefetchStoryChoices(showBook, parsed.choices);
     }
     function updateChoiceCheck(count) {
       const next = document.querySelector('[data-reader-next]');

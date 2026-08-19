@@ -4394,6 +4394,10 @@ class CampaignDeskProductionTests(unittest.TestCase):
             r"stashLegacyView\(\);\s*toolMount\.innerHTML\s*=\s*'';\s*mountView\(toolMount\);",
         )
         self.assertIn("function renderStoryInto(target, variant)", assistant_html)
+        self.assertIn("const sectionFetchCache = new Map();", assistant_html)
+        self.assertIn("function prefetchStoryChoices(bookNumber, choices)", assistant_html)
+        self.assertIn("fetch(url, { cache: 'force-cache' })", assistant_html)
+        self.assertIn("prefetchStoryChoices(showBook, parsed.choices);", assistant_html)
         self.assertIn("async function routeStoryChoice(section)", assistant_html)
         self.assertIn("await routeStoryChoice(Number(button.dataset.storyRoute || button.dataset.storyJump))", assistant_html)
         self.assertIn("if (isNativeSurface) {\n        activeBook = Number(character.BookNumber);", assistant_html)
