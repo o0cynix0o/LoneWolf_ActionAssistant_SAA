@@ -3105,7 +3105,11 @@
       setReceipt(withSectionStatus(buildActionReceipt(payload, beforeAction, app)));
       showAchievementUnlocks(app.achievementUnlocks);
       if (!browseMode) syncBookToState();
-      render();
+      // Native story panels parse their content asynchronously. Wait for that
+      // refresh so a completed action never leaves the live Choices card
+      // showing the state from before a roll, loot choice, or section effect.
+      const renderCompletion = render();
+      if (renderCompletion && typeof renderCompletion.then === 'function') await renderCompletion;
     }
 
     async function submitBookTransition(payload, nextBook) {
@@ -3181,8 +3185,7 @@
       document.body.classList.toggle('lw-native-takeover', takeover);
 
       if (isNativeSurface) {
-        renderNativeSurface({ deathActive, setupActive, completeActive, cliActive, takeover });
-        return;
+        return renderNativeSurface({ deathActive, setupActive, completeActive, cliActive, takeover });
       }
 
       // ---- Legacy fallback path (non-native surfaces only) ----
@@ -3924,7 +3927,7 @@
       if (campaignTab === 'story') {
         if (storyPanel) storyPanel.hidden = false;
         if (toolMount) toolMount.hidden = true;
-        renderStoryInto(storyPanel, 'campaign');
+        return renderStoryInto(storyPanel, 'campaign');
       } else {
         if (storyPanel) storyPanel.hidden = true;
         if (toolMount) toolMount.hidden = false;
@@ -4003,7 +4006,7 @@
     function renderReaderSurface() {
       renderReaderHead();
       renderReaderCompanionNative();
-      renderStoryInto(nativeEl('readerSurface'), 'reader');
+      return renderStoryInto(nativeEl('readerSurface'), 'reader');
     }
 
     // ---- Tools / Console -----------------------------------------------------
@@ -4099,10 +4102,12 @@
         else if (f.completeActive) renderBookCompleteScreen();
         return;
       }
-      if (nativeSurface === 'campaign') renderCampaignSurface();
-      else if (nativeSurface === 'reader') renderReaderSurface();
-      else if (nativeSurface === 'tools') renderToolsSurface(f);
+      let surfaceRender;
+      if (nativeSurface === 'campaign') surfaceRender = renderCampaignSurface();
+      else if (nativeSurface === 'reader') surfaceRender = renderReaderSurface();
+      else if (nativeSurface === 'tools') surfaceRender = renderToolsSurface(f);
       renderSectionActivity();
+      return surfaceRender;
     }
 
     function applyNativeSurfaceNavigation(url) {
