@@ -3105,11 +3105,7 @@
       setReceipt(withSectionStatus(buildActionReceipt(payload, beforeAction, app)));
       showAchievementUnlocks(app.achievementUnlocks);
       if (!browseMode) syncBookToState();
-      // Native story panels parse their content asynchronously. Wait for that
-      // refresh so a completed action never leaves the live Choices card
-      // showing the state from before a roll, loot choice, or section effect.
-      const renderCompletion = render();
-      if (renderCompletion && typeof renderCompletion.then === 'function') await renderCompletion;
+      render();
     }
 
     async function submitBookTransition(payload, nextBook) {
@@ -3185,7 +3181,8 @@
       document.body.classList.toggle('lw-native-takeover', takeover);
 
       if (isNativeSurface) {
-        return renderNativeSurface({ deathActive, setupActive, completeActive, cliActive, takeover });
+        renderNativeSurface({ deathActive, setupActive, completeActive, cliActive, takeover });
+        return;
       }
 
       // ---- Legacy fallback path (non-native surfaces only) ----
@@ -3602,6 +3599,10 @@
       target.innerHTML = head + `<div class="prose story-prose">${parsed.prose}</div>` + (variant === 'reader' ? `<div class="rule"></div>` : '') + storyChoiceButtonsHtml(parsed.choices, variant);
       if (variant === 'reader') renderReaderCompanionNative();
       updateChoiceCheck(parsed.choices.length);
+      // The campaign summary contains section-roll results. Refresh it after
+      // the story has finished painting, rather than holding every action open
+      // until this asynchronous read completes.
+      if (variant === 'campaign') renderCampaignGlance();
       prefetchStoryChoices(showBook, parsed.choices);
     }
     function updateChoiceCheck(count) {
@@ -3927,7 +3928,7 @@
       if (campaignTab === 'story') {
         if (storyPanel) storyPanel.hidden = false;
         if (toolMount) toolMount.hidden = true;
-        return renderStoryInto(storyPanel, 'campaign');
+        renderStoryInto(storyPanel, 'campaign');
       } else {
         if (storyPanel) storyPanel.hidden = true;
         if (toolMount) toolMount.hidden = false;
@@ -4006,7 +4007,7 @@
     function renderReaderSurface() {
       renderReaderHead();
       renderReaderCompanionNative();
-      return renderStoryInto(nativeEl('readerSurface'), 'reader');
+      renderStoryInto(nativeEl('readerSurface'), 'reader');
     }
 
     // ---- Tools / Console -----------------------------------------------------
@@ -4102,12 +4103,10 @@
         else if (f.completeActive) renderBookCompleteScreen();
         return;
       }
-      let surfaceRender;
-      if (nativeSurface === 'campaign') surfaceRender = renderCampaignSurface();
-      else if (nativeSurface === 'reader') surfaceRender = renderReaderSurface();
-      else if (nativeSurface === 'tools') surfaceRender = renderToolsSurface(f);
+      if (nativeSurface === 'campaign') renderCampaignSurface();
+      else if (nativeSurface === 'reader') renderReaderSurface();
+      else if (nativeSurface === 'tools') renderToolsSurface(f);
       renderSectionActivity();
-      return surfaceRender;
     }
 
     function applyNativeSurfaceNavigation(url) {
