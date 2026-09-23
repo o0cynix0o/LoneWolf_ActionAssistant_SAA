@@ -1,5 +1,21 @@
 # Changelog
 
+## 3.7.1 - Internal Testing
+
+- Kept the native Campaign and Reader story panels in sync with campaign state:
+  the section text, choices, and Choices/at-a-glance cards now refresh after a
+  route selection, roll, loot choice, or section effect instead of showing the
+  pre-action state.
+- Made native story actions non-blocking and de-duplicated: a roll or combat
+  action no longer waits on the asynchronous story re-render, the reader/campaign
+  no longer reloads a section it already shows, and upcoming routes are
+  prefetched for faster choice navigation.
+- Kept the background soundtrack playing continuously across Campaign, Reader,
+  and Tools navigation.
+- Clarified Curing discipline behavior and arrow (Quiver) capacity wording.
+- Rebuilt the frozen app and Windows installer so these fixes ship in the
+  packaged build.
+
 ## 3.7.0 - Internal Testing
 
 - Added an optional, bundled background soundtrack. Playback is disabled by
