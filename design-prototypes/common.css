@@ -85,3 +85,48 @@ p { margin-top: 0; }
   .metric-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
+/* Borderless prototype direction: hierarchy comes from contrast and spacing. */
+.topbar, .panel, .panel-title, .campaign-chip, .tabbar, .button, .status, .metric,
+.book-row, .book-card, .choice, .chart-row, .combat-grid div, .context span,
+.modifier, .encounter-strip, .combat-ratio, .combatant, .meter, .reading-surface,
+.book-choice, .toast, .tool-link, .activity div, hr, input, select, textarea {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+.topbar { background: rgba(12, 18, 20, .98); }
+.panel { background: var(--surface); }
+.panel-title { background: transparent; }
+.campaign-chip { background: #101a1a; }
+.button { background: #26393f; color: var(--accent); }
+.button:hover { background: #314d55; }
+.button.primary { background: var(--accent); color: #102025; }
+.button.primary:hover { background: #e0f8ff; }
+.button.ghost { background: transparent; }
+.status { background: #152523; }
+.status.reading { background: rgba(61, 133, 98, .16); }
+.status.ready { background: rgba(157, 116, 39, .18); }
+.tabbar { background: #101a1a; padding: 5px 0; gap: 5px; }
+.tabbar button { border-radius: 0; }
+.tabbar button.active, .tabbar button:hover { background: #26393f; }
+.metric { background: #101a1a; }
+.book-row { background: transparent; }
+.book-row:hover, .book-row.active { background: #26393f; }
+.book-card { background: #152124; }
+.book-card.current { background: #1a302b; }
+.choice, .chart-row, .combat-grid div, .tool-link { background: #26393f; }
+.choice:hover, .tool-link:hover { background: #314d55; }
+.context span, .modifier { background: #18272b; }
+.reading-surface { background: #f0eadb; }
+.reading-surface .book-choice { background: #e5dfd0; }
+.reading-surface .book-choice:hover { background: #d9eeeb; }
+.encounter-strip { background: rgba(61, 133, 98, .16); }
+.combat-ratio { background: #18272b; }
+.meter { background: #111713; }
+.meter > span { border-radius: 0; }
+.detail-cover { border: 0 !important; }
+.progress { border-radius: 0; }
+.series-nav button, .tool-nav button { border: 0 !important; border-radius: 0 !important; }
+.series-nav button.active, .series-nav button:hover, .tool-nav button.active, .tool-nav button:hover { background: #26393f; }
+input, select, textarea { background: #101a1a; color: var(--ink); }
+input:focus, select:focus, textarea:focus, button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }

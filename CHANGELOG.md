@@ -1,5 +1,35 @@
 # Changelog
 
+## 3.7.1 - Internal Testing
+
+- Kept the native Campaign and Reader story panels in sync with campaign state:
+  the section text, choices, and Choices/at-a-glance cards now refresh after a
+  route selection, roll, loot choice, or section effect instead of showing the
+  pre-action state.
+- Made native story actions non-blocking and de-duplicated: a roll or combat
+  action no longer waits on the asynchronous story re-render, the reader/campaign
+  no longer reloads a section it already shows, and upcoming routes are
+  prefetched for faster choice navigation.
+- Kept the background soundtrack playing continuously across Campaign, Reader,
+  and Tools navigation.
+- Clarified Curing discipline behavior and arrow (Quiver) capacity wording.
+- Rebuilt the frozen app and Windows installer so these fixes ship in the
+  packaged build.
+
+## 3.7.0 - Internal Testing
+
+- Added an optional, bundled background soundtrack. Playback is disabled by
+  default, never affects campaign state, and resumes the selected track and
+  queue when moving between the Campaign, Reader, and Tools views.
+- Added a Campaign Player card, Reader companion controls, and a full Tools
+  soundtrack workspace with transport, volume, playlist, shuffle, repeat,
+  queue position, and per-track attribution.
+- Packaged the approved MP3 masters and `THIRD_PARTY_MUSIC.md` with both the
+  frozen app and Windows installer. No music download, export, or raw asset
+  path is exposed in the application.
+- Completed source-suite, source self-test, frozen self-test, installer build,
+  and package asset-integrity checks for the release candidate.
+
 ## 3.6.0 - Internal Testing
 
 - Rebuilt the production Library, Campaign, Reader, Tools, Console, Settings,

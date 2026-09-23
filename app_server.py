@@ -85,8 +85,14 @@ UI_PREFERENCE_KEYS = {
     "lonewolf_redux.appearance.titleBanner.v1",
     "lonewolf_redux.appearance.coverArt.v1",
     "lonewolf_redux.appearance.theme.v1",
+    "lonewolf_redux.appearance.surfaceStyle.v1",
     "lonewolf_redux.reader.styleEnabled.v1",
     "lonewolf_redux.reader.theme.v1",
+    "lonewolf_redux.music.enabled.v1",
+    "lonewolf_redux.music.volume.v1",
+    "lonewolf_redux.music.playlist.v1",
+    "lonewolf_redux.music.shuffle.v1",
+    "lonewolf_redux.music.repeat.v1",
 }
 UI_PREFERENCE_PREFIXES = (
     "lonewolf_redux.cards.layout.",
@@ -319,6 +325,7 @@ def state_payload(message: str = "", achievement_unlocks: list[dict] | None = No
         "run": ASSISTANT.run_payload(),
         "sectionFlow": ASSISTANT.current_section_flow_payload(),
         "death": ASSISTANT.death_recovery_payload(),
+        "recoveryTimeline": ASSISTANT.recovery_timeline_payload(),
         "bookComplete": ASSISTANT.book_completion_payload(),
         "pendingBookSetup": ASSISTANT.pending_book_setup_payload(),
         "achievements": ASSISTANT.achievement_payload(),
@@ -615,6 +622,16 @@ def handle_action(payload: dict) -> str:
             f"{'permadeath on' if ASSISTANT.permadeath_enabled() else 'permadeath off'}, "
             f"and {ASSISTANT.combat_mode()} combat."
         )
+    if action == "set_library_book_read":
+        return capture_output(
+            lambda: ASSISTANT.set_library_book_read(
+                payload.get("bookNumber"), truthy(payload.get("read"))
+            )
+        )
+    if action == "set_library_read_books":
+        return capture_output(
+            lambda: ASSISTANT.set_library_read_books(payload.get("bookNumbers"))
+        )
     if action == "set_combat_mode":
         mode = payload.get("combatMode") or "DataFile"
         ASSISTANT.set_combat_mode(mode)
@@ -737,6 +754,8 @@ def handle_action(payload: dict) -> str:
         return capture_output(lambda: ASSISTANT.finish_karmo_potion())
     if action == "death_recovery":
         return capture_output(lambda: ASSISTANT.restore_death_checkpoint(str(payload.get("mode") or "repeat")))
+    if action == "checkpoint_recovery":
+        return capture_output(lambda: ASSISTANT.restore_section_checkpoint(str(payload.get("key") or "")))
     if action == "meal":
         tokens = ["meal", "missed"] if payload.get("missed") else ["meal"]
         return capture_output(lambda: ASSISTANT.meal_command(tokens))

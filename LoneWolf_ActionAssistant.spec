@@ -9,6 +9,7 @@ datas = [
     ("library.html", "."),
     ("install-books.html", "."),
     ("NOTICE.md", "."),
+    ("THIRD_PARTY_MUSIC.md", "."),
     ("logo.ico", "."),
     ("assets", "assets"),
     ("data", "data"),

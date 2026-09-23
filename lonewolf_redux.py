@@ -1254,6 +1254,7 @@ def default_state() -> dict[str, Any]:
     return {
         "Version": "0.2.0",
         "RuleSet": "Lone Wolf",
+        "LibraryReadBooks": [],
         "CurrentSection": 1,
         "SectionHistory": [
             {"BookNumber": 1, "BookTitle": "Flight from the Dark", "Section": 1}
@@ -1383,6 +1384,19 @@ def as_list(value: Any) -> list[Any]:
     if isinstance(value, list):
         return list(value)
     return [value]
+
+
+def clean_library_read_books(values: Any) -> list[int]:
+    """Keep the library's per-save reading marks valid and deterministic."""
+    marked: set[int] = set()
+    for value in as_list(values):
+        try:
+            book_number = int(value)
+        except (TypeError, ValueError):
+            continue
+        if book_number in BOOKS:
+            marked.add(book_number)
+    return sorted(marked)
 
 
 def json_clone(value: Any) -> Any:
@@ -1554,6 +1568,7 @@ def normalize_state(state: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(state.get("CurrentBookStats"), dict):
         state["CurrentBookStats"] = base["CurrentBookStats"]
     state["BookHistory"] = as_list(state.get("BookHistory"))
+    state["LibraryReadBooks"] = clean_library_read_books(state.get("LibraryReadBooks"))
 
     for key, value in base["Character"].items():
         state["Character"].setdefault(key, value)
@@ -4490,6 +4505,31 @@ class LoneWolfReduxAssistant:
         self.state["Run"] = new_run_state(difficulty, permadeath, combat_mode=combat_mode)
         self.settings["CombatMode"] = self.state["Run"]["CombatMode"]
 
+    def set_library_book_read(self, book_number: Any, read: Any) -> None:
+        """Persist a Library reading mark with this campaign save."""
+        try:
+            number = int(book_number)
+        except (TypeError, ValueError) as exc:
+            raise ValueError("Choose a valid Lone Wolf book.") from exc
+        if number not in BOOKS:
+            raise ValueError("Choose a valid Lone Wolf book.")
+        marked = set(clean_library_read_books(self.state.get("LibraryReadBooks")))
+        if bool(read):
+            marked.add(number)
+            message = f"Marked Book {number} as read."
+        else:
+            marked.discard(number)
+            message = f"Marked Book {number} as unread."
+        self.state["LibraryReadBooks"] = sorted(marked)
+        self.autosave()
+        print(message)
+
+    def set_library_read_books(self, values: Any) -> None:
+        """Replace this save's reading list while migrating legacy browser marks."""
+        self.state["LibraryReadBooks"] = clean_library_read_books(values)
+        self.autosave()
+        print("Library reading marks saved.")
+
     def apply_gameplay_endurance_loss(self, loss: int) -> tuple[int, int, str]:
         """Apply V1 Story/Easy loss rules while leaving manual sheet edits alone."""
         requested = max(0, int(loss))
@@ -5430,6 +5470,63 @@ class LoneWolfReduxAssistant:
         death["RewindTarget"] = self.checkpoint_summary(rewind)
         return death
 
+    def checkpoint_available_routes(self, checkpoint: dict[str, Any]) -> list[dict[str, Any]]:
+        """Read a checkpoint's legal printed routes against its saved Action Chart."""
+        snapshot = checkpoint.get("Snapshot") if isinstance(checkpoint, dict) else None
+        if not isinstance(snapshot, dict):
+            return []
+        original_state = self.state
+        try:
+            self.state = normalize_state(json_clone(snapshot))
+            book_number = int(checkpoint.get("BookNumber") or self.character.get("BookNumber") or 1)
+            section = int(checkpoint.get("Section") or self.state.get("CurrentSection") or 1)
+            return [
+                route
+                for route in self.section_source_route_payload(book_number, section)
+                if self.route_availability_payload(route).get("Available", True)
+            ]
+        finally:
+            self.state = original_state
+
+    def section_is_terminal_failure(self, book_number: int, section: int) -> bool:
+        entry = self.section_automation_entry(book_number, section) or {}
+        for action in as_list(entry.get("actions")):
+            if not isinstance(action, dict) or str(action.get("type") or "").lower() != "ending":
+                continue
+            if str(action.get("ending") or "").lower() in {"death", "failure", "combat"}:
+                return True
+        return False
+
+    def recovery_timeline_payload(self, limit: int = 10) -> dict[str, Any]:
+        """Expose recent restorable snapshots and the latest meaningful fork."""
+        locked = self.permadeath_enabled()
+        checkpoints = self.section_checkpoints()
+        timeline: list[dict[str, Any]] = []
+        for checkpoint in reversed(checkpoints[-max(1, int(limit)):]):
+            routes = self.checkpoint_available_routes(checkpoint)
+            forced_terminal = (
+                len(routes) == 1
+                and self.section_is_terminal_failure(
+                    int(checkpoint.get("BookNumber") or 1),
+                    int(routes[0].get("Section") or 0),
+                )
+            )
+            timeline.append({
+                **(self.checkpoint_summary(checkpoint) or {}),
+                "Key": str(checkpoint.get("Key") or ""),
+                "CanRestore": not locked,
+                "Routes": [{"Section": route.get("Section"), "Label": route.get("Label", "")} for route in routes],
+                "DecisionPoint": len(routes) > 1,
+                "ForcedTerminalRoute": forced_terminal,
+            })
+        recommended = next((item for item in timeline if item.get("DecisionPoint")), None)
+        return {
+            "Available": bool(checkpoints) and not locked,
+            "Permadeath": locked,
+            "Timeline": timeline,
+            "Recommended": recommended,
+        }
+
     def register_death(self, death_type: str = "death", cause: str = "") -> None:
         if self.cheat_active("unkillable"):
             checkpoints = self.section_checkpoints()
@@ -5500,34 +5597,20 @@ class LoneWolfReduxAssistant:
         history_entry.pop("Active", None)
         self.automation["DeathHistory"] = (history + [history_entry])[-100:]
 
-    def restore_death_checkpoint(self, mode: str = "repeat") -> None:
-        if not self.death_active():
-            print("No active death or failed mission to recover from.")
-            return
+    def restore_section_checkpoint(self, checkpoint_key: str, action_label: str = "Recovered") -> None:
+        """Restore one exact section snapshot, retaining only its valid past timeline."""
         if self.permadeath_enabled():
             print("Permadeath is enabled for this run; recovery checkpoints are unavailable.")
             return
-
-        mode = str(mode or "repeat").lower()
         checkpoints = self.section_checkpoints()
         if not checkpoints:
             print("No recovery checkpoint is available.")
             return
-
-        if mode == "rewind":
-            if len(checkpoints) < 2:
-                print("No previous section checkpoint is available.")
-                return
-            target_index = len(checkpoints) - 2
-            action_label = "Rewound"
-        else:
-            target_index = len(checkpoints) - 1
-            action_label = "Repeated"
-
-        target = checkpoints[target_index]
-        if mode != "rewind" and str(target.get("Stage") or "ready") == "entry":
-            print("Repeat is not available for this death; rewind to the previous section instead.")
+        target_index = next((index for index, checkpoint in enumerate(checkpoints) if str(checkpoint.get("Key") or "") == str(checkpoint_key or "")), -1)
+        if target_index < 0:
+            print("That recovery checkpoint is no longer available.")
             return
+        target = checkpoints[target_index]
         snapshot = target.get("Snapshot")
         if isinstance(snapshot, str):
             restored = json.loads(snapshot)
@@ -5554,6 +5637,33 @@ class LoneWolfReduxAssistant:
         self.write_current_position()
         self.autosave()
         print(f"{action_label} to Book {self.character['BookNumber']}, section {self.state['CurrentSection']}.")
+
+    def restore_death_checkpoint(self, mode: str = "repeat") -> None:
+        if not self.death_active():
+            print("No active death or failed mission to recover from.")
+            return
+        if self.permadeath_enabled():
+            print("Permadeath is enabled for this run; recovery checkpoints are unavailable.")
+            return
+
+        mode = str(mode or "repeat").lower()
+        checkpoints = self.section_checkpoints()
+        if not checkpoints:
+            print("No recovery checkpoint is available.")
+            return
+        if mode == "rewind":
+            if len(checkpoints) < 2:
+                print("No previous section checkpoint is available.")
+                return
+            target = checkpoints[-2]
+            action_label = "Rewound"
+        else:
+            target = checkpoints[-1]
+            if str(target.get("Stage") or "ready") == "entry":
+                print("Repeat is not available for this death; rewind to the previous section instead.")
+                return
+            action_label = "Repeated"
+        self.restore_section_checkpoint(str(target.get("Key") or ""), action_label)
 
     def section_automation_entry(self, book_number: int, section: int) -> dict[str, Any] | None:
         book_entries = self.section_automation.get(str(book_number), {})
@@ -5722,6 +5832,24 @@ class LoneWolfReduxAssistant:
     def has_power(self, name: str) -> bool:
         return name in self.effective_disciplines()
 
+    def quiver_count(self) -> int:
+        """Return the number of ordinary six-arrow Quivers on the Action Chart."""
+        return self.count_items("Quiver", ["special"])
+
+    def quiver_arrow_capacity(self) -> int:
+        return self.quiver_count() * 6
+
+    def arrow_inventory_payload(self) -> dict[str, int]:
+        arrows = max(0, int(self.inventory.get("QuiverArrows") or 0))
+        quivers = self.quiver_count()
+        capacity = self.quiver_arrow_capacity()
+        return {
+            "Arrows": arrows,
+            "Quivers": quivers,
+            "Capacity": capacity,
+            "OpenSlots": max(0, capacity - arrows),
+        }
+
     def section_source_routes(self, book_number: int | None = None, section: int | None = None) -> list[int]:
         book_number = int(book_number or self.character["BookNumber"])
         section = int(section or self.state["CurrentSection"])
@@ -5756,6 +5884,7 @@ class LoneWolfReduxAssistant:
 
         choices: list[dict[str, Any]] = []
         seen: set[int] = set()
+        prior_item_condition: dict[str, Any] | None = None
         choice_pattern = re.compile(
             r"<p\b[^>]*class=[\"'][^\"']*\bchoice\b[^\"']*[\"'][^>]*>(.*?)</p>",
             flags=re.IGNORECASE | re.DOTALL,
@@ -5772,9 +5901,18 @@ class LoneWolfReduxAssistant:
                 seen.add(target)
                 payload = {"Section": target, "Label": label or f"Go to {target}"}
                 condition, blocked_reason = self.infer_source_route_condition(payload["Label"])
+                if (
+                    condition is None
+                    and prior_item_condition
+                    and re.match(r"^if (?:you )?(?:do not|don't) (?:have|possess) (?:this|the) (?:special )?item\b", label, flags=re.IGNORECASE)
+                ):
+                    condition = {"type": "no_item", "name": prior_item_condition["name"], "match": prior_item_condition.get("match", "exact")}
+                    blocked_reason = f"Requires that you do not have {prior_item_condition['name']}."
                 if condition:
                     payload["Condition"] = condition
                     payload["BlockedReason"] = blocked_reason
+                    if condition.get("type") == "item" and condition.get("name"):
+                        prior_item_condition = condition
                 choices.append(payload)
 
         if choices:
@@ -5872,6 +6010,8 @@ class LoneWolfReduxAssistant:
             ("Bow", "exact"),
         )
         item_clause = re.match(r"^if (?:you )?(?P<verb>have|possess|purchased)\b", lowered)
+        no_item_clause = re.match(r"^if (?:you )?(?:do not|don't) (?:have|possess)\b", lowered)
+        item_clause = item_clause or no_item_clause
         if item_clause:
             item_conditions: list[dict[str, Any]] = []
             item_names: list[str] = []
@@ -5881,7 +6021,8 @@ class LoneWolfReduxAssistant:
                 if not match or any(match.start() < end and start < match.end() for start, end in claimed_spans):
                     continue
                 claimed_spans.append(match.span())
-                condition_type = "item_history" if item_clause.group("verb") == "purchased" else "item"
+                verb = item_clause.groupdict().get("verb") or ""
+                condition_type = "no_item" if no_item_clause else ("item_history" if verb == "purchased" else "item")
                 item_conditions.append({"type": condition_type, "name": item, "match": match_mode})
                 item_names.append(item)
             if item_conditions:
@@ -5891,7 +6032,7 @@ class LoneWolfReduxAssistant:
                     "conditions": item_conditions,
                 }
                 requirement = " or ".join(item_names) if item_uses_or else " and ".join(item_names)
-                return item_condition, f"Requires {requirement}."
+                return item_condition, (f"Requires that you do not have {requirement}." if no_item_clause else f"Requires {requirement}.")
 
         discipline_pattern = re.compile(
             r"(?:^if\s+you\s+|\bor\s+if\s+you\s+)(?:have|possess)\s+the\s+magnakai\s+disciplines?\s+of\s+",
@@ -7625,6 +7766,9 @@ class LoneWolfReduxAssistant:
     def current_healing_payload(self) -> dict[str, Any]:
         current = int(self.character["EnduranceCurrent"])
         maximum = int(self.character["EnduranceMax"])
+        book_stats = self.state.get("CurrentBookStats")
+        original_maximum = int(book_stats.get("StartingEnduranceMax") or maximum) if isinstance(book_stats, dict) else maximum
+        target_maximum = max(1, min(maximum, original_maximum))
         applied = self.healing_visit_key() in as_list(self.automation.get("AppliedHealing"))
         combat_present = bool(self.flow_combat_entries())
         book_number = int(self.character.get("BookNumber") or 0)
@@ -7647,34 +7791,49 @@ class LoneWolfReduxAssistant:
         elif self.death_active():
             blocked_reason = "Healing is unavailable during death recovery."
         elif combat_present:
-            blocked_reason = "This section has combat; apply Healing only in non-combat sections."
-        elif current >= maximum:
-            blocked_reason = "Endurance is already at maximum."
+            blocked_reason = f"This section has combat; {healing_name} only applies in non-combat sections."
         elif applied:
-            blocked_reason = "Healing already applied for this section visit."
+            blocked_reason = f"{healing_name} already applied for this section visit."
+        elif current >= target_maximum:
+            blocked_reason = f"END is already at this book's original score ({target_maximum})."
+
+        journal_entry = next(
+            (
+                item for item in reversed(as_list(self.automation.get("Journal")))
+                if isinstance(item, dict)
+                and str(item.get("Kind") or "") == "healing"
+                and str(item.get("VisitKey") or "") == self.current_visit_key()
+            ),
+            None,
+        )
 
         return {
+            "Name": healing_name or "Curing",
             "Available": bool(healing_name) and self.has_power(healing_name),
             "Ready": blocked_reason == "",
             "Applied": applied,
             "BlockedReason": blocked_reason,
             "CurrentEndurance": current,
             "MaximumEndurance": maximum,
+            "TargetEndurance": target_maximum,
             "Amount": 1,
-            "Summary": f"{healing_name or 'Curing'} restores 1 END in an eligible non-combat section.",
+            "Messages": as_list(journal_entry.get("Messages")) if journal_entry else [],
+            "Summary": f"{healing_name or 'Curing'} restores 1 END after each eligible non-combat numbered section, up to {target_maximum} END.",
         }
 
-    def apply_healing(self) -> None:
+    def apply_healing(self, automatic: bool = False) -> str:
         payload = self.current_healing_payload()
         if not bool(payload.get("Ready")):
             reason = str(payload.get("BlockedReason") or "Healing is not available.")
-            print(f"Healing not available: {reason}")
-            return
+            if not automatic:
+                print(f"Healing not available: {reason}")
+            return ""
 
         amount, cap_note = self.apply_healing_cap(1)
         if amount <= 0:
-            print(f"Healing not available: {cap_note or 'Healing is capped for this book.'}")
-            return
+            if not automatic:
+                print(f"Healing not available: {cap_note or 'Healing is capped for this book.'}")
+            return ""
         message = self.change_endurance(amount, gameplay=False)
         if cap_note:
             message = f"{message}; {cap_note}"
@@ -7689,13 +7848,15 @@ class LoneWolfReduxAssistant:
                 "VisitKey": self.current_visit_key(),
                 "BookNumber": int(self.character["BookNumber"]),
                 "Section": int(self.state["CurrentSection"]),
-                "Summary": "Magnakai Curing" if payload.get("Summary", "").startswith("Curing") else "Kai Healing",
+                "Summary": f"Magnakai {payload['Name']}" if payload.get("Name") == "Curing" else "Kai Healing",
                 "Messages": [message],
             }
         )
         self.automation["Journal"] = journal[-100:]
         self.autosave()
-        print(f"Healing: {message}")
+        if not automatic:
+            print(f"{payload['Name']}: {message}")
+        return f"{payload['Name']}: {message}"
 
     def loss_choice_entries(self, entry: dict[str, Any] | None = None) -> list[dict[str, Any]]:
         flow = entry if isinstance(entry, dict) else (self.current_section_flow_entry() or {})
@@ -7726,6 +7887,17 @@ class LoneWolfReduxAssistant:
             )
             option_payload["Repeatable"] = bool(option.get("repeatable"))
             payload.append(option_payload)
+        if int(self.character.get("BookNumber") or 0) == 6 and int(self.state.get("CurrentSection") or 0) == 98:
+            arrows = self.arrow_inventory_payload()
+            can_buy = int(self.inventory.get("GoldCrowns") or 0) >= 1 and arrows["OpenSlots"] >= 2
+            payload.append({
+                "id": "buy-arrows",
+                "label": "Buy 2 Arrows (1 Gold Crown)",
+                "Ready": can_buy,
+                "Applied": False,
+                "Repeatable": True,
+                "BlockedReason": "" if can_buy else "You need 1 Gold Crown and room for two arrows in a Quiver.",
+            })
         return payload
 
     def current_shop_payload(self, entry: dict[str, Any] | None = None) -> dict[str, Any] | None:
@@ -7736,7 +7908,7 @@ class LoneWolfReduxAssistant:
             if section == 98:
                 shop = {"title": "Section 98 Weaponsmith", "sales": [
                     *[{"container": "weapon", "name": name, "price": price} for name, price in (("Broadsword", 6), ("Dagger", 1), ("Short Sword", 2), ("Warhammer", 5), ("Spear", 4), ("Mace", 3), ("Axe", 2), ("Bow", 6), ("Quarterstaff", 2), ("Sword", 3))],
-                    {"container": "special", "name": "Quiver", "price": 2}, {"container": "special", "name": "Large Quiver", "price": 4}, {"kind": "arrows", "quantity": 3, "price": 1, "label": "3 Arrows [DE]"},
+                    {"kind": "arrows", "quantity": 4, "price": 1, "label": "4 Arrows"},
                 ]}
             elif section == 275:
                 shop = {"title": "Section 275 Cartographer", "sales": [{"container": "backpack", "name": "Map of Sommerlund", "price": 4}, {"container": "backpack", "name": "Map of Tekaro", "price": 3}, {"container": "backpack", "name": "Map of Luyen", "price": 2}]}
@@ -8017,6 +8189,7 @@ class LoneWolfReduxAssistant:
             "Portholes": self.current_portholes_payload(entry),
             "GoldDistraction": self.current_gold_distraction_payload(entry),
             "Healing": self.current_healing_payload(),
+            "Arrows": self.arrow_inventory_payload(),
             "LossChoices": self.current_loss_choices_payload(entry),
             "Loot": self.current_flow_loot_payload(entry),
             "Shop": self.current_shop_payload(entry),
@@ -8763,6 +8936,29 @@ class LoneWolfReduxAssistant:
         return f"unknown automation action: {action_type}"
 
     def apply_flow_loot(self, option_id: str) -> None:
+        if (
+            option_id == "buy-arrows"
+            and int(self.character.get("BookNumber") or 0) == 6
+            and int(self.state.get("CurrentSection") or 0) == 98
+        ):
+            arrows = self.arrow_inventory_payload()
+            if int(self.inventory.get("GoldCrowns") or 0) < 1 or arrows["OpenSlots"] < 2:
+                print("Arrows are unavailable: you need 1 Gold Crown and room for two arrows in a Quiver.")
+                return
+            before = arrows["Arrows"]
+            self.inventory["QuiverArrows"] = before + 2
+            gold = self.change_gold_crowns(-1)
+            message = f"Arrows {before}->{before + 2}; {gold}"
+            journal = as_list(self.automation.get("Journal"))
+            journal.append({
+                "Kind": "loot", "AppliedAt": datetime.now().isoformat(timespec="seconds"),
+                "VisitKey": self.current_visit_key(), "BookNumber": 6, "Section": 98,
+                "Summary": "Buy 2 Arrows (1 Gold Crown)", "Messages": [message],
+            })
+            self.automation["Journal"] = journal[-100:]
+            self.autosave()
+            print(f"Loot: Buy 2 Arrows (1 Gold Crown). {message}")
+            return
         flow = self.current_section_flow_entry() or {}
         options = [option for option in as_list(flow.get("loot")) if isinstance(option, dict)]
         option = next((item for item in options if str(item.get("id") or "") == option_id), None)
@@ -10055,6 +10251,9 @@ class LoneWolfReduxAssistant:
             self.save_section_checkpoint("entry")
         automation_messages = self.apply_section_automation(visit_changed=visit_changed)
         automation_messages.extend(self.apply_global_section_effects(visit_changed=visit_changed))
+        healing_message = self.apply_healing(automatic=True) if int(self.character.get("BookNumber") or 0) == 6 else ""
+        if healing_message:
+            automation_messages.append(healing_message)
         if checkpoint_needed and not self.death_active():
             self.save_section_checkpoint("ready")
         self.write_current_position()
@@ -10090,6 +10289,9 @@ class LoneWolfReduxAssistant:
             self.save_section_checkpoint("entry")
         automation_messages = self.apply_section_automation(visit_changed=visit_changed)
         automation_messages.extend(self.apply_global_section_effects(visit_changed=visit_changed))
+        healing_message = self.apply_healing(automatic=True) if int(self.character.get("BookNumber") or 0) == 6 else ""
+        if healing_message:
+            automation_messages.append(healing_message)
         if checkpoint_needed and not self.death_active():
             self.save_section_checkpoint("ready")
         self.write_current_position()

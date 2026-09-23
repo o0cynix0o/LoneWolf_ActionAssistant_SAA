@@ -21,6 +21,15 @@
   --lw-ui-page-width: 1480px;
 }
 
+/* Paper needs quieter controls than the dark themes. Keep the same interaction
+   hierarchy, but use ink, parchment, and an earned gold accent instead of
+   dropping dark blue islands into a printed-page palette. */
+html[data-lw-theme="paper"] {
+  --lw-ui-selected: #e1d7c1;
+  --lw-ui-gold: #9a6724;
+  --lw-ui-green: #317453;
+}
+
 .lw-ui-page {
   width: min(var(--lw-ui-page-width), calc(100% - 40px));
   margin: 0 auto;
@@ -71,6 +80,9 @@
 
 .lw-ui-button:hover { border-color: var(--lw-ui-accent); background: var(--lw-ui-selected); }
 .lw-ui-button--primary { border-color: var(--lw-ui-accent) !important; background: var(--lw-ui-accent) !important; color: #102025 !important; }
+.lw-ui-button--primary > strong,
+.lw-ui-button--primary > span,
+.lw-ui-button--primary > small { color: #102025 !important; }
 .lw-ui-button--danger { border-color: var(--lw-ui-danger); color: var(--lw-ui-danger); }
 
 .lw-ui-status {
@@ -90,6 +102,123 @@
 .lw-ui-status--locked { color: #64787b; }
 .lw-ui-status--completed { border-color: var(--lw-ui-border-strong); color: var(--lw-ui-accent); }
 
+html.lw-surface-borderless {
+  --lw-ui-radius: 0px;
+  /* The frameless layout relies on one quiet surface, not a stack of near-black
+     card shades. This matches the recovery snapshot treatment. */
+  --lw-borderless-surface: color-mix(in srgb, #3d8562 7%, var(--lw-bg));
+  /* Action controls use the campaign ribbon's dark-blue tile. It is distinct
+     enough to scan without bringing framed-button noise back to the layout. */
+  --lw-borderless-control: var(--lw-ui-selected);
+  --lw-borderless-control-hover: color-mix(in srgb, var(--lw-ui-accent) 16%, var(--lw-ui-selected));
+  --lw-panel: var(--lw-borderless-surface);
+  --lw-panel-2: var(--lw-borderless-surface);
+  --lw-panel-3: var(--lw-borderless-surface);
+  --lw-ui-surface: var(--lw-borderless-surface);
+  --lw-ui-raised: var(--lw-borderless-surface);
+  --lw-shell-surface: var(--lw-borderless-surface);
+  --lw-shell-raised: var(--lw-borderless-surface);
+}
+
+html.lw-surface-borderless[data-lw-theme="paper"] {
+  --lw-borderless-surface: #e7e0cf;
+  --lw-borderless-control: #e1d7c1;
+  --lw-borderless-control-hover: #d6c8ad;
+}
+
+html.lw-surface-borderless .lw-ui-panel,
+html.lw-surface-borderless .lw-ui-panel__title,
+html.lw-surface-borderless .lw-ui-button,
+html.lw-surface-borderless .lw-ui-status {
+  border: 0;
+  box-shadow: none;
+}
+
+html.lw-surface-borderless .lw-ui-panel__title { border-bottom: 0; }
+html.lw-surface-borderless .lw-ui-button { background: var(--lw-ui-raised); }
+html.lw-surface-borderless .lw-ui-button:hover { background: var(--lw-ui-selected); }
+
+/* A few live campaign primitives use legacy literal fills. Bring them into
+   the same borderless surface contract without flattening book pages, cover
+   frames, or stateful selected/primary controls. */
+html.lw-surface-borderless :where(
+  .lw-metric,
+  .lw-token-row span,
+  .story-combat,
+  .lw-tabbar,
+  .lw-discipline-chip,
+  .lw-combat-ratio,
+  .lw-combat-actions-panel,
+  .lw-combat-settings__body,
+  .lw-combat-history,
+  .lw-combat-rounds,
+  .lw-combat-start,
+  .lw-section-activity__drawer,
+  .tools-navigation,
+  .install-book,
+  .install-details code
+) {
+  background: var(--lw-borderless-surface) !important;
+}
+
+html.lw-surface-borderless .lw-recovery-path {
+  background: var(--lw-borderless-surface);
+}
+
+/* Borderless actions share the campaign ribbon treatment: a calm dark tile at
+   rest, a brighter hover tile, and the light accent only for the active mode. */
+html.lw-surface-borderless :is(button, .lw-ui-button, .settings-option):not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger):not([aria-current="page"]):not([aria-selected="true"]) {
+  background: var(--lw-borderless-control) !important;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+html.lw-surface-borderless :is(button, .lw-ui-button, .settings-option):not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger):not([aria-current="page"]):not([aria-selected="true"]):is(:hover, :focus-visible) {
+  background: var(--lw-borderless-control-hover) !important;
+}
+
+/* Selected tabs, persistent primary commands, and option cards use the same
+   clear light-blue focus state as the campaign action ribbon. */
+html.lw-surface-borderless :is(button.active, .settings-option.active, .lw-ui-button--primary, #currentBtn, [aria-selected="true"]):not(.book-choice) {
+  background: var(--lw-ui-accent) !important;
+  color: #102025 !important;
+}
+html.lw-surface-borderless :is(button.active, .settings-option.active, .lw-ui-button--primary, #currentBtn, [aria-selected="true"]):not(.book-choice) > :is(strong, span) {
+  color: #102025 !important;
+}
+html.lw-surface-borderless :is(button.active, .settings-option.active, .lw-ui-button--primary, #currentBtn, [aria-selected="true"]):not(.book-choice) > small {
+  color: #24434c !important;
+}
+
+/* Destructive commands remain easy to identify, but their tile and hover
+   behavior match every other action rather than falling back to the legacy
+   outline treatment. */
+html.lw-surface-borderless :is(button.danger, .lw-ui-button--danger) {
+  background: var(--lw-borderless-control) !important;
+  color: var(--lw-ui-danger) !important;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+html.lw-surface-borderless :is(button.danger, .lw-ui-button--danger):is(:hover, :focus-visible) {
+  background: color-mix(in srgb, var(--lw-ui-danger) 16%, var(--lw-ui-selected)) !important;
+}
+
 @media (max-width: 800px) {
   .lw-ui-page { width: min(100% - 24px, var(--lw-ui-page-width)); padding-top: 18px; }
+}
+
+/* Native campaign, reader, tools, and console all inherit the same frameless
+   contract when the user selects Borderless. */
+html.lw-surface-borderless :where(header, main, section, article, aside, nav, footer, div, button, input, select, textarea, a, details, summary),
+html.lw-surface-borderless :where(header, main, section, article, aside, nav, footer, div, button, input, select, textarea, a, details, summary)::before,
+html.lw-surface-borderless :where(header, main, section, article, aside, nav, footer, div, button, input, select, textarea, a, details, summary)::after {
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+html.lw-surface-borderless :where(header, main, section, article, aside, nav, footer, div, button, input, select, textarea, a, details, summary) {
+  border-radius: 0 !important;
+}
+
+html.lw-surface-borderless :where(button, input, select, textarea, a, summary):focus-visible {
+  outline: 2px solid var(--lw-ui-accent) !important;
+  outline-offset: 2px;
 }

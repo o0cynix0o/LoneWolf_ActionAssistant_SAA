@@ -3,8 +3,14 @@
     titleBanner: 'lonewolf_redux.appearance.titleBanner.v1',
     coverArt: 'lonewolf_redux.appearance.coverArt.v1',
     theme: 'lonewolf_redux.appearance.theme.v1',
+    surfaceStyle: 'lonewolf_redux.appearance.surfaceStyle.v1',
     readerStyleEnabled: 'lonewolf_redux.reader.styleEnabled.v1',
-    readerTheme: 'lonewolf_redux.reader.theme.v1'
+    readerTheme: 'lonewolf_redux.reader.theme.v1',
+    musicEnabled: 'lonewolf_redux.music.enabled.v1',
+    musicVolume: 'lonewolf_redux.music.volume.v1',
+    musicPlaylist: 'lonewolf_redux.music.playlist.v1',
+    musicShuffle: 'lonewolf_redux.music.shuffle.v1',
+    musicRepeat: 'lonewolf_redux.music.repeat.v1'
   };
 
   const titleBanners = [
@@ -112,6 +118,31 @@
         '--lw-reader-page': '#ffffeb',
         '--lw-shadow': 'rgba(0, 0, 0, 0.40)',
         '--lw-hero-glow': 'rgba(135, 205, 224, 0.28)'
+      }
+    },
+    {
+      id: 'paper',
+      name: 'Paper',
+      note: 'A quiet printed-page look for the whole assistant.',
+      vars: {
+        '--lw-bg': '#ebe5d5',
+        '--lw-bg-soft': '#e2dac8',
+        '--lw-panel': '#f4efe3',
+        '--lw-panel-2': '#ebe3d2',
+        '--lw-panel-3': '#dfd4bc',
+        '--lw-border': '#c5b995',
+        '--lw-border-strong': '#9c8a60',
+        '--lw-text': '#17333c',
+        '--lw-muted': '#6b5a40',
+        '--lw-muted-2': '#4b453b',
+        '--lw-accent': '#8a571c',
+        '--lw-accent-2': '#a36d28',
+        '--lw-danger': '#9c3f35',
+        '--lw-danger-border': '#b67b70',
+        '--lw-reader-shell': '#e3dccb',
+        '--lw-reader-page': '#f3eddd',
+        '--lw-shadow': 'rgba(55, 42, 20, 0.18)',
+        '--lw-hero-glow': 'rgba(184, 147, 76, 0.20)'
       }
     },
     {
@@ -422,9 +453,29 @@
     titleBanner: 'title1',
     coverArt: 'on',
     theme: 'kai-gold',
+    surfaceStyle: 'borderless',
     readerStyleEnabled: 'off',
-    readerTheme: 'original'
+    readerTheme: 'original',
+    musicEnabled: 'off',
+    musicVolume: 0.35,
+    musicPlaylist: 'journey',
+    musicShuffle: 'off',
+    musicRepeat: 'playlist'
   };
+
+  const musicPlaylists = Object.freeze([
+    { id: 'journey', name: 'Journey' },
+    { id: 'tavern-and-rest', name: 'Tavern and Rest' },
+    { id: 'ancient-mysteries', name: 'Ancient Mysteries' },
+    { id: 'dark-roads', name: 'Dark Roads' },
+    { id: 'all-approved-tracks', name: 'All Approved Tracks' }
+  ]);
+
+  const musicRepeatModes = Object.freeze([
+    { id: 'playlist', name: 'Repeat playlist' },
+    { id: 'track', name: 'Repeat track' },
+    { id: 'off', name: 'Stop after queue' }
+  ]);
 
   function byId(list, id, fallbackId) {
     return list.find((entry) => entry.id === id) || list.find((entry) => entry.id === fallbackId) || list[0];
@@ -435,8 +486,14 @@
       titleBanner: localStorage.getItem(STORAGE_KEYS.titleBanner) || defaults.titleBanner,
       coverArt: localStorage.getItem(STORAGE_KEYS.coverArt) || defaults.coverArt,
       theme: localStorage.getItem(STORAGE_KEYS.theme) || defaults.theme,
+      surfaceStyle: localStorage.getItem(STORAGE_KEYS.surfaceStyle) || defaults.surfaceStyle,
       readerStyleEnabled: localStorage.getItem(STORAGE_KEYS.readerStyleEnabled) || defaults.readerStyleEnabled,
-      readerTheme: localStorage.getItem(STORAGE_KEYS.readerTheme) || defaults.readerTheme
+      readerTheme: localStorage.getItem(STORAGE_KEYS.readerTheme) || defaults.readerTheme,
+      musicEnabled: localStorage.getItem(STORAGE_KEYS.musicEnabled) || defaults.musicEnabled,
+      musicVolume: localStorage.getItem(STORAGE_KEYS.musicVolume) || defaults.musicVolume,
+      musicPlaylist: localStorage.getItem(STORAGE_KEYS.musicPlaylist) || defaults.musicPlaylist,
+      musicShuffle: localStorage.getItem(STORAGE_KEYS.musicShuffle) || defaults.musicShuffle,
+      musicRepeat: localStorage.getItem(STORAGE_KEYS.musicRepeat) || defaults.musicRepeat
     };
   }
 
@@ -445,8 +502,14 @@
       [STORAGE_KEYS.titleBanner]: settings.titleBanner,
       [STORAGE_KEYS.coverArt]: settings.coverArt,
       [STORAGE_KEYS.theme]: settings.theme,
+      [STORAGE_KEYS.surfaceStyle]: settings.surfaceStyle,
       [STORAGE_KEYS.readerStyleEnabled]: settings.readerStyleEnabled,
-      [STORAGE_KEYS.readerTheme]: settings.readerTheme
+      [STORAGE_KEYS.readerTheme]: settings.readerTheme,
+      [STORAGE_KEYS.musicEnabled]: settings.musicEnabled,
+      [STORAGE_KEYS.musicVolume]: settings.musicVolume,
+      [STORAGE_KEYS.musicPlaylist]: settings.musicPlaylist,
+      [STORAGE_KEYS.musicShuffle]: settings.musicShuffle,
+      [STORAGE_KEYS.musicRepeat]: settings.musicRepeat
     };
   }
 
@@ -460,8 +523,14 @@
       titleBanner: values[STORAGE_KEYS.titleBanner] || defaults.titleBanner,
       coverArt: values[STORAGE_KEYS.coverArt] || defaults.coverArt,
       theme: values[STORAGE_KEYS.theme] || defaults.theme,
+      surfaceStyle: values[STORAGE_KEYS.surfaceStyle] || defaults.surfaceStyle,
       readerStyleEnabled: values[STORAGE_KEYS.readerStyleEnabled] || defaults.readerStyleEnabled,
-      readerTheme: values[STORAGE_KEYS.readerTheme] || defaults.readerTheme
+      readerTheme: values[STORAGE_KEYS.readerTheme] || defaults.readerTheme,
+      musicEnabled: values[STORAGE_KEYS.musicEnabled] || defaults.musicEnabled,
+      musicVolume: values[STORAGE_KEYS.musicVolume] || defaults.musicVolume,
+      musicPlaylist: values[STORAGE_KEYS.musicPlaylist] || defaults.musicPlaylist,
+      musicShuffle: values[STORAGE_KEYS.musicShuffle] || defaults.musicShuffle,
+      musicRepeat: values[STORAGE_KEYS.musicRepeat] || defaults.musicRepeat
     };
   }
 
@@ -470,8 +539,15 @@
     settings.titleBanner = byId(titleBanners, settings.titleBanner, defaults.titleBanner).id;
     settings.coverArt = settings.coverArt === 'off' ? 'off' : 'on';
     settings.theme = byId(themes, settings.theme, defaults.theme).id;
+    settings.surfaceStyle = settings.surfaceStyle === 'bordered' ? 'bordered' : 'borderless';
     settings.readerStyleEnabled = settings.readerStyleEnabled === 'on' ? 'on' : 'off';
     settings.readerTheme = byId(readerThemes, settings.readerTheme, defaults.readerTheme).id;
+    settings.musicEnabled = settings.musicEnabled === 'on' ? 'on' : 'off';
+    const musicVolume = Number(settings.musicVolume);
+    settings.musicVolume = Number.isFinite(musicVolume) ? Math.min(1, Math.max(0, musicVolume)) : defaults.musicVolume;
+    settings.musicPlaylist = byId(musicPlaylists, settings.musicPlaylist, defaults.musicPlaylist).id;
+    settings.musicShuffle = settings.musicShuffle === 'on' ? 'on' : 'off';
+    settings.musicRepeat = byId(musicRepeatModes, settings.musicRepeat, defaults.musicRepeat).id;
     return settings;
   }
 
@@ -480,8 +556,14 @@
     localStorage.setItem(STORAGE_KEYS.titleBanner, clean.titleBanner);
     localStorage.setItem(STORAGE_KEYS.coverArt, clean.coverArt);
     localStorage.setItem(STORAGE_KEYS.theme, clean.theme);
+    localStorage.setItem(STORAGE_KEYS.surfaceStyle, clean.surfaceStyle);
     localStorage.setItem(STORAGE_KEYS.readerStyleEnabled, clean.readerStyleEnabled);
     localStorage.setItem(STORAGE_KEYS.readerTheme, clean.readerTheme);
+    localStorage.setItem(STORAGE_KEYS.musicEnabled, clean.musicEnabled);
+    localStorage.setItem(STORAGE_KEYS.musicVolume, String(clean.musicVolume));
+    localStorage.setItem(STORAGE_KEYS.musicPlaylist, clean.musicPlaylist);
+    localStorage.setItem(STORAGE_KEYS.musicShuffle, clean.musicShuffle);
+    localStorage.setItem(STORAGE_KEYS.musicRepeat, clean.musicRepeat);
     return clean;
   }
 
@@ -732,6 +814,96 @@
         flex-wrap: wrap;
         margin-top: 0.65rem;
       }
+      html.lw-surface-borderless header,
+      html.lw-surface-borderless .toolbar,
+      html.lw-surface-borderless .tabs,
+      html.lw-surface-borderless .panel,
+      html.lw-surface-borderless .book,
+      html.lw-surface-borderless .stat-card,
+      html.lw-surface-borderless .quick-card,
+      html.lw-surface-borderless .quick-tabs-divider,
+      html.lw-surface-borderless .item-row,
+      html.lw-surface-borderless .status-grid,
+      html.lw-surface-borderless .quick-panel,
+      html.lw-surface-borderless .top-dashboard,
+      html.lw-surface-borderless .layout-bar,
+      html.lw-surface-borderless .menu-popover,
+      html.lw-surface-borderless .death-option,
+      html.lw-surface-borderless .combat-meter-card,
+      html.lw-surface-borderless .cartwheel-game,
+      html.lw-surface-borderless .message,
+      html.lw-surface-borderless .file-mode-lock,
+      html.lw-surface-borderless .reader-panel,
+      html.lw-surface-borderless .series-section,
+      html.lw-surface-borderless .lw-library-overview,
+      html.lw-surface-borderless .lw-ui-panel,
+      html.lw-surface-borderless .lw-global-nav,
+      html.lw-surface-borderless .lw-global-nav__links a,
+      html.lw-surface-borderless .lw-global-nav__campaign,
+      html.lw-surface-borderless button,
+      html.lw-surface-borderless input,
+      html.lw-surface-borderless select,
+      html.lw-surface-borderless textarea,
+      html.lw-surface-borderless .settings-option,
+      html.lw-surface-borderless .lw-ui-button,
+      html.lw-surface-borderless .lw-ui-status {
+        border: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+      }
+      html.lw-surface-borderless .panel-title,
+      html.lw-surface-borderless .lw-ui-panel__title {
+        border-bottom: 0 !important;
+      }
+      html.lw-surface-borderless button:not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger),
+      html.lw-surface-borderless .settings-option:not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger),
+      html.lw-surface-borderless .lw-ui-button:not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger) {
+        background-color: var(--lw-borderless-control) !important;
+        transition: background-color 120ms ease, color 120ms ease;
+      }
+      html.lw-surface-borderless button:not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger):hover,
+      html.lw-surface-borderless .settings-option:not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger):hover,
+      html.lw-surface-borderless .lw-ui-button:not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger):hover {
+        background-color: var(--lw-borderless-control-hover) !important;
+      }
+      html.lw-surface-borderless button.active,
+      html.lw-surface-borderless .settings-option.active,
+      html.lw-surface-borderless .lw-ui-button--primary,
+      html.lw-surface-borderless #currentBtn,
+      html.lw-surface-borderless [aria-selected="true"]:not(.book-choice) {
+        background-color: var(--lw-accent) !important;
+        color: #102025 !important;
+      }
+      html.lw-surface-borderless :is(button.active, .settings-option.active, .lw-ui-button--primary, #currentBtn, [aria-selected="true"]):not(.book-choice) > :is(strong, span) {
+        color: #102025 !important;
+      }
+      html.lw-surface-borderless :is(button.active, .settings-option.active, .lw-ui-button--primary, #currentBtn, [aria-selected="true"]):not(.book-choice) > small {
+        color: #24434c !important;
+      }
+      html.lw-surface-borderless :is(button.danger, .lw-ui-button--danger) {
+        background-color: var(--lw-borderless-control) !important;
+        color: var(--lw-danger) !important;
+        transition: background-color 120ms ease, color 120ms ease;
+      }
+      html.lw-surface-borderless :is(button.danger, .lw-ui-button--danger):is(:hover, :focus-visible) {
+        background-color: color-mix(in srgb, var(--lw-danger) 16%, var(--lw-ui-selected)) !important;
+      }
+      /* Keep the borderless choice honest across legacy and native surfaces.
+         Transparent borders retain existing layout measurements while removing
+         every visible frame that individual page styles may add later. */
+      html.lw-surface-borderless :where(header, main, section, article, aside, nav, footer, div, button, input, select, textarea, a, details, summary),
+      html.lw-surface-borderless :where(header, main, section, article, aside, nav, footer, div, button, input, select, textarea, a, details, summary)::before,
+      html.lw-surface-borderless :where(header, main, section, article, aside, nav, footer, div, button, input, select, textarea, a, details, summary)::after {
+        border-color: transparent !important;
+        box-shadow: none !important;
+      }
+      html.lw-surface-borderless :where(header, main, section, article, aside, nav, footer, div, button, input, select, textarea, a, details, summary) {
+        border-radius: 0 !important;
+      }
+      html.lw-surface-borderless :where(button, input, select, textarea, a, summary):focus-visible {
+        outline: 2px solid var(--lw-accent) !important;
+        outline-offset: 2px;
+      }
       @media (max-width: 620px) {
         .slot-row {
           grid-template-columns: 1fr;
@@ -763,10 +935,14 @@
     ensureRuntimeStyle();
     applyTheme(clean);
     document.documentElement.classList.toggle('lw-cover-art-off', clean.coverArt === 'off');
+    document.documentElement.classList.toggle('lw-surface-borderless', clean.surfaceStyle === 'borderless');
     document.documentElement.dataset.lwCoverArt = clean.coverArt;
+    document.documentElement.dataset.lwSurfaceStyle = clean.surfaceStyle;
     document.documentElement.dataset.lwReaderTheme = clean.readerTheme;
     document.body.classList.toggle('lw-cover-art-off', clean.coverArt === 'off');
+    document.body.classList.toggle('lw-surface-borderless', clean.surfaceStyle === 'borderless');
     document.body.dataset.lwCoverArt = clean.coverArt;
+    document.body.dataset.lwSurfaceStyle = clean.surfaceStyle;
     document.body.dataset.lwReaderTheme = clean.readerTheme;
     document.querySelectorAll('[data-lw-title-banner]').forEach((image) => {
       const banner = byId(titleBanners, clean.titleBanner, defaults.titleBanner);
@@ -818,6 +994,24 @@
 
   function readerCss(settings = readLocal()) {
     const clean = normalize(settings);
+    // Paper is a complete reading environment. Unlike the dark themes, it
+    // intentionally carries through into the book iframe without requiring a
+    // second appearance choice.
+    if (clean.theme === 'paper') {
+      return readerBookCss({
+        shell: '#e3dccb',
+        page: '#f3eddd',
+        panel: '#fffaf0',
+        panelAlt: '#e5dcc8',
+        text: '#17333c',
+        muted: '#6b5a40',
+        accent: '#8a571c',
+        accentHover: '#eee0c8',
+        border: '#c5b995',
+        header: '#17333c',
+        subtitle: '#a36d28'
+      });
+    }
     if (clean.readerStyleEnabled !== 'on') return '';
     const readerTheme = byId(readerThemes, clean.readerTheme, defaults.readerTheme);
     if (readerTheme.id === 'redux-dark') {
@@ -861,6 +1055,8 @@
     titleBanners,
     themes,
     readerThemes,
+    musicPlaylists,
+    musicRepeatModes,
     readLocal,
     writeLocal,
     normalize,

@@ -21,3 +21,12 @@ installer/MicrosoftEdgeWebview2Setup.exe
 venv/
 .pytest_cache/
 .mypy_cache/
+
+# Separate GitHub wiki working clone (its own repository; never nest-commit it)
+wiki/
+
+# Soundtrack staging: raw candidate masters and license snippets live here for
+# audit only. The shipped, encoded tracks are committed under assets/audio/ and
+# licensing is recorded in THIRD_PARTY_MUSIC.md and music/MUSIC_LICENSE_AUDIT.md.
+music/*.mp3
+music/*.txt

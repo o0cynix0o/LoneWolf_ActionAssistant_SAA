@@ -26,3 +26,8 @@ The Lone Wolf stories, concepts, text, logos, cover art, and illustrations
 remain the property of their credited rights holders. The assistant code, local
 save tooling, audits, route tests, achievements, and strategy documentation are
 maintained as companion material for personal play.
+
+Optional background music is bundled as part of the application experience.
+Track-by-track attribution, license links, and source records are in
+`THIRD_PARTY_MUSIC.md`. The application does not offer those tracks as
+standalone downloads or exports.

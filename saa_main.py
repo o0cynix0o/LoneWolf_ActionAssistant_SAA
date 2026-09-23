@@ -144,7 +144,10 @@ def run_self_test() -> int:
             PATHS.resource_root / "index.html",
             PATHS.resource_root / "assistant.html",
             PATHS.resource_root / "NOTICE.md",
+            PATHS.resource_root / "THIRD_PARTY_MUSIC.md",
             PATHS.resource_root / "assets" / "images" / "series-sigil-wolf-mask.png",
+            PATHS.resource_root / "assets" / "audio" / "music-manifest.json",
+            PATHS.resource_root / "assets" / "audio" / "Firesong.mp3",
             PATHS.resource_data / "crt.json",
         )
         missing = [str(path) for path in required if not path.is_file()]
@@ -160,6 +163,10 @@ def run_self_test() -> int:
             payload = json.load(response)
         if "Books" not in payload:
             raise RuntimeError("Book-files API returned an invalid response.")
+        with urllib.request.urlopen(f"{base_url}/api/state", timeout=3) as response:
+            state_payload = json.load(response)
+        if not isinstance(state_payload.get("recoveryTimeline"), dict):
+            raise RuntimeError("State API did not provide the checkpoint recovery timeline.")
         with urllib.request.urlopen(
             f"{base_url}/assets/images/series-sigil-wolf-mask.png",
             timeout=3,
@@ -168,6 +175,21 @@ def run_self_test() -> int:
             sigil_signature = response.read(8)
         if sigil_type != "image/png" or sigil_signature != b"\x89PNG\r\n\x1a\n":
             raise RuntimeError("Series sigil asset was not served as a valid PNG.")
+        with urllib.request.urlopen(
+            f"{base_url}/assets/audio/music-manifest.json",
+            timeout=3,
+        ) as response:
+            manifest = json.load(response)
+        if not isinstance(manifest.get("tracks"), list) or len(manifest["tracks"]) != 16:
+            raise RuntimeError("Music manifest did not provide the packaged soundtrack.")
+        with urllib.request.urlopen(
+            f"{base_url}/assets/audio/Firesong.mp3",
+            timeout=3,
+        ) as response:
+            audio_type = response.headers.get_content_type()
+            audio_probe = response.read(3)
+        if audio_type != "audio/mpeg" or not audio_probe:
+            raise RuntimeError("Packaged soundtrack asset was not served as MP3 audio.")
         result = {
             "ok": True,
             "httpPort": http_port,
@@ -204,8 +226,21 @@ def run_desktop() -> int:
         http_server, http_thread = _start_http(DEFAULT_HTTP_PORT)
         http_port = int(http_server.server_address[1])
         base_url = f"http://127.0.0.1:{http_port}"
-        os.environ["LONEWOLF_SAA_CHEAT_URL"] = f"{base_url}/api/internal/session-cheats"
+        cheat_url = f"{base_url}/api/internal/session-cheats"
+        os.environ["LONEWOLF_SAA_CHEAT_URL"] = cheat_url
         os.environ["LONEWOLF_SAA_CHEAT_TOKEN"] = app_server.CHEAT_SESSION.token
+        # Publish the live url+token to a file the CLI worker reads fresh, so a
+        # relaunch always resyncs even if a stale token lingers in the process
+        # environment. Best-effort: the CLI degrades gracefully without it.
+        try:
+            cheat_file = PATHS.user_data / "cheat-session.json"
+            cheat_file.write_text(
+                json.dumps({"url": cheat_url, "token": app_server.CHEAT_SESSION.token}),
+                encoding="utf-8",
+            )
+            os.environ["LONEWOLF_SAA_CHEAT_FILE"] = str(cheat_file)
+        except OSError as exc:
+            _lifecycle_log(f"cheat-session file could not be written: {exc}")
         websocket = _start_websocket(DEFAULT_WS_PORT)
         _wait_for_http(base_url)
 
@@ -235,6 +270,12 @@ def run_desktop() -> int:
             app_server.stop_server(http_server, http_thread)
         os.environ.pop("LONEWOLF_SAA_CHEAT_URL", None)
         os.environ.pop("LONEWOLF_SAA_CHEAT_TOKEN", None)
+        cheat_file_path = os.environ.pop("LONEWOLF_SAA_CHEAT_FILE", None)
+        if cheat_file_path:
+            try:
+                os.remove(cheat_file_path)
+            except OSError:
+                pass
         _lifecycle_log("desktop shutdown complete")
 
 

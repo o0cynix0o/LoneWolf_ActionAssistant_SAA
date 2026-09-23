@@ -473,6 +473,33 @@ body.lw-shell-assistant button.active {
   color: #102025;
 }
 
+html.lw-surface-borderless .lw-global-nav,
+html.lw-surface-borderless .lw-global-nav__links a,
+html.lw-surface-borderless .lw-global-nav__campaign,
+html.lw-surface-borderless .lw-library-overview,
+html.lw-surface-borderless .lw-series-filter button,
+html.lw-surface-borderless body.lw-shell-index .series-section,
+html.lw-surface-borderless body.lw-shell-index .reader-panel,
+html.lw-surface-borderless body.lw-shell-index .book,
+html.lw-surface-borderless .lw-current-book-status {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+html.lw-surface-borderless .lw-global-nav__links a:hover,
+html.lw-surface-borderless .lw-global-nav__links a[aria-current="page"],
+html.lw-surface-borderless .lw-series-filter button:hover,
+html.lw-surface-borderless .lw-series-filter button.active {
+  background: var(--lw-shell-raised);
+}
+
+/* Selected controls use a light accent surface. Their nested labels must not
+   retain the normal light-on-dark text colors used by option-card content. */
+body.lw-shell-assistant button.active > strong,
+body.lw-shell-assistant button.active > span { color: #102025 !important; }
+body.lw-shell-assistant button.active > small { color: #24434c !important; }
+
 body.lw-shell-utility main {
   padding-top: 28px;
 }
@@ -492,6 +519,25 @@ body.lw-shell-utility .book-link {
   body.lw-shell-index .reader-panel { position: static; }
   body.lw-shell-assistant .workspace { height: calc(100vh - 52px); }
   .lw-production-context { align-items: start; flex-direction: column; padding-right: 42px; }
+}
+
+/* Final fallback for the borderless preference. The runtime settings sheet
+   repeats this rule after page-specific styles, but this keeps library and
+   navigation surfaces clean from the first paint as well. */
+html.lw-surface-borderless :where(header, main, section, article, aside, nav, footer, div, button, input, select, textarea, a, details, summary),
+html.lw-surface-borderless :where(header, main, section, article, aside, nav, footer, div, button, input, select, textarea, a, details, summary)::before,
+html.lw-surface-borderless :where(header, main, section, article, aside, nav, footer, div, button, input, select, textarea, a, details, summary)::after {
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+html.lw-surface-borderless :where(header, main, section, article, aside, nav, footer, div, button, input, select, textarea, a, details, summary) {
+  border-radius: 0 !important;
+}
+
+html.lw-surface-borderless :where(button, input, select, textarea, a, summary):focus-visible {
+  outline: 2px solid var(--lw-shell-accent) !important;
+  outline-offset: 2px;
 }
 
 @media (max-width: 680px) {

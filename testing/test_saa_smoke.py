@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import io
 import json
 import re
@@ -2442,7 +2443,7 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
             assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
-            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 6}, "Inventory": {"GoldCrowns": 0, "QuiverArrows": 3}, "CurrentSection": 98})
+            assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 6}, "Inventory": {"GoldCrowns": 0, "SpecialItems": ["Quiver"], "QuiverArrows": 4}, "CurrentSection": 98})
             assistant.apply_shop_sale("arrows")
             assistant.set_section(275)
             assistant.inventory["BackpackItems"] = ["Map of Tekaro"]
@@ -2452,6 +2453,49 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
         self.assertEqual(assistant.inventory["QuiverArrows"], 0)
         self.assertEqual(assistant.inventory["BackpackItems"], [])
         self.assertEqual(assistant.inventory["GoldCrowns"], 4)
+
+    def test_book6_curing_applies_on_each_eligible_section_and_stops_at_original_end(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 6, "EnduranceCurrent": 10, "EnduranceMax": 32, "MagnakaiDisciplines": ["Curing"]},
+                "Inventory": {"SpecialItems": ["Quiver"], "QuiverArrows": 5},
+                "CurrentBookStats": {"BookNumber": 6, "StartingEnduranceMax": 24},
+                "CurrentSection": 97,
+            })
+            assistant.set_section(98)
+            flow = assistant.current_section_flow_payload()
+            assistant.set_section(100)
+            after_second_section = assistant.character["EnduranceCurrent"]
+            assistant.character["EnduranceCurrent"] = 24
+            assistant.set_section(101)
+
+        self.assertTrue(flow["Healing"]["Applied"])
+        self.assertEqual(flow["Healing"]["Name"], "Curing")
+        self.assertEqual(flow["Healing"]["TargetEndurance"], 24)
+        self.assertEqual(after_second_section, 12)
+        self.assertEqual(assistant.character["EnduranceCurrent"], 24)
+        self.assertEqual(assistant.arrow_inventory_payload(), {"Arrows": 5, "Quivers": 1, "Capacity": 6, "OpenSlots": 1})
+
+    def test_book6_weaponsmith_uses_source_arrow_prices_and_quiver_capacity(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data", state_data_dir=base / "state", books_dir=base / "books")
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 6},
+                "Inventory": {"GoldCrowns": 2, "SpecialItems": ["Quiver"], "QuiverArrows": 4},
+                "CurrentSection": 98,
+            })
+            flow = assistant.current_section_flow_payload()
+            assistant.apply_flow_loot("buy-arrows")
+            assistant.apply_shop_sale("arrows")
+
+        self.assertTrue(any(item["id"] == "buy-arrows" and item["Ready"] for item in flow["Loot"]))
+        self.assertFalse(any("Quiver" in item["Label"] for item in flow["Shop"]["Sales"]))
+        self.assertIn({"Id": "arrows", "Label": "4 Arrows", "Price": 1, "Kind": "arrows", "Quantity": 4}, flow["Shop"]["Sales"])
+        self.assertEqual(assistant.inventory["QuiverArrows"], 2)
+        self.assertEqual(assistant.inventory["GoldCrowns"], 2)
 
     def test_book6_final_section_records_campaign_completion(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -3570,7 +3614,9 @@ class CampaignEntryPointTests(unittest.TestCase):
 
     def test_campaign_entry_keeps_setup_visible_and_protects_existing_campaigns(self) -> None:
         assistant_html = self.source_text("assistant.html")
-        self.assertIn("if (isCliMode() && !campaignStartRequested)", assistant_html)
+        self.assertIn("const cliActive = isCliMode() && !campaignStartRequested;", assistant_html)
+        self.assertIn("if (isNativeSurface) {", assistant_html)
+        self.assertIn("renderNativeSurface({", assistant_html)
         self.assertIn('data-campaign-cancel', assistant_html)
         self.assertIn("const campaignEntry = campaignStartRequested && card.dataset.campaignEntry === 'true';", assistant_html)
         self.assertGreaterEqual(assistant_html.count('if (!confirmCampaignReplacement()) return;'), 3)
@@ -3926,7 +3972,7 @@ class CardLayoutInteractionTests(unittest.TestCase):
                     return cls.assistant_html[match.start():index + 1]
         raise AssertionError(f"JavaScript function {name!r} has no closing brace")
 
-    def test_release_metadata_is_3_6_0_internal_testing(self) -> None:
+    def test_release_metadata_is_3_7_1_internal_testing(self) -> None:
         readme = (self.root / "README.md").read_text(encoding="utf-8")
         building = (self.root / "docs" / "BUILDING.md").read_text(encoding="utf-8")
         user_guide = (self.root / "docs" / "USER_GUIDE.md").read_text(encoding="utf-8")
@@ -3936,16 +3982,16 @@ class CardLayoutInteractionTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         version_info = (self.root / "version_info.txt").read_text(encoding="utf-8")
 
-        self.assertIn("# Lone Wolf Action Assistant 3.6.0 Internal Testing", readme)
-        self.assertIn("Version: **3.6.0 Internal Testing**", readme)
-        self.assertIn("# Building Lone Wolf Action Assistant 3.6.0 Internal Testing", building)
-        self.assertIn("# Lone Wolf Action Assistant 3.6.0 Internal Testing", user_guide)
-        self.assertIn("## 3.6.0 - Internal Testing", changelog)
-        self.assertIn('#define AppVersion "3.6.0"', installer)
-        self.assertIn("filevers=(3, 6, 0, 0)", version_info)
-        self.assertIn("prodvers=(3, 6, 0, 0)", version_info)
-        self.assertIn("StringStruct(u'FileVersion', u'3.6.0')", version_info)
-        self.assertIn("StringStruct(u'ProductVersion', u'3.6.0')", version_info)
+        self.assertIn("# Lone Wolf Action Assistant 3.7.1 Internal Testing", readme)
+        self.assertIn("Version: **3.7.1 Internal Testing**", readme)
+        self.assertIn("# Building Lone Wolf Action Assistant 3.7.1 Internal Testing", building)
+        self.assertIn("# Lone Wolf Action Assistant 3.7.1 Internal Testing", user_guide)
+        self.assertIn("## 3.7.1 - Internal Testing", changelog)
+        self.assertIn('#define AppVersion "3.7.1"', installer)
+        self.assertIn("filevers=(3, 7, 1, 0)", version_info)
+        self.assertIn("prodvers=(3, 7, 1, 0)", version_info)
+        self.assertIn("StringStruct(u'FileVersion', u'3.7.1')", version_info)
+        self.assertIn("StringStruct(u'ProductVersion', u'3.7.1')", version_info)
 
     def test_movable_cards_get_a_dedicated_drag_handle(self) -> None:
         self.assertIn("data-card-drag-handle", self.assistant_html)
@@ -4191,7 +4237,9 @@ class LibraryProductionTests(unittest.TestCase):
         index_html = (root / "index.html").read_text(encoding="utf-8")
 
         self.assertIn('href="assets/css/lw-library.css"', index_html)
-        self.assertIn("Your Lone Wolf Library", index_html)
+        self.assertIn("Stand Alone Application", index_html)
+        self.assertIn('class="library-hero__mark"', index_html)
+        self.assertIn('assets/images/lone-wolf-title-banner.png', index_html)
         self.assertIn('id="currentBtn"', index_html)
         self.assertIn("Start Current Campaign", index_html)
         self.assertIn('id="seriesTabs"', index_html)
@@ -4199,18 +4247,167 @@ class LibraryProductionTests(unittest.TestCase):
         self.assertIn("function renderCurrentCampaign(position)", index_html)
         self.assertIn("function selectLibrarySeries(series)", index_html)
         self.assertIn("lonewolf:campaign-state", index_html)
+        self.assertIn("set_library_book_read", index_html)
+        self.assertIn("loadCampaignReadStatus", index_html)
         self.assertTrue((root / "assets" / "css" / "lw-library.css").is_file())
+
+    def test_paper_theme_is_available_before_and_after_runtime_settings_load(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        settings_js = (root / "assets" / "js" / "lw-settings.js").read_text(encoding="utf-8")
+        early_appearance_js = (root / "assets" / "js" / "lw-appearance-early.js").read_text(encoding="utf-8")
+
+        self.assertIn("id: 'paper'", settings_js)
+        self.assertIn("name: 'Paper'", settings_js)
+        self.assertIn("'paper': {", early_appearance_js)
+        self.assertIn("'--lw-reader-page': '#f3eddd'", settings_js)
+        self.assertIn("if (clean.theme === 'paper')", settings_js)
+        campaign_css = (root / "assets" / "css" / "lw-campaign.css").read_text(encoding="utf-8")
+        self.assertIn(".lw-story-panel .story-prose { max-width: 700px; color: var(--lw-ui-ink);", campaign_css)
+
+    def test_library_read_marks_are_saved_with_the_campaign(self) -> None:
+        root = Path(lonewolf_redux.__file__).resolve().parent
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=root / "data", state_data_dir=base / "state", books_dir=base / "books"
+            )
+            with redirect_stdout(io.StringIO()):
+                assistant.set_library_book_read(6, True)
+            self.assertEqual(assistant.state["LibraryReadBooks"], [6])
+            path = base / "save.json"
+            assistant.save_game(str(path), quiet=True)
+
+            loaded = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "other-saves", data_dir=root / "data", state_data_dir=base / "other-state", books_dir=base / "books"
+            )
+            self.assertTrue(loaded.load_game(str(path), quiet=True))
+            self.assertEqual(loaded.state["LibraryReadBooks"], [6])
+
+        normalized = lonewolf_redux.normalize_state({"LibraryReadBooks": [6, "6", 0, 99, "bad"]})
+        self.assertEqual(normalized["LibraryReadBooks"], [6])
+
+
+class RecoveryTimelineTests(unittest.TestCase):
+    def test_book6_terminal_loop_recovers_to_the_last_real_decision(self) -> None:
+        root = Path(lonewolf_redux.__file__).resolve().parent
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            book_dir = base / "books" / "06tkot"
+            book_dir.mkdir(parents=True)
+            (book_dir / "sect146.htm").write_text(
+                "<p class='choice'>Ride to Amory. <a href='sect96.htm'>Turn to 96</a>.</p>"
+                "<p class='choice'>Head for Soren. <a href='sect247.htm'>Turn to 247</a>.</p>",
+                encoding="utf-8",
+            )
+            (book_dir / "sect96.htm").write_text(
+                "<p class='choice'>If you possess a Cess, <a href='sect49.htm'>turn to 49</a>.</p>"
+                "<p class='choice'>If you do not possess this Special Item, <a href='sect221.htm'>turn to 221</a>.</p>",
+                encoding="utf-8",
+            )
+            (book_dir / "sect49.htm").write_text(
+                "<p class='choice'><a href='sect129.htm'>Turn to 129</a>.</p>", encoding="utf-8"
+            )
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=root / "data", state_data_dir=base / "state", books_dir=base / "books"
+            )
+            assistant.state["RuleSet"] = "Magnakai"
+            assistant.state["Character"].update({"BookNumber": 6, "MagnakaiDisciplines": ["Curing"]})
+            assistant.state["Inventory"]["SpecialItems"] = ["Cess"]
+
+            assistant.set_section(146)
+            assistant.set_section(96)
+            routes = assistant.current_section_flow_payload()["SourceRoutes"]
+            self.assertEqual([(route["Section"], route["Available"]) for route in routes], [(49, True), (221, False)])
+            assistant.set_section(49)
+            assistant.set_section(129)
+            self.assertTrue(assistant.death_active())
+
+            recovery = assistant.recovery_timeline_payload()
+            self.assertTrue(recovery["Timeline"][1]["ForcedTerminalRoute"])
+            self.assertEqual(recovery["Recommended"]["Section"], 146)
+            with redirect_stdout(io.StringIO()):
+                assistant.restore_section_checkpoint(recovery["Recommended"]["Key"])
+            self.assertFalse(assistant.death_active())
+            self.assertEqual(assistant.state["CurrentSection"], 146)
+            self.assertIn("Cess", assistant.inventory["SpecialItems"])
 
 
 class CampaignDeskProductionTests(unittest.TestCase):
+    def test_borderless_surfaces_share_the_recovery_background(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        foundation_css = (root / "assets" / "css" / "lw-ui-foundation.css").read_text(encoding="utf-8")
+
+        self.assertIn("--lw-borderless-surface: color-mix(in srgb, #3d8562 7%, var(--lw-bg));", foundation_css)
+        self.assertIn("--lw-panel: var(--lw-borderless-surface);", foundation_css)
+        self.assertIn("--lw-ui-surface: var(--lw-borderless-surface);", foundation_css)
+        self.assertIn(".lw-recovery-path", foundation_css)
+        self.assertIn(".lw-section-activity__drawer", foundation_css)
+        self.assertIn("--lw-borderless-control: var(--lw-ui-selected);", foundation_css)
+        self.assertIn("Borderless actions share the campaign ribbon treatment", foundation_css)
+        self.assertIn('html[data-lw-theme="paper"]', foundation_css)
+        self.assertIn("--lw-borderless-control: #e1d7c1;", foundation_css)
+        self.assertIn("background: var(--lw-borderless-control) !important;", foundation_css)
+        self.assertIn("background: var(--lw-borderless-control-hover) !important;", foundation_css)
+        self.assertIn("Selected tabs, persistent primary commands", foundation_css)
+        self.assertIn("#currentBtn, [aria-selected=\"true\"]", foundation_css)
+        self.assertIn("button.danger, .lw-ui-button--danger", foundation_css)
+
     def test_campaign_desk_keeps_reader_and_live_assistant_together(self) -> None:
         root = Path(saa_main.__file__).resolve().parent
         assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
 
         self.assertIn('href="assets/css/lw-campaign.css"', assistant_html)
-        self.assertIn('class="workspace lw-campaign-desk"', assistant_html)
+        self.assertIn('class="workspace lw-native" id="workspace"', assistant_html)
+        self.assertIn('id="campaignMain"', assistant_html)
+        self.assertIn('id="storyPanel"', assistant_html)
+        self.assertIn('id="campaignGlance"', assistant_html)
         self.assertIn('id="campaignRail"', assistant_html)
+        self.assertIn("['disciplines', 'Disciplines']", assistant_html)
+        self.assertIn("function renderCampaignDisciplines()", assistant_html)
+        self.assertIn("function renderCampaignCombat()", assistant_html)
+        self.assertIn("Combat in progress", assistant_html)
+        self.assertIn("Fight complete:", assistant_html)
+        self.assertIn("Round record", assistant_html)
+        self.assertIn("id=\"sectionActivity\"", assistant_html)
+        self.assertIn("function renderSectionActivity()", assistant_html)
+        self.assertIn("function stashLegacyView()", assistant_html)
+        self.assertIn("function deathCombatRecord(death)", assistant_html)
+        self.assertIn("Combat Record", assistant_html)
+        self.assertIn("'Magnakai Disciplines'", assistant_html)
+        self.assertIn("'Kai Disciplines'", assistant_html)
+        self.assertIn("if (isNativeSurface && nativeSurface === 'campaign') campaignTab = 'combat';", assistant_html)
+        self.assertIn("function renderCampaignSurface()", assistant_html)
+        self.assertIn("function campaignResumeCopy()", assistant_html)
+        self.assertIn("function campaignObjectiveCopy()", assistant_html)
+        self.assertIn("const BOOK_OBJECTIVES = Object.freeze({", assistant_html)
+        for book_number in range(1, 30):
+            self.assertRegex(assistant_html, rf"\n\s*{book_number}: '[^']+")
+        self.assertIn("Prepare to confront ${enemy}", assistant_html)
+        self.assertIn("Resolve the section check", assistant_html)
+        self.assertIn("Choose what you leave behind", assistant_html)
+        self.assertIn("Decide what to take with you", assistant_html)
+        self.assertIn("campaignAdvancedThisVisit", assistant_html)
+        self.assertIn("Last time", assistant_html)
+        self.assertIn("Current objective", assistant_html)
+        self.assertRegex(
+            assistant_html,
+            r"stashLegacyView\(\);\s*toolMount\.innerHTML\s*=\s*'';\s*mountView\(toolMount\);",
+        )
+        self.assertIn("function renderStoryInto(target, variant)", assistant_html)
+        self.assertIn("const sectionFetchCache = new Map();", assistant_html)
+        self.assertIn("function prefetchStoryChoices(bookNumber, choices)", assistant_html)
+        self.assertIn("fetch(url, { cache: 'force-cache' })", assistant_html)
+        self.assertIn("prefetchStoryChoices(showBook, parsed.choices);", assistant_html)
+        self.assertIn("if (variant === 'campaign') renderCampaignGlance();", assistant_html)
+        self.assertIn("async function routeStoryChoice(section)", assistant_html)
+        self.assertIn("await routeStoryChoice(Number(button.dataset.storyRoute || button.dataset.storyJump))", assistant_html)
+        self.assertIn("if (isNativeSurface) {\n        activeBook = Number(character.BookNumber);", assistant_html)
+        self.assertNotIn("if (target && !target.hidden) await renderStoryInto(target, variant);", assistant_html)
         self.assertIn("function renderCampaignRail()", assistant_html)
+        self.assertIn("function recoveryTimelineHtml(compact = false)", assistant_html)
+        self.assertIn("if (!currentDeath().Active) return '';", assistant_html)
+        self.assertIn("data-checkpoint-recovery", assistant_html)
+        self.assertNotIn("choiceGroup('Story Routes'", assistant_html)
         self.assertIn("function campaignSeriesForBook(bookNumber)", assistant_html)
         self.assertIn("data-rail-current", assistant_html)
         self.assertIn("data-rail-book", assistant_html)
@@ -4232,6 +4429,11 @@ class ReaderToolsProductionTests(unittest.TestCase):
         self.assertIn("document.body.classList.toggle('lw-console-active', isCliMode())", assistant_html)
         self.assertIn('data-view="${id}"', assistant_html)
         self.assertIn("Command console", shell_js)
+        reader_css = (root / "assets" / "css" / "lw-reader-tools.css").read_text(encoding="utf-8")
+        self.assertIn("html.lw-surface-borderless .lw-reading-surface .book-choice", reader_css)
+        self.assertIn("color: #263334 !important;", reader_css)
+        foundation_css = (root / "assets" / "css" / "lw-ui-foundation.css").read_text(encoding="utf-8")
+        self.assertIn(":not(.book-choice):not(.active)", foundation_css)
         self.assertTrue((root / "assets" / "css" / "lw-reader-tools.css").is_file())
 
 
@@ -4254,6 +4456,16 @@ class SettingsInstallProductionTests(unittest.TestCase):
         self.assertIn("callNative('zips')", installer_html)
         self.assertTrue((root / "assets" / "css" / "lw-settings-install.css").is_file())
 
+    def test_selected_and_primary_controls_keep_nested_labels_legible(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        foundation_css = (root / "assets" / "css" / "lw-ui-foundation.css").read_text(encoding="utf-8")
+        shell_css = (root / "assets" / "css" / "lw-shell.css").read_text(encoding="utf-8")
+
+        self.assertIn(".lw-ui-button--primary > strong", foundation_css)
+        self.assertIn(".lw-ui-button--primary > small", foundation_css)
+        self.assertIn("button.active > strong", shell_css)
+        self.assertIn("button.active > small", shell_css)
+
 
 class DistributionNoticeTests(unittest.TestCase):
     def test_notice_matches_and_ships_with_the_authorized_release(self) -> None:
@@ -4266,6 +4478,83 @@ class DistributionNoticeTests(unittest.TestCase):
         self.assertNotIn("do not redistribute the Lone Wolf book text, illustrations", notice)
         self.assertIn('("NOTICE.md", ".")', spec)
         self.assertIn("'NOTICE.md'", build_script)
+
+
+class SoundtrackPackagingTests(unittest.TestCase):
+    def test_manifest_matches_packaged_mp3_masters_and_credits(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        manifest_path = root / "assets" / "audio" / "music-manifest.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        spec = (root / "LoneWolf_ActionAssistant.spec").read_text(encoding="utf-8")
+        credits = (root / "THIRD_PARTY_MUSIC.md").read_text(encoding="utf-8")
+
+        self.assertEqual(manifest.get("version"), 1)
+        self.assertEqual(len(manifest.get("tracks", [])), 16)
+        self.assertIn('("assets", "assets")', spec)
+        self.assertIn('("THIRD_PARTY_MUSIC.md", ".")', spec)
+        self.assertIn("Creative Commons Attribution 4.0", credits)
+        self.assertIn("Pixabay Content License", credits)
+
+        for track in manifest["tracks"]:
+            asset = root / track["path"]
+            self.assertTrue(asset.is_file(), track["id"])
+            self.assertEqual(asset.stat().st_size, track["bytes"], track["id"])
+            self.assertEqual(
+                hashlib.sha256(asset.read_bytes()).hexdigest(),
+                track["sha256"],
+                track["id"],
+            )
+            self.assertTrue(track["sourceUrl"].startswith("https://"), track["id"])
+            self.assertTrue(track["licenseUrl"].startswith("https://"), track["id"])
+            self.assertIn("all-approved-tracks", track["playlists"], track["id"])
+
+
+class SoundtrackPlayerTests(unittest.TestCase):
+    def test_shared_player_uses_manifest_preferences_and_compact_surfaces(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        player = (root / "assets" / "js" / "lw-music.js").read_text(encoding="utf-8")
+        settings = (root / "assets" / "js" / "lw-settings.js").read_text(encoding="utf-8")
+        assistant = (root / "assistant.html").read_text(encoding="utf-8")
+
+        self.assertIn("assets/audio/music-manifest.json", player)
+        self.assertIn("sessionStorage", player)
+        self.assertIn("beforeunload", player)
+        self.assertIn("data-lw-music-action", player)
+        self.assertIn("playerCardMarkup('campaign')", assistant)
+        self.assertIn("compactMarkup('reader')", assistant)
+        for preference in (
+            "lonewolf_redux.music.enabled.v1",
+            "lonewolf_redux.music.volume.v1",
+            "lonewolf_redux.music.playlist.v1",
+            "lonewolf_redux.music.shuffle.v1",
+            "lonewolf_redux.music.repeat.v1",
+        ):
+            self.assertIn(preference, settings)
+            self.assertIn(preference, app_server.UI_PREFERENCE_KEYS)
+
+    def test_surface_navigation_preserves_the_shared_music_player(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        assistant = (root / "assistant.html").read_text(encoding="utf-8")
+        shell = (root / "assets" / "js" / "lw-shell.js").read_text(encoding="utf-8")
+
+        self.assertIn("function navigateAssistantSurface(url, options = {})", shell)
+        self.assertIn("lonewolf:navigate-surface", shell)
+        self.assertIn("history.pushState", shell)
+        self.assertIn("function applyNativeSurfaceNavigation(url)", assistant)
+        self.assertIn("document.addEventListener('lonewolf:navigate-surface'", assistant)
+        self.assertIn("let nativeSurface", assistant)
+
+    def test_tools_and_campaign_expose_full_soundtrack_player(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        player = (root / "assets" / "js" / "lw-music.js").read_text(encoding="utf-8")
+        assistant = (root / "assistant.html").read_text(encoding="utf-8")
+        build = (root / "build.ps1").read_text(encoding="utf-8")
+        self.assertIn("['soundtrack', 'Soundtrack'", assistant)
+        self.assertIn("playerCardMarkup('campaign')", assistant)
+        self.assertIn("playerCardMarkup('tools')", assistant)
+        for control in ("setPlaylist", "setShuffle", "setRepeat", "setEnabled", "selectTrack", "Music credits and licenses"):
+            self.assertIn(control, player)
+        self.assertIn("THIRD_PARTY_MUSIC.md", build)
 
 
 class ServiceTests(unittest.TestCase):
@@ -4774,6 +5063,19 @@ class GreyStarResidueRemovedTests(unittest.TestCase):
             assistant.finish_karmo_potion()
         self.assertEqual(assistant.character["EnduranceCurrent"], 10)
 
+    def test_alether_berries_are_consumed_for_their_combat_skill_bonus(self) -> None:
+        import contextlib
+
+        assistant = app_server.ASSISTANT
+        with contextlib.redirect_stdout(io.StringIO()):
+            app_server.apply_new_game({"bookNumber": 1, "autoGenerate": True})
+        before = assistant.character["CombatSkillCurrent"]
+        assistant.inventory["BackpackItems"] = ["Alether Berries"]
+        with contextlib.redirect_stdout(io.StringIO()):
+            assistant.use_item("backpack", "Alether Berries")
+        self.assertEqual(assistant.character["CombatSkillCurrent"], before + 2)
+        self.assertNotIn("Alether Berries", assistant.inventory["BackpackItems"])
+
     def test_willpower_and_staff_helpers_are_gone(self) -> None:
         for attr in (
             "combat_uses_magical_staff",
@@ -4947,6 +5249,29 @@ class CheatSessionTests(unittest.TestCase):
                 urllib.request.urlopen(request, timeout=3)
             self.assertEqual(raised.exception.code, 403)
             raised.exception.close()
+        finally:
+            app_server.stop_server(server, thread)
+
+    def test_remote_client_survives_a_stale_token_and_prefers_live_token_file(self) -> None:
+        server, thread = app_server.start_server(port=0)
+        try:
+            url = f"http://127.0.0.1:{server.server_address[1]}/api/internal/session-cheats"
+            stale = cheat_session.RemoteCheatClient(url, "stale-token")
+            self.assertEqual(stale.status(), {})
+
+            with tempfile.TemporaryDirectory() as temp_dir:
+                token_file = Path(temp_dir) / "cheat-session.json"
+                token_file.write_text(
+                    json.dumps({"url": url, "token": app_server.CHEAT_SESSION.token}),
+                    encoding="utf-8",
+                )
+                provider = cheat_session.provider_from_environment({
+                    "LONEWOLF_SAA_CHEAT_FILE": str(token_file),
+                    "LONEWOLF_SAA_CHEAT_URL": url,
+                    "LONEWOLF_SAA_CHEAT_TOKEN": "stale-token",
+                })
+                self.assertIsInstance(provider, cheat_session.RemoteCheatClient)
+                self.assertEqual(provider.status()["active"], app_server.CHEAT_SESSION.status()["active"])
         finally:
             app_server.stop_server(server, thread)
 

@@ -31,9 +31,15 @@ try {
     uv pip install --python $Python -r requirements.txt
     if ($LASTEXITCODE -ne 0) { throw 'Dependency installation failed.' }
 
-    magick 'lone-wolf icon.png' -background '#11110f' -gravity center -extent 1536x1536 `
-        -define icon:auto-resize=256,128,64,48,32,24,16 'logo.ico'
-    if ($LASTEXITCODE -ne 0) { throw 'Icon conversion failed.' }
+    if (Get-Command magick -ErrorAction SilentlyContinue) {
+        magick 'lone-wolf icon.png' -background '#11110f' -gravity center -extent 1536x1536 `
+            -define icon:auto-resize=256,128,64,48,32,24,16 'logo.ico'
+        if ($LASTEXITCODE -ne 0) { throw 'Icon conversion failed.' }
+    } elseif (Test-Path 'logo.ico') {
+        Write-Host 'ImageMagick (magick) not found; reusing existing logo.ico.'
+    } else {
+        throw 'ImageMagick (magick) is not installed and logo.ico is missing. Install ImageMagick to generate the application icon.'
+    }
 
     # The embedded terminal relaunches this same windowed EXE with --cli under
     # WinPTY, so no separate console worker executable is built.
@@ -42,6 +48,9 @@ try {
 
     Copy-Item -LiteralPath (Join-Path $ProjectRoot 'NOTICE.md') `
         -Destination (Join-Path (Split-Path -Parent $PackagedExe) 'NOTICE.md') `
+        -Force
+    Copy-Item -LiteralPath (Join-Path $ProjectRoot 'THIRD_PARTY_MUSIC.md') `
+        -Destination (Join-Path (Split-Path -Parent $PackagedExe) 'THIRD_PARTY_MUSIC.md') `
         -Force
 
     & $PackagedExe --self-test
