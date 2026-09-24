@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.7.4 - Internal Testing
+
+- The death screen now shows the section's original book text. A "What happened"
+  panel renders the printed prose for the section that ended the adventure, so a
+  death is no longer a blank summary; the recovery options follow beneath it.
+- Rebuilt the frozen app and Windows installer for this change.
+
 ## 3.7.3 - Internal Testing
 
 - Extended route-availability highlighting to more choice gates. Discipline
