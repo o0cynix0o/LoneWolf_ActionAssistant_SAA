@@ -2614,6 +2614,26 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
             assistant.state = state
             self.assertTrue(assistant.evaluate_flow_condition({"type": "lore_circle", "name": "Fire"}))
 
+    def test_torch_and_tinderbox_route_gate_accepts_separate_items(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            label = "If you possess a Kalte Firesphere or a Torch and a Tinderbox, turn to 80."
+            condition, _reason = assistant.infer_source_route_condition(label)
+            self.assertEqual(condition["type"], "any")
+            branch = next(c for c in condition["conditions"] if c.get("type") == "all")
+            self.assertEqual({c["name"] for c in branch["conditions"]}, {"Torch", "Tinderbox"})
+
+            assistant.inventory["BackpackItems"] = ["Torch", "Tinderbox"]
+            self.assertTrue(assistant.evaluate_flow_condition(condition))
+            assistant.inventory["BackpackItems"] = ["Torch"]
+            self.assertFalse(assistant.evaluate_flow_condition(condition))
+
     def test_book8_cabin_roll_uses_v1_lore_circle_precedence(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
