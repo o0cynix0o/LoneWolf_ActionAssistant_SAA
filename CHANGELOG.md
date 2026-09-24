@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.7.3 - Internal Testing
+
+- Extended route-availability highlighting to more choice gates. Discipline
+  gates are now recognized across every series (Kai, Magnakai, Grand Master,
+  New Order), including the "wish to use your Kai Discipline of X" phrasing, and
+  gold-crown thresholds ("at least N", "N or more", "pay N", and "less than N")
+  are recognized. These gates already drove route availability in the engine;
+  they are now evaluated and highlighted like item gates.
+- Rebuilt the frozen app and Windows installer for these changes.
+
 ## 3.7.2 - Internal Testing
 
 - Highlighted native Campaign and Reader story choices by the engine's own route
