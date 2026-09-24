@@ -3564,11 +3564,46 @@
         sections.forEach((section) => { void fetchSection(bookNumber, section); });
       });
     }
-    function storyChoiceButtonsHtml(choices, variant) {
+    // Map each gated route the engine evaluated to { available, reason }, keyed by
+    // target section. Availability comes only from the engine's own route
+    // evaluation (sectionFlow.SourceRoutes) and is never re-parsed from the book
+    // text here. It is applied only to the live campaign section (never a browsed
+    // section), so highlighting always reflects the current Action Chart.
+    function storyRouteAvailability(showSection) {
+      if (browseMode || Number(showSection) !== Number(app.state.CurrentSection)) return null;
+      const map = new Map();
+      arr(currentFlow().SourceRoutes).forEach((route) => {
+        if (!route || typeof route !== 'object') return;
+        const section = Number(route.Section);
+        if (!Number.isInteger(section)) return;
+        const gated = !!(route.Condition || route.condition);
+        const available = route.Available !== false;
+        // Ordinary, unconditional routes get no annotation; only engine-evaluated
+        // gates (an item, gold, arrow, rank, lore, or roll check) are marked.
+        if (!gated && available) return;
+        map.set(section, { available, reason: text(route.BlockedReason, '') });
+      });
+      return map.size ? map : null;
+    }
+    function storyChoiceButtonsHtml(choices, variant, availability) {
       if (!choices.length) return `<p class="story-no-choice">No further choices are printed for this section. If the section calls for combat, a roll, or an ending, use the campaign tools.</p>`;
       const cls = variant === 'reader' ? 'book-choice' : 'story-choice';
-      return `<div class="story-choice-list">` + choices.map((c) =>
-        `<button class="${cls}" type="button" data-story-route="${c.section}"><span>${escapeHtml(c.label)}</span><small>Turn to ${c.section}</small></button>`).join('') + `</div>`;
+      return `<div class="story-choice-list">` + choices.map((c) => {
+        const info = availability && availability.get(Number(c.section));
+        let stateClass = '';
+        let attrs = '';
+        let note = `Turn to ${c.section}`;
+        if (info && info.available) {
+          stateClass = ' is-available';
+          attrs = ` title="Your Action Chart meets this route's requirement." aria-label="${escapeHtml(c.label)} — you meet this requirement"`;
+          note = `Ready · Turn to ${c.section}`;
+        } else if (info) {
+          const reason = info.reason || 'Your Action Chart does not meet this route yet.';
+          stateClass = ' is-gated';
+          attrs = ` title="${escapeHtml(reason)}" aria-label="${escapeHtml(c.label)} — ${escapeHtml(reason)}"`;
+        }
+        return `<button class="${cls}${stateClass}" type="button" data-story-route="${c.section}"${attrs}><span>${escapeHtml(c.label)}</span><small>${escapeHtml(note)}</small></button>`;
+      }).join('') + `</div>`;
     }
     async function renderStoryInto(target, variant) {
       if (!target || !app) return;
@@ -3596,7 +3631,8 @@
       const head = variant === 'reader'
         ? `<p class="chapter">${escapeHtml(bookMeta.title)}</p><h2>Section ${escapeHtml(showSection)}</h2>`
         : `<div class="lw-story-panel__head"><div><p class="lw-eyebrow">${escapeHtml(bookMeta.title)}</p><h2>Section ${escapeHtml(showSection)}</h2></div><span class="lw-ui-status lw-ui-status--reading">Current section</span></div>`;
-      target.innerHTML = head + `<div class="prose story-prose">${parsed.prose}</div>` + (variant === 'reader' ? `<div class="rule"></div>` : '') + storyChoiceButtonsHtml(parsed.choices, variant);
+      const availability = storyRouteAvailability(showSection);
+      target.innerHTML = head + `<div class="prose story-prose">${parsed.prose}</div>` + (variant === 'reader' ? `<div class="rule"></div>` : '') + storyChoiceButtonsHtml(parsed.choices, variant, availability);
       if (variant === 'reader') renderReaderCompanionNative();
       updateChoiceCheck(parsed.choices.length);
       // The campaign summary contains section-roll results. Refresh it after

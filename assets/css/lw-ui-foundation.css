@@ -167,12 +167,12 @@ html.lw-surface-borderless .lw-recovery-path {
 
 /* Borderless actions share the campaign ribbon treatment: a calm dark tile at
    rest, a brighter hover tile, and the light accent only for the active mode. */
-html.lw-surface-borderless :is(button, .lw-ui-button, .settings-option):not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger):not([aria-current="page"]):not([aria-selected="true"]) {
+html.lw-surface-borderless :is(button, .lw-ui-button, .settings-option):not(.book-choice):not(.active):not(.is-available):not(.is-gated):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger):not([aria-current="page"]):not([aria-selected="true"]) {
   background: var(--lw-borderless-control) !important;
   transition: background-color 120ms ease, color 120ms ease;
 }
 
-html.lw-surface-borderless :is(button, .lw-ui-button, .settings-option):not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger):not([aria-current="page"]):not([aria-selected="true"]):is(:hover, :focus-visible) {
+html.lw-surface-borderless :is(button, .lw-ui-button, .settings-option):not(.book-choice):not(.active):not(.is-available):not(.is-gated):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger):not([aria-current="page"]):not([aria-selected="true"]):is(:hover, :focus-visible) {
   background: var(--lw-borderless-control-hover) !important;
 }
 

@@ -69,6 +69,13 @@ body.lw-surface-tools.lw-console-active .lw-active-tool { min-height: 72vh; }
 .story-choice { display: flex; justify-content: space-between; gap: 16px; align-items: center; padding: 12px 14px; border: 1px solid var(--lw-ui-border); border-radius: 5px; background: var(--lw-ui-raised); color: var(--lw-ui-ink); text-align: left; font: 400 1rem var(--lw-ui-serif); cursor: pointer; }
 .story-choice:hover { border-color: var(--lw-ui-accent); background: var(--lw-ui-selected); }
 .story-choice small { color: var(--lw-ui-gold); white-space: nowrap; font-family: var(--lw-ui-sans); }
+/* Engine-evaluated route gates: green when the Action Chart qualifies, dimmed
+   (but still visible and clickable) when a required item/gold/roll is missing. */
+.story-choice.is-available { border-color: #46886c !important; background: rgba(61, 133, 98, .16) !important; box-shadow: inset 3px 0 0 var(--lw-ui-green) !important; }
+.story-choice.is-available:hover { border-color: var(--lw-ui-green) !important; background: rgba(61, 133, 98, .24) !important; }
+.story-choice.is-available small { color: var(--lw-ui-green) !important; }
+.story-choice.is-gated { border-style: dashed !important; opacity: .58; }
+.story-choice.is-gated:hover { opacity: .85; }
 
 /* ============================================================
  * CAMPAIGN DESK
