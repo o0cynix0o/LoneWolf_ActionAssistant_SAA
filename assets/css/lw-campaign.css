@@ -61,6 +61,8 @@ body.lw-surface-tools.lw-console-active .lw-active-tool { min-height: 72vh; }
 .story-error a, .story-jump { color: var(--lw-ui-accent); cursor: pointer; text-decoration: underline; }
 .story-prose p { margin: 0 0 1em; }
 .story-prose p:last-child { margin-bottom: 0; }
+/* Book text of the section that ended the adventure, shown on the death screen. */
+.death-story-panel .story-prose { max-width: 760px; color: var(--lw-ui-ink); font: 1.06rem/1.7 var(--lw-ui-serif); }
 .story-prose .smallcaps { font-variant: small-caps; letter-spacing: .02em; }
 .story-illustration { display: block; max-width: 100%; height: auto; margin: 20px auto; border: 1px solid var(--lw-ui-border); border-radius: 6px; background: #0c1417; }
 .story-combat { padding: 10px 12px; border: 1px solid var(--lw-ui-border); border-left: 3px solid var(--lw-ui-gold); border-radius: 4px; background: rgba(0,0,0,.16); font-weight: 700; }

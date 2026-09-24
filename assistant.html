@@ -4914,6 +4914,10 @@
         ? 'Step back before this section. Use this when a route choice led to the death and you want to pick a different path.'
         : 'There is no earlier section checkpoint yet. Load a save or start a new run if repeat is not available.';
       view.innerHTML = `
+        <div class="panel death-story-panel" data-card-id="death-story">
+          <h2>What happened</h2>
+          <div class="prose story-prose" id="deathStoryBody"><p class="muted">Loading the section text…</p></div>
+        </div>
         <div class="panel panel-danger" data-card-id="death-outcome">
           <h2>${escapeHtml(scene.title)}</h2>
           <p class="death-copy">${escapeHtml(scene.body)}</p>
@@ -4951,6 +4955,24 @@
           ${recoveryTimelineHtml()}
         </div>
       `;
+      renderDeathSectionText();
+    }
+
+    // Show the original book text for the section that ended the adventure, so a
+    // death is never a blank summary. Read-only prose (no choices) via the same
+    // parser the native story surfaces use.
+    async function renderDeathSectionText() {
+      const target = document.getElementById('deathStoryBody');
+      if (!target || !app) return;
+      const death = currentDeath();
+      const book = Number(death.BookNumber || currentCharacter().BookNumber);
+      const section = Number(death.Section || app.state.CurrentSection);
+      if (!Number.isInteger(section)) { target.innerHTML = '<p class="muted">No section text is recorded for this death.</p>'; return; }
+      let result;
+      try { result = await fetchSection(book, section); } catch (e) { result = { error: 'network' }; }
+      if (!result || result.error) { target.innerHTML = '<p class="muted">The book text for this section is not installed.</p>'; return; }
+      const parsed = parseSectionDocument(result.doc, book);
+      target.innerHTML = parsed.prose || '<p class="muted">This section has no printed text.</p>';
     }
 
     function cardScopeForView(scope) {
