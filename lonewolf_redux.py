@@ -6017,13 +6017,29 @@ class LoneWolfReduxAssistant:
             item_names: list[str] = []
             claimed_spans: list[tuple[int, int]] = []
             for item, match_mode in route_items:
-                match = re.search(rf"(?<![a-z]){re.escape(item.lower())}(?![a-z])", clause.lower())
+                # "a Torch and a Tinderbox" is two separately carried items with an
+                # optional article between them, not one combined item.
+                search = (
+                    r"(?<![a-z])torch and (?:a |an |the )?tinderbox(?![a-z])"
+                    if item == "Torch and Tinderbox"
+                    else rf"(?<![a-z]){re.escape(item.lower())}(?![a-z])"
+                )
+                match = re.search(search, clause.lower())
                 if not match or any(match.start() < end and start < match.end() for start, end in claimed_spans):
                     continue
                 claimed_spans.append(match.span())
                 verb = item_clause.groupdict().get("verb") or ""
-                condition_type = "no_item" if no_item_clause else ("item_history" if verb == "purchased" else "item")
-                item_conditions.append({"type": condition_type, "name": item, "match": match_mode})
+                if item == "Torch and Tinderbox" and not no_item_clause:
+                    item_conditions.append({
+                        "type": "all",
+                        "conditions": [
+                            {"type": "item", "name": "Torch", "match": "exact"},
+                            {"type": "item", "name": "Tinderbox", "match": "exact"},
+                        ],
+                    })
+                else:
+                    condition_type = "no_item" if no_item_clause else ("item_history" if verb == "purchased" else "item")
+                    item_conditions.append({"type": condition_type, "name": item, "match": match_mode})
                 item_names.append(item)
             if item_conditions:
                 item_uses_or = bool(re.search(r"\s+or\s+", clause, flags=re.IGNORECASE))

@@ -65,6 +65,14 @@ html.lw-surface-borderless .lw-reading-surface .book-choice:is(:hover, :focus-vi
   color: #263334 !important;
 }
 
+/* Engine-evaluated route gates on the printed page (light in every theme):
+   green when the Action Chart qualifies, dimmed when a requirement is unmet. */
+html .lw-reading-surface .book-choice.is-available { border-color: #2f7d55 !important; background: #edf7ee !important; box-shadow: inset 4px 0 0 #2f7d55 !important; }
+html .lw-reading-surface .book-choice.is-available:is(:hover, :focus-visible) { background: #e0f2e4 !important; }
+html .lw-reading-surface .book-choice.is-available small { color: #2f7d55 !important; }
+html .lw-reading-surface .book-choice.is-gated { border-style: dashed !important; opacity: .6; }
+html .lw-reading-surface .book-choice.is-gated:is(:hover, :focus-visible) { opacity: .85; }
+
 .lw-reader-companion-stack { display: grid; gap: 12px; align-content: start; }
 .lw-companion__panel { padding: 14px; }
 .lw-companion__head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; }

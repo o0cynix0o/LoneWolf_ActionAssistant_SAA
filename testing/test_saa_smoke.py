@@ -2614,6 +2614,26 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
             assistant.state = state
             self.assertTrue(assistant.evaluate_flow_condition({"type": "lore_circle", "name": "Fire"}))
 
+    def test_torch_and_tinderbox_route_gate_accepts_separate_items(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            label = "If you possess a Kalte Firesphere or a Torch and a Tinderbox, turn to 80."
+            condition, _reason = assistant.infer_source_route_condition(label)
+            self.assertEqual(condition["type"], "any")
+            branch = next(c for c in condition["conditions"] if c.get("type") == "all")
+            self.assertEqual({c["name"] for c in branch["conditions"]}, {"Torch", "Tinderbox"})
+
+            assistant.inventory["BackpackItems"] = ["Torch", "Tinderbox"]
+            self.assertTrue(assistant.evaluate_flow_condition(condition))
+            assistant.inventory["BackpackItems"] = ["Torch"]
+            self.assertFalse(assistant.evaluate_flow_condition(condition))
+
     def test_book8_cabin_roll_uses_v1_lore_circle_precedence(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
@@ -3972,7 +3992,7 @@ class CardLayoutInteractionTests(unittest.TestCase):
                     return cls.assistant_html[match.start():index + 1]
         raise AssertionError(f"JavaScript function {name!r} has no closing brace")
 
-    def test_release_metadata_is_3_7_1_internal_testing(self) -> None:
+    def test_release_metadata_is_3_7_2_internal_testing(self) -> None:
         readme = (self.root / "README.md").read_text(encoding="utf-8")
         building = (self.root / "docs" / "BUILDING.md").read_text(encoding="utf-8")
         user_guide = (self.root / "docs" / "USER_GUIDE.md").read_text(encoding="utf-8")
@@ -3982,16 +4002,16 @@ class CardLayoutInteractionTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         version_info = (self.root / "version_info.txt").read_text(encoding="utf-8")
 
-        self.assertIn("# Lone Wolf Action Assistant 3.7.1 Internal Testing", readme)
-        self.assertIn("Version: **3.7.1 Internal Testing**", readme)
-        self.assertIn("# Building Lone Wolf Action Assistant 3.7.1 Internal Testing", building)
-        self.assertIn("# Lone Wolf Action Assistant 3.7.1 Internal Testing", user_guide)
-        self.assertIn("## 3.7.1 - Internal Testing", changelog)
-        self.assertIn('#define AppVersion "3.7.1"', installer)
-        self.assertIn("filevers=(3, 7, 1, 0)", version_info)
-        self.assertIn("prodvers=(3, 7, 1, 0)", version_info)
-        self.assertIn("StringStruct(u'FileVersion', u'3.7.1')", version_info)
-        self.assertIn("StringStruct(u'ProductVersion', u'3.7.1')", version_info)
+        self.assertIn("# Lone Wolf Action Assistant 3.7.2 Internal Testing", readme)
+        self.assertIn("Version: **3.7.2 Internal Testing**", readme)
+        self.assertIn("# Building Lone Wolf Action Assistant 3.7.2 Internal Testing", building)
+        self.assertIn("# Lone Wolf Action Assistant 3.7.2 Internal Testing", user_guide)
+        self.assertIn("## 3.7.2 - Internal Testing", changelog)
+        self.assertIn('#define AppVersion "3.7.2"', installer)
+        self.assertIn("filevers=(3, 7, 2, 0)", version_info)
+        self.assertIn("prodvers=(3, 7, 2, 0)", version_info)
+        self.assertIn("StringStruct(u'FileVersion', u'3.7.2')", version_info)
+        self.assertIn("StringStruct(u'ProductVersion', u'3.7.2')", version_info)
 
     def test_movable_cards_get_a_dedicated_drag_handle(self) -> None:
         self.assertIn("data-card-drag-handle", self.assistant_html)
