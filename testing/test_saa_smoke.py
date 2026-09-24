@@ -2634,6 +2634,57 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
             assistant.inventory["BackpackItems"] = ["Torch"]
             self.assertFalse(assistant.evaluate_flow_condition(condition))
 
+    def test_discipline_route_gate_recognizes_all_series(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            kai, _kr = assistant.infer_source_route_condition(
+                "If you wish to use your Kai Discipline of Sixth Sense, turn to 141."
+            )
+            self.assertEqual(kai, {"type": "power", "name": "Sixth Sense"})
+            # "Grand Weaponmastery" must not be reduced to the "Weaponmastery" substring.
+            grand, _gr = assistant.infer_source_route_condition(
+                "If you have the Grand Master Discipline of Grand Weaponmastery, turn to 50."
+            )
+            self.assertEqual(grand, {"type": "power", "name": "Grand Weaponmastery"})
+
+            assistant.state = {"Character": {"BookNumber": 1, "KaiDisciplines": ["Sixth Sense"]}}
+            self.assertTrue(assistant.evaluate_flow_condition(kai))
+            assistant.state = {"Character": {"BookNumber": 1, "KaiDisciplines": ["Healing"]}}
+            self.assertFalse(assistant.evaluate_flow_condition(kai))
+
+    def test_gold_route_gate_recognizes_thresholds(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            self.assertEqual(
+                assistant.infer_source_route_condition("If you have at least 5 Gold Crowns, turn to 20.")[0],
+                {"type": "gold_gte", "value": 5},
+            )
+            self.assertEqual(
+                assistant.infer_source_route_condition("If you wish to pay 3 Gold Crowns, turn to 30.")[0],
+                {"type": "gold_gte", "value": 3},
+            )
+            self.assertEqual(
+                assistant.infer_source_route_condition("If you have less than 2 Gold Crowns, turn to 40.")[0],
+                {"type": "gold_lt", "value": 2},
+            )
+            gate = {"type": "gold_gte", "value": 5}
+            assistant.inventory["GoldCrowns"] = 5
+            self.assertTrue(assistant.evaluate_flow_condition(gate))
+            assistant.inventory["GoldCrowns"] = 4
+            self.assertFalse(assistant.evaluate_flow_condition(gate))
+
     def test_book8_cabin_roll_uses_v1_lore_circle_precedence(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
@@ -3992,7 +4043,7 @@ class CardLayoutInteractionTests(unittest.TestCase):
                     return cls.assistant_html[match.start():index + 1]
         raise AssertionError(f"JavaScript function {name!r} has no closing brace")
 
-    def test_release_metadata_is_3_7_2_internal_testing(self) -> None:
+    def test_release_metadata_is_3_7_3_internal_testing(self) -> None:
         readme = (self.root / "README.md").read_text(encoding="utf-8")
         building = (self.root / "docs" / "BUILDING.md").read_text(encoding="utf-8")
         user_guide = (self.root / "docs" / "USER_GUIDE.md").read_text(encoding="utf-8")
@@ -4002,16 +4053,16 @@ class CardLayoutInteractionTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         version_info = (self.root / "version_info.txt").read_text(encoding="utf-8")
 
-        self.assertIn("# Lone Wolf Action Assistant 3.7.2 Internal Testing", readme)
-        self.assertIn("Version: **3.7.2 Internal Testing**", readme)
-        self.assertIn("# Building Lone Wolf Action Assistant 3.7.2 Internal Testing", building)
-        self.assertIn("# Lone Wolf Action Assistant 3.7.2 Internal Testing", user_guide)
-        self.assertIn("## 3.7.2 - Internal Testing", changelog)
-        self.assertIn('#define AppVersion "3.7.2"', installer)
-        self.assertIn("filevers=(3, 7, 2, 0)", version_info)
-        self.assertIn("prodvers=(3, 7, 2, 0)", version_info)
-        self.assertIn("StringStruct(u'FileVersion', u'3.7.2')", version_info)
-        self.assertIn("StringStruct(u'ProductVersion', u'3.7.2')", version_info)
+        self.assertIn("# Lone Wolf Action Assistant 3.7.3 Internal Testing", readme)
+        self.assertIn("Version: **3.7.3 Internal Testing**", readme)
+        self.assertIn("# Building Lone Wolf Action Assistant 3.7.3 Internal Testing", building)
+        self.assertIn("# Lone Wolf Action Assistant 3.7.3 Internal Testing", user_guide)
+        self.assertIn("## 3.7.3 - Internal Testing", changelog)
+        self.assertIn('#define AppVersion "3.7.3"', installer)
+        self.assertIn("filevers=(3, 7, 3, 0)", version_info)
+        self.assertIn("prodvers=(3, 7, 3, 0)", version_info)
+        self.assertIn("StringStruct(u'FileVersion', u'3.7.3')", version_info)
+        self.assertIn("StringStruct(u'ProductVersion', u'3.7.3')", version_info)
 
     def test_movable_cards_get_a_dedicated_drag_handle(self) -> None:
         self.assertIn("data-card-drag-handle", self.assistant_html)
