@@ -2634,6 +2634,57 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
             assistant.inventory["BackpackItems"] = ["Torch"]
             self.assertFalse(assistant.evaluate_flow_condition(condition))
 
+    def test_discipline_route_gate_recognizes_all_series(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            kai, _kr = assistant.infer_source_route_condition(
+                "If you wish to use your Kai Discipline of Sixth Sense, turn to 141."
+            )
+            self.assertEqual(kai, {"type": "power", "name": "Sixth Sense"})
+            # "Grand Weaponmastery" must not be reduced to the "Weaponmastery" substring.
+            grand, _gr = assistant.infer_source_route_condition(
+                "If you have the Grand Master Discipline of Grand Weaponmastery, turn to 50."
+            )
+            self.assertEqual(grand, {"type": "power", "name": "Grand Weaponmastery"})
+
+            assistant.state = {"Character": {"BookNumber": 1, "KaiDisciplines": ["Sixth Sense"]}}
+            self.assertTrue(assistant.evaluate_flow_condition(kai))
+            assistant.state = {"Character": {"BookNumber": 1, "KaiDisciplines": ["Healing"]}}
+            self.assertFalse(assistant.evaluate_flow_condition(kai))
+
+    def test_gold_route_gate_recognizes_thresholds(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            self.assertEqual(
+                assistant.infer_source_route_condition("If you have at least 5 Gold Crowns, turn to 20.")[0],
+                {"type": "gold_gte", "value": 5},
+            )
+            self.assertEqual(
+                assistant.infer_source_route_condition("If you wish to pay 3 Gold Crowns, turn to 30.")[0],
+                {"type": "gold_gte", "value": 3},
+            )
+            self.assertEqual(
+                assistant.infer_source_route_condition("If you have less than 2 Gold Crowns, turn to 40.")[0],
+                {"type": "gold_lt", "value": 2},
+            )
+            gate = {"type": "gold_gte", "value": 5}
+            assistant.inventory["GoldCrowns"] = 5
+            self.assertTrue(assistant.evaluate_flow_condition(gate))
+            assistant.inventory["GoldCrowns"] = 4
+            self.assertFalse(assistant.evaluate_flow_condition(gate))
+
     def test_book8_cabin_roll_uses_v1_lore_circle_precedence(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)

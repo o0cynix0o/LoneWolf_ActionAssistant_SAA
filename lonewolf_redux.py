@@ -227,6 +227,21 @@ NEW_ORDER_DISCIPLINES = GRAND_MASTER_DISCIPLINES + [
     "Bardsmanship",
 ]
 
+_ROUTE_NUMBER_WORDS = {
+    "one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7,
+    "eight": 8, "nine": 9, "ten": 10, "eleven": 11, "twelve": 12, "thirteen": 13,
+    "fourteen": 14, "fifteen": 15, "sixteen": 16, "seventeen": 17, "eighteen": 18,
+    "nineteen": 19, "twenty": 20, "thirty": 30, "forty": 40, "fifty": 50,
+}
+
+
+def _route_number(token: Any) -> int | None:
+    """Parse a small count written as digits or a number word, else None."""
+    text = str(token or "").strip().lower()
+    if text.isdigit():
+        return int(text)
+    return _ROUTE_NUMBER_WORDS.get(text)
+
 WEAPONMASTERY_WEAPONS = [
     "Dagger",
     "Spear",
@@ -5985,6 +6000,23 @@ class LoneWolfReduxAssistant:
                     f"Requires at least {count} Arrow{'s' if count != 1 else ''}.",
                 )
 
+        if re.match(r"^if you\b", lowered) and re.search(r"\bgold crowns?\b", lowered):
+            gold_lt = re.search(r"\b(?:less than|fewer than|under)\s+(\d+|[a-z-]+)\s+gold crowns?\b", lowered)
+            gold_gte = (
+                re.search(r"\b(?:at least|no fewer than)\s+(\d+|[a-z-]+)\s+gold crowns?\b", lowered)
+                or re.search(r"\b(\d+|[a-z-]+)\s+gold crowns?\s+or more\b", lowered)
+                or re.search(r"\b(?:wish to )?pay\s+(?:a fee of\s+)?(\d+|[a-z-]+)\s+gold crowns?\b", lowered)
+            )
+            if gold_lt:
+                amount = _route_number(gold_lt.group(1))
+                if amount is not None:
+                    return {"type": "gold_lt", "value": amount}, f"Requires fewer than {amount} Gold Crowns."
+            if gold_gte:
+                amount = _route_number(gold_gte.group(1))
+                if amount is not None:
+                    plural = "s" if amount != 1 else ""
+                    return {"type": "gold_gte", "value": amount}, f"Requires at least {amount} Gold Crown{plural}."
+
         route_items = (
             ("Dagger of Vashna", "exact"),
             ("Sinede's Silver Key", "exact"),
@@ -6050,8 +6082,15 @@ class LoneWolfReduxAssistant:
                 requirement = " or ".join(item_names) if item_uses_or else " and ".join(item_names)
                 return item_condition, (f"Requires that you do not have {requirement}." if no_item_clause else f"Requires {requirement}.")
 
+        # Discipline gates across every series, including the "wish to use your
+        # Kai Discipline of X" phrasing. Each branch may name one or more
+        # disciplines (and an optional Magnakai rank).
         discipline_pattern = re.compile(
-            r"(?:^if\s+you\s+|\bor\s+if\s+you\s+)(?:have|possess)\s+the\s+magnakai\s+disciplines?\s+of\s+",
+            r"(?:^if\s+you\s+|\bor\s+if\s+you\s+)"
+            r"(?:wish\s+to\s+use|have|possess|use)\s+"
+            r"(?:your\s+|the\s+)?"
+            r"(?:kai\s+|magnakai\s+|grand[\s-]master\s+|new\s+order\s+)?"
+            r"disciplines?\s+of\s+",
             flags=re.IGNORECASE,
         )
         matches = list(discipline_pattern.finditer(clause))
@@ -6060,16 +6099,29 @@ class LoneWolfReduxAssistant:
 
         branches: list[dict[str, Any]] = []
         requirements: list[str] = []
-        known_disciplines = list(MAGNAKAI_DISCIPLINES)
+        # Longest names first so "Grand Weaponmastery" is claimed before the
+        # substring "Weaponmastery".
+        known_disciplines = sorted(
+            dict.fromkeys(
+                KAI_DISCIPLINES + MAGNAKAI_DISCIPLINES + GRAND_MASTER_DISCIPLINES + NEW_ORDER_DISCIPLINES
+            ),
+            key=len,
+            reverse=True,
+        )
         for index, match in enumerate(matches):
             branch = clause[match.end():matches[index + 1].start() if index + 1 < len(matches) else len(clause)]
-            disciplines = [
-                name
-                for name in known_disciplines
-                if re.search(rf"(?<![a-z]){re.escape(name.lower())}(?![a-z])", branch.lower())
-            ]
+            branch_lower = branch.lower()
+            claimed: list[tuple[int, int]] = []
+            disciplines: list[str] = []
+            for name in known_disciplines:
+                found = re.search(rf"(?<![a-z]){re.escape(name.lower())}(?![a-z])", branch_lower)
+                if not found or any(found.start() < end and start < found.end() for start, end in claimed):
+                    continue
+                claimed.append(found.span())
+                disciplines.append(name)
             if not disciplines:
                 continue
+            disciplines.sort(key=lambda item_name: branch_lower.find(item_name.lower()))
             conditions: list[dict[str, Any]] = [{"type": "power", "name": name} for name in disciplines]
             branch_rank_match = re.search(
                 r"\b(?:rank of|rank)\s+(?:kai master\s+)?([a-z-]+)",
