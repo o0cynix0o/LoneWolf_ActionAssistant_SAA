@@ -1,5 +1,19 @@
 # Changelog
 
+## 3.7.2 - Internal Testing
+
+- Highlighted native Campaign and Reader story choices by the engine's own route
+  evaluation: a printed choice whose Action Chart requirement you meet (an item,
+  arrow, rank, or lore-circle gate) is shown in green with a "Ready" label, while
+  a gated choice you do not yet meet is dimmed but stays visible and clickable
+  with the requirement on hover. Ordinary choices are unchanged, and only the
+  live campaign section is annotated.
+- Fixed the "a Torch and a Tinderbox" route gate: it was evaluated as a single
+  item named "Torch and Tinderbox" (and its text match missed the article), so
+  carrying a Torch and a Tinderbox separately never satisfied it. It now requires
+  both component items, correcting route availability wherever the gate appears.
+- Rebuilt the frozen app and Windows installer for these changes.
+
 ## 3.7.1 - Internal Testing
 
 - Kept the native Campaign and Reader story panels in sync with campaign state:
