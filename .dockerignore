@@ -1,0 +1,22 @@
+# Keep the build context (and the bind-mounted tree) lean. The web UI's own
+# image assets under assets/ are intentionally kept.
+.git/
+.venv/
+venv/
+dist/
+build/
+installer/output/
+installer/MicrosoftEdgeWebview2Setup.exe
+music/
+wiki/
+docker-data/
+saves/
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.log
+.mypy_cache/
+.pytest_cache/
+# Windows desktop build assets not used by the containerized web server:
+logo.ico
+lone-wolf icon.png

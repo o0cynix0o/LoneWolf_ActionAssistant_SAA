@@ -1,0 +1,21 @@
+services:
+  lonewolf:
+    build: .
+    image: lonewolf-action-assistant:local
+    container_name: lonewolf-action-assistant
+    ports:
+      - "8797:8797"   # web app  -> http://localhost:8797/
+      - "8798:8798"   # console/CLI websocket
+    volumes:
+      # Live "update on the fly": edit the source, then
+      #   docker compose restart lonewolf
+      # (pure Python, so a restart picks up the changes; no rebuild needed).
+      - .:/app
+      # Persistent books and per-player saves. Survives updates and rebuilds.
+      # Put Project Aon book folders under ./docker-data/books/lw/<folder>/.
+      # (Kept separate from the repo's tracked app-resource data/ folder.)
+      - ./docker-data:/data
+    environment:
+      - LOCALAPPDATA=/data
+      - LONEWOLF_SAA_BOOKS_DIR=/data/books
+    restart: unless-stopped
