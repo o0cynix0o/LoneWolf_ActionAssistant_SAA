@@ -30,3 +30,6 @@ wiki/
 # licensing is recorded in THIRD_PARTY_MUSIC.md and music/MUSIC_LICENSE_AUDIT.md.
 music/*.mp3
 music/*.txt
+
+# Container runtime volume (books + saves)
+docker-data/
