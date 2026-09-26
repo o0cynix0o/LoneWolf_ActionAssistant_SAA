@@ -3177,11 +3177,17 @@
       const setupActive = !!app.pendingBookSetup?.Active;
       const completeActive = currentBookComplete().Active;
       const cliActive = isCliMode() && !campaignStartRequested;
-      const takeover = deathActive || setupActive || completeActive;
+      // A brand-new (or explicitly requested) Book 1 campaign must present
+      // character creation before play, front-and-center on the reading
+      // surfaces, rather than dropping into section 1 with a blank character.
+      const creationActive = shouldShowBook1Creation()
+        && (nativeSurface === 'campaign' || nativeSurface === 'reader')
+        && !deathActive && !setupActive && !completeActive && !cliActive;
+      const takeover = deathActive || setupActive || completeActive || creationActive;
       document.body.classList.toggle('lw-native-takeover', takeover);
 
       if (isNativeSurface) {
-        renderNativeSurface({ deathActive, setupActive, completeActive, cliActive, takeover });
+        renderNativeSurface({ deathActive, setupActive, completeActive, cliActive, creationActive, takeover });
         return;
       }
 
@@ -4124,6 +4130,19 @@
     }
 
     // ---- Surface orchestrator (called from render) ---------------------------
+    // Present the New Adventure character creator full-width so a new campaign
+    // always walks the player through creation before play. Reuses the existing
+    // creation UI and its globally-wired controls (Generate & Begin / Set Up My
+    // Character / legacy starts).
+    function renderCreationScreen() {
+      view.classList.remove('view-card-grid');
+      view.innerHTML = `
+        <div class="panel lw-creation-screen" data-campaign-entry="true">
+          <h2>New Adventure</h2>
+          ${newCharacterBody()}
+        </div>`;
+    }
+
     function renderNativeSurface(flags) {
       const f = flags || {};
       // Assert the shell classes ourselves so surface rendering never races the
@@ -4137,6 +4156,7 @@
         if (f.deathActive) renderDeathScreen();
         else if (f.setupActive) { renderBookSetupScreen(); syncBook6SetupRequirements(view.querySelector('#continueBookForm')); }
         else if (f.completeActive) renderBookCompleteScreen();
+        else if (f.creationActive) renderCreationScreen();
         return;
       }
       if (nativeSurface === 'campaign') renderCampaignSurface();
