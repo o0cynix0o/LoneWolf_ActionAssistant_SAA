@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+- Reworked completed-book handoffs into a two-step onboarding screen. The next
+  book's full Story So Far now appears before the carried Action Chart choices,
+  and the campaign advances to Section 1 only after those choices are confirmed.
+- Added a safe return to the completed-book summary, preserved pending handoffs
+  across restarts, and enabled the supported New Order Book 21-29 transitions.
+
 ## 3.7.5 - Internal Testing
 
 - Reset every session-scoped cheat before installing a replacement campaign,

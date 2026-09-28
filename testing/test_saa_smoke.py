@@ -3952,6 +3952,19 @@ class RunFeatureParityTests(unittest.TestCase):
                     equipment_choices=["sword", "warhammer", "laumspur", "tinderbox", "kai-shield", "helmet", "herb-pouch"],
                 )
 
+    def test_pending_next_book_setup_can_return_to_the_completed_book_summary(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            assistant = self.assistant(temp_dir)
+            assistant.ensure_book_completed(1)
+            assistant.open_next_book()
+
+            assistant.cancel_next_book_setup()
+
+            self.assertEqual(assistant.character["BookNumber"], 1)
+            self.assertEqual(assistant.state["CurrentSection"], 1)
+            self.assertFalse(assistant.pending_book_setup_payload()["Active"])
+            self.assertTrue(assistant.book_completion_payload()["Active"])
+
     def test_inventory_order_is_saved_and_sommerswerd_is_the_first_combat_weapon(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             assistant = self.assistant(temp_dir)
@@ -4133,6 +4146,23 @@ class CardLayoutInteractionTests(unittest.TestCase):
         self.assertIn("CapacityBlocked", section_loot)
         self.assertIn('data-campaign-tab="inventory"', section_loot)
         self.assertIn("BlockedReason", section_loot)
+
+    def test_book_transition_onboarding_places_story_before_setup(self) -> None:
+        renderer = self.function_source("renderBookSetupScreen")
+        form_renderer = self.function_source("bookContinueForm")
+        story_index = renderer.index('data-book-transition-story')
+        setup_index = renderer.index('Prepare Your Action Chart')
+        server_source = (self.root / "app_server.py").read_text(encoding="utf-8")
+
+        self.assertLess(story_index, setup_index)
+        self.assertIn("bookUrl(nextBook, null, 'tssf.htm')", renderer)
+        self.assertIn("prepareBookTransitionStory()", renderer)
+        self.assertIn("data-cancel-book-transition", renderer)
+        self.assertIn("const summary = completion.Summary || {};", form_renderer)
+        self.assertIn("Begin Book ${escapeHtml(nextBook)} at Section 1", self.assistant_html)
+        self.assertIn("nextBook <= 29", self.assistant_html)
+        self.assertNotIn("loadStorySoFar(nextBook)", self.assistant_html)
+        self.assertIn('if action == "cancel_book_transition":', server_source)
 
     def test_pre_book8_inventory_panel_titles_omit_capacity_warning(self) -> None:
         render_inventory = self.function_source("renderInventory")

@@ -5001,6 +5001,12 @@ class LoneWolfReduxAssistant:
         print(f"Opened Book {next_book}: {BOOK_CATALOG[next_book]['Title']}")
         return next_book
 
+    def cancel_next_book_setup(self) -> None:
+        """Return to the completed-book summary without changing campaign state."""
+        self.automation.pop("PendingBookSetup", None)
+        self.autosave()
+        print("Returned to the completed-book summary.")
+
     def achievement_state(self) -> dict[str, Any]:
         state = self.state.get("Achievements")
         if not isinstance(state, dict):
