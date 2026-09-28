@@ -63,6 +63,38 @@ body.lw-surface-tools.lw-console-active .lw-active-tool { min-height: 72vh; }
 .story-prose p:last-child { margin-bottom: 0; }
 /* Book text of the section that ended the adventure, shown on the death screen. */
 .death-story-panel .story-prose { max-width: 760px; color: var(--lw-ui-ink); font: 1.06rem/1.7 var(--lw-ui-serif); }
+
+/* ---- Completed combat / death takeover -----------------------------------
+   Finished encounters are outcomes, not editable fights. Keep the source
+   prose, record, and recovery actions in one aligned grid and never expose
+   another-round controls after the engine has entered its death state. */
+.lw-death-screen { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(280px, .75fr); gap: 12px; }
+.lw-death-screen > * { min-width: 0; margin: 0 !important; }
+.lw-death-screen__head,
+.lw-death-screen__story,
+.lw-death-screen__record,
+.lw-death-screen__recovery { grid-column: 1 / -1; }
+.lw-death-screen__head { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 18px 20px; }
+.lw-death-screen__head h1 { margin-bottom: 0; }
+.lw-death-screen__ratio { flex: 0 0 auto; min-width: 118px; padding: 10px 12px; border: 1px solid var(--lw-ui-border); border-radius: var(--lw-ui-radius); background: rgba(0,0,0,.2); text-align: center; }
+.lw-death-screen__ratio small { display: block; color: var(--lw-ui-muted); font: 800 .66rem var(--lw-ui-sans); letter-spacing: .06em; text-transform: uppercase; }
+.lw-death-screen__ratio strong { display: block; margin-top: 3px; color: var(--lw-ui-gold); font: 700 1.35rem var(--lw-ui-serif); }
+.lw-death-screen .panel { padding: 16px; border: 1px solid var(--lw-ui-border); border-radius: var(--lw-ui-radius); background: var(--lw-ui-surface); }
+.lw-death-screen .panel h2 { color: var(--lw-ui-accent); font: 700 1.3rem var(--lw-ui-serif); }
+.lw-death-screen__story .story-prose { max-width: 900px; }
+.lw-death-screen__outcome,
+.lw-death-screen__final { height: 100%; }
+.lw-death-screen__outcome { border-color: color-mix(in srgb, var(--lw-danger) 55%, var(--lw-ui-border)) !important; }
+.lw-death-screen__status { margin: 0 0 8px; color: var(--lw-danger); font: 800 .72rem var(--lw-ui-sans); letter-spacing: .06em; text-transform: uppercase; }
+.lw-death-screen__record .death-combat-rounds { display: grid; gap: 7px; }
+.lw-death-screen__record .item-row { margin: 0; }
+.lw-death-screen__recovery .death-options { margin-top: 4px; }
+
+@media (max-width: 820px) {
+  .lw-death-screen { grid-template-columns: minmax(0, 1fr); }
+  .lw-death-screen > * { grid-column: 1; }
+  .lw-death-screen__head { align-items: flex-start; }
+}
 /* New-campaign character creator, shown full-width before play begins. */
 .lw-creation-screen { max-width: 880px; margin: 0 auto; }
 .story-prose .smallcaps { font-variant: small-caps; letter-spacing: .02em; }

@@ -4590,6 +4590,26 @@ class RecoveryTimelineTests(unittest.TestCase):
 
 
 class CampaignDeskProductionTests(unittest.TestCase):
+    def test_completed_combat_uses_an_aligned_read_only_outcome_layout(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
+        campaign_css = (root / "assets" / "css" / "lw-campaign.css").read_text(encoding="utf-8")
+
+        death_renderer = assistant_html.split("function renderDeathScreen()", 1)[1].split(
+            "function cardScopeForView", 1
+        )[0]
+        self.assertIn('class="lw-death-screen"', death_renderer)
+        self.assertIn('id="deathStoryPanel"', death_renderer)
+        self.assertLess(death_renderer.index('id="deathStoryPanel"'), death_renderer.index('data-card-id="death-outcome"'))
+        self.assertIn("if (storyPanel) storyPanel.remove()", death_renderer)
+        self.assertNotIn("Resolve round", death_renderer)
+        self.assertNotIn("Auto resolve", death_renderer)
+        self.assertNotIn("data-combat-evade", death_renderer)
+        self.assertNotIn("data-combat-stop", death_renderer)
+        self.assertIn(".lw-death-screen { display: grid;", campaign_css)
+        self.assertIn(".lw-death-screen__outcome,\n.lw-death-screen__final { height: 100%; }", campaign_css)
+        self.assertIn("@media (max-width: 820px)", campaign_css)
+
     def test_borderless_surfaces_share_the_recovery_background(self) -> None:
         root = Path(saa_main.__file__).resolve().parent
         foundation_css = (root / "assets" / "css" / "lw-ui-foundation.css").read_text(encoding="utf-8")

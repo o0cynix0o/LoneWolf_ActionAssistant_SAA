@@ -5100,7 +5100,7 @@
       if (!fight) return '';
       const rounds = arr(fight.Rounds);
       return `
-        <div class="panel death-combat-record">
+        <div class="panel death-combat-record lw-death-screen__record">
           <h2>Combat Record</h2>
           <p class="muted">${escapeHtml(text(fight.EnemyName, 'Enemy'))} · ${escapeHtml(text(fight.Outcome, 'Defeat'))} · ${escapeHtml(text(fight.RoundCount, rounds.length))} rounds</p>
           <div class="death-combat-rounds">
@@ -5114,6 +5114,13 @@
     function renderDeathScreen() {
       const death = currentDeath();
       const scene = deathSceneFor(death);
+      const combat = currentCombat();
+      const history = arr(app?.state?.CombatHistory).slice().reverse();
+      const bookNumber = Number(death?.BookNumber || currentCharacter().BookNumber || 0);
+      const sectionNumber = Number(death?.Section || app?.state?.CurrentSection || 0);
+      const fight = history.find((entry) => Number(entry?.BookNumber || 0) === bookNumber && Number(entry?.Section || 0) === sectionNumber) || history[0] || {};
+      const enemyName = text(fight.EnemyName || combat.EnemyName, 'Final encounter');
+      const combatRatio = fight.CombatRatio ?? combat.CombatRatio;
       const repeatTarget = targetLabel(death.RepeatTarget);
       const rewindTarget = targetLabel(death.RewindTarget);
       const repeatCopy = death.CanRepeat
@@ -5123,47 +5130,53 @@
         ? 'Step back before this section. Use this when a route choice led to the death and you want to pick a different path.'
         : 'There is no earlier section checkpoint yet. Load a save or start a new run if repeat is not available.';
       view.innerHTML = `
-        <div class="panel death-story-panel" data-card-id="death-story">
-          <h2>What happened</h2>
-          <div class="prose story-prose" id="deathStoryBody"><p class="muted">Loading the section text…</p></div>
-        </div>
-        <div class="panel panel-danger" data-card-id="death-outcome">
-          <h2>${escapeHtml(scene.title)}</h2>
-          <p class="death-copy">${escapeHtml(scene.body)}</p>
-          <div class="grid death-summary">
-            ${field('Result', escapeHtml(text(scene.result, 'Your adventure ends here.')))}
-            ${field('Status', escapeHtml(scene.status))}
-            ${field('Advice', escapeHtml(scene.advice))}
+        <section class="lw-death-screen" aria-labelledby="deathScreenTitle">
+          <header class="lw-ui-panel lw-death-screen__head">
+            <div><p class="lw-eyebrow">Section ${escapeHtml(text(death.Section, app.state.CurrentSection))} · Final combat record</p><h1 id="deathScreenTitle">${escapeHtml(enemyName)}</h1></div>
+            ${combatRatio !== null && combatRatio !== undefined ? `<div class="lw-death-screen__ratio"><small>Starting ratio</small><strong>${escapeHtml(formatSigned(combatRatio))}</strong></div>` : ''}
+          </header>
+          <div class="panel death-story-panel lw-death-screen__story" id="deathStoryPanel" data-card-id="death-story">
+            <h2>What happened</h2>
+            <div class="prose story-prose" id="deathStoryBody"><p class="muted">Loading the section text…</p></div>
           </div>
-        </div>
-        <div class="panel">
-          <h2>Final Record</h2>
-          <div class="grid">
-            ${field('Section', escapeHtml(text(death.Section, app.state.CurrentSection)))}
-            ${field('Final END', `${escapeHtml(text(death.EnduranceCurrent, '0'))}/${escapeHtml(text(death.EnduranceMax, currentCharacter().EnduranceMax))}`)}
-            ${field('Recorded', escapeHtml(text(death.RecordedAt, 'Now')))}
+          <div class="panel panel-danger lw-death-screen__outcome" data-card-id="death-outcome">
+            <p class="lw-death-screen__status">Defeated in ${text(death?.Type).toLowerCase() === 'combat' ? 'combat' : 'this section'}</p>
+            <h2>${escapeHtml(scene.title)}</h2>
+            <p class="death-copy">${escapeHtml(scene.body)}</p>
+            <div class="grid death-summary">
+              ${field('Result', escapeHtml(text(scene.result, 'Your adventure ends here.')))}
+              ${field('Status', escapeHtml(scene.status))}
+              ${field('Advice', escapeHtml(scene.advice))}
+            </div>
           </div>
-        </div>
-        ${deathCombatRecord(death)}
-        <div class="panel">
-          <h2>Recovery</h2>
-          <div class="death-options">
-            <article class="death-option">
-              <h3>Repeat Section</h3>
-              <p>${escapeHtml(repeatCopy)}</p>
-              <p class="muted">${escapeHtml(repeatTarget)}</p>
-              <button type="button" data-death-recovery="repeat" ${death.CanRepeat ? '' : 'disabled'}>Repeat</button>
-            </article>
-            <article class="death-option">
-              <h3>Rewind Previous Section</h3>
-              <p>${escapeHtml(rewindCopy)}</p>
-              <p class="muted">${escapeHtml(rewindTarget)}</p>
-              <button type="button" data-death-recovery="rewind" ${death.CanRewind ? '' : 'disabled'}>Rewind</button>
-            </article>
+          <div class="panel lw-death-screen__final">
+            <h2>Final Record</h2>
+            <div class="grid">
+              ${field('Section', escapeHtml(text(death.Section, app.state.CurrentSection)))}
+              ${field('Final END', `${escapeHtml(text(death.EnduranceCurrent, '0'))}/${escapeHtml(text(death.EnduranceMax, currentCharacter().EnduranceMax))}`)}
+              ${field('Recorded', escapeHtml(text(death.RecordedAt, 'Now')))}
+            </div>
           </div>
-          ${recoveryTimelineHtml()}
-        </div>
-      `;
+          ${deathCombatRecord(death)}
+          <div class="panel lw-death-screen__recovery">
+            <h2>Recovery</h2>
+            <div class="death-options">
+              <article class="death-option">
+                <h3>Repeat Section</h3>
+                <p>${escapeHtml(repeatCopy)}</p>
+                <p class="muted">${escapeHtml(repeatTarget)}</p>
+                <button type="button" data-death-recovery="repeat" ${death.CanRepeat ? '' : 'disabled'}>Repeat</button>
+              </article>
+              <article class="death-option">
+                <h3>Rewind Previous Section</h3>
+                <p>${escapeHtml(rewindCopy)}</p>
+                <p class="muted">${escapeHtml(rewindTarget)}</p>
+                <button type="button" data-death-recovery="rewind" ${death.CanRewind ? '' : 'disabled'}>Rewind</button>
+              </article>
+            </div>
+            ${recoveryTimelineHtml()}
+          </div>
+        </section>`;
       renderDeathSectionText();
     }
 
@@ -5176,12 +5189,14 @@
       const death = currentDeath();
       const book = Number(death.BookNumber || currentCharacter().BookNumber);
       const section = Number(death.Section || app.state.CurrentSection);
-      if (!Number.isInteger(section)) { target.innerHTML = '<p class="muted">No section text is recorded for this death.</p>'; return; }
+      const storyPanel = document.getElementById('deathStoryPanel');
+      if (!Number.isInteger(section)) { if (storyPanel) storyPanel.remove(); return; }
       let result;
       try { result = await fetchSection(book, section); } catch (e) { result = { error: 'network' }; }
-      if (!result || result.error) { target.innerHTML = '<p class="muted">The book text for this section is not installed.</p>'; return; }
+      if (!result || result.error) { if (storyPanel) storyPanel.remove(); return; }
       const parsed = parseSectionDocument(result.doc, book);
-      target.innerHTML = parsed.prose || '<p class="muted">This section has no printed text.</p>';
+      if (!parsed.prose) { if (storyPanel) storyPanel.remove(); return; }
+      target.innerHTML = parsed.prose;
     }
 
     function cardScopeForView(scope) {
