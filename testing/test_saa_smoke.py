@@ -385,6 +385,36 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
         self.assertEqual(len(assistant.inventory["BackpackItems"]), 8)
         self.assertEqual(assistant.character["Book2Setup"]["TransitionDrops"], [("backpack", 0), ("backpack", 1), ("backpack", 2)])
 
+    def test_book2_weapon_choice_requires_replacement_before_state_mutates(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state["Character"]["BookNumber"] = 1
+            assistant.state["Inventory"]["Weapons"] = ["Axe", "Spear"]
+            assistant.ensure_book_completed()
+            before = lonewolf_redux.json_clone(assistant.state)
+
+            with self.assertRaisesRegex(ValueError, "needs a Weapon exchange"):
+                assistant.continue_completed_book(
+                    kai_discipline="Camouflage",
+                    book2_gold_roll=0,
+                    book2_armoury_choices=["sword", "shield"],
+                )
+
+            self.assertEqual(assistant.state, before)
+            assistant.continue_completed_book(
+                kai_discipline="Camouflage",
+                book2_gold_roll=0,
+                book2_armoury_choices=["sword", "shield"],
+                book2_weapon_exchanges=["Axe"],
+            )
+
+        self.assertEqual(assistant.character["BookNumber"], 2)
+        self.assertEqual(assistant.inventory["Weapons"], ["Spear", "Sword"])
+
     def test_books6_to8_keep_a_full_backpack_until_the_player_selects_drops(self) -> None:
         state = lonewolf_redux.default_state()
         state["Character"].update({"BookNumber": 5, "MagnakaiDisciplines": [], "WeaponmasteryWeapons": []})
@@ -3731,6 +3761,14 @@ class CampaignEntryPointTests(unittest.TestCase):
         self.assertIn("function syncBook6SetupRequirements", assistant_html)
         self.assertIn("data-book6-exchange-status", assistant_html)
         self.assertIn("Choose ${requiredExchanges} Weapon Exchange", assistant_html)
+
+    def test_kai_book_transition_requires_weapon_replacements(self) -> None:
+        assistant_html = self.source_text("assistant.html")
+
+        self.assertIn("function syncKaiBookTransitionWeaponRequirements", assistant_html)
+        self.assertIn("would exceed the two-weapon limit", assistant_html)
+        self.assertIn("Replace ${requiredExchanges} Weapon", assistant_html)
+        self.assertIn("replace a carried weapon before continuing", assistant_html)
 
     def test_campaign_entry_keeps_setup_visible_and_protects_existing_campaigns(self) -> None:
         assistant_html = self.source_text("assistant.html")

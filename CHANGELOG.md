@@ -13,6 +13,9 @@
   the trained weapon before the player selects the next book's equipment. Each
   transition roll is now generated once, saved across refresh/back/reopen, and
   cannot be rerolled to shop for a preferred result.
+- Prevented Book 2-5 setup from advancing when newly selected equipment would
+  exceed the two-weapon limit. The form now identifies required replacements,
+  and the transition validates capacity before changing the campaign state.
 
 ## 3.7.5 - Internal Testing
 
