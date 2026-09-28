@@ -63,6 +63,8 @@ body.lw-surface-tools.lw-console-active .lw-active-tool { min-height: 72vh; }
 .story-prose p:last-child { margin-bottom: 0; }
 /* Book text of the section that ended the adventure, shown on the death screen. */
 .death-story-panel .story-prose { max-width: 760px; color: var(--lw-ui-ink); font: 1.06rem/1.7 var(--lw-ui-serif); }
+/* New-campaign character creator, shown full-width before play begins. */
+.lw-creation-screen { max-width: 880px; margin: 0 auto; }
 .story-prose .smallcaps { font-variant: small-caps; letter-spacing: .02em; }
 .story-illustration { display: block; max-width: 100%; height: auto; margin: 20px auto; border: 1px solid var(--lw-ui-border); border-radius: 6px; background: #0c1417; }
 .story-combat { padding: 10px 12px; border: 1px solid var(--lw-ui-border); border-left: 3px solid var(--lw-ui-gold); border-radius: 4px; background: rgba(0,0,0,.16); font-weight: 700; }
@@ -199,10 +201,11 @@ body.lw-surface-campaign .workspace.lw-native {
 
 /* Campaign gives music its own quiet card, so it is discoverable without
    being mixed into story choices or the at-a-glance tool grid. */
-.lw-music-player-card { display: grid; gap: 10px; padding: 15px 16px 16px; min-width: 0; }
+.lw-music-player-card { display: grid; gap: 10px; padding: 18px 16px 16px; min-width: 0; }
 .lw-music-player-card__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-.lw-music-player-card__head .lw-eyebrow { margin-bottom: 3px; }
-.lw-music-player-card__head h2 { font-size: 1.12rem; }
+.lw-music-player-card__head > div { display: grid; gap: 7px; min-width: 0; }
+.lw-music-player-card__head .lw-eyebrow { margin: 0; line-height: 1.35; }
+.lw-music-player-card__head h2 { margin: 0; font-size: 1.12rem; line-height: 1.2; }
 .lw-music-player-card__now { display: grid; gap: 2px; min-width: 0; }
 .lw-music-player-card__now strong { overflow: hidden; color: var(--lw-ui-ink); font: 700 .98rem var(--lw-ui-sans); text-overflow: ellipsis; white-space: nowrap; }
 .lw-music-player-card__now span, .lw-music-player-card__message { color: var(--lw-ui-muted); font: .77rem/1.4 var(--lw-ui-sans); }

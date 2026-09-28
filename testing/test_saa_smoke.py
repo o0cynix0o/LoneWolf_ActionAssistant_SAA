@@ -3662,6 +3662,9 @@ class CampaignEntryPointTests(unittest.TestCase):
         self.assertIn('function shouldShowBook1Creation()', assistant_html)
         self.assertIn('function confirmCampaignReplacement()', assistant_html)
         self.assertIn('clearCampaignStartRequest();', assistant_html)
+        self.assertIn("function completeCampaignStart()", assistant_html)
+        self.assertIn("campaignTab = 'story';", assistant_html)
+        self.assertEqual(assistant_html.count('completeCampaignStart();'), 3)
 
     def test_active_game_modes_are_visible_and_editable_during_play(self) -> None:
         assistant_html = self.source_text("assistant.html")
@@ -4507,6 +4510,15 @@ class ReaderToolsProductionTests(unittest.TestCase):
         self.assertIn(":not(.book-choice):not(.active)", foundation_css)
         self.assertTrue((root / "assets" / "css" / "lw-reader-tools.css").is_file())
 
+    def test_back_to_tools_exits_cli_mode_and_reloads_console_changes(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
+
+        self.assertIn("const leavingConsole = (nativeConsole || isCliMode())", assistant_html)
+        self.assertIn("await setPlayMode(lastNonCliPlayMode);", assistant_html)
+        self.assertIn("await action({ action: 'reload_last_save' });", assistant_html)
+        self.assertIn("void applyNativeSurfaceNavigation", assistant_html)
+
 
 class SettingsInstallProductionTests(unittest.TestCase):
     def test_settings_and_book_manager_use_the_unified_production_surfaces(self) -> None:
@@ -4626,6 +4638,14 @@ class SoundtrackPlayerTests(unittest.TestCase):
         for control in ("setPlaylist", "setShuffle", "setRepeat", "setEnabled", "selectTrack", "Music credits and licenses"):
             self.assertIn(control, player)
         self.assertIn("THIRD_PARTY_MUSIC.md", build)
+
+    def test_music_player_heading_has_explicit_vertical_spacing(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        campaign_css = (root / "assets" / "css" / "lw-campaign.css").read_text(encoding="utf-8")
+
+        self.assertIn(".lw-music-player-card__head > div { display: grid; gap: 7px;", campaign_css)
+        self.assertIn(".lw-music-player-card__head .lw-eyebrow { margin: 0; line-height: 1.35;", campaign_css)
+        self.assertIn(".lw-music-player-card__head h2 { margin: 0;", campaign_css)
 
 
 class ServiceTests(unittest.TestCase):
