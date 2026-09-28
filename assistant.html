@@ -1899,7 +1899,9 @@
     let campaignEntryFocusPending = campaignStartRequested;
     const playModeKey = 'lonewolf_redux.mode';
     const playModes = ['auto', 'manual', 'cli'];
-    let playMode = pageParams.get('console') === '1' ? 'cli' : normalizePlayMode(localStorage.getItem(playModeKey));
+    const storedPlayMode = normalizePlayMode(localStorage.getItem(playModeKey));
+    let lastNonCliPlayMode = storedPlayMode === 'cli' ? 'auto' : storedPlayMode;
+    let playMode = pageParams.get('console') === '1' ? 'cli' : storedPlayMode;
     let cliTerminal = null;
     let cliFitAddon = null;
     let cliSocket = null;
@@ -4165,11 +4167,12 @@
       renderSectionActivity();
     }
 
-    function applyNativeSurfaceNavigation(url) {
+    async function applyNativeSurfaceNavigation(url) {
       const target = new URL(url, window.location.href);
       const nextSurface = target.searchParams.get('surface');
       if (!['campaign', 'reader', 'tools'].includes(nextSurface)) return;
       const nextTool = target.searchParams.get('tool');
+      const leavingConsole = (nativeConsole || isCliMode()) && target.searchParams.get('console') !== '1';
       nativeSurface = nextSurface;
       nativeConsole = target.searchParams.get('console') === '1';
       isNativeSurface = true;
@@ -4180,6 +4183,10 @@
       }
       if (!nativeConsole) stopCliTerminal();
       closeFrontMatter();
+      if (leavingConsole && isCliMode()) {
+        await setPlayMode(lastNonCliPlayMode);
+        return;
+      }
       render();
     }
 
@@ -4187,7 +4194,7 @@
     if (!window.__lwNativeBound) {
       window.__lwNativeBound = true;
       document.addEventListener('lonewolf:navigate-surface', (event) => {
-        applyNativeSurfaceNavigation(event.detail?.url || window.location.href);
+        void applyNativeSurfaceNavigation(event.detail?.url || window.location.href);
       });
       document.addEventListener('click', (event) => {
         const inlineJump = event.target.closest('[data-story-jump]');
@@ -4434,6 +4441,7 @@
         stopCliTerminal();
       }
       playMode = nextMode;
+      if (nextMode !== 'cli') lastNonCliPlayMode = nextMode;
       localStorage.setItem(playModeKey, playMode);
       closeMenus();
       setModeIndicator();
@@ -6249,6 +6257,11 @@
       window.history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
     }
 
+    function completeCampaignStart() {
+      campaignTab = 'story';
+      clearCampaignStartRequest();
+    }
+
     function defaultSheetLayout() {
       return hasSavedCharacter() ? ['action', 'choices'] : ['action', 'new', 'choices'];
     }
@@ -7197,7 +7210,7 @@
           ...(disciplines.includes('Weaponskill') ? { weaponskillRoll: draft.weaponskillRoll } : {})
         });
         book1Creation = null;
-        clearCampaignStartRequest();
+        completeCampaignStart();
       } catch (error) {
         showBook1CreationError(error);
       } finally {
@@ -7241,7 +7254,7 @@
           ...(creation.disciplines.includes('Weaponskill') ? { weaponskillRoll: creation.rolls.weaponskillRoll } : {})
         });
         book1Creation = null;
-        clearCampaignStartRequest();
+        completeCampaignStart();
       } catch (error) {
         showBook1CreationError(error);
       } finally {
@@ -9025,7 +9038,7 @@
           equipmentChoices: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29].includes(bookNumber) ? armourySelections : []
         });
         book1Creation = null;
-        clearCampaignStartRequest();
+        completeCampaignStart();
         render();
       }
       form.reset?.();

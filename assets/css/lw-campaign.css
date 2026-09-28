@@ -201,10 +201,11 @@ body.lw-surface-campaign .workspace.lw-native {
 
 /* Campaign gives music its own quiet card, so it is discoverable without
    being mixed into story choices or the at-a-glance tool grid. */
-.lw-music-player-card { display: grid; gap: 10px; padding: 15px 16px 16px; min-width: 0; }
+.lw-music-player-card { display: grid; gap: 10px; padding: 18px 16px 16px; min-width: 0; }
 .lw-music-player-card__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-.lw-music-player-card__head .lw-eyebrow { margin-bottom: 3px; }
-.lw-music-player-card__head h2 { font-size: 1.12rem; }
+.lw-music-player-card__head > div { display: grid; gap: 7px; min-width: 0; }
+.lw-music-player-card__head .lw-eyebrow { margin: 0; line-height: 1.35; }
+.lw-music-player-card__head h2 { margin: 0; font-size: 1.12rem; line-height: 1.2; }
 .lw-music-player-card__now { display: grid; gap: 2px; min-width: 0; }
 .lw-music-player-card__now strong { overflow: hidden; color: var(--lw-ui-ink); font: 700 .98rem var(--lw-ui-sans); text-overflow: ellipsis; white-space: nowrap; }
 .lw-music-player-card__now span, .lw-music-player-card__message { color: var(--lw-ui-muted); font: .77rem/1.4 var(--lw-ui-sans); }
