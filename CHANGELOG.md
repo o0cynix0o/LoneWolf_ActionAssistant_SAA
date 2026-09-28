@@ -10,7 +10,9 @@
   across restarts, and enabled the supported New Order Book 21-29 transitions.
 - Replaced raw book-transition roll fields with guided Roll 0-9 cards. Gold
   rolls now show the award and projected total, while Weaponskill rolls reveal
-  the trained weapon before the player selects the next book's equipment.
+  the trained weapon before the player selects the next book's equipment. Each
+  transition roll is now generated once, saved across refresh/back/reopen, and
+  cannot be rerolled to shop for a preferred result.
 
 ## 3.7.5 - Internal Testing
 
