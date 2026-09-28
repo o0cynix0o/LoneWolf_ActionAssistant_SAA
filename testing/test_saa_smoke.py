@@ -4170,6 +4170,22 @@ class CardLayoutInteractionTests(unittest.TestCase):
         self.assertNotIn("loadStorySoFar(nextBook)", self.assistant_html)
         self.assertIn('if action == "cancel_book_transition":', server_source)
 
+    def test_book_transition_rolls_show_their_outcomes_before_equipment(self) -> None:
+        form_renderer = self.function_source("bookContinueForm")
+        roll_card = self.function_source("bookTransitionRollCard")
+        roll_action = self.function_source("rollBookTransition")
+
+        self.assertIn("data-transition-roll", roll_card)
+        self.assertIn("Roll 0-9", roll_card)
+        self.assertIn("bookTransitionRollCard('Gold Crowns'", form_renderer)
+        self.assertIn("bookTransitionRollCard('Weaponskill'", form_renderer)
+        self.assertLess(form_renderer.index("bookTransitionRollCard('Weaponskill'"), form_renderer.index("equipmentChoiceGrid(nextBook)"))
+        self.assertIn("draft.weaponskillWeapon", roll_action)
+        self.assertIn("Weaponskill now applies to ${weapon}", roll_action)
+        self.assertIn("+${gain} Gold Crowns (${projected} total)", roll_action)
+        self.assertIn("Roll Again", roll_action)
+        self.assertIn("roll ${rollLabel} before continuing", self.assistant_html)
+
     def test_pre_book8_inventory_panel_titles_omit_capacity_warning(self) -> None:
         render_inventory = self.function_source("renderInventory")
 

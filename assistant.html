@@ -1220,6 +1220,13 @@
     .book-transition-story-status {
       margin: 0;
     }
+    .transition-roll-card[hidden] {
+      display: none !important;
+    }
+    .transition-discipline-field,
+    .transition-roll-grid {
+      grid-column: 1 / -1;
+    }
     .book-transition-setup > h2 {
       margin-top: 0;
     }
@@ -4707,6 +4714,22 @@
       `;
     }
 
+    function bookTransitionRollCard(label, key, nextBook, currentGold = 0, hidden = false) {
+      const isGold = key === 'goldRoll';
+      const detail = isGold
+        ? `Roll 0-9. Book ${nextBook} adds ${nextBook >= 13 ? '20' : '10'} plus the roll, up to the 50 Gold Crown limit.`
+        : 'Roll 0-9. The result determines your trained Weaponskill weapon before you choose equipment.';
+      return `
+        <div class="creation-roll-card transition-roll-card" data-transition-roll-card="${escapeHtml(key)}" data-next-book="${escapeHtml(nextBook)}" data-current-gold="${escapeHtml(currentGold)}" ${hidden ? 'hidden' : ''}>
+          <small>${escapeHtml(label)}</small>
+          <strong data-transition-roll-result>Not rolled</strong>
+          <span class="creation-note" data-transition-roll-note>${escapeHtml(detail)}</span>
+          <input type="hidden" name="${escapeHtml(key)}" value="" ${hidden ? 'disabled' : ''}>
+          <button type="button" data-transition-roll="${escapeHtml(key)}">Roll 0-9</button>
+        </div>
+      `;
+    }
+
     function bookContinueForm(completion) {
       const choices = arr(completion.KaiDisciplineChoices);
       const kaiOptions = choices.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('');
@@ -4726,7 +4749,7 @@
           <form id="continueBookForm" class="grid" data-next-book="6">
             <div class="check-field"><span>Choose exactly 3 Magnakai Disciplines</span><div class="check-grid">${magnakaiChoices.map((name) => `<label class="check-option"><input type="checkbox" name="magnakaiDiscipline" value="${escapeHtml(name)}"><span>${escapeHtml(name)}</span></label>`).join('')}</div></div>
             <div class="check-field"><span>Weaponmastery - choose exactly 3 Weapons if selected</span><div class="check-grid">${masteredWeapons.map((name) => `<label class="check-option"><input type="checkbox" name="weaponmasteryWeapon" value="${escapeHtml(name)}"><span>${escapeHtml(name)}</span></label>`).join('')}</div></div>
-            <label class="field">Gold Roll<input name="goldRoll" type="number" min="0" max="9" placeholder="0-9"></label>
+            ${bookTransitionRollCard('Gold Crowns', 'goldRoll', nextBook, summary.GoldCrowns)}
             <label class="field" title="Optional Book 6 rules carried over from the original assistant. Standard uses normal Magnakai rules. Curing cap limits Curing and Healing to 15 END restored in Book 6. Healing instead lets a Kai Healing user use Healing rather than Curing, capped at 10 END restored. Herb Pouch unlocks the Herb Pouch field-issue item and lets you drink a potion instead of attacking in combat.">Book 6 Curing Option<select name="deCuringOption" title="Hover the Curing Option label for a description of every choice."><option value="0" title="Use the normal Magnakai Curing rules.">Standard</option><option value="1" title="With Curing, cap total END restored by Curing or Healing at 15 during Book 6.">Curing cap</option><option value="2" title="With Kai Healing but no Curing, use Healing during Book 6; cap total END restored at 10.">Healing instead</option><option value="3" title="With Curing, unlock a Herb Pouch as field issue. It allows a potion instead of attacking in combat; the enemy takes no damage that round.">Herb Pouch</option></select></label>
             <label class="field" title="Optional Book 6 rule: with your recorded Weaponskill weapon equipped, gain +2 Combat Skill in Book 6. This bonus can stack with Weaponmastery.">Book 6 Weaponskill Option<select name="deWeaponskillOption" title="Hover the Weaponskill Option label for its full effect."><option value="0" title="Do not apply the optional Book 6 Weaponskill rule.">Standard</option><option value="1" title="Gain +2 Combat Skill while using your recorded Weaponskill weapon in Book 6. It can stack with Weaponmastery.">Weaponskill +2 CS</option></select></label>
             <div class="check-field"><span>Book 6 Field Issue - choose up to 7</span><div class="check-grid">${book6Equipment.map(([id, label]) => {
@@ -4758,7 +4781,7 @@
           <form id="continueBookForm" class="grid" data-next-book="${escapeHtml(nextBook)}">
             ${disciplineControl}
             ${masteryControl}
-            <label class="field">Gold Roll<input name="goldRoll" type="number" min="0" max="9" placeholder="0-9"></label>
+            ${bookTransitionRollCard('Gold Crowns', 'goldRoll', nextBook, summary.GoldCrowns)}
             <div class="check-field"><span>${escapeHtml(equipmentLabelForBook(nextBook))}</span><div class="check-grid">${options.map(([id, label]) => `<label class="check-option"><input type="checkbox" name="equipmentChoices" value="${escapeHtml(id)}"><span>${escapeHtml(label)}</span></label>`).join('')}</div></div>
             ${carriedItems.length ? `<div class="check-field"><span>Leave Behind Before Equipment Issue</span><div class="check-grid">${carriedItems.map(([container, index, item]) => `<label class="check-option"><input type="checkbox" name="transitionDrops" value="${escapeHtml(container)}:${escapeHtml(index)}"><span>${escapeHtml(item)} [${escapeHtml(container)}]</span></label>`).join('')}</div></div>` : ''}
             <button type="submit">Begin Book ${escapeHtml(nextBook)} at Section 1</button>
@@ -4779,7 +4802,7 @@
           <form id="continueBookForm" class="grid" data-next-book="${escapeHtml(nextBook)}">
             <label class="field">New New Order Discipline<select name="newOrderDiscipline">${newOrderChoices.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('')}</select></label>
             <div class="check-field"><span>Grand Weaponmastery Weapons - choose one if already known; otherwise choose this rank's weapons when selecting it now</span><div class="check-grid">${grandWeaponmasteryWeapons.map((name) => `<label class="check-option"><input type="checkbox" name="grandWeaponmasteryWeapon" value="${escapeHtml(name)}"><span>${escapeHtml(name)}</span></label>`).join('')}</div></div>
-            <label class="field">Gold Roll<input name="goldRoll" type="number" min="0" max="9" placeholder="0-9"></label>
+            ${bookTransitionRollCard('Gold Crowns', 'goldRoll', nextBook, summary.GoldCrowns)}
             <div class="check-field"><span>${escapeHtml(equipmentLabelForBook(nextBook))}</span><div class="check-grid">${equipmentOptionsForBook(nextBook).map(([id, label]) => `<label class="check-option"><input type="checkbox" name="equipmentChoices" value="${escapeHtml(id)}"><span>${escapeHtml(label)}</span></label>`).join('')}</div></div>
             ${carriedItems.length ? `<div class="check-field"><span>Leave Behind Before Equipment Issue</span><div class="check-grid">${carriedItems.map(([container, index, item]) => `<label class="check-option"><input type="checkbox" name="transitionDrops" value="${escapeHtml(container)}:${escapeHtml(index)}"><span>${escapeHtml(item)} [${escapeHtml(container)}]</span></label>`).join('')}</div></div>` : ''}
             <button type="submit">Begin Book ${escapeHtml(nextBook)} at Section 1</button>
@@ -4809,7 +4832,7 @@
           <form id="continueBookForm" class="grid" data-next-book="${escapeHtml(nextBook)}">
             <label class="field">New Magnakai Discipline<select name="magnakaiDiscipline">${magnakaiChoices.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('')}</select></label>
             <label class="field">Weaponmastery Weapon<select name="weaponmasteryWeapon"><option value="">Not choosing Weaponmastery</option>${masteredWeapons.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('')}</select></label>
-            ${nextBook === 11 ? '' : '<label class="field">Gold Roll<input name="goldRoll" type="number" min="0" max="9" placeholder="0-9"></label>'}
+            ${nextBook === 11 ? '' : bookTransitionRollCard('Gold Crowns', 'goldRoll', nextBook, summary.GoldCrowns)}
             ${issueText}
             ${transitionDrops}
             <button type="submit">Begin Book ${escapeHtml(nextBook)} at Section 1</button>
@@ -4819,9 +4842,11 @@
       const equipmentLabel = equipmentLabelForBook(nextBook);
       return `
         <form id="continueBookForm" class="grid" data-next-book="${escapeHtml(nextBook)}">
-          <label class="field">New Kai Discipline<select name="kaiDiscipline">${kaiOptions}</select></label>
-          <label class="field">Gold Roll<input name="goldRoll" type="number" min="0" max="9" placeholder="0-9"></label>
-          <label class="field">Weaponskill Roll<input name="weaponskillRoll" type="number" min="0" max="9" placeholder="Only if picking Weaponskill"></label>
+          <label class="field transition-discipline-field">New Kai Discipline<select name="kaiDiscipline" data-transition-kai-discipline>${kaiOptions}</select></label>
+          <div class="creation-roll-grid transition-roll-grid">
+            ${bookTransitionRollCard('Gold Crowns', 'goldRoll', nextBook, summary.GoldCrowns)}
+            ${bookTransitionRollCard('Weaponskill', 'weaponskillRoll', nextBook, summary.GoldCrowns, choices[0] !== 'Weaponskill')}
+          </div>
           <div class="check-field">
             <span>${escapeHtml(equipmentLabel)}</span>
             <div class="check-grid">${equipmentChoiceGrid(nextBook)}</div>
@@ -4831,6 +4856,57 @@
           <button type="submit">Begin Book ${escapeHtml(nextBook)} at Section 1</button>
         </form>
       `;
+    }
+
+    function syncBookTransitionWeaponskill(form) {
+      const discipline = form?.querySelector('[data-transition-kai-discipline]');
+      const card = form?.querySelector('[data-transition-roll-card="weaponskillRoll"]');
+      if (!discipline || !card) return;
+      const selected = discipline.value === 'Weaponskill';
+      card.hidden = !selected;
+      const input = card.querySelector('input[name="weaponskillRoll"]');
+      if (input) input.disabled = !selected;
+    }
+
+    async function rollBookTransition(button) {
+      const card = button.closest('[data-transition-roll-card]');
+      const key = text(button.dataset.transitionRoll);
+      const input = card?.querySelector(`input[name="${key}"]`);
+      const result = card?.querySelector('[data-transition-roll-result]');
+      const note = card?.querySelector('[data-transition-roll-note]');
+      if (!card || !input || !result || !note || !['goldRoll', 'weaponskillRoll'].includes(key)) return;
+      button.disabled = true;
+      button.textContent = 'Rolling…';
+      try {
+        const draft = await requestBook1CreationDraft({
+          rolls: {},
+          includeWeaponskill: key === 'weaponskillRoll'
+        });
+        const roll = Number(draft[key]);
+        if (!Number.isInteger(roll) || roll < 0 || roll > 9) throw new Error('The app returned an invalid roll result.');
+        input.value = String(roll);
+        if (key === 'weaponskillRoll') {
+          const weapon = text(draft.weaponskillWeapon, 'Unknown weapon');
+          result.textContent = `Roll ${roll} → ${weapon}`;
+          note.textContent = `Weaponskill now applies to ${weapon}. Choose your Royal Armoury items below with that result in mind.`;
+        } else {
+          const nextBook = Number(card.dataset.nextBook || 2);
+          const currentGold = Math.max(0, Number(card.dataset.currentGold || 0));
+          const gain = (nextBook >= 13 ? 20 : 10) + roll;
+          const projected = Math.min(50, currentGold + gain);
+          result.textContent = `Roll ${roll} → +${gain} Gold Crowns (${projected} total)`;
+          note.textContent = projected < currentGold + gain
+            ? `You receive ${gain}, but the 50 Gold Crown limit caps the carried total at ${projected}.`
+            : `You receive ${gain} Gold Crowns, taking your carried total from ${currentGold} to ${projected}.`;
+        }
+        button.textContent = 'Roll Again';
+      } catch (error) {
+        result.textContent = 'Roll unavailable';
+        note.textContent = text(error?.message, 'The app could not generate this roll. Try again.');
+        button.textContent = 'Try Again';
+      } finally {
+        button.disabled = false;
+      }
     }
 
     function renderTabs() {
@@ -8412,6 +8488,10 @@
         await rollBook1Creation(button.dataset.creationRoll);
         return;
       }
+      if (button.dataset.transitionRoll) {
+        await rollBookTransition(button);
+        return;
+      }
       if (button.dataset.settingKind) {
         await updateAssistantSetting(button.dataset.settingKind, button.dataset.settingId);
         return;
@@ -8772,6 +8852,9 @@
     });
 
     document.addEventListener('change', (event) => {
+      if (event.target.matches?.('[data-transition-kai-discipline]')) {
+        syncBookTransitionWeaponskill(event.target.closest('form'));
+      }
       if (event.target.matches?.('input[name="guidedKaiDisciplines"]')) {
         const form = event.target.closest('form');
         const selections = Array.from(form?.querySelectorAll('input[name="guidedKaiDisciplines"]:checked') || [])
@@ -8888,6 +8971,18 @@
         const magnakaiSelections = formData.getAll('magnakaiDiscipline');
         const masterySelections = formData.getAll('weaponmasteryWeapon');
         const equipmentSelections = formData.getAll('equipmentChoices');
+        const missingRoll = Array.from(form.querySelectorAll('[data-transition-roll-card]:not([hidden]) input[name]'))
+          .find((input) => !text(input.value));
+        if (missingRoll) {
+          const card = missingRoll.closest('[data-transition-roll-card]');
+          const rollLabel = card?.querySelector('small')?.textContent || 'required';
+          setReceipt({
+            summary: `Book ${nextBook} - roll ${rollLabel} before continuing.`,
+            title: `Book ${nextBook} Setup`,
+            details: [receiptDetail('Needed', 'Use the Roll 0-9 button so the result and its effect are visible before you confirm the transition.')]
+          });
+          return;
+        }
         if (nextBook === 6) {
           const hasWeaponmastery = magnakaiSelections.includes('Weaponmastery');
           if (magnakaiSelections.length !== 3 || (hasWeaponmastery && masterySelections.length !== 3) || (!hasWeaponmastery && masterySelections.length)) {

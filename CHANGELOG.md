@@ -8,6 +8,9 @@
   after those choices are confirmed.
 - Added a safe return to the completed-book summary, preserved pending handoffs
   across restarts, and enabled the supported New Order Book 21-29 transitions.
+- Replaced raw book-transition roll fields with guided Roll 0-9 cards. Gold
+  rolls now show the award and projected total, while Weaponskill rolls reveal
+  the trained weapon before the player selects the next book's equipment.
 
 ## 3.7.5 - Internal Testing
 
