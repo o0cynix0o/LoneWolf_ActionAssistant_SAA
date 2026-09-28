@@ -1214,13 +1214,11 @@
       margin-bottom: 0.3rem;
       text-transform: uppercase;
     }
-    .book-transition-story-frame {
-      display: block;
-      width: 100%;
-      min-height: 28rem;
-      border: 1px solid var(--lw-border-strong);
-      border-radius: 6px;
-      background: #ffffe6;
+    .book-transition-story-surface {
+      margin-top: 0.9rem;
+    }
+    .book-transition-story-status {
+      margin: 0;
     }
     .book-transition-setup > h2 {
       margin-top: 0;
@@ -6737,7 +6735,9 @@
             <small class="book-transition-step">Step 1</small>
             <h2>The Story So Far</h2>
             <p class="muted">This is the opening text from your installed Book ${escapeHtml(nextBook)} files.</p>
-            <iframe class="book-transition-story-frame" data-book-transition-story title="Book ${escapeHtml(nextBook)} Story So Far" src="${escapeHtml(bookUrl(nextBook, null, 'tssf.htm'))}"></iframe>
+            <div class="lw-story-panel lw-ui-panel book-transition-story-surface" data-book-transition-story aria-label="Book ${escapeHtml(nextBook)} Story So Far">
+              <p class="book-transition-story-status muted">Loading the opening text…</p>
+            </div>
           </div>
           <div class="panel book-transition-setup">
             <small class="book-transition-step">Step 2</small>
@@ -6747,43 +6747,31 @@
           </div>
         </section>
       `;
-      prepareBookTransitionStory();
+      renderBookTransitionStory(nextBook);
     }
 
-    function prepareBookTransitionStory() {
-      const frame = view.querySelector('[data-book-transition-story]');
-      if (!frame) return;
-      const fit = () => {
-        try {
-          const doc = frame.contentDocument;
-          if (!doc?.body) return;
-          if (!doc.querySelector('style[data-transition-reader-style]')) {
-            const style = doc.createElement('style');
-            style.dataset.transitionReaderStyle = 'true';
-            style.textContent = `
-              html, body { min-height: 0 !important; background: #ffffe6 !important; }
-              body { margin: 0 !important; padding: 0 !important; }
-              body > .container { width: 100% !important; max-width: none !important; padding: 1rem 1.2rem !important; }
-              #main-header, #page-navigation, footer { display: none !important; }
-              article, .frontmatter, .maintext { margin: 0 !important; max-width: none !important; }
-            `;
-            doc.head.appendChild(style);
-          }
-          const height = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight, 448);
-          frame.style.height = `${Math.ceil(height + 4)}px`;
-        } catch (_error) {
-          // Keep the readable minimum height if the imported page cannot be measured.
-        }
-      };
-      frame.addEventListener('load', () => {
-        fit();
-        window.setTimeout(fit, 120);
-        window.setTimeout(fit, 500);
-      }, { once: true });
+    async function renderBookTransitionStory(bookNumber) {
+      const target = view.querySelector('[data-book-transition-story]');
+      if (!target) return;
       try {
-        if (frame.contentDocument?.readyState === 'complete') fit();
+        const response = await fetch(bookUrl(bookNumber, null, 'tssf.htm'), { cache: 'force-cache' });
+        if (!response.ok) throw new Error(`Story So Far returned ${response.status}`);
+        const doc = new DOMParser().parseFromString(await response.text(), 'text/html');
+        const source = doc.querySelector('.maintext') || doc.querySelector('article');
+        if (!source) throw new Error('Story So Far content was not found');
+        const clone = source.cloneNode(true);
+        clone.querySelectorAll('script, style, #page-navigation, nav, .navbar, footer, #license').forEach((node) => node.remove());
+        clone.querySelectorAll('img').forEach((img) => {
+          const src = img.getAttribute('src') || '';
+          if (src && !/^(https?:|\/|data:)/i.test(src)) img.setAttribute('src', `books/lw/${bookByNumber(bookNumber).folder}/${src}`);
+          img.removeAttribute('integrity');
+          img.removeAttribute('crossorigin');
+          img.classList.add('story-illustration');
+        });
+        clone.querySelectorAll('a').forEach((anchor) => anchor.replaceWith(...anchor.childNodes));
+        target.innerHTML = `<div class="prose story-prose">${clone.innerHTML}</div>`;
       } catch (_error) {
-        // The load handler still leaves a readable fixed-height frame.
+        target.innerHTML = '<p class="story-error">The Story So Far could not be loaded from the installed book files. Return to the completed-book summary and try again.</p>';
       }
     }
 
