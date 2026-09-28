@@ -1,5 +1,24 @@
 # Changelog
 
+## 3.7.5 - Internal Testing
+
+- Reset every session-scoped cheat before installing a replacement campaign,
+  preventing modified values and stale snapshots from leaking into a new
+  character.
+- Applied Book 1-5 Kai Healing automatically on eligible section entry and
+  kept it out of the Choices panel.
+- Added preflight capacity feedback for section loot. Full Weapon, Backpack,
+  Herb Pouch, or Special Item storage now explains why loot is blocked and
+  provides a direct path to Inventory instead of silently ignoring Apply.
+- Fixed the native Console route so it actually starts its WebSocket terminal,
+  and bounded connection attempts with an explicit timeout and reconnect
+  guidance.
+- Increased the Campaign background-player card spacing, removed the repeated
+  pre-Book-8 capacity warning from inventory panel headings, and ignored normal
+  browser disconnects during static-response writes.
+- Completed a visible Book 1 campaign playthrough through section 350 and added
+  regression coverage for the corrected behaviors.
+
 ## 3.7.4 - Internal Testing
 
 - The death screen now shows the section's original book text. A "What happened"

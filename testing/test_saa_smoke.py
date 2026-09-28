@@ -2422,6 +2422,31 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
         self.assertEqual(assistant.inventory["GoldCrowns"], 10)
         self.assertEqual(assistant.inventory["Weapons"], ["Sword", "Dagger"])
 
+    def test_book1_weapon_loot_explains_full_slots_before_apply(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state(
+                {
+                    "Character": {"BookNumber": 1},
+                    "Inventory": {"Weapons": ["Axe", "Quarterstaff"]},
+                    "CurrentSection": 255,
+                }
+            )
+
+            prince_sword = next(
+                option for option in assistant.current_flow_loot_payload()
+                if option["id"] == "255-princes-sword"
+            )
+
+        self.assertFalse(prince_sword["Ready"])
+        self.assertTrue(prince_sword["CapacityBlocked"])
+        self.assertIn("Weapon slots are full (2/2)", prince_sword["BlockedReason"])
+        self.assertIn("drop a weapon", prince_sword["BlockedReason"])
+
     def test_book6_mercenary_sale_uses_live_inventory_and_source_price(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
@@ -3593,6 +3618,27 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
             self.assertTrue(healing["Available"])
             self.assertIn("Healing restores 1 END", healing["Summary"])
 
+    def test_kai_healing_applies_automatically_on_eligible_section_entry(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state["Character"].update(
+                {
+                    "BookNumber": 1,
+                    "KaiDisciplines": ["Healing"],
+                    "EnduranceCurrent": 10,
+                    "EnduranceMax": 20,
+                }
+            )
+
+            assistant.set_section(148)
+
+            self.assertEqual(assistant.character["EnduranceCurrent"], 11)
+            self.assertTrue(assistant.current_healing_payload()["Applied"])
+
 
 class CampaignEntryPointTests(unittest.TestCase):
     @staticmethod
@@ -4046,7 +4092,7 @@ class CardLayoutInteractionTests(unittest.TestCase):
                     return cls.assistant_html[match.start():index + 1]
         raise AssertionError(f"JavaScript function {name!r} has no closing brace")
 
-    def test_release_metadata_is_3_7_4_internal_testing(self) -> None:
+    def test_release_metadata_is_3_7_5_internal_testing(self) -> None:
         readme = (self.root / "README.md").read_text(encoding="utf-8")
         building = (self.root / "docs" / "BUILDING.md").read_text(encoding="utf-8")
         user_guide = (self.root / "docs" / "USER_GUIDE.md").read_text(encoding="utf-8")
@@ -4055,17 +4101,43 @@ class CardLayoutInteractionTests(unittest.TestCase):
             self.root / "installer" / "LoneWolf_ActionAssistant.iss"
         ).read_text(encoding="utf-8")
         version_info = (self.root / "version_info.txt").read_text(encoding="utf-8")
+        compose = (self.root / "docker-compose.yml").read_text(encoding="utf-8")
+        dockerfile = (self.root / "Dockerfile").read_text(encoding="utf-8")
 
-        self.assertIn("# Lone Wolf Action Assistant 3.7.4 Internal Testing", readme)
-        self.assertIn("Version: **3.7.4 Internal Testing**", readme)
-        self.assertIn("# Building Lone Wolf Action Assistant 3.7.4 Internal Testing", building)
-        self.assertIn("# Lone Wolf Action Assistant 3.7.4 Internal Testing", user_guide)
-        self.assertIn("## 3.7.4 - Internal Testing", changelog)
-        self.assertIn('#define AppVersion "3.7.4"', installer)
-        self.assertIn("filevers=(3, 7, 4, 0)", version_info)
-        self.assertIn("prodvers=(3, 7, 4, 0)", version_info)
-        self.assertIn("StringStruct(u'FileVersion', u'3.7.4')", version_info)
-        self.assertIn("StringStruct(u'ProductVersion', u'3.7.4')", version_info)
+        self.assertIn("# Lone Wolf Action Assistant 3.7.5 Internal Testing", readme)
+        self.assertIn("Version: **3.7.5 Internal Testing**", readme)
+        self.assertIn("# Building Lone Wolf Action Assistant 3.7.5 Internal Testing", building)
+        self.assertIn("# Lone Wolf Action Assistant 3.7.5 Internal Testing", user_guide)
+        self.assertIn("## 3.7.5 - Internal Testing", changelog)
+        self.assertIn('#define AppVersion "3.7.5"', installer)
+        self.assertIn("filevers=(3, 7, 5, 0)", version_info)
+        self.assertIn("prodvers=(3, 7, 5, 0)", version_info)
+        self.assertIn("StringStruct(u'FileVersion', u'3.7.5')", version_info)
+        self.assertIn("StringStruct(u'ProductVersion', u'3.7.5')", version_info)
+        self.assertIn("image: lonewolf-action-assistant:3.7.5", compose)
+        self.assertIn("ARG APP_VERSION=3.7.5", dockerfile)
+
+    def test_cli_connection_has_a_bounded_pending_state(self) -> None:
+        start_cli = self.function_source("startCliTerminal")
+        stop_cli = self.function_source("stopCliTerminal")
+
+        self.assertIn("(!nativeConsole && !isCliMode())", start_cli)
+        self.assertIn("Connection timed out", start_cli)
+        self.assertIn("6000", start_cli)
+        self.assertIn("clearTimeout(cliConnectTimer)", start_cli)
+        self.assertIn("clearTimeout(cliConnectTimer)", stop_cli)
+
+    def test_blocked_loot_offers_inventory_recovery(self) -> None:
+        section_loot = self.function_source("sectionLootRows")
+
+        self.assertIn("CapacityBlocked", section_loot)
+        self.assertIn('data-campaign-tab="inventory"', section_loot)
+        self.assertIn("BlockedReason", section_loot)
+
+    def test_pre_book8_inventory_panel_titles_omit_capacity_warning(self) -> None:
+        render_inventory = self.function_source("renderInventory")
+
+        self.assertNotIn("no limit before Book 8", render_inventory)
 
     def test_movable_cards_get_a_dedicated_drag_handle(self) -> None:
         self.assertIn("data-card-drag-handle", self.assistant_html)
@@ -4643,7 +4715,8 @@ class SoundtrackPlayerTests(unittest.TestCase):
         root = Path(saa_main.__file__).resolve().parent
         campaign_css = (root / "assets" / "css" / "lw-campaign.css").read_text(encoding="utf-8")
 
-        self.assertIn(".lw-music-player-card__head > div { display: grid; gap: 7px;", campaign_css)
+        self.assertIn(".lw-music-player-card { display: grid; gap: 12px; min-height: 118px;", campaign_css)
+        self.assertIn(".lw-music-player-card__head > div { display: grid; gap: 10px;", campaign_css)
         self.assertIn(".lw-music-player-card__head .lw-eyebrow { margin: 0; line-height: 1.35;", campaign_css)
         self.assertIn(".lw-music-player-card__head h2 { margin: 0;", campaign_css)
 
@@ -4870,6 +4943,7 @@ class CreationDraftTests(unittest.TestCase):
 
     def test_new_book1_auto_generation_uses_unique_disciplines(self) -> None:
         fake_assistant = mock.Mock()
+        fake_cheat_session = mock.Mock()
         captured = {}
 
         def create_state(**kwargs):
@@ -4878,6 +4952,7 @@ class CreationDraftTests(unittest.TestCase):
 
         with (
             mock.patch.object(app_server, "ASSISTANT", fake_assistant),
+            mock.patch.object(app_server, "CHEAT_SESSION", fake_cheat_session),
             mock.patch.object(app_server.lonewolf_redux, "create_book1_character_state", side_effect=create_state),
         ):
             app_server.apply_new_game({"bookNumber": 1, "autoGenerate": True})
@@ -4886,6 +4961,7 @@ class CreationDraftTests(unittest.TestCase):
         self.assertEqual(len(disciplines), 5)
         self.assertEqual(len(set(disciplines)), 5)
         self.assertTrue(set(disciplines).issubset(app_server.lonewolf_redux.KAI_DISCIPLINES))
+        fake_cheat_session.reset_for_new_campaign.assert_called_once_with()
 
 
 class SavePathContainmentTests(unittest.TestCase):
@@ -5217,6 +5293,21 @@ class CheatSessionTests(unittest.TestCase):
         session.toggle_digest(cheat_session.digest_code(phrases["force_zero"]))
         self.assertEqual(session.forced_digit(), 0)
         self.assertFalse(session.is_active("force_nine"))
+
+    def test_new_campaign_reset_clears_all_session_cheat_state(self) -> None:
+        session, phrases = self.fixture_session("god_mode", "developer_sight")
+        session.toggle_digest(cheat_session.digest_code(phrases["god_mode"]))
+        session.toggle_digest(
+            cheat_session.digest_code(phrases["developer_sight"]),
+            snapshot={"CurrentSection": 99},
+        )
+
+        status = session.reset_for_new_campaign()
+
+        self.assertEqual(status["active"], [])
+        self.assertEqual(status["runtime"], {})
+        self.assertFalse(status["achievementLocked"])
+        self.assertFalse(status["hasDeveloperSnapshot"])
 
     def test_session_effects_survive_new_assistant_and_do_not_enter_save_json(self) -> None:
         session, phrases = self.fixture_session("max_health", "max_cs")

@@ -1,4 +1,4 @@
-# Lone Wolf Action Assistant 3.7.4 Internal Testing
+# Lone Wolf Action Assistant 3.7.5 Internal Testing
 
 ## Installation
 
@@ -61,6 +61,10 @@ Master and is not a direct character handoff.
 When a Book 8+ transition or a newly found item would exceed the Special Item
 limit, choose what to leave behind before adding another item. The assistant
 does not silently discard an item for you.
+
+When both Weapon slots or the Backpack are full, section loot stays visible but
+cannot be applied. The Choices panel explains which capacity is full and offers
+**Manage Inventory** so you can drop an item before returning to claim the loot.
 
 Use **Open Managed Books Folder** when you need direct access to the selected storage location.
 
@@ -133,3 +137,14 @@ The app automatically creates missing state folders on launch. Diagnostic logs a
 ## Embedded terminal
 
 The Assistant page retains the original Lone Wolf command-line terminal. It runs inside the desktop application through a local WebSocket and a pipe-backed child process. No separate Python installation is required.
+
+The connection status changes from **Connecting** to **Connected** when the
+local bridge is ready. A connection that cannot complete times out after six
+seconds with a visible recovery message; choose **Reconnect** to try again.
+
+## Automatic Healing
+
+In Books 1-5, the Kai Discipline of Healing automatically restores 1 END when
+you enter an eligible numbered section outside combat, up to the book's
+original END score. Healing is recorded in Section Activity; it is not a choice
+that must be applied manually.

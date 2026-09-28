@@ -418,7 +418,7 @@ def apply_new_game(payload: dict) -> str:
         disciplines = lonewolf_redux.KAI_DISCIPLINES[:5]
 
     if book_number in {6, 7, 8, 9, 10, 11, 12}:
-        ASSISTANT.state = lonewolf_redux.create_magnakai_character_state(
+        new_state = lonewolf_redux.create_magnakai_character_state(
             book_number=book_number,
             name=name,
             magnakai_disciplines=payload.get("magnakaiDisciplines"),
@@ -433,7 +433,7 @@ def apply_new_game(payload: dict) -> str:
             de_weaponskill_option=int(payload.get("deWeaponskillOption") or 0),
         )
     elif book_number in set(range(13, 21)):
-        ASSISTANT.state = lonewolf_redux.create_grand_master_character_state(
+        new_state = lonewolf_redux.create_grand_master_character_state(
             book_number=book_number,
             name=name,
             grand_master_disciplines=payload.get("grandMasterDisciplines"),
@@ -445,7 +445,7 @@ def apply_new_game(payload: dict) -> str:
             equipment_choices=payload.get("equipmentChoices") or payload.get("armouryChoices"),
         )
     elif book_number in set(range(21, 30)):
-        ASSISTANT.state = lonewolf_redux.create_new_order_character_state(
+        new_state = lonewolf_redux.create_new_order_character_state(
             book_number=book_number,
             name=name,
             new_order_disciplines=payload.get("newOrderDisciplines"),
@@ -458,7 +458,7 @@ def apply_new_game(payload: dict) -> str:
             equipment_choices=payload.get("equipmentChoices") or payload.get("armouryChoices"),
         )
     elif book_number == 5:
-        ASSISTANT.state = lonewolf_redux.create_book5_character_state(
+        new_state = lonewolf_redux.create_book5_character_state(
             name=name,
             kai_disciplines=disciplines,
             section=int(payload.get("section") or 1),
@@ -471,7 +471,7 @@ def apply_new_game(payload: dict) -> str:
             safekeeping_special_items=payload.get("safekeepingSpecialItems"),
         )
     elif book_number == 4:
-        ASSISTANT.state = lonewolf_redux.create_book4_character_state(
+        new_state = lonewolf_redux.create_book4_character_state(
             name=name,
             kai_disciplines=disciplines,
             section=int(payload.get("section") or 1),
@@ -483,7 +483,7 @@ def apply_new_game(payload: dict) -> str:
             weapon_exchanges=payload.get("weaponExchanges"),
         )
     elif book_number == 3:
-        ASSISTANT.state = lonewolf_redux.create_book3_character_state(
+        new_state = lonewolf_redux.create_book3_character_state(
             name=name,
             kai_disciplines=disciplines,
             section=int(payload.get("section") or 1),
@@ -495,7 +495,7 @@ def apply_new_game(payload: dict) -> str:
             weapon_exchanges=payload.get("weaponExchanges"),
         )
     elif book_number == 2:
-        ASSISTANT.state = lonewolf_redux.create_book2_character_state(
+        new_state = lonewolf_redux.create_book2_character_state(
             name=name,
             kai_disciplines=disciplines,
             section=int(payload.get("section") or 1),
@@ -507,7 +507,7 @@ def apply_new_game(payload: dict) -> str:
             weapon_exchanges=payload.get("weaponExchanges"),
         )
     else:
-        ASSISTANT.state = lonewolf_redux.create_book1_character_state(
+        new_state = lonewolf_redux.create_book1_character_state(
             name=name,
             kai_disciplines=disciplines,
             section=int(payload.get("section") or 1),
@@ -517,6 +517,8 @@ def apply_new_game(payload: dict) -> str:
             starting_find_roll=payload.get("startingFindRoll"),
             weaponskill_roll=payload.get("weaponskillRoll"),
         )
+    CHEAT_SESSION.reset_for_new_campaign()
+    ASSISTANT.state = new_state
     ASSISTANT.set_run_configuration(
         payload.get("difficulty") or "Normal",
         truthy(payload.get("permadeath")),
@@ -926,7 +928,12 @@ class LoneWolfReduxHandler(BaseHTTPRequestHandler):
         self.send_header("Content-Disposition", f'attachment; filename="{filename}"')
         self.send_header("Content-Length", str(len(data)))
         self.end_headers()
-        self.wfile.write(data)
+        try:
+            self.wfile.write(data)
+        except (BrokenPipeError, ConnectionResetError):
+            # Browsers may abandon an asset request during navigation or reload.
+            # That is a normal client disconnect, not a server failure.
+            return
 
     def do_GET(self) -> None:  # noqa: N802
         if not self.host_header_is_local():
@@ -1077,7 +1084,12 @@ class LoneWolfReduxHandler(BaseHTTPRequestHandler):
         self.send_header("Content-Type", content_type)
         self.send_header("Content-Length", str(len(data)))
         self.end_headers()
-        self.wfile.write(data)
+        try:
+            self.wfile.write(data)
+        except (BrokenPipeError, ConnectionResetError):
+            # Browsers may abandon an asset request during navigation or reload.
+            # That is a normal client disconnect, not a server failure.
+            return
 
 
 def create_server(host: str = "127.0.0.1", port: int = 8797) -> ThreadingHTTPServer:
