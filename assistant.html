@@ -1186,6 +1186,54 @@
     .item-row span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .item-row span.wrap { overflow: visible; text-overflow: clip; white-space: normal; }
     .item-row small { color: #aeb091; }
+    .book-transition-onboarding {
+      display: grid;
+      gap: 1rem;
+      width: min(100%, 1080px);
+      margin: 0 auto;
+    }
+    .book-transition-heading {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .book-transition-heading h2,
+    .book-transition-heading p {
+      margin: 0;
+    }
+    .book-transition-heading p {
+      margin-top: 0.35rem;
+    }
+    .book-transition-step {
+      color: var(--lw-accent);
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.3rem;
+      text-transform: uppercase;
+    }
+    .book-transition-story-frame {
+      display: block;
+      width: 100%;
+      min-height: 28rem;
+      border: 1px solid var(--lw-border-strong);
+      border-radius: 6px;
+      background: #ffffe6;
+    }
+    .book-transition-setup > h2 {
+      margin-top: 0;
+    }
+    @media (max-width: 720px) {
+      .book-transition-heading {
+        align-items: stretch;
+        flex-direction: column-reverse;
+      }
+      .book-transition-heading button {
+        align-self: flex-start;
+      }
+    }
     .inventory-drag-handle {
       min-width: 30px;
       padding: 0.3rem 0.35rem;
@@ -4533,8 +4581,8 @@
       const summary = completion.Summary || {};
       const nextBook = Number(completion.NextBookNumber || 0);
       const nextTitle = text(completion.NextBookTitle, '');
-      const continueControls = completion.CanContinue && nextBook >= 2 && nextBook <= 20 ? (
-        `<button type="button" data-open-next-book="${escapeHtml(nextBook)}">Open Book ${escapeHtml(nextBook)}</button>`
+      const continueControls = completion.CanContinue && nextBook >= 2 && nextBook <= 29 ? (
+        `<button type="button" data-open-next-book="${escapeHtml(nextBook)}">Continue to Book ${escapeHtml(nextBook)}</button>`
       ) : (
         completion.CanContinue
           ? '<p class="muted">That next book is not enabled yet.</p>'
@@ -4664,7 +4712,8 @@
     function bookContinueForm(completion) {
       const choices = arr(completion.KaiDisciplineChoices);
       const kaiOptions = choices.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('');
-      const weapons = arr((completion.Summary || {}).Weapons);
+      const summary = completion.Summary || {};
+      const weapons = arr(summary.Weapons);
       const nextBook = Number(completion.NextBookNumber || 2);
       if (nextBook === 6) {
         const magnakaiChoices = arr(completion.MagnakaiDisciplineChoices);
@@ -4688,7 +4737,7 @@
             }).join('')}</div></div>
             ${transitionBackpackDropFields(summary.BackpackItems)}
             ${weaponExchangeFields(weapons)}
-            <button type="submit" data-book6-continue>Continue to Book 6</button>
+            <button type="submit" data-book6-continue>Begin Book 6 at Section 1</button>
           </form>
         `;
       }
@@ -4714,7 +4763,7 @@
             <label class="field">Gold Roll<input name="goldRoll" type="number" min="0" max="9" placeholder="0-9"></label>
             <div class="check-field"><span>${escapeHtml(equipmentLabelForBook(nextBook))}</span><div class="check-grid">${options.map(([id, label]) => `<label class="check-option"><input type="checkbox" name="equipmentChoices" value="${escapeHtml(id)}"><span>${escapeHtml(label)}</span></label>`).join('')}</div></div>
             ${carriedItems.length ? `<div class="check-field"><span>Leave Behind Before Equipment Issue</span><div class="check-grid">${carriedItems.map(([container, index, item]) => `<label class="check-option"><input type="checkbox" name="transitionDrops" value="${escapeHtml(container)}:${escapeHtml(index)}"><span>${escapeHtml(item)} [${escapeHtml(container)}]</span></label>`).join('')}</div></div>` : ''}
-            <button type="submit">Continue to Book ${escapeHtml(nextBook)}</button>
+            <button type="submit">Begin Book ${escapeHtml(nextBook)} at Section 1</button>
           </form>
         `;
       }
@@ -4735,7 +4784,7 @@
             <label class="field">Gold Roll<input name="goldRoll" type="number" min="0" max="9" placeholder="0-9"></label>
             <div class="check-field"><span>${escapeHtml(equipmentLabelForBook(nextBook))}</span><div class="check-grid">${equipmentOptionsForBook(nextBook).map(([id, label]) => `<label class="check-option"><input type="checkbox" name="equipmentChoices" value="${escapeHtml(id)}"><span>${escapeHtml(label)}</span></label>`).join('')}</div></div>
             ${carriedItems.length ? `<div class="check-field"><span>Leave Behind Before Equipment Issue</span><div class="check-grid">${carriedItems.map(([container, index, item]) => `<label class="check-option"><input type="checkbox" name="transitionDrops" value="${escapeHtml(container)}:${escapeHtml(index)}"><span>${escapeHtml(item)} [${escapeHtml(container)}]</span></label>`).join('')}</div></div>` : ''}
-            <button type="submit">Continue to Book ${escapeHtml(nextBook)}</button>
+            <button type="submit">Begin Book ${escapeHtml(nextBook)} at Section 1</button>
           </form>
         `;
       }
@@ -4765,7 +4814,7 @@
             ${nextBook === 11 ? '' : '<label class="field">Gold Roll<input name="goldRoll" type="number" min="0" max="9" placeholder="0-9"></label>'}
             ${issueText}
             ${transitionDrops}
-            <button type="submit">Continue to Book ${escapeHtml(nextBook)}</button>
+            <button type="submit">Begin Book ${escapeHtml(nextBook)} at Section 1</button>
           </form>
         `;
       }
@@ -4781,7 +4830,7 @@
           </div>
           ${transitionBackpackDropFields(summary.BackpackItems)}
           ${weaponExchangeFields(weapons)}
-          <button type="submit">Continue to Book ${escapeHtml(nextBook)}</button>
+          <button type="submit">Begin Book ${escapeHtml(nextBook)} at Section 1</button>
         </form>
       `;
     }
@@ -6675,18 +6724,67 @@
       const nextBook = Number(pending.NextBookNumber || completion.NextBookNumber || 0);
       const nextTitle = text(completion.NextBookTitle || bookByNumber(nextBook).title, 'Next Book');
       view.innerHTML = `
-        <div class="panel">
-          <h2>Book ${escapeHtml(nextBook)}: ${escapeHtml(nextTitle)}</h2>
-          <div class="grid">
-            ${field('Previous Book', escapeHtml(text(pending.FromBookNumber, '?')))}
-            ${field('Opening', 'Story So Far')}
+        <section class="book-transition-onboarding" data-book-transition-onboarding="${escapeHtml(nextBook)}">
+          <div class="panel book-transition-heading">
+            <div>
+              <small class="book-transition-step">Next adventure</small>
+              <h2>Book ${escapeHtml(nextBook)}: ${escapeHtml(nextTitle)}</h2>
+              <p class="muted">Read the opening, prepare the carried Action Chart, and begin Section 1 when you are ready.</p>
+            </div>
+            <button type="button" data-cancel-book-transition>Back to Book ${escapeHtml(text(pending.FromBookNumber, '?'))} summary</button>
           </div>
-        </div>
-        <div class="panel">
-          <h2>Action Chart Setup</h2>
-          ${bookContinueForm(completion)}
-        </div>
+          <div class="panel book-transition-story">
+            <small class="book-transition-step">Step 1</small>
+            <h2>The Story So Far</h2>
+            <p class="muted">This is the opening text from your installed Book ${escapeHtml(nextBook)} files.</p>
+            <iframe class="book-transition-story-frame" data-book-transition-story title="Book ${escapeHtml(nextBook)} Story So Far" src="${escapeHtml(bookUrl(nextBook, null, 'tssf.htm'))}"></iframe>
+          </div>
+          <div class="panel book-transition-setup">
+            <small class="book-transition-step">Step 2</small>
+            <h2>Prepare Your Action Chart</h2>
+            <p class="muted">Your completed Book ${escapeHtml(text(pending.FromBookNumber, '?'))} campaign is unchanged until you confirm this setup.</p>
+            ${bookContinueForm(completion)}
+          </div>
+        </section>
       `;
+      prepareBookTransitionStory();
+    }
+
+    function prepareBookTransitionStory() {
+      const frame = view.querySelector('[data-book-transition-story]');
+      if (!frame) return;
+      const fit = () => {
+        try {
+          const doc = frame.contentDocument;
+          if (!doc?.body) return;
+          if (!doc.querySelector('style[data-transition-reader-style]')) {
+            const style = doc.createElement('style');
+            style.dataset.transitionReaderStyle = 'true';
+            style.textContent = `
+              html, body { min-height: 0 !important; background: #ffffe6 !important; }
+              body { margin: 0 !important; padding: 0 !important; }
+              body > .container { width: 100% !important; max-width: none !important; padding: 1rem 1.2rem !important; }
+              #main-header, #page-navigation, footer { display: none !important; }
+              article, .frontmatter, .maintext { margin: 0 !important; max-width: none !important; }
+            `;
+            doc.head.appendChild(style);
+          }
+          const height = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight, 448);
+          frame.style.height = `${Math.ceil(height + 4)}px`;
+        } catch (_error) {
+          // Keep the readable minimum height if the imported page cannot be measured.
+        }
+      };
+      frame.addEventListener('load', () => {
+        fit();
+        window.setTimeout(fit, 120);
+        window.setTimeout(fit, 500);
+      }, { once: true });
+      try {
+        if (frame.contentDocument?.readyState === 'complete') fit();
+      } catch (_error) {
+        // The load handler still leaves a readable fixed-height frame.
+      }
     }
 
     function runConfigurationFields(creation) {
@@ -8530,10 +8628,9 @@
       if (button.dataset.checkpointRecovery) await action({ action: 'checkpoint_recovery', key: button.dataset.checkpointRecovery });
       if (button.dataset.completeBook !== undefined) await action({ action: 'complete_book' });
       if (button.dataset.openNextBook) {
-        const nextBook = Number(button.dataset.openNextBook);
         await action({ action: 'open_next_book' });
-        loadStorySoFar(nextBook);
       }
+      if (button.dataset.cancelBookTransition !== undefined) await action({ action: 'cancel_book_transition' });
       if (button.dataset.repeatBook !== undefined) await action({ action: 'repeat_book' });
       if (button.dataset.automationApply !== undefined) await action({ action: 'apply_automation' });
       if (button.dataset.roll !== undefined) {

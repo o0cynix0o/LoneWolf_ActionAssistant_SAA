@@ -791,6 +791,8 @@ def handle_action(payload: dict) -> str:
         return capture_output(complete)
     if action == "open_next_book":
         return capture_output(lambda: ASSISTANT.open_next_book())
+    if action == "cancel_book_transition":
+        return capture_output(ASSISTANT.cancel_next_book_setup)
     if action == "continue_book":
         return capture_output(
             lambda: ASSISTANT.continue_completed_book(
