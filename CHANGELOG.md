@@ -3,8 +3,9 @@
 ## Unreleased
 
 - Reworked completed-book handoffs into a two-step onboarding screen. The next
-  book's full Story So Far now appears before the carried Action Chart choices,
-  and the campaign advances to Section 1 only after those choices are confirmed.
+  book's full Story So Far now uses the app's native Campaign story panel before
+  the carried Action Chart choices, and the campaign advances to Section 1 only
+  after those choices are confirmed.
 - Added a safe return to the completed-book summary, preserved pending handoffs
   across restarts, and enabled the supported New Order Book 21-29 transitions.
 

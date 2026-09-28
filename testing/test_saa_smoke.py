@@ -4149,14 +4149,20 @@ class CardLayoutInteractionTests(unittest.TestCase):
 
     def test_book_transition_onboarding_places_story_before_setup(self) -> None:
         renderer = self.function_source("renderBookSetupScreen")
+        story_renderer = self.function_source("renderBookTransitionStory")
         form_renderer = self.function_source("bookContinueForm")
         story_index = renderer.index('data-book-transition-story')
         setup_index = renderer.index('Prepare Your Action Chart')
         server_source = (self.root / "app_server.py").read_text(encoding="utf-8")
 
         self.assertLess(story_index, setup_index)
-        self.assertIn("bookUrl(nextBook, null, 'tssf.htm')", renderer)
-        self.assertIn("prepareBookTransitionStory()", renderer)
+        self.assertIn("lw-story-panel lw-ui-panel book-transition-story-surface", renderer)
+        self.assertNotIn("lw-reading-surface", renderer)
+        self.assertIn("renderBookTransitionStory(nextBook)", renderer)
+        self.assertNotIn("<iframe", renderer)
+        self.assertIn("bookUrl(bookNumber, null, 'tssf.htm')", story_renderer)
+        self.assertIn("doc.querySelector('.maintext')", story_renderer)
+        self.assertIn('<div class="prose story-prose">', story_renderer)
         self.assertIn("data-cancel-book-transition", renderer)
         self.assertIn("const summary = completion.Summary || {};", form_renderer)
         self.assertIn("Begin Book ${escapeHtml(nextBook)} at Section 1", self.assistant_html)
