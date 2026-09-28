@@ -5439,16 +5439,38 @@ class CheatSessionTests(unittest.TestCase):
         self.assertEqual(status["runtime"], {})
         self.assertFalse(status["achievementLocked"])
         self.assertFalse(status["hasDeveloperSnapshot"])
+        self.assertFalse(status["hasCampaignSnapshot"])
+
+    def test_disabling_final_cheat_restores_the_pre_cheat_campaign_snapshot(self) -> None:
+        session, phrases = self.fixture_session("max_cs", "max_health")
+        cs_digest = cheat_session.digest_code(phrases["max_cs"])
+        health_digest = cheat_session.digest_code(phrases["max_health"])
+        original = {"CurrentSection": 348, "CombatHistory": []}
+
+        session.toggle_digest(cs_digest, snapshot=original)
+        session.toggle_digest(health_digest, snapshot={"CurrentSection": 333})
+        first_disabled = session.toggle_digest(cs_digest)
+        restored = session.toggle_digest(health_digest)
+
+        self.assertIsNone(first_disabled["restoredSnapshot"])
+        self.assertEqual(restored["restoredSnapshot"], original)
+        self.assertEqual(restored["active"], [])
+        self.assertFalse(restored["hasCampaignSnapshot"])
+        self.assertTrue(restored["sessionTainted"])
 
     def test_session_effects_survive_new_assistant_and_do_not_enter_save_json(self) -> None:
         session, phrases = self.fixture_session("max_health", "max_cs")
-        session.toggle_digest(cheat_session.digest_code(phrases["max_health"]))
-        session.toggle_digest(cheat_session.digest_code(phrases["max_cs"]))
         with tempfile.TemporaryDirectory() as temp_dir:
             first = self.assistant(temp_dir, session)
             base_end = first.character["EnduranceMax"]
             path = Path(temp_dir) / "saves" / "clean.json"
             first.save_game(str(path), quiet=True)
+            session.toggle_digest(
+                cheat_session.digest_code(phrases["max_health"]), snapshot=first.state
+            )
+            session.toggle_digest(
+                cheat_session.digest_code(phrases["max_cs"]), snapshot=first.state
+            )
             second = self.assistant(temp_dir, session)
             saved = json.loads(path.read_text(encoding="utf-8"))
 
@@ -5472,6 +5494,22 @@ class CheatSessionTests(unittest.TestCase):
 
             self.assertFalse(blocked_path.exists())
             self.assertEqual(assistant.character["CombatSkillCurrent"], original)
+
+    def test_all_cheat_effects_block_saves_and_restore_the_campaign(self) -> None:
+        session, phrases = self.fixture_session("max_cs")
+        digest = cheat_session.digest_code(phrases["max_cs"])
+        with tempfile.TemporaryDirectory() as temp_dir:
+            assistant = self.assistant(temp_dir, session)
+            original_section = int(assistant.state["CurrentSection"])
+            blocked_path = Path(temp_dir) / "saves" / "sandbox.json"
+            with redirect_stdout(io.StringIO()):
+                assistant.toggle_cheat_digest(digest)
+                assistant.state["CurrentSection"] = 333
+                assistant.save_game(str(blocked_path), quiet=True)
+                assistant.toggle_cheat_digest(digest)
+
+            self.assertFalse(blocked_path.exists())
+            self.assertEqual(assistant.state["CurrentSection"], original_section)
 
     def test_resource_guards_preserve_costs_but_keep_gains(self) -> None:
         session, phrases = self.fixture_session("infinite_gold", "infinite_meals")

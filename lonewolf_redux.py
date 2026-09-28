@@ -9874,9 +9874,9 @@ class LoneWolfReduxAssistant:
         return self.save_dir / f"{name}.json"
 
     def save_game(self, path_text: str = "", quiet: bool = False) -> bool:
-        if self.cheat_active("developer_sight"):
+        if as_list(self.cheats.status().get("active")):
             if not quiet:
-                print("Developer Sight is active; sandbox changes were not saved.")
+                print("Cheat sandbox is active; temporary changes were not saved.")
             return True
         path = self.resolve_save_path(path_text)
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -12811,10 +12811,7 @@ class LoneWolfReduxAssistant:
         print("+------------------------------------------------------------------------+")
 
     def toggle_cheat_digest(self, digest: str) -> None:
-        known_effect = EFFECT_DIGESTS.get(digest)
-        if known_effect is None:
-            known_effect = getattr(self.cheats, "digest_map", {}).get(digest)
-        snapshot = json_clone(self.state) if known_effect == "developer_sight" else None
+        snapshot = json_clone(self.state)
         result = self.cheats.toggle_digest(digest, snapshot=snapshot)
         if not result.get("recognized"):
             return
@@ -12822,11 +12819,14 @@ class LoneWolfReduxAssistant:
         if isinstance(restored, dict):
             self.state = normalize_state(restored)
             self.write_current_position()
+            self.autosave()
         effect = str(result.get("effect") or "")
         state = "ON" if result.get("enabled") else "OFF"
         print(f"{CHEAT_EFFECT_TITLES.get(effect, effect)}: {state}")
         if result.get("enabled"):
-            print("Achievements are locked until the desktop application closes.")
+            print("Cheat sandbox started. Achievements are locked until the desktop application closes.")
+        elif isinstance(restored, dict):
+            print("Cheat sandbox closed. The pre-cheat campaign state was restored.")
         if self._cheat_catalog is not None:
             self.show_cheat_catalog()
 
