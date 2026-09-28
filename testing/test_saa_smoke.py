@@ -4158,6 +4158,8 @@ class CardLayoutInteractionTests(unittest.TestCase):
         self.assertLess(story_index, setup_index)
         self.assertIn("lw-story-panel lw-ui-panel book-transition-story-surface", renderer)
         self.assertNotIn("lw-reading-surface", renderer)
+        self.assertIn(".book-transition-story-surface .story-prose", self.assistant_html)
+        self.assertIn("margin-inline: auto", self.assistant_html)
         self.assertIn("renderBookTransitionStory(nextBook)", renderer)
         self.assertNotIn("<iframe", renderer)
         self.assertIn("bookUrl(bookNumber, null, 'tssf.htm')", story_renderer)
