@@ -1259,6 +1259,7 @@ def default_automation() -> dict[str, Any]:
         "DiceGames": {},
         "Ending": None,
         "PendingBookSetup": None,
+        "BookTransitionRolls": {},
         "DeathState": {"Active": False},
         "DeathHistory": [],
         "SectionCheckpoints": [],
@@ -4985,7 +4986,50 @@ class LoneWolfReduxAssistant:
         next_book = int(pending.get("NextBookNumber") or 0)
         if not completion.get("Active") or next_book != int(completion.get("NextBookNumber") or 0):
             return {"Active": False}
-        return {"Active": True, **json_clone(pending)}
+        summary = completion.get("Summary") if isinstance(completion.get("Summary"), dict) else {}
+        from_book = int(summary.get("BookNumber") or 0)
+        roll_store = self.automation.get("BookTransitionRolls")
+        if not isinstance(roll_store, dict):
+            roll_store = {}
+            self.automation["BookTransitionRolls"] = roll_store
+        rolls = roll_store.get(f"{from_book}:{next_book}")
+        return {
+            "Active": True,
+            **json_clone(pending),
+            "Rolls": json_clone(rolls) if isinstance(rolls, dict) else {},
+        }
+
+    def roll_next_book_setup(self, kind: str) -> dict[str, Any]:
+        """Roll a transition result once and preserve it across reload/back navigation."""
+        pending = self.pending_book_setup_payload()
+        if not pending.get("Active"):
+            raise ValueError("Open the next-book setup before rolling.")
+        normalized_kind = str(kind or "").strip()
+        if normalized_kind not in {"goldRoll", "weaponskillRoll"}:
+            raise ValueError("That book-transition roll is not supported.")
+
+        from_book = int(pending.get("FromBookNumber") or 0)
+        next_book = int(pending.get("NextBookNumber") or 0)
+        store = self.automation.setdefault("BookTransitionRolls", {})
+        if not isinstance(store, dict):
+            store = {}
+            self.automation["BookTransitionRolls"] = store
+        transition_rolls = store.setdefault(f"{from_book}:{next_book}", {})
+        if not isinstance(transition_rolls, dict):
+            transition_rolls = {}
+            store[f"{from_book}:{next_book}"] = transition_rolls
+
+        existing = transition_rolls.get(normalized_kind)
+        if isinstance(existing, dict) and isinstance(existing.get("Roll"), int):
+            return json_clone(existing)
+
+        digit = random.SystemRandom().randrange(10)
+        result: dict[str, Any] = {"Roll": digit}
+        if normalized_kind == "weaponskillRoll":
+            result["Weapon"] = weaponskill_weapon_for_roll(digit)
+        transition_rolls[normalized_kind] = result
+        self.autosave()
+        return json_clone(result)
 
     def open_next_book(self) -> int:
         completion = self.book_completion_payload()

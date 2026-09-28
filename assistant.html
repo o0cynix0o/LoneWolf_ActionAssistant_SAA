@@ -1231,6 +1231,15 @@
     .transition-roll-grid {
       grid-column: 1 / -1;
     }
+    .book-transition-setup #continueBookForm {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .book-transition-setup .transition-roll-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .book-transition-setup .transition-roll-grid.single-roll {
+      grid-template-columns: minmax(0, 1fr);
+    }
     .book-transition-setup > h2 {
       margin-top: 0;
     }
@@ -1241,6 +1250,9 @@
       }
       .book-transition-heading button {
         align-self: flex-start;
+      }
+      .book-transition-setup .transition-roll-grid {
+        grid-template-columns: minmax(0, 1fr);
       }
     }
     .inventory-drag-handle {
@@ -4718,28 +4730,50 @@
       `;
     }
 
-    function bookTransitionRollCard(label, key, nextBook, currentGold = 0, hidden = false) {
+    function bookTransitionRollPresentation(key, nextBook, currentGold, savedRoll) {
+      const roll = Number(savedRoll?.Roll);
+      if (!Number.isInteger(roll) || roll < 0 || roll > 9) return null;
+      if (key === 'weaponskillRoll') {
+        const weapon = text(savedRoll?.Weapon, 'Unknown weapon');
+        return {
+          result: `Roll ${roll} → ${weapon}`,
+          note: `Weaponskill applies to ${weapon}. Choose your Royal Armoury items below with that result in mind.`
+        };
+      }
+      const gain = (nextBook >= 13 ? 20 : 10) + roll;
+      const projected = Math.min(50, currentGold + gain);
+      return {
+        result: `Roll ${roll} → +${gain} Gold Crowns (${projected} total)`,
+        note: projected < currentGold + gain
+          ? `You receive ${gain}, but the 50 Gold Crown limit caps the carried total at ${projected}.`
+          : `You receive ${gain} Gold Crowns, taking your carried total from ${currentGold} to ${projected}.`
+      };
+    }
+
+    function bookTransitionRollCard(label, key, nextBook, currentGold = 0, hidden = false, savedRoll = null) {
       const isGold = key === 'goldRoll';
-      const detail = isGold
+      const saved = bookTransitionRollPresentation(key, nextBook, Number(currentGold || 0), savedRoll);
+      const detail = saved?.note || (isGold
         ? `Roll 0-9. Book ${nextBook} adds ${nextBook >= 13 ? '20' : '10'} plus the roll, up to the 50 Gold Crown limit.`
-        : 'Roll 0-9. The result determines your trained Weaponskill weapon before you choose equipment.';
+        : 'Roll 0-9. The result determines your trained Weaponskill weapon before you choose equipment.');
       return `
         <div class="creation-roll-card transition-roll-card" data-transition-roll-card="${escapeHtml(key)}" data-next-book="${escapeHtml(nextBook)}" data-current-gold="${escapeHtml(currentGold)}" ${hidden ? 'hidden' : ''}>
           <small>${escapeHtml(label)}</small>
-          <strong data-transition-roll-result>Not rolled</strong>
+          <strong data-transition-roll-result>${escapeHtml(saved?.result || 'Not rolled')}</strong>
           <span class="creation-note" data-transition-roll-note>${escapeHtml(detail)}</span>
-          <input type="hidden" name="${escapeHtml(key)}" value="" ${hidden ? 'disabled' : ''}>
-          <button type="button" data-transition-roll="${escapeHtml(key)}">Roll 0-9</button>
+          <input type="hidden" name="${escapeHtml(key)}" value="${saved ? escapeHtml(savedRoll.Roll) : ''}" ${hidden ? 'disabled' : ''}>
+          <button type="button" data-transition-roll="${escapeHtml(key)}" ${saved ? 'disabled' : ''}>${saved ? 'Roll complete' : 'Roll 0-9'}</button>
         </div>
       `;
     }
 
-    function bookContinueForm(completion) {
+    function bookContinueForm(completion, pending = {}) {
       const choices = arr(completion.KaiDisciplineChoices);
       const kaiOptions = choices.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('');
       const summary = completion.Summary || {};
       const weapons = arr(summary.Weapons);
       const nextBook = Number(completion.NextBookNumber || 2);
+      const savedRolls = pending.Rolls && typeof pending.Rolls === 'object' ? pending.Rolls : {};
       if (nextBook === 6) {
         const magnakaiChoices = arr(completion.MagnakaiDisciplineChoices);
         const masteredWeapons = ['Dagger', 'Spear', 'Mace', 'Warhammer', 'Sword', 'Axe', 'Short Sword', 'Quarterstaff', 'Broadsword', 'Bow'];
@@ -4753,7 +4787,7 @@
           <form id="continueBookForm" class="grid" data-next-book="6">
             <div class="check-field"><span>Choose exactly 3 Magnakai Disciplines</span><div class="check-grid">${magnakaiChoices.map((name) => `<label class="check-option"><input type="checkbox" name="magnakaiDiscipline" value="${escapeHtml(name)}"><span>${escapeHtml(name)}</span></label>`).join('')}</div></div>
             <div class="check-field"><span>Weaponmastery - choose exactly 3 Weapons if selected</span><div class="check-grid">${masteredWeapons.map((name) => `<label class="check-option"><input type="checkbox" name="weaponmasteryWeapon" value="${escapeHtml(name)}"><span>${escapeHtml(name)}</span></label>`).join('')}</div></div>
-            ${bookTransitionRollCard('Gold Crowns', 'goldRoll', nextBook, summary.GoldCrowns)}
+            ${bookTransitionRollCard('Gold Crowns', 'goldRoll', nextBook, summary.GoldCrowns, false, savedRolls.goldRoll)}
             <label class="field" title="Optional Book 6 rules carried over from the original assistant. Standard uses normal Magnakai rules. Curing cap limits Curing and Healing to 15 END restored in Book 6. Healing instead lets a Kai Healing user use Healing rather than Curing, capped at 10 END restored. Herb Pouch unlocks the Herb Pouch field-issue item and lets you drink a potion instead of attacking in combat.">Book 6 Curing Option<select name="deCuringOption" title="Hover the Curing Option label for a description of every choice."><option value="0" title="Use the normal Magnakai Curing rules.">Standard</option><option value="1" title="With Curing, cap total END restored by Curing or Healing at 15 during Book 6.">Curing cap</option><option value="2" title="With Kai Healing but no Curing, use Healing during Book 6; cap total END restored at 10.">Healing instead</option><option value="3" title="With Curing, unlock a Herb Pouch as field issue. It allows a potion instead of attacking in combat; the enemy takes no damage that round.">Herb Pouch</option></select></label>
             <label class="field" title="Optional Book 6 rule: with your recorded Weaponskill weapon equipped, gain +2 Combat Skill in Book 6. This bonus can stack with Weaponmastery.">Book 6 Weaponskill Option<select name="deWeaponskillOption" title="Hover the Weaponskill Option label for its full effect."><option value="0" title="Do not apply the optional Book 6 Weaponskill rule.">Standard</option><option value="1" title="Gain +2 Combat Skill while using your recorded Weaponskill weapon in Book 6. It can stack with Weaponmastery.">Weaponskill +2 CS</option></select></label>
             <div class="check-field"><span>Book 6 Field Issue - choose up to 7</span><div class="check-grid">${book6Equipment.map(([id, label]) => {
@@ -4785,7 +4819,7 @@
           <form id="continueBookForm" class="grid" data-next-book="${escapeHtml(nextBook)}">
             ${disciplineControl}
             ${masteryControl}
-            ${bookTransitionRollCard('Gold Crowns', 'goldRoll', nextBook, summary.GoldCrowns)}
+            ${bookTransitionRollCard('Gold Crowns', 'goldRoll', nextBook, summary.GoldCrowns, false, savedRolls.goldRoll)}
             <div class="check-field"><span>${escapeHtml(equipmentLabelForBook(nextBook))}</span><div class="check-grid">${options.map(([id, label]) => `<label class="check-option"><input type="checkbox" name="equipmentChoices" value="${escapeHtml(id)}"><span>${escapeHtml(label)}</span></label>`).join('')}</div></div>
             ${carriedItems.length ? `<div class="check-field"><span>Leave Behind Before Equipment Issue</span><div class="check-grid">${carriedItems.map(([container, index, item]) => `<label class="check-option"><input type="checkbox" name="transitionDrops" value="${escapeHtml(container)}:${escapeHtml(index)}"><span>${escapeHtml(item)} [${escapeHtml(container)}]</span></label>`).join('')}</div></div>` : ''}
             <button type="submit">Begin Book ${escapeHtml(nextBook)} at Section 1</button>
@@ -4806,7 +4840,7 @@
           <form id="continueBookForm" class="grid" data-next-book="${escapeHtml(nextBook)}">
             <label class="field">New New Order Discipline<select name="newOrderDiscipline">${newOrderChoices.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('')}</select></label>
             <div class="check-field"><span>Grand Weaponmastery Weapons - choose one if already known; otherwise choose this rank's weapons when selecting it now</span><div class="check-grid">${grandWeaponmasteryWeapons.map((name) => `<label class="check-option"><input type="checkbox" name="grandWeaponmasteryWeapon" value="${escapeHtml(name)}"><span>${escapeHtml(name)}</span></label>`).join('')}</div></div>
-            ${bookTransitionRollCard('Gold Crowns', 'goldRoll', nextBook, summary.GoldCrowns)}
+            ${bookTransitionRollCard('Gold Crowns', 'goldRoll', nextBook, summary.GoldCrowns, false, savedRolls.goldRoll)}
             <div class="check-field"><span>${escapeHtml(equipmentLabelForBook(nextBook))}</span><div class="check-grid">${equipmentOptionsForBook(nextBook).map(([id, label]) => `<label class="check-option"><input type="checkbox" name="equipmentChoices" value="${escapeHtml(id)}"><span>${escapeHtml(label)}</span></label>`).join('')}</div></div>
             ${carriedItems.length ? `<div class="check-field"><span>Leave Behind Before Equipment Issue</span><div class="check-grid">${carriedItems.map(([container, index, item]) => `<label class="check-option"><input type="checkbox" name="transitionDrops" value="${escapeHtml(container)}:${escapeHtml(index)}"><span>${escapeHtml(item)} [${escapeHtml(container)}]</span></label>`).join('')}</div></div>` : ''}
             <button type="submit">Begin Book ${escapeHtml(nextBook)} at Section 1</button>
@@ -4836,7 +4870,7 @@
           <form id="continueBookForm" class="grid" data-next-book="${escapeHtml(nextBook)}">
             <label class="field">New Magnakai Discipline<select name="magnakaiDiscipline">${magnakaiChoices.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('')}</select></label>
             <label class="field">Weaponmastery Weapon<select name="weaponmasteryWeapon"><option value="">Not choosing Weaponmastery</option>${masteredWeapons.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('')}</select></label>
-            ${nextBook === 11 ? '' : bookTransitionRollCard('Gold Crowns', 'goldRoll', nextBook, summary.GoldCrowns)}
+            ${nextBook === 11 ? '' : bookTransitionRollCard('Gold Crowns', 'goldRoll', nextBook, summary.GoldCrowns, false, savedRolls.goldRoll)}
             ${issueText}
             ${transitionDrops}
             <button type="submit">Begin Book ${escapeHtml(nextBook)} at Section 1</button>
@@ -4847,9 +4881,9 @@
       return `
         <form id="continueBookForm" class="grid" data-next-book="${escapeHtml(nextBook)}">
           <label class="field transition-discipline-field">New Kai Discipline<select name="kaiDiscipline" data-transition-kai-discipline>${kaiOptions}</select></label>
-          <div class="creation-roll-grid transition-roll-grid">
-            ${bookTransitionRollCard('Gold Crowns', 'goldRoll', nextBook, summary.GoldCrowns)}
-            ${bookTransitionRollCard('Weaponskill', 'weaponskillRoll', nextBook, summary.GoldCrowns, choices[0] !== 'Weaponskill')}
+          <div class="creation-roll-grid transition-roll-grid${choices[0] === 'Weaponskill' ? '' : ' single-roll'}">
+            ${bookTransitionRollCard('Gold Crowns', 'goldRoll', nextBook, summary.GoldCrowns, false, savedRolls.goldRoll)}
+            ${bookTransitionRollCard('Weaponskill', 'weaponskillRoll', nextBook, summary.GoldCrowns, choices[0] !== 'Weaponskill', savedRolls.weaponskillRoll)}
           </div>
           <div class="check-field">
             <span>${escapeHtml(equipmentLabel)}</span>
@@ -4868,6 +4902,7 @@
       if (!discipline || !card) return;
       const selected = discipline.value === 'Weaponskill';
       card.hidden = !selected;
+      card.closest('.transition-roll-grid')?.classList.toggle('single-roll', !selected);
       const input = card.querySelector('input[name="weaponskillRoll"]');
       if (input) input.disabled = !selected;
     }
@@ -4882,33 +4917,30 @@
       button.disabled = true;
       button.textContent = 'Rolling…';
       try {
-        const draft = await requestBook1CreationDraft({
-          rolls: {},
-          includeWeaponskill: key === 'weaponskillRoll'
+        const response = await fetch('/api/action', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'transition_roll', kind: key })
         });
-        const roll = Number(draft[key]);
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(text(payload?.error, 'The app could not generate this roll.'));
+        const savedRoll = payload?.transitionRoll || {};
+        const roll = Number(savedRoll.Roll);
         if (!Number.isInteger(roll) || roll < 0 || roll > 9) throw new Error('The app returned an invalid roll result.');
         input.value = String(roll);
-        if (key === 'weaponskillRoll') {
-          const weapon = text(draft.weaponskillWeapon, 'Unknown weapon');
-          result.textContent = `Roll ${roll} → ${weapon}`;
-          note.textContent = `Weaponskill now applies to ${weapon}. Choose your Royal Armoury items below with that result in mind.`;
-        } else {
-          const nextBook = Number(card.dataset.nextBook || 2);
-          const currentGold = Math.max(0, Number(card.dataset.currentGold || 0));
-          const gain = (nextBook >= 13 ? 20 : 10) + roll;
-          const projected = Math.min(50, currentGold + gain);
-          result.textContent = `Roll ${roll} → +${gain} Gold Crowns (${projected} total)`;
-          note.textContent = projected < currentGold + gain
-            ? `You receive ${gain}, but the 50 Gold Crown limit caps the carried total at ${projected}.`
-            : `You receive ${gain} Gold Crowns, taking your carried total from ${currentGold} to ${projected}.`;
-        }
-        button.textContent = 'Roll Again';
+        const presentation = bookTransitionRollPresentation(
+          key,
+          Number(card.dataset.nextBook || 2),
+          Math.max(0, Number(card.dataset.currentGold || 0)),
+          savedRoll
+        );
+        result.textContent = presentation?.result || `Roll ${roll}`;
+        note.textContent = presentation?.note || 'Roll complete.';
+        button.textContent = 'Roll complete';
       } catch (error) {
         result.textContent = 'Roll unavailable';
         note.textContent = text(error?.message, 'The app could not generate this roll. Try again.');
         button.textContent = 'Try Again';
-      } finally {
         button.disabled = false;
       }
     }
@@ -6823,7 +6855,7 @@
             <small class="book-transition-step">Step 2</small>
             <h2>Prepare Your Action Chart</h2>
             <p class="muted">Your completed Book ${escapeHtml(text(pending.FromBookNumber, '?'))} campaign is unchanged until you confirm this setup.</p>
-            ${bookContinueForm(completion)}
+            ${bookContinueForm(completion, pending)}
           </div>
         </section>
       `;

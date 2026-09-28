@@ -3965,6 +3965,23 @@ class RunFeatureParityTests(unittest.TestCase):
             self.assertFalse(assistant.pending_book_setup_payload()["Active"])
             self.assertTrue(assistant.book_completion_payload()["Active"])
 
+    def test_book_transition_rolls_are_single_use_across_back_and_reopen(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            assistant = self.assistant(temp_dir)
+            assistant.ensure_book_completed(1)
+            assistant.open_next_book()
+
+            first_gold = assistant.roll_next_book_setup("goldRoll")
+            second_gold = assistant.roll_next_book_setup("goldRoll")
+            weaponskill = assistant.roll_next_book_setup("weaponskillRoll")
+            assistant.cancel_next_book_setup()
+            assistant.open_next_book()
+
+            self.assertEqual(first_gold, second_gold)
+            self.assertEqual(first_gold, assistant.roll_next_book_setup("goldRoll"))
+            self.assertEqual(weaponskill, assistant.pending_book_setup_payload()["Rolls"]["weaponskillRoll"])
+            self.assertIn("Weapon", weaponskill)
+
     def test_inventory_order_is_saved_and_sommerswerd_is_the_first_combat_weapon(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             assistant = self.assistant(temp_dir)
@@ -4175,6 +4192,7 @@ class CardLayoutInteractionTests(unittest.TestCase):
     def test_book_transition_rolls_show_their_outcomes_before_equipment(self) -> None:
         form_renderer = self.function_source("bookContinueForm")
         roll_card = self.function_source("bookTransitionRollCard")
+        roll_presentation = self.function_source("bookTransitionRollPresentation")
         roll_action = self.function_source("rollBookTransition")
 
         self.assertIn("data-transition-roll", roll_card)
@@ -4182,10 +4200,11 @@ class CardLayoutInteractionTests(unittest.TestCase):
         self.assertIn("bookTransitionRollCard('Gold Crowns'", form_renderer)
         self.assertIn("bookTransitionRollCard('Weaponskill'", form_renderer)
         self.assertLess(form_renderer.index("bookTransitionRollCard('Weaponskill'"), form_renderer.index("equipmentChoiceGrid(nextBook)"))
-        self.assertIn("draft.weaponskillWeapon", roll_action)
-        self.assertIn("Weaponskill now applies to ${weapon}", roll_action)
-        self.assertIn("+${gain} Gold Crowns (${projected} total)", roll_action)
-        self.assertIn("Roll Again", roll_action)
+        self.assertIn("savedRoll?.Weapon", roll_presentation)
+        self.assertIn("+${gain} Gold Crowns (${projected} total)", roll_presentation)
+        self.assertIn("action: 'transition_roll'", roll_action)
+        self.assertIn("Roll complete", roll_action)
+        self.assertNotIn("Roll Again", roll_action)
         self.assertIn("roll ${rollLabel} before continuing", self.assistant_html)
 
     def test_pre_book8_inventory_panel_titles_omit_capacity_warning(self) -> None:

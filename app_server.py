@@ -1033,6 +1033,12 @@ class LoneWolfReduxHandler(BaseHTTPRequestHandler):
                     # campaign, autosave, achievements, or last-action output.
                     self.send_json({"creationDraft": create_book1_creation_draft(payload)})
                     return
+                if action_name == "transition_roll":
+                    # Transition rolls belong to the pending setup, not the
+                    # active character, and are intentionally single-use.
+                    result = ASSISTANT.roll_next_book_setup(str(payload.get("kind") or ""))
+                    self.send_json({"transitionRoll": result})
+                    return
                 before_unlocks = ASSISTANT.achievement_unlocked_ids()
                 cheat_resources = ASSISTANT.cheat_resource_snapshot()
                 if action_name == "shutdown":
