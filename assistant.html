@@ -3114,7 +3114,13 @@
       app = await response.json();
       if (bookResponse?.ok) bookFiles = await bookResponse.json();
       syncUiPreferences(app.uiPreferences);
-      serverStatus.textContent = browseMode ? 'Reading Only' : 'Connected';
+      const cheatStatus = app.cheats || {};
+      const activeCheats = arr(cheatStatus.active);
+      serverStatus.textContent = browseMode
+        ? 'Reading Only'
+        : (activeCheats.length
+          ? `Cheat sandbox active (${activeCheats.length})`
+          : (cheatStatus.sessionTainted ? 'Cheat sandbox restored · Achievements paused' : 'Connected'));
       if (browseMode) {
         syncBrowseBook();
         setReceipt({

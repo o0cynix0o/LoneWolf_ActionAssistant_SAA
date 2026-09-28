@@ -77,7 +77,7 @@ class CheatSession:
         self._active: set[str] = set()
         self._achievement_locked = False
         self._runtime: dict[str, Any] = {}
-        self._developer_snapshot: dict[str, Any] | None = None
+        self._campaign_snapshot: dict[str, Any] | None = None
 
     def is_active(self, effect: str) -> bool:
         with self._lock:
@@ -111,8 +111,12 @@ class CheatSession:
             return {
                 "active": sorted(self._active),
                 "achievementLocked": self._achievement_locked,
+                "sessionTainted": self._achievement_locked,
                 "runtime": dict(self._runtime),
-                "hasDeveloperSnapshot": self._developer_snapshot is not None,
+                "hasCampaignSnapshot": self._campaign_snapshot is not None,
+                "hasDeveloperSnapshot": (
+                    "developer_sight" in self._active and self._campaign_snapshot is not None
+                ),
             }
 
     def reset_for_new_campaign(self) -> dict[str, Any]:
@@ -121,7 +125,7 @@ class CheatSession:
             self._active.clear()
             self._achievement_locked = False
             self._runtime.clear()
-            self._developer_snapshot = None
+            self._campaign_snapshot = None
             return self.status()
 
     def toggle_digest(self, digest: str, snapshot: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -132,22 +136,27 @@ class CheatSession:
             enabled = effect not in self._active
             restored_snapshot = None
             if enabled:
+                if not self._active and isinstance(snapshot, dict):
+                    # Every cheat session is a sandbox. Capture the campaign
+                    # once, before the first effect, and restore it when the
+                    # final effect is disabled so routes, combat records, and
+                    # inventory changes cannot leak into ordinary play.
+                    self._campaign_snapshot = json.loads(json.dumps(snapshot))
                 other = MUTUALLY_EXCLUSIVE.get(effect)
                 if other:
                     self._active.discard(other)
                 self._active.add(effect)
                 self._achievement_locked = True
-                if effect == "developer_sight" and isinstance(snapshot, dict):
-                    self._developer_snapshot = json.loads(json.dumps(snapshot))
                 if effect in MAX_END_EFFECTS:
                     self._runtime["endurance"] = 99
             else:
                 self._active.discard(effect)
-                if effect == "developer_sight":
-                    restored_snapshot = self._developer_snapshot
-                    self._developer_snapshot = None
                 if effect in MAX_END_EFFECTS and not self._active.intersection(MAX_END_EFFECTS):
                     self._runtime.pop("endurance", None)
+                if not self._active:
+                    restored_snapshot = self._campaign_snapshot
+                    self._campaign_snapshot = None
+                    self._runtime.clear()
             return {
                 "recognized": True,
                 "effect": effect,

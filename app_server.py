@@ -319,6 +319,7 @@ def state_payload(message: str = "", achievement_unlocks: list[dict] | None = No
     for checkpoint in lonewolf_redux.as_list(state.get("Automation", {}).get("SectionCheckpoints")):
         if isinstance(checkpoint, dict):
             checkpoint.pop("Snapshot", None)
+    cheat_status = CHEAT_SESSION.status()
     return {
         "books": lonewolf_redux.BOOK_CATALOG,
         "state": state,
@@ -329,6 +330,12 @@ def state_payload(message: str = "", achievement_unlocks: list[dict] | None = No
         "bookComplete": ASSISTANT.book_completion_payload(),
         "pendingBookSetup": ASSISTANT.pending_book_setup_payload(),
         "achievements": ASSISTANT.achievement_payload(),
+        "cheats": {
+            "active": list(cheat_status.get("active") or []),
+            "sessionTainted": bool(cheat_status.get("sessionTainted")),
+            "achievementLocked": bool(cheat_status.get("achievementLocked")),
+            "sandboxActive": bool(cheat_status.get("hasCampaignSnapshot")),
+        },
         "achievementUnlocks": achievement_unlocks or [],
         "saves": public_save_entries(),
         "saveSlots": public_save_slots(),
@@ -1011,7 +1018,17 @@ class LoneWolfReduxHandler(BaseHTTPRequestHandler):
                 self.send_json({"error": "Invalid desktop session token."}, HTTPStatus.FORBIDDEN)
                 return
             with STATE_LOCK:
-                self.send_json(CHEAT_SESSION.handle(payload))
+                result = CHEAT_SESSION.handle(payload)
+                restored = result.get("restoredSnapshot")
+                if isinstance(restored, dict):
+                    # The console worker and browser server hold separate
+                    # assistant objects. Restore both sides when the final
+                    # cheat leaves the shared sandbox, then persist only the
+                    # clean snapshot.
+                    ASSISTANT.state = lonewolf_redux.normalize_state(restored)
+                    ASSISTANT.write_current_position()
+                    ASSISTANT.autosave()
+                self.send_json(result)
             return
         if parsed.path == "/api/ui-preferences":
             with STATE_LOCK:
