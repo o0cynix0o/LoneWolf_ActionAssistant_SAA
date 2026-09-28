@@ -5,6 +5,9 @@ runs the **same app as a local web server** and you use it from a **browser** at
 `http://localhost:8797/`. This is handy for updating on the fly without
 rebuilding the installer.
 
+Release 3.7.5 uses the versioned local image
+`lonewolf-action-assistant:3.7.5`.
+
 ## Requirements
 
 - Docker + Docker Compose (Docker Desktop on Windows/macOS is fine).
@@ -54,6 +57,15 @@ docker compose restart lonewolf # apply Python changes
 docker compose down             # stop and remove the container
 docker compose up -d --build    # rebuild the image (only needed if the
                                 # runtime dependency in the Dockerfile changes)
+```
+
+For a versioned release, rebuild even when dependencies are unchanged so the
+standalone image contains the released source instead of relying on the live
+bind mount:
+
+```bash
+docker compose build --no-cache lonewolf
+docker compose up -d --force-recreate lonewolf
 ```
 
 ## Ports

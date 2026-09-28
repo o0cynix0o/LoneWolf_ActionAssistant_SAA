@@ -7939,6 +7939,40 @@ class LoneWolfReduxAssistant:
         option_id = str(option.get("id") or "")
         return self.flow_loot_key(option_id) in as_list(self.automation.get("AppliedLoot"))
 
+    def flow_loot_capacity_block(self, option: dict[str, Any]) -> str:
+        """Explain inventory capacity failures before a player applies loot."""
+        if self.cheat_active("bottomless_inventory"):
+            return ""
+        for action in as_list(option.get("actions")):
+            if not isinstance(action, dict) or str(action.get("type") or "").lower() != "add_item":
+                continue
+            name = str(action.get("name") or "item")
+            container = str(action.get("container") or "backpack")
+            key = self.container_key(container)
+            if container == "herb_or_backpack":
+                if self.inventory.get("HasHerbPouch") and item_slot_total(self.inventory["HerbPouchItems"]) + item_slot_cost(name) <= 8:
+                    continue
+                key = "BackpackItems"
+            if key == "Weapons" and len(as_list(self.inventory["Weapons"])) >= 2:
+                return f"Weapon slots are full (2/2). Open Inventory and drop a weapon before taking {name}."
+            if key == "BackpackItems":
+                if not bool(self.automation_flags.get("backpackAvailable", True)):
+                    return f"Your Backpack is unavailable, so {name} cannot be carried."
+                used = item_slot_total(self.inventory["BackpackItems"])
+                capacity = backpack_capacity(self.inventory)
+                if used + item_slot_cost(name) > capacity:
+                    return f"Backpack is full ({used}/{capacity}). Open Inventory and drop an item before taking {name}."
+            if key == "HerbPouchItems" and item_slot_total(self.inventory["HerbPouchItems"]) + item_slot_cost(name) > 8:
+                return f"Herb Pouch is full. Open Inventory and drop an item before taking {name}."
+            if key in {"SpecialItems", "PocketSpecialItems"}:
+                existing = as_list(self.inventory[key])
+                if name in existing:
+                    continue
+                limit = special_item_limit(self.character.get("BookNumber"))
+                if limit is not None and special_item_count(self.inventory) >= limit:
+                    return f"Special Item limit is {limit}. Open Inventory and leave an item behind before taking {name}."
+        return ""
+
     def current_flow_loot_payload(self, entry: dict[str, Any] | None = None) -> list[dict[str, Any]]:
         flow = entry if isinstance(entry, dict) else (self.current_section_flow_entry() or {})
         payload: list[dict[str, Any]] = []
@@ -7948,10 +7982,14 @@ class LoneWolfReduxAssistant:
             option_id = str(option.get("id") or "")
             option_payload = json_clone(option)
             option_payload["Applied"] = self.is_flow_loot_applied(option)
+            capacity_block = self.flow_loot_capacity_block(option)
+            option_payload["CapacityBlocked"] = bool(capacity_block)
+            option_payload["BlockedReason"] = capacity_block
             option_payload["Ready"] = (
                 bool(option_id)
                 and not bool(option_payload["Applied"])
                 and self.evaluate_flow_condition(option.get("condition"))
+                and not bool(capacity_block)
             )
             option_payload["Repeatable"] = bool(option.get("repeatable"))
             payload.append(option_payload)
@@ -10319,7 +10357,7 @@ class LoneWolfReduxAssistant:
             self.save_section_checkpoint("entry")
         automation_messages = self.apply_section_automation(visit_changed=visit_changed)
         automation_messages.extend(self.apply_global_section_effects(visit_changed=visit_changed))
-        healing_message = self.apply_healing(automatic=True) if int(self.character.get("BookNumber") or 0) == 6 else ""
+        healing_message = self.apply_healing(automatic=True) if int(self.character.get("BookNumber") or 0) <= 6 else ""
         if healing_message:
             automation_messages.append(healing_message)
         if checkpoint_needed and not self.death_active():
@@ -10357,7 +10395,7 @@ class LoneWolfReduxAssistant:
             self.save_section_checkpoint("entry")
         automation_messages = self.apply_section_automation(visit_changed=visit_changed)
         automation_messages.extend(self.apply_global_section_effects(visit_changed=visit_changed))
-        healing_message = self.apply_healing(automatic=True) if int(self.character.get("BookNumber") or 0) == 6 else ""
+        healing_message = self.apply_healing(automatic=True) if int(self.character.get("BookNumber") or 0) <= 6 else ""
         if healing_message:
             automation_messages.append(healing_message)
         if checkpoint_needed and not self.death_active():

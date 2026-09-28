@@ -1906,6 +1906,7 @@
     let cliFitAddon = null;
     let cliSocket = null;
     let cliResizeHandler = null;
+    let cliConnectTimer = null;
     const topLayoutKey = 'lonewolf_redux.top.layout.v1';
     const topSizeKey = 'lonewolf_redux.top.sizes.v1';
     const sheetLayoutKey = 'lonewolf_redux.sheet.layout.v1';
@@ -2858,7 +2859,7 @@
         };
       }
 
-      const healing = flow.Healing || {};
+      const healing = afterSnapshot?.sectionFlow?.Healing || {};
       if (healing.Available) {
         const name = text(healing.Name, 'Curing');
         const value = healing.Applied
@@ -2866,7 +2867,7 @@
           : (healing.Ready
             ? `Ready: +${text(healing.Amount, 1)} END, up to ${text(healing.TargetEndurance, healing.MaximumEndurance)} END.`
             : text(healing.BlockedReason, 'Unavailable.'));
-        details.push(receiptDetail(name, value));
+        base.push(receiptDetail(name, value));
       }
 
       if (actionName === 'checkpoint_recovery') {
@@ -4286,7 +4287,7 @@
 
     function startCliTerminal() {
       const container = document.getElementById('cliTerminalContainer');
-      if (!container || !isCliMode()) return;
+      if (!container || (!nativeConsole && !isCliMode())) return;
       if (!window.Terminal) {
         container.innerHTML = '<div class="mode-note">Terminal assets did not load. Check your internet connection, then use Reconnect or switch back to Auto mode.</div>';
         updateCliStatus('Terminal unavailable');
@@ -4324,21 +4325,38 @@
       cliTerminal.writeln('Connecting to Lone Wolf CLI...');
 
       const wsUrl = cliWsUrl();
-      cliSocket = new WebSocket(wsUrl);
-      cliSocket.addEventListener('open', () => {
+      const socket = new WebSocket(wsUrl);
+      cliSocket = socket;
+      cliConnectTimer = window.setTimeout(() => {
+        if (cliSocket !== socket || socket.readyState !== WebSocket.CONNECTING) return;
+        updateCliStatus('Connection timed out');
+        cliTerminal?.writeln('\r\n[CLI connection timed out. Use Reconnect to try again.]');
+        try { socket.close(); } catch {}
+      }, 6000);
+      socket.addEventListener('open', () => {
+        if (cliSocket !== socket) return;
+        window.clearTimeout(cliConnectTimer);
+        cliConnectTimer = null;
         updateCliStatus('Connected');
         cliTerminal.focus();
         cliFitAddon?.fit();
         sendCliResize();
       });
-      cliSocket.addEventListener('message', (event) => {
+      socket.addEventListener('message', (event) => {
+        if (cliSocket !== socket) return;
         cliTerminal.write(typeof event.data === 'string' ? event.data : String(event.data));
       });
-      cliSocket.addEventListener('close', () => {
+      socket.addEventListener('close', () => {
+        window.clearTimeout(cliConnectTimer);
+        cliConnectTimer = null;
+        if (cliSocket !== socket) return;
         updateCliStatus('Disconnected');
         cliTerminal?.writeln('\r\n[CLI disconnected]');
       });
-      cliSocket.addEventListener('error', () => {
+      socket.addEventListener('error', () => {
+        window.clearTimeout(cliConnectTimer);
+        cliConnectTimer = null;
+        if (cliSocket !== socket) return;
         updateCliStatus('Connection error');
         cliTerminal?.writeln('\r\n[Could not connect to the CLI bridge. Make sure the launcher started the WebSocket server.]');
       });
@@ -4412,6 +4430,10 @@
     }
 
     function stopCliTerminal(dispose = true) {
+      if (cliConnectTimer) {
+        window.clearTimeout(cliConnectTimer);
+        cliConnectTimer = null;
+      }
       if (cliResizeHandler) {
         window.removeEventListener('resize', cliResizeHandler);
         cliResizeHandler = null;
@@ -6370,11 +6392,23 @@
     }
 
     function sectionLootRows(lootOptions) {
-      return arr(lootOptions).filter((loot) => loot.Ready !== false).map((loot) => `
+      return arr(lootOptions).filter((loot) => loot.Ready !== false || loot.CapacityBlocked).map((loot) => `
         <div class="item-row">
           <small>Loot</small>
-          <span class="wrap">${escapeHtml(text(loot.label || loot.id, 'Option'))}</span>
-          ${modeActionButton(`data-flow-loot="${escapeHtml(text(loot.id))}"`, 'Apply', 'section loot')}
+          <span class="wrap">${escapeHtml(text(loot.label || loot.id, 'Option'))}${loot.CapacityBlocked ? `<small class="item-note">${escapeHtml(text(loot.BlockedReason, 'Inventory capacity is full.'))}</small>` : ''}</span>
+          ${loot.CapacityBlocked
+            ? `<button type="button" disabled title="${escapeHtml(text(loot.BlockedReason))}">Apply</button><button type="button" data-campaign-tab="inventory">Manage Inventory</button>`
+            : modeActionButton(`data-flow-loot="${escapeHtml(text(loot.id))}"`, 'Apply', 'section loot')}
+        </div>
+      `).join('');
+    }
+
+    function sectionShopRows(shop) {
+      return arr(shop?.Sales).map((sale) => `
+        <div class="item-row">
+          <small>Sell</small>
+          <span class="wrap">${escapeHtml(text(sale.Label, 'Item'))} for ${escapeHtml(text(sale.Price, 0))} Gold</span>
+          ${modeActionButton(`data-shop-sale="${escapeHtml(text(sale.Id))}"`, 'Sell', 'section loot')}
         </div>
       `).join('');
     }
@@ -6543,6 +6577,7 @@
         choiceGroup('Portholes', sectionPortholesRows()),
         choiceGroup('Gold Distraction', sectionGoldDistractionRows()),
         choiceGroup('Loot And Section Items', sectionLootRows(flow.Loot || entry.loot)),
+        choiceGroup(text(flow.Shop?.Title, 'Shop'), sectionShopRows(flow.Shop)),
         choiceGroup('Section Combat', sectionCombatRows(entry)),
         choiceGroup('Section Roll', sectionRollRows(entry))
       ].filter(Boolean);
@@ -7323,7 +7358,7 @@
       const backpackCapacity = Number(inv.BackpackCapacity || 8);
       const backpackLabel = flags.backpackAvailable === false || flags.backpackItemsAvailable === false ? 'Unavailable' : `${itemSlotTotal(inv.BackpackItems)}/${backpackCapacity}`;
       const specialTotal = specialItems.length + pocketSpecialItems.length;
-      const specialLabel = Number(currentCharacter().BookNumber || 1) >= 8 ? `${specialTotal}/12` : `${specialTotal} (no limit before Book 8)`;
+      const specialLabel = Number(currentCharacter().BookNumber || 1) >= 8 ? `${specialTotal}/12` : `${specialTotal}`;
       const quivers = specialItems.filter((item) => text(item).trim().toLowerCase() === 'quiver').length;
       const arrows = Math.max(0, Number(inv.QuiverArrows || 0));
       const arrowCapacity = quivers * 6;

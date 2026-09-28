@@ -115,6 +115,15 @@ class CheatSession:
                 "hasDeveloperSnapshot": self._developer_snapshot is not None,
             }
 
+    def reset_for_new_campaign(self) -> dict[str, Any]:
+        """Start a replacement campaign without carrying session cheats into it."""
+        with self._lock:
+            self._active.clear()
+            self._achievement_locked = False
+            self._runtime.clear()
+            self._developer_snapshot = None
+            return self.status()
+
     def toggle_digest(self, digest: str, snapshot: dict[str, Any] | None = None) -> dict[str, Any]:
         with self._lock:
             effect = self.digest_map.get(str(digest).lower())

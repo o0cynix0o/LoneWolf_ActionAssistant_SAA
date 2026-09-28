@@ -5,6 +5,11 @@
 # (pywebview/WebView2) is Windows-only and is not part of the container.
 FROM python:3.13-slim
 
+ARG APP_VERSION=3.7.5
+LABEL org.opencontainers.image.title="Lone Wolf Action Assistant" \
+      org.opencontainers.image.version="${APP_VERSION}" \
+      org.opencontainers.image.source="https://github.com/o0cynix0o/LoneWolf_ActionAssistant_SAA"
+
 WORKDIR /app
 
 # Only "websockets" is needed at runtime. pywebview/pywinpty/pyinstaller in
