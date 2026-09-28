@@ -2181,6 +2181,38 @@ apply_book4_gold_roll = apply_book_gold_roll
 apply_book5_gold_roll = apply_book_gold_roll
 
 
+def validate_transition_weapon_exchanges(
+    inventory: dict[str, Any],
+    options: dict[str, dict[str, Any]],
+    choices: Any,
+    weapon_exchanges: Any = None,
+) -> None:
+    """Verify field-issue weapons fit before a book transition mutates state."""
+    projected_weapons = as_list(inventory.get("Weapons"))
+    exchanges = [str(item).strip() for item in as_list(weapon_exchanges) if str(item).strip()]
+    exchange_index = 0
+
+    for choice_id in as_list(choices):
+        option = options.get(str(choice_id), {})
+        for container, item in as_list(option.get("Items")):
+            if container != "weapon":
+                continue
+            if len(projected_weapons) >= 2:
+                exchanged = ""
+                while exchange_index < len(exchanges):
+                    candidate = exchanges[exchange_index]
+                    exchange_index += 1
+                    removed, projected_weapons = remove_first_matching(projected_weapons, candidate)
+                    if removed:
+                        exchanged = candidate
+                        break
+                if not exchanged:
+                    raise ValueError(
+                        f"Taking {item} needs a Weapon exchange because the Weapon limit is 2."
+                    )
+            projected_weapons.append(item)
+
+
 def apply_book2_armoury_to_state(
     state: dict[str, Any],
     choices: Any,
@@ -12178,6 +12210,24 @@ class LoneWolfReduxAssistant:
             choice_ids = clean_book4_equipment_choices(book4_equipment_choices)
         else:
             choice_ids = clean_book5_equipment_choices(book5_equipment_choices)
+        transition_options = {
+            2: BOOK2_ARMOURY_OPTIONS,
+            3: BOOK3_EQUIPMENT_OPTIONS,
+            4: BOOK4_EQUIPMENT_OPTIONS,
+            5: BOOK5_EQUIPMENT_OPTIONS,
+        }[next_book]
+        transition_exchanges = {
+            2: book2_weapon_exchanges,
+            3: book3_weapon_exchanges,
+            4: book4_weapon_exchanges,
+            5: book5_weapon_exchanges,
+        }[next_book]
+        validate_transition_weapon_exchanges(
+            self.inventory,
+            transition_options,
+            choice_ids,
+            transition_exchanges,
+        )
         messages: list[str] = []
         transition_recovery = self.restore_endurance_for_book_transition()
         if transition_recovery:

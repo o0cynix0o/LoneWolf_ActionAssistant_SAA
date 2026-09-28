@@ -7311,6 +7311,57 @@
       }
     }
 
+    function syncKaiBookTransitionWeaponRequirements(form) {
+      const nextBook = Number(form?.dataset.nextBook || 0);
+      if (![2, 3, 4, 5].includes(nextBook)) return;
+      const weaponChoices = {
+        2: new Set(['sword', 'short-sword', 'mace', 'quarterstaff', 'spear', 'broadsword']),
+        3: new Set(['sword', 'short-sword', 'spear', 'mace', 'warhammer', 'axe', 'quarterstaff', 'broadsword']),
+        4: new Set(['warhammer', 'dagger', 'sword', 'spear', 'mace']),
+        5: new Set(['dagger', 'sword', 'spear', 'mace'])
+      }[nextBook];
+      const selectedWeaponInputs = Array.from(form.querySelectorAll('input[name="armouryChoices"]:checked'))
+        .filter((input) => weaponChoices.has(input.value));
+      const currentWeapons = arr(currentInventory().Weapons).map((item) => text(item)).filter(Boolean);
+      const requiredExchanges = Math.max(0, currentWeapons.length + selectedWeaponInputs.length - 2);
+      const exchangeSelects = Array.from(form.querySelectorAll('select[name="weaponExchanges"]'));
+      const chosenExchanges = exchangeSelects.slice(0, requiredExchanges).map((select) => text(select.value)).filter(Boolean);
+      const availableWeapons = [...currentWeapons];
+      const validExchanges = chosenExchanges.length === requiredExchanges && chosenExchanges.every((weapon) => {
+        const index = availableWeapons.indexOf(weapon);
+        if (index < 0) return false;
+        availableWeapons.splice(index, 1);
+        return true;
+      });
+      const status = form.querySelector('[data-book6-exchange-status]');
+      const labels = Array.from(form.querySelectorAll('[data-book6-exchange-label]'));
+      const continueButton = form.querySelector('button[type="submit"]');
+
+      exchangeSelects.forEach((select, index) => {
+        const required = index < requiredExchanges;
+        select.required = required;
+        if (!required) select.value = '';
+      });
+      labels.forEach((label, index) => {
+        label.textContent = index < requiredExchanges
+          ? `Required Weapon Replacement ${index + 1}`
+          : `Weapon Exchange ${index + 1}`;
+      });
+      if (status) {
+        status.hidden = requiredExchanges === 0;
+        if (requiredExchanges) {
+          const added = selectedWeaponInputs.map((input) => input.closest('label')?.querySelector('span')?.textContent || input.value).join(', ');
+          status.textContent = `${added} would exceed the two-weapon limit. Choose ${requiredExchanges} carried weapon${requiredExchanges === 1 ? '' : 's'} to replace below.`;
+        }
+      }
+      if (continueButton) {
+        continueButton.disabled = requiredExchanges > 0 && !validExchanges;
+        continueButton.textContent = requiredExchanges > 0 && !validExchanges
+          ? `Replace ${requiredExchanges} Weapon${requiredExchanges === 1 ? '' : 's'} to Continue`
+          : `Begin Book ${nextBook} at Section 1`;
+      }
+    }
+
     async function requestBook1CreationDraft(payload) {
       const response = await fetch('/api/action', {
         method: 'POST',
@@ -8914,8 +8965,9 @@
         syncBook6SetupRequirements(event.target.closest('form'));
         return;
       }
-      if (event.target.matches?.('#continueBookForm input[name="equipmentChoices"], #continueBookForm select[name="weaponExchanges"]')) {
+      if (event.target.matches?.('#continueBookForm input[name="equipmentChoices"], #continueBookForm input[name="armouryChoices"], #continueBookForm select[name="weaponExchanges"]')) {
         syncBook6SetupRequirements(event.target.closest('form'));
+        syncKaiBookTransitionWeaponRequirements(event.target.closest('form'));
         return;
       }
       if (event.target.matches?.('input[name="kaiDisciplines"], input[name="magnakaiDisciplines"], input[name="weaponmasteryWeapons"], input[name="grandMasterDisciplines"], input[name="grandWeaponmasteryWeapons"], [data-new-book]')) {
@@ -9159,6 +9211,18 @@
             details: [receiptDetail('Selected', `${armourySelections.length}/${equipmentRule.max}`)]
           });
           return;
+        }
+        if ([2, 3, 4, 5].includes(nextBook)) {
+          syncKaiBookTransitionWeaponRequirements(form);
+          const blockedByWeaponLimit = form.querySelector('button[type="submit"]')?.disabled;
+          if (blockedByWeaponLimit) {
+            setReceipt({
+              summary: `Book ${nextBook} - replace a carried weapon before continuing.`,
+              title: `Book ${nextBook} Setup`,
+              details: [receiptDetail('Needed', 'Your Action Chart can hold two Weapons. Choose the required Weapon Replacement below.')]
+            });
+            return;
+          }
         }
         await action({
           action: 'continue_book',
