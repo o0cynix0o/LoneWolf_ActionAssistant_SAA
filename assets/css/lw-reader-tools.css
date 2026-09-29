@@ -230,3 +230,71 @@ body.lw-surface-tools.lw-console-active[data-lw-console-layout="companion-rail"]
   .lw-music-player-card--tools .lw-music-player-card__settings { grid-template-columns: 1fr; }
   .lw-music-player-card__tracks > div { grid-template-columns: 1fr; }
 }
+
+/* Compendium and inventory reference popovers. Kept self-contained so the
+   forthcoming tools-layout audit can move the feature without rewriting it. */
+.item-row { position: relative; }
+.item-info-button {
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, var(--lw-ui-accent) 55%, transparent);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--lw-ui-accent);
+  font: 700 .85rem/1 Georgia, serif;
+}
+.item-info-button:hover, .item-info-button:focus-visible, .item-info-button[aria-expanded="true"] {
+  background: var(--lw-ui-accent);
+  color: var(--lw-ui-ink, #091012);
+}
+.item-info-popover {
+  position: absolute;
+  z-index: 40;
+  right: 42px;
+  top: calc(100% - 4px);
+  width: min(390px, calc(100vw - 48px));
+  padding: 16px;
+  border: 1px solid color-mix(in srgb, var(--lw-ui-accent) 45%, transparent);
+  background: var(--lw-ui-surface, #17262a);
+  color: var(--lw-ui-text, #eafaff);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, .48);
+}
+.item-info-popover__head { display: flex; justify-content: space-between; gap: 12px; align-items: start; }
+.item-info-popover__head button { min-width: 30px; padding: 3px 8px; }
+.item-info-popover p { margin: 9px 0; }
+.item-info-popover ul { margin: 9px 0; padding-left: 20px; }
+.item-info-popover > .lw-ui-button { margin-top: 8px; width: 100%; }
+
+.compendium-hero { display: flex; justify-content: space-between; gap: 24px; align-items: center; }
+.compendium-hero h2 { margin: 2px 0 6px; font-size: clamp(2rem, 4vw, 3.4rem); }
+.compendium-hero p { margin: 0; max-width: 66ch; }
+.compendium-progress { min-width: 150px; padding: 14px 18px; background: #091012; color: #eafaff; text-align: center; }
+.compendium-progress strong { display: block; color: var(--lw-ui-accent); font-size: 1.55rem; }
+.compendium-progress span { display: block; margin-top: 3px; font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; }
+.compendium-toolbar { display: grid; gap: 14px; }
+.compendium-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.compendium-tabs button.active { background: var(--lw-ui-accent); color: var(--lw-ui-ink, #091012); }
+.compendium-filters { display: grid; grid-template-columns: minmax(180px, .45fr) minmax(260px, 1fr); gap: 12px; }
+.compendium-filters label { display: grid; gap: 5px; font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; }
+.compendium-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 12px; }
+.compendium-card { min-width: 0; padding: 16px; background: var(--lw-ui-surface, #17262a); }
+.compendium-card__head { display: flex; justify-content: space-between; gap: 16px; }
+.compendium-card__head span, .compendium-card__head small { color: var(--lw-ui-muted, #9eb8bd); font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; }
+.compendium-card__head small { max-width: 150px; text-align: right; text-transform: none; letter-spacing: 0; }
+.compendium-card h3 { margin: 3px 0 8px; color: var(--lw-ui-heading, #bceeff); }
+.compendium-card p { line-height: 1.45; }
+.compendium-card ul { padding-left: 20px; }
+.compendium-card--unknown { display: flex; gap: 12px; align-items: center; opacity: .67; }
+.compendium-card__icon { display: grid; place-items: center; width: 38px; height: 38px; flex: 0 0 38px; border: 1px solid currentColor; border-radius: 50%; }
+.compendium-stats { color: var(--lw-ui-accent); font-weight: 700; }
+.compendium-spoiler { padding: 10px; border-left: 3px solid var(--lw-ui-accent); background: color-mix(in srgb, var(--lw-ui-accent) 8%, transparent); }
+
+@media (max-width: 700px) {
+  .compendium-hero { align-items: stretch; flex-direction: column; }
+  .compendium-filters { grid-template-columns: 1fr; }
+  .compendium-card__head { display: block; }
+  .compendium-card__head small { display: block; margin-top: 4px; max-width: none; text-align: left; }
+  .item-info-popover { position: fixed; inset: auto 12px 12px 12px; width: auto; }
+}

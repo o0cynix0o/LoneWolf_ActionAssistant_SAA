@@ -5897,5 +5897,32 @@ class CheatSessionTests(unittest.TestCase):
             app_server.stop_server(server, thread)
 
 
+class CompendiumTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.root = Path(__file__).resolve().parents[1]
+        self.catalog = json.loads((self.root / "data" / "compendium.json").read_text(encoding="utf-8"))
+
+    def test_catalog_covers_installed_series_and_every_category(self) -> None:
+        self.assertEqual(self.catalog["generatedFrom"]["books"], 29)
+        self.assertEqual(self.catalog["generatedFrom"]["sectionFiles"], 10150)
+        for category in ("items", "bestiary", "people", "places"):
+            self.assertGreater(len(self.catalog["categories"][category]), 0, category)
+
+    def test_reviewed_item_mechanics_and_spoilers_are_preserved(self) -> None:
+        items = {entry["name"].casefold(): entry for entry in self.catalog["categories"]["items"]}
+        self.assertIn("+2 COMBAT SKILL in combat", items["shield"]["mechanics"])
+        self.assertIn("+8 COMBAT SKILL", items["sommerswerd"]["mechanics"])
+        self.assertTrue(items["diamond"]["spoilerSafe"])
+        self.assertEqual(items["diamond"]["futureUseRefs"], [{"book": 3, "section": 24}])
+        self.assertIn("Satisfies Rope requirements", items["rope (2 spaces)"]["mechanics"])
+
+    def test_tools_ui_exposes_compendium_and_inventory_info_controls(self) -> None:
+        page = (self.root / "assistant.html").read_text(encoding="utf-8")
+        self.assertIn("function renderCompendium()", page)
+        self.assertIn('data-compendium-tab=', page)
+        self.assertIn('data-item-info=', page)
+        self.assertIn("Open in Compendium", page)
+
+
 if __name__ == "__main__":
     unittest.main()
