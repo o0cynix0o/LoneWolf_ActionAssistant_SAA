@@ -6456,8 +6456,9 @@ class LoneWolfReduxAssistant:
         # Kai Discipline of X" phrasing. Each branch may name one or more
         # disciplines (and an optional Magnakai rank).
         discipline_pattern = re.compile(
-            r"(?:^if\s+you\s+|\bor\s+if\s+you\s+)"
+            r"(?:^if\s+you\s+|\bor\s+if\s+you\s+|\band\s+)"
             r"(?:wish\s+to\s+use|have|possess|use)\s+"
+            r"(?:either\s+)?"
             r"(?:your\s+|the\s+)?"
             r"(?:kai\s+|magnakai\s+|grand[\s-]master\s+|new\s+order\s+)?"
             r"disciplines?\s+of\s+",
