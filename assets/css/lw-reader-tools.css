@@ -157,6 +157,8 @@ body.lw-surface-tools .workspace.lw-native { display: block; }
 /* Console: hide tool nav / summary / quick roll; terminal fills. */
 body.lw-surface-tools.lw-console-active .workspace.lw-native { width: min(840px, calc(100% - 32px)); padding-bottom: 16px; }
 body.lw-surface-tools.lw-console-active .lw-tools { gap: 12px; }
+body.lw-surface-tools.lw-console-active .lw-tools-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; }
+body.lw-surface-tools.lw-console-active .lw-tools-head__actions { flex-wrap: nowrap; }
 body.lw-surface-tools.lw-console-active .lw-tools-body { grid-template-columns: 1fr; }
 body.lw-surface-tools.lw-console-active .tools-navigation { display: none; }
 body.lw-surface-tools.lw-console-active .lw-tools-content { grid-template-columns: 1fr; }
@@ -167,6 +169,8 @@ body.lw-surface-tools.lw-console-active #toolsActiveMount > #view { padding: 0; 
 
 @media (max-width: 700px) {
   body.lw-surface-tools.lw-console-active .workspace.lw-native { width: calc(100% - 20px); }
+  body.lw-surface-tools.lw-console-active .lw-tools-head { grid-template-columns: 1fr; }
+  body.lw-surface-tools.lw-console-active .lw-tools-head__actions { flex-wrap: wrap; }
   body.lw-surface-tools.lw-console-active .cli-terminal-panel { height: 680px; }
   body.lw-surface-tools.lw-console-active .cli-terminal-toolbar { align-items: stretch; }
   body.lw-surface-tools.lw-console-active .cli-terminal-toolbar .mode-note { flex-basis: 100%; }
