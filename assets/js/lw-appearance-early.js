@@ -6,7 +6,8 @@
     surfaceStyle: 'lonewolf_redux.appearance.surfaceStyle.v1',
     consoleLayout: 'lonewolf_redux.appearance.consoleLayout.v1',
     readerStyleEnabled: 'lonewolf_redux.reader.styleEnabled.v1',
-    readerTheme: 'lonewolf_redux.reader.theme.v1'
+    readerTheme: 'lonewolf_redux.reader.theme.v1',
+    choiceHintsEnabled: 'lonewolf_redux.reader.choiceHints.v1'
   };
 
   const defaults = {
@@ -16,7 +17,8 @@
     surfaceStyle: 'borderless',
     consoleLayout: 'companion-rail',
     readerStyleEnabled: 'off',
-    readerTheme: 'original'
+    readerTheme: 'original',
+    choiceHintsEnabled: 'on'
   };
 
   const titleBanners = {
@@ -204,7 +206,8 @@
       surfaceStyle: localValue(STORAGE_KEYS.surfaceStyle, defaults.surfaceStyle),
       consoleLayout: localValue(STORAGE_KEYS.consoleLayout, defaults.consoleLayout),
       readerStyleEnabled: localValue(STORAGE_KEYS.readerStyleEnabled, defaults.readerStyleEnabled),
-      readerTheme: localValue(STORAGE_KEYS.readerTheme, defaults.readerTheme)
+      readerTheme: localValue(STORAGE_KEYS.readerTheme, defaults.readerTheme),
+      choiceHintsEnabled: localValue(STORAGE_KEYS.choiceHintsEnabled, defaults.choiceHintsEnabled)
     });
   }
 
@@ -217,6 +220,7 @@
     settings.consoleLayout = settings.consoleLayout === 'focus-dock' ? 'focus-dock' : 'companion-rail';
     settings.readerStyleEnabled = settings.readerStyleEnabled === 'on' ? 'on' : 'off';
     settings.readerTheme = settings.readerTheme || defaults.readerTheme;
+    settings.choiceHintsEnabled = settings.choiceHintsEnabled === 'off' ? 'off' : 'on';
     return settings;
   }
 

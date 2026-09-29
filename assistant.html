@@ -3659,6 +3659,7 @@
     // text here. It is applied only to the live campaign section (never a browsed
     // section), so highlighting always reflects the current Action Chart.
     function storyRouteAvailability(showSection) {
+      if (assistantSettings?.choiceHintsEnabled === 'off') return null;
       if (browseMode || Number(showSection) !== Number(app.state.CurrentSection)) return null;
       const map = new Map();
       arr(currentFlow().SourceRoutes).forEach((route) => {
@@ -8104,6 +8105,7 @@
       const current = settingsApi.readLocal();
       const coverOn = current.coverArt !== 'off';
       const readerOn = current.readerStyleEnabled === 'on';
+      const choiceHintsOn = current.choiceHintsEnabled !== 'off';
       return `
         <div class="panel">
           <h2>Appearance</h2>
@@ -8133,6 +8135,14 @@
           <h3 class="section-subtitle">Console Layout</h3>
           <div class="settings-grid">
             ${settingsApi.consoleLayouts.map((layout) => settingsOptionButton('consoleLayout', layout.id, layout.name, layout.note, current.consoleLayout === layout.id)).join('')}
+          </div>
+        </div>
+        <div class="panel">
+          <h2>Campaign Guidance</h2>
+          <p class="muted">Choice eligibility hints compare printed requirements with the current Action Chart. They never choose a route for you.</p>
+          <div class="settings-grid">
+            ${settingsOptionButton('choiceHintsEnabled', 'on', 'Show Choice Hints', 'Use green for met requirements and grey/dashed for unavailable routes.', choiceHintsOn)}
+            ${settingsOptionButton('choiceHintsEnabled', 'off', 'Hide Choice Hints', 'Keep every printed story choice visually neutral.', !choiceHintsOn)}
           </div>
         </div>
         <div class="panel">
@@ -8704,6 +8714,17 @@
         return;
       }
       if (button.dataset.settingsView !== undefined) {
+        if (isNativeSurface && nativeSurface !== 'tools') {
+          const settingsUrl = new URL(window.location.href);
+          settingsUrl.searchParams.set('surface', 'tools');
+          settingsUrl.searchParams.set('tool', 'settings');
+          settingsUrl.searchParams.set('resume', '1');
+          settingsUrl.searchParams.delete('console');
+          window.history.pushState({}, '', settingsUrl);
+          closeMenus();
+          await applyNativeSurfaceNavigation(settingsUrl.href);
+          return;
+        }
         activeView = 'settings';
         closeMenus();
         render();

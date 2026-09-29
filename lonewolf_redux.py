@@ -606,6 +606,36 @@ KAI_RANKS = [
     (5, "Initiate"),
 ]
 
+GRAND_MASTER_RANKS = [
+    (12, "Kai Supreme Master"),
+    (11, "Sun Prince"),
+    (10, "Grand Crown"),
+    (9, "Grand Thane"),
+    (8, "Sun Thane"),
+    (7, "Sun Lord"),
+    (6, "Sun Knight"),
+    (5, "Kai Grand Guardian"),
+    (4, "Kai Grand Defender"),
+    (3, "Kai Grand Sentinel"),
+    (2, "Kai Grand Master Superior"),
+    (1, "Kai Grand Master Senior"),
+]
+
+NEW_ORDER_RANKS = [
+    (16, "Kai Supreme Master"),
+    (15, "Sun Prince"),
+    (14, "Grand Crown"),
+    (13, "Grand Thane"),
+    (12, "Sun Thane"),
+    (11, "Sun Lord"),
+    (10, "Sun Knight"),
+    (9, "Kai Grand Guardian"),
+    (8, "Kai Grand Defender"),
+    (7, "Kai Grand Sentinel"),
+    (6, "Kai Grand Master Superior"),
+    (5, "Kai Grand Master Senior"),
+]
+
 LONE_WOLF_BOOK1_ACHIEVEMENTS = [
     {
         "Id": "lw1_complete",
@@ -5981,7 +6011,7 @@ class LoneWolfReduxAssistant:
 
         choices: list[dict[str, Any]] = []
         seen: set[int] = set()
-        prior_item_condition: dict[str, Any] | None = None
+        prior_gate_condition: dict[str, Any] | None = None
         choice_pattern = re.compile(
             r"<p\b[^>]*class=[\"'][^\"']*\bchoice\b[^\"']*[\"'][^>]*>(.*?)</p>",
             flags=re.IGNORECASE | re.DOTALL,
@@ -5997,19 +6027,45 @@ class LoneWolfReduxAssistant:
                     continue
                 seen.add(target)
                 payload = {"Section": target, "Label": label or f"Go to {target}"}
-                condition, blocked_reason = self.infer_source_route_condition(payload["Label"])
-                if (
-                    condition is None
-                    and prior_item_condition
-                    and re.match(r"^if (?:you )?(?:do not|don't) (?:have|possess) (?:this|the) (?:special )?item\b", label, flags=re.IGNORECASE)
-                ):
-                    condition = {"type": "no_item", "name": prior_item_condition["name"], "match": prior_item_condition.get("match", "exact")}
-                    blocked_reason = f"Requires that you do not have {prior_item_condition['name']}."
+                condition, blocked_reason = self.infer_source_route_condition(payload["Label"], book_number)
+                referential_item = bool(re.match(
+                    r"^if (?:you )?(?:possess|have) (?:this|the) (?:special )?item\b",
+                    label,
+                    flags=re.IGNORECASE,
+                ))
+                if condition is None and prior_gate_condition is None and referential_item:
+                    context = html.unescape(re.sub(r"<[^>]+>", " ", source[:choice_match.start()]))
+                    normalized_context = context.lower().replace("’", "'").replace("‘", "'")
+                    candidates: list[tuple[int, str, str]] = []
+                    for name, match_mode in self.source_route_item_catalog():
+                        found = list(re.finditer(
+                            rf"(?<![a-z]){re.escape(name.lower())}(?![a-z])",
+                            normalized_context,
+                        ))
+                        if found:
+                            candidates.append((found[-1].start(), name, match_mode))
+                    if candidates:
+                        _position, name, match_mode = max(candidates, key=lambda item: item[0])
+                        condition = {"type": "item", "name": name, "match": match_mode}
+                        blocked_reason = f"Requires {name}."
+                optional_refusal = bool(re.search(
+                    r"\b(?:do not wish|don't wish|choose not|prefer not|would rather not)\b",
+                    label,
+                    flags=re.IGNORECASE,
+                ))
+                referential_inverse = bool(re.match(
+                    r"^if (?:you )?(?:do not|don't|possess neither|possess none|have neither|have none)\b",
+                    label,
+                    flags=re.IGNORECASE,
+                ))
+                if condition is None and prior_gate_condition and referential_inverse and not optional_refusal:
+                    condition = self.invert_flow_condition(prior_gate_condition)
+                    blocked_reason = "Requires that the preceding Action Chart requirement is not met."
                 if condition:
                     payload["Condition"] = condition
                     payload["BlockedReason"] = blocked_reason
-                    if condition.get("type") == "item" and condition.get("name"):
-                        prior_item_condition = condition
+                    if not str(condition.get("type") or "").startswith("no_"):
+                        prior_gate_condition = condition
                 choices.append(payload)
 
         if choices:
@@ -6026,7 +6082,104 @@ class LoneWolfReduxAssistant:
             result.append({"Section": section, "Label": f"Go to {section}"})
         return result
 
-    def infer_source_route_condition(self, label: str) -> tuple[dict[str, Any] | None, str]:
+    def invert_flow_condition(self, condition: dict[str, Any]) -> dict[str, Any]:
+        """Return the logical inverse of a route condition when it is representable."""
+        kind = str(condition.get("type") or "").lower()
+        inverse_types = {
+            "power": "no_power",
+            "no_power": "power",
+            "item": "no_item",
+            "no_item": "item",
+            "item_history": "no_item_history",
+            "no_item_history": "item_history",
+            "gold_gte": "gold_lt",
+            "gold_at_least": "gold_lt",
+            "gold_lt": "gold_gte",
+            "gold_below": "gold_gte",
+            "arrows_gte": "arrows_lt",
+            "arrow_count_gte": "arrows_lt",
+            "arrows_lt": "arrows_gte",
+            "arrow_count_lt": "arrows_gte",
+            "item_count_gte": "item_count_lt",
+            "items_gte": "item_count_lt",
+            "item_count_lt": "item_count_gte",
+            "items_lt": "item_count_gte",
+            "magnakai_rank_gte": "magnakai_rank_lt",
+            "magnakai_rank_lt": "magnakai_rank_gte",
+            "grand_master_rank_gte": "grand_master_rank_lt",
+            "grand_master_rank_lt": "grand_master_rank_gte",
+            "new_order_rank_gte": "new_order_rank_lt",
+            "new_order_rank_lt": "new_order_rank_gte",
+        }
+        if kind in {"all", "any"}:
+            children = [
+                self.invert_flow_condition(item)
+                for item in as_list(condition.get("conditions"))
+                if isinstance(item, dict)
+            ]
+            return {"type": "any" if kind == "all" else "all", "conditions": children}
+        inverse = dict(condition)
+        inverse["type"] = inverse_types.get(kind, "not")
+        if inverse["type"] == "not":
+            return {"type": "not", "condition": dict(condition)}
+        return inverse
+
+    def source_route_item_catalog(self) -> list[tuple[str, str]]:
+        """Return item names known to the automation data, longest first.
+
+        Source-route recognition must stay conservative, but it should not rely
+        on a hand-maintained shortlist that silently misses later-book Special
+        Items.  Item-bearing actions and conditions are already audited data, so
+        they provide a safe catalogue without copying source prose.
+        """
+        cached = getattr(self, "_source_route_item_catalog", None)
+        if isinstance(cached, list):
+            return cached
+        names = {
+            "Arrow", "Axe", "Bow", "Broadsword", "Dagger", "Lantern", "Mace",
+            "Meal", "Quarterstaff", "Rope", "Short Sword", "Spear", "Sword",
+            "Tinderbox", "Torch", "Warhammer",
+        }
+
+        def collect(value: Any) -> None:
+            if isinstance(value, dict):
+                kind = str(value.get("type") or "").lower()
+                item_context = kind in {
+                    "add_item", "remove_item", "remove_matching_items", "item",
+                    "no_item", "item_history", "no_item_history", "item_count_gte",
+                    "item_count_lt",
+                } or "container" in value or "containers" in value
+                if item_context:
+                    name = str(value.get("name") or "").strip()
+                    if name:
+                        names.add(name)
+                    for item in as_list(value.get("names")) + as_list(value.get("includeNames")):
+                        if str(item).strip():
+                            names.add(str(item).strip())
+                for child in value.values():
+                    collect(child)
+            elif isinstance(value, list):
+                for child in value:
+                    collect(child)
+
+        collect(self.section_flows)
+        collect(self.section_automation)
+        result: dict[str, tuple[str, str]] = {}
+        for name in names:
+            display = re.sub(r"\s*\([^)]*(?:END|CS|use|dose)[^)]*\)\s*$", "", name, flags=re.IGNORECASE).strip()
+            if not display:
+                continue
+            # A shortened source label should still match a stored item carrying
+            # an effect suffix, e.g. "Potion of Laumspur (+4 END)".
+            mode = "contains" if display != name else "exact"
+            result.setdefault(display.lower(), (display, mode))
+        cached = sorted(result.values(), key=lambda item: len(item[0]), reverse=True)
+        self._source_route_item_catalog = cached
+        return cached
+
+    def infer_source_route_condition(
+        self, label: str, book_number: int | None = None
+    ) -> tuple[dict[str, Any] | None, str]:
         """Recognize only explicit Action Chart gates in official source choice text."""
         source = re.sub(r"\s+", " ", str(label or "")).strip()
         lowered = source.lower()
@@ -6039,20 +6192,45 @@ class LoneWolfReduxAssistant:
             "scion-kai": 8,
             "archmaster": 9,
         }
-        rank_match = re.search(
-            r"\b(?:rank of|rank)\s+(?:kai master\s+)?([a-z-]+)",
-            clause,
-            flags=re.IGNORECASE,
+        route_book = int(book_number or self.character.get("BookNumber") or 1)
+        grand_rank_lookup = {name.lower(): value for value, name in GRAND_MASTER_RANKS}
+        new_order_rank_lookup = {name.lower(): value for value, name in NEW_ORDER_RANKS}
+        rank_candidates = sorted(
+            {
+                *magnakai_ranks,
+                *(name.lower() for _, name in KAI_RANKS),
+                *grand_rank_lookup,
+                *new_order_rank_lookup,
+            },
+            key=len,
+            reverse=True,
         )
-        rank_name = rank_match.group(1).lower() if rank_match else ""
+        rank_name = next(
+            (
+                name
+                for name in rank_candidates
+                if re.search(rf"(?<![a-z]){re.escape(name)}(?![a-z])", clause.lower())
+            ),
+            "",
+        )
 
-        if re.match(r"^if you have (?:attained|reached) the (?:kai )?rank\b", lowered):
-            if rank_name not in magnakai_ranks:
-                return None, ""
-            return (
-                {"type": "magnakai_rank_gte", "value": magnakai_ranks[rank_name]},
-                f"Requires {rank_name.title()} rank.",
-            )
+        if re.match(r"^if you have (?:attained|reached|achieved) the (?:kai )?rank\b", lowered):
+            if rank_name in magnakai_ranks:
+                return (
+                    {"type": "magnakai_rank_gte", "value": magnakai_ranks[rank_name]},
+                    f"Requires {rank_name.title()} rank.",
+                )
+            if rank_name in {name.lower() for _, name in KAI_RANKS}:
+                display = next(name for _, name in KAI_RANKS if name.lower() == rank_name)
+                return {"type": "kai_rank_gte", "name": display}, f"Requires {display} rank."
+            rank_lookup = new_order_rank_lookup if route_book >= 21 else grand_rank_lookup
+            if rank_name in rank_lookup:
+                condition_type = "new_order_rank_gte" if route_book >= 21 else "grand_master_rank_gte"
+                return (
+                    {"type": condition_type, "value": rank_lookup[rank_name]},
+                    f"Requires {next(name for _, name in (NEW_ORDER_RANKS if route_book >= 21 else GRAND_MASTER_RANKS) if name.lower() == rank_name)} rank.",
+                )
+            return None, ""
 
         lore_match = re.match(
             r"^if you have completed the lore-circle of (?:the )?([a-z-]+)\b",
@@ -6083,12 +6261,26 @@ class LoneWolfReduxAssistant:
                 )
 
         if re.match(r"^if you\b", lowered) and re.search(r"\bgold crowns?\b", lowered):
+            optional_refusal = bool(re.search(
+                r"\b(?:do not wish|don't wish|choose not|prefer not|would rather not)\b",
+                lowered,
+            ))
+            if optional_refusal:
+                return None, ""
+            no_gold = re.search(
+                r"\b(?:have|possess|carry)\s+(?:no|zero)\s+gold crowns?\b|"
+                r"\bdo not have any gold crowns?\b|\b(?:lost|lose) all (?:of )?(?:your )?gold crowns?\b",
+                lowered,
+            )
             gold_lt = re.search(r"\b(?:less than|fewer than|under)\s+(\d+|[a-z-]+)\s+gold crowns?\b", lowered)
             gold_gte = (
                 re.search(r"\b(?:at least|no fewer than)\s+(\d+|[a-z-]+)\s+gold crowns?\b", lowered)
                 or re.search(r"\b(\d+|[a-z-]+)\s+gold crowns?\s+or more\b", lowered)
-                or re.search(r"\b(?:wish to )?pay\s+(?:a fee of\s+)?(\d+|[a-z-]+)\s+gold crowns?\b", lowered)
+                or re.search(r"\b(?:have|possess|carry)\s+(\d+|[a-z-]+)\s+gold crowns?\b", lowered)
+                or re.search(r"\bpay(?:\s+(?:the|him|her|them|a|an|your|innkeeper|driver|man|woman|guard|sergeant)){0,4}\s+(\d+|[a-z-]+)\s+gold crowns?\b", lowered)
             )
+            if no_gold:
+                return {"type": "gold_lt", "value": 1}, "Requires no Gold Crowns."
             if gold_lt:
                 amount = _route_number(gold_lt.group(1))
                 if amount is not None:
@@ -6101,6 +6293,8 @@ class LoneWolfReduxAssistant:
 
         route_items = (
             ("Dagger of Vashna", "exact"),
+            ("Blue Stone Triangle", "exact"),
+            ("Badge of Rank", "exact"),
             ("Sinede's Silver Key", "exact"),
             ("Silver Bow", "contains"),
             ("Riverboat Ticket", "contains"),
@@ -6123,22 +6317,36 @@ class LoneWolfReduxAssistant:
             ("Rope", "exact"),
             ("Bow", "exact"),
         )
+        route_items = tuple(dict.fromkeys((*route_items, *self.source_route_item_catalog())))
         item_clause = re.match(r"^if (?:you )?(?P<verb>have|possess|purchased)\b", lowered)
         no_item_clause = re.match(r"^if (?:you )?(?:do not|don't) (?:have|possess)\b", lowered)
         item_clause = item_clause or no_item_clause
         if item_clause:
+            if re.search(r"\bticket\b.*\bport bax\b", clause, flags=re.IGNORECASE):
+                condition_type = "no_item" if no_item_clause else "item"
+                return (
+                    {"type": condition_type, "name": "Ticket to Port Bax", "match": "exact"},
+                    "Requires a Ticket to Port Bax." if not no_item_clause else "Requires that you do not have a Ticket to Port Bax.",
+                )
+            if re.search(r"\b(?:a|another|any|hand) weapons?\b", clause, flags=re.IGNORECASE):
+                condition_type = "item_count_lt" if no_item_clause else "item_count_gte"
+                return (
+                    {"type": condition_type, "name": "", "containers": ["weapon"], "value": 1},
+                    "Requires a carried Weapon." if not no_item_clause else "Requires that you carry no Weapon.",
+                )
             item_conditions: list[dict[str, Any]] = []
             item_names: list[str] = []
             claimed_spans: list[tuple[int, int]] = []
+            normalized_clause = clause.lower().replace("’", "'").replace("‘", "'")
             for item, match_mode in route_items:
                 # "a Torch and a Tinderbox" is two separately carried items with an
                 # optional article between them, not one combined item.
                 search = (
                     r"(?<![a-z])torch and (?:a |an |the )?tinderbox(?![a-z])"
                     if item == "Torch and Tinderbox"
-                    else rf"(?<![a-z]){re.escape(item.lower())}(?![a-z])"
+                    else rf"(?<![a-z]){re.escape(item.lower())}{'s?' if item in {'Fireseed'} else ''}(?![a-z])"
                 )
-                match = re.search(search, clause.lower())
+                match = re.search(search, normalized_clause)
                 if not match or any(match.start() < end and start < match.end() for start, end in claimed_spans):
                     continue
                 claimed_spans.append(match.span())
@@ -6164,6 +6372,71 @@ class LoneWolfReduxAssistant:
                 requirement = " or ".join(item_names) if item_uses_or else " and ".join(item_names)
                 return item_condition, (f"Requires that you do not have {requirement}." if no_item_clause else f"Requires {requirement}.")
 
+        # Later series often name a discipline directly ("If you possess
+        # Kai-alchemy") rather than using "Discipline of ...".  Recognize those
+        # names conservatively.  Compound rank wording stays unresolved until
+        # its rank is also parsed; highlighting a partial requirement would be
+        # misleading.
+        known_disciplines = sorted(
+            dict.fromkeys(
+                KAI_DISCIPLINES + MAGNAKAI_DISCIPLINES + GRAND_MASTER_DISCIPLINES + NEW_ORDER_DISCIPLINES
+            ),
+            key=len,
+            reverse=True,
+        )
+        if re.match(r"^if\b", lowered) and not re.search(
+            r"\bdisciplines?\s+of\b", clause, flags=re.IGNORECASE
+        ):
+            found: list[tuple[int, int, str]] = []
+            for name in known_disciplines:
+                match = re.search(rf"(?<![a-z]){re.escape(name.lower())}(?![a-z])", clause.lower())
+                if not match or any(match.start() < end and start < match.end() for start, end, _ in found):
+                    continue
+                found.append((match.start(), match.end(), name))
+            found.sort()
+            if found:
+                optional_refusal = bool(re.search(
+                    r"\b(?:do not wish|don't wish|choose not|prefer not|would rather not)\b",
+                    clause,
+                    flags=re.IGNORECASE,
+                ))
+                negative = bool(re.search(
+                    r"^if\b.{0,45}\b(?:do not|don't|neither|none|without)\b",
+                    lowered,
+                ))
+                if negative and optional_refusal:
+                    return None, ""
+                span = clause[found[0][0]:found[-1][1]]
+                uses_or = bool(re.search(r"\b(?:or|either|neither)\b", span, flags=re.IGNORECASE))
+                conditions = [{"type": "power", "name": name} for _, _, name in found]
+                condition = conditions[0] if len(conditions) == 1 else {
+                    "type": "any" if uses_or else "all",
+                    "conditions": conditions,
+                }
+                route_rank_condition: dict[str, Any] | None = None
+                rank_phrase = re.search(
+                    r"\b(?:rank of\s+)?(kai grand master superior|kai grand master senior|"
+                    r"kai grand sentinel|kai grand defender|kai grand guardian|sun knight|"
+                    r"sun lord|sun thane|grand thane|grand crown|sun prince|kai supreme master)\b",
+                    clause,
+                    flags=re.IGNORECASE,
+                )
+                if rank_phrase:
+                    parsed_rank = rank_phrase.group(1).lower()
+                    lookup = new_order_rank_lookup if route_book >= 21 else grand_rank_lookup
+                    if parsed_rank in lookup:
+                        route_rank_condition = {
+                            "type": "new_order_rank_gte" if route_book >= 21 else "grand_master_rank_gte",
+                            "value": lookup[parsed_rank],
+                        }
+                if route_rank_condition:
+                    condition = {"type": "all", "conditions": [condition, route_rank_condition]}
+                names = " or ".join(item[2] for item in found) if uses_or else " and ".join(item[2] for item in found)
+                if negative:
+                    condition = self.invert_flow_condition(condition)
+                    return condition, f"Requires that you do not possess {names}."
+                return condition, f"Requires {names}."
+
         # Discipline gates across every series, including the "wish to use your
         # Kai Discipline of X" phrasing. Each branch may name one or more
         # disciplines (and an optional Magnakai rank).
@@ -6183,13 +6456,6 @@ class LoneWolfReduxAssistant:
         requirements: list[str] = []
         # Longest names first so "Grand Weaponmastery" is claimed before the
         # substring "Weaponmastery".
-        known_disciplines = sorted(
-            dict.fromkeys(
-                KAI_DISCIPLINES + MAGNAKAI_DISCIPLINES + GRAND_MASTER_DISCIPLINES + NEW_ORDER_DISCIPLINES
-            ),
-            key=len,
-            reverse=True,
-        )
         for index, match in enumerate(matches):
             branch = clause[match.end():matches[index + 1].start() if index + 1 < len(matches) else len(clause)]
             branch_lower = branch.lower()
@@ -6472,12 +6738,17 @@ class LoneWolfReduxAssistant:
         if kind == "all":
             conditions = [item for item in as_list(condition.get("conditions")) if isinstance(item, dict)]
             return bool(conditions) and all(self.evaluate_flow_condition(item) for item in conditions)
+        if kind == "not":
+            nested = condition.get("condition")
+            return isinstance(nested, dict) and not self.evaluate_flow_condition(nested)
         if kind == "power":
             return self.has_power(str(condition.get("name") or ""))
         if kind == "no_power":
             return not self.has_power(str(condition.get("name") or ""))
         if kind in {"kai_rank_gte", "rank_gte"}:
             return kai_rank_meets(self.effective_disciplines(), str(condition.get("name") or condition.get("rank") or condition.get("value") or ""))
+        if kind in {"kai_rank_lt", "rank_lt"}:
+            return not kai_rank_meets(self.effective_disciplines(), str(condition.get("name") or condition.get("rank") or condition.get("value") or ""))
         if kind in {"discipline_count_gte", "kai_disciplines_gte"}:
             return len(self.effective_disciplines()) >= int(condition.get("value") or 0)
         if kind in {"visited_section", "section_visited"}:
@@ -6495,6 +6766,10 @@ class LoneWolfReduxAssistant:
             return int(self.character.get("GrandMasterRank") or 0) >= int(condition.get("value") or 0)
         if kind in {"grand_master_rank_lt", "grand_master_rank_below"}:
             return int(self.character.get("GrandMasterRank") or 0) < int(condition.get("value") or 0)
+        if kind in {"new_order_rank_gte", "new_order_rank"}:
+            return int(self.character.get("NewOrderRank") or 0) >= int(condition.get("value") or 0)
+        if kind in {"new_order_rank_lt", "new_order_rank_below"}:
+            return int(self.character.get("NewOrderRank") or 0) < int(condition.get("value") or 0)
         if kind in {"lore_circle", "lore_circle_completed"}:
             target = lore_circle_key(condition.get("name") or condition.get("value"))
             return bool(target) and any(

@@ -7,6 +7,7 @@
     consoleLayout: 'lonewolf_redux.appearance.consoleLayout.v1',
     readerStyleEnabled: 'lonewolf_redux.reader.styleEnabled.v1',
     readerTheme: 'lonewolf_redux.reader.theme.v1',
+    choiceHintsEnabled: 'lonewolf_redux.reader.choiceHints.v1',
     musicEnabled: 'lonewolf_redux.music.enabled.v1',
     musicVolume: 'lonewolf_redux.music.volume.v1',
     musicPlaylist: 'lonewolf_redux.music.playlist.v1',
@@ -458,6 +459,7 @@
     consoleLayout: 'companion-rail',
     readerStyleEnabled: 'off',
     readerTheme: 'original',
+    choiceHintsEnabled: 'on',
     musicEnabled: 'off',
     musicVolume: 0.35,
     musicPlaylist: 'journey',
@@ -497,6 +499,7 @@
       consoleLayout: localStorage.getItem(STORAGE_KEYS.consoleLayout) || defaults.consoleLayout,
       readerStyleEnabled: localStorage.getItem(STORAGE_KEYS.readerStyleEnabled) || defaults.readerStyleEnabled,
       readerTheme: localStorage.getItem(STORAGE_KEYS.readerTheme) || defaults.readerTheme,
+      choiceHintsEnabled: localStorage.getItem(STORAGE_KEYS.choiceHintsEnabled) || defaults.choiceHintsEnabled,
       musicEnabled: localStorage.getItem(STORAGE_KEYS.musicEnabled) || defaults.musicEnabled,
       musicVolume: localStorage.getItem(STORAGE_KEYS.musicVolume) || defaults.musicVolume,
       musicPlaylist: localStorage.getItem(STORAGE_KEYS.musicPlaylist) || defaults.musicPlaylist,
@@ -514,6 +517,7 @@
       [STORAGE_KEYS.consoleLayout]: settings.consoleLayout,
       [STORAGE_KEYS.readerStyleEnabled]: settings.readerStyleEnabled,
       [STORAGE_KEYS.readerTheme]: settings.readerTheme,
+      [STORAGE_KEYS.choiceHintsEnabled]: settings.choiceHintsEnabled,
       [STORAGE_KEYS.musicEnabled]: settings.musicEnabled,
       [STORAGE_KEYS.musicVolume]: settings.musicVolume,
       [STORAGE_KEYS.musicPlaylist]: settings.musicPlaylist,
@@ -536,6 +540,7 @@
       consoleLayout: values[STORAGE_KEYS.consoleLayout] || defaults.consoleLayout,
       readerStyleEnabled: values[STORAGE_KEYS.readerStyleEnabled] || defaults.readerStyleEnabled,
       readerTheme: values[STORAGE_KEYS.readerTheme] || defaults.readerTheme,
+      choiceHintsEnabled: values[STORAGE_KEYS.choiceHintsEnabled] || defaults.choiceHintsEnabled,
       musicEnabled: values[STORAGE_KEYS.musicEnabled] || defaults.musicEnabled,
       musicVolume: values[STORAGE_KEYS.musicVolume] || defaults.musicVolume,
       musicPlaylist: values[STORAGE_KEYS.musicPlaylist] || defaults.musicPlaylist,
@@ -553,6 +558,7 @@
     settings.consoleLayout = byId(consoleLayouts, settings.consoleLayout, defaults.consoleLayout).id;
     settings.readerStyleEnabled = settings.readerStyleEnabled === 'on' ? 'on' : 'off';
     settings.readerTheme = byId(readerThemes, settings.readerTheme, defaults.readerTheme).id;
+    settings.choiceHintsEnabled = settings.choiceHintsEnabled === 'off' ? 'off' : 'on';
     settings.musicEnabled = settings.musicEnabled === 'on' ? 'on' : 'off';
     const musicVolume = Number(settings.musicVolume);
     settings.musicVolume = Number.isFinite(musicVolume) ? Math.min(1, Math.max(0, musicVolume)) : defaults.musicVolume;
@@ -571,6 +577,7 @@
     localStorage.setItem(STORAGE_KEYS.consoleLayout, clean.consoleLayout);
     localStorage.setItem(STORAGE_KEYS.readerStyleEnabled, clean.readerStyleEnabled);
     localStorage.setItem(STORAGE_KEYS.readerTheme, clean.readerTheme);
+    localStorage.setItem(STORAGE_KEYS.choiceHintsEnabled, clean.choiceHintsEnabled);
     localStorage.setItem(STORAGE_KEYS.musicEnabled, clean.musicEnabled);
     localStorage.setItem(STORAGE_KEYS.musicVolume, String(clean.musicVolume));
     localStorage.setItem(STORAGE_KEYS.musicPlaylist, clean.musicPlaylist);
