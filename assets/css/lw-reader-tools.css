@@ -167,6 +167,40 @@ body.lw-surface-tools.lw-console-active #toolsQuickRoll { display: none; }
 body.lw-surface-tools.lw-console-active #toolsActiveMount { grid-column: auto; }
 body.lw-surface-tools.lw-console-active #toolsActiveMount > #view { padding: 0; }
 
+body.lw-surface-tools.lw-console-active[data-lw-console-layout="companion-rail"] .workspace.lw-native { width: min(1120px, calc(100% - 32px)); }
+.cli-console-layout { display: grid; gap: 12px; min-width: 0; }
+.cli-console-layout--companion-rail { grid-template-columns: minmax(0, 1fr) 248px; align-items: stretch; }
+.cli-console-rail { display: grid; align-content: start; gap: 12px; min-width: 0; }
+.cli-console-player, .cli-console-controls { min-width: 0; padding: 14px; background: var(--lw-ui-surface); }
+.cli-console-player .lw-music-compact { padding: 0; }
+.cli-console-player .lw-music-compact > strong { white-space: normal; }
+.cli-console-player .lw-music-compact__controls { grid-template-columns: 34px 38px 34px; }
+.cli-console-player .lw-music-compact__volume { grid-column: 1 / -1; }
+.cli-console-controls { display: grid; gap: 12px; }
+.cli-console-controls h2 { margin: 0; font-size: 1rem; }
+.cli-console-controls .lw-eyebrow { margin-bottom: 5px; }
+.cli-console-controls__actions { display: grid; gap: 8px; }
+.cli-console-controls__actions button { width: 100%; }
+.cli-console-layout--focus-dock .cli-terminal-panel { height: clamp(480px, calc(100vh - 480px), 620px); min-height: 480px; }
+.cli-console-dock { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px; align-items: center; padding: 12px 14px; }
+.cli-console-dock__player { min-width: 0; }
+.cli-console-dock .lw-music-compact { grid-template-columns: minmax(150px, 1fr) minmax(250px, 1.4fr); align-items: center; gap: 6px 16px; padding: 0; }
+.cli-console-dock .lw-music-compact__head { grid-column: 1; }
+.cli-console-dock .lw-music-compact > strong, .cli-console-dock .lw-music-compact > small { grid-column: 1; }
+.cli-console-dock .lw-music-compact__controls { grid-column: 2; grid-row: 1 / span 3; }
+.cli-console-dock .lw-music-compact__message { grid-column: 1 / -1; }
+.cli-console-dock .cli-console-controls { padding: 0; background: transparent; }
+.cli-console-dock .cli-console-controls > div:first-child { display: none; }
+.cli-console-dock .cli-console-controls__actions { display: flex; flex-wrap: nowrap; }
+.cli-console-dock .cli-console-controls__actions button { width: auto; white-space: nowrap; }
+
+@media (max-width: 980px) {
+  .cli-console-layout--companion-rail { grid-template-columns: 1fr; }
+  .cli-console-rail { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cli-console-player .lw-music-compact__controls { grid-template-columns: 34px 38px 34px minmax(74px, 1fr); }
+  .cli-console-player .lw-music-compact__volume { grid-column: auto; }
+}
+
 @media (max-width: 700px) {
   body.lw-surface-tools.lw-console-active .workspace.lw-native { width: calc(100% - 20px); }
   body.lw-surface-tools.lw-console-active .lw-tools-head { grid-template-columns: 1fr; }
@@ -174,6 +208,14 @@ body.lw-surface-tools.lw-console-active #toolsActiveMount > #view { padding: 0; 
   body.lw-surface-tools.lw-console-active .cli-terminal-panel { height: 680px; }
   body.lw-surface-tools.lw-console-active .cli-terminal-toolbar { align-items: stretch; }
   body.lw-surface-tools.lw-console-active .cli-terminal-toolbar .mode-note { flex-basis: 100%; }
+  .cli-console-rail, .cli-console-dock { grid-template-columns: 1fr; }
+  .cli-console-dock .lw-music-compact { grid-template-columns: 1fr; }
+  .cli-console-dock .lw-music-compact__head,
+  .cli-console-dock .lw-music-compact > strong,
+  .cli-console-dock .lw-music-compact > small,
+  .cli-console-dock .lw-music-compact__controls,
+  .cli-console-dock .lw-music-compact__message { grid-column: 1; grid-row: auto; }
+  .cli-console-dock .cli-console-controls__actions { flex-wrap: wrap; }
 }
 
 @media (max-width: 850px) {
