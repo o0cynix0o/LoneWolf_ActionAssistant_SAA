@@ -1583,6 +1583,11 @@
     #cliTerminalContainer .xterm {
       height: 100%;
     }
+    .cli-terminal-viewport {
+      width: min(100%, 680px);
+      height: 100%;
+      margin-inline: auto;
+    }
     .file-mode-lock {
       width: min(820px, calc(100% - 32px));
       margin: 12vh auto;
@@ -4369,6 +4374,9 @@
         return;
       }
       container.innerHTML = '';
+      const terminalViewport = document.createElement('div');
+      terminalViewport.className = 'cli-terminal-viewport';
+      container.appendChild(terminalViewport);
 
       // Frozen builds use a pipe-backed CLI and browser-side line editing.
       // Source builds retain ConPTY. The old WinPTY marker is accepted for
@@ -4395,7 +4403,7 @@
         cliFitAddon = new FitAddon.FitAddon();
         cliTerminal.loadAddon(cliFitAddon);
       }
-      cliTerminal.open(container);
+      cliTerminal.open(terminalViewport);
       cliFitAddon?.fit();
       cliTerminal.writeln('Connecting to Lone Wolf CLI...');
 

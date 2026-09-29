@@ -4622,7 +4622,11 @@ class CampaignDeskProductionTests(unittest.TestCase):
         self.assertNotIn('disabled title="${escapeHtml(text(loot.BlockedReason))}">Apply</button>', assistant_html)
         self.assertIn(".lw-glance__choices .section-loot-row { display: grid; grid-template-columns: minmax(0, 1fr);", campaign_css)
         self.assertIn("height: clamp(680px, calc(100vh - 110px), 920px);", assistant_html)
+        self.assertIn("className = 'cli-terminal-viewport';", assistant_html)
+        self.assertIn("cliTerminal.open(terminalViewport);", assistant_html)
+        self.assertIn("width: min(100%, 680px);", assistant_html)
         self.assertIn("width: min(840px, calc(100% - 32px));", tools_css)
+        self.assertIn(".lw-tools-head__actions { flex-wrap: nowrap; }", tools_css)
         self.assertIn("#toolsActiveMount > #view { padding: 0; }", tools_css)
 
     def test_borderless_surfaces_share_the_recovery_background(self) -> None:
