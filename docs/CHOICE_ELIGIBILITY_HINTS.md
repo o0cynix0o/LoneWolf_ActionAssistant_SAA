@@ -36,3 +36,10 @@ An unresolved record is a review flag, not an assertion that a route is
 broken. The parser stays conservative where prose depends on earlier-story
 history, random-table results, or wording that cannot be safely reduced to an
 Action Chart test.
+
+## Directional item substitutes
+
+The two-slot Rope and Long Rope can satisfy an ordinary **Rope** requirement;
+they can always handle the shorter crossing or climb. An ordinary one-slot
+Rope cannot satisfy a route that explicitly requires **Rope (2 spaces)** or a
+Long Rope. The items retain their printed names and slot costs in inventory.

@@ -3198,6 +3198,31 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
         self.assertEqual(arrow_reason, "Requires at least 2 Arrows.")
         self.assertEqual(ticket_reason, "Requires Riverboat Ticket.")
 
+    def test_two_space_rope_satisfies_rope_but_not_the_reverse(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            ordinary = {"type": "item", "name": "Rope", "containers": ["backpack"]}
+            long_rope = {"type": "item", "name": "Rope (2 spaces)", "containers": ["backpack"]}
+
+            assistant.inventory["BackpackItems"] = ["Rope (2 spaces)"]
+            self.assertTrue(assistant.evaluate_flow_condition(ordinary))
+            self.assertTrue(assistant.evaluate_flow_condition(long_rope))
+            self.assertEqual(assistant.count_items("Rope", ["backpack"]), 1)
+
+            assistant.inventory["BackpackItems"] = ["Rope"]
+            self.assertTrue(assistant.evaluate_flow_condition(ordinary))
+            self.assertFalse(assistant.evaluate_flow_condition(long_rope))
+
+            assistant.inventory["BackpackItems"] = ["Long Rope (2 spaces)"]
+            self.assertTrue(assistant.evaluate_flow_condition(ordinary))
+            self.assertTrue(assistant.evaluate_flow_condition(long_rope))
+
     def test_legacy_kai_rank_routes_use_discipline_count(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
