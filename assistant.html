@@ -1929,7 +1929,7 @@
       ['disciplines', 'Disciplines'],
       ['sections', 'Sections'],
       ['combat', 'Combat'],
-      ['achievements', 'Achievements'],
+      ['compendium', 'Compendium'],
       ['saves', 'Saves'],
       ['notes', 'Notes']
     ];
@@ -1953,7 +1953,7 @@
     let assistantSettings = settingsApi.apply(settingsApi.readLocal());
     let app = null;
     const requestedToolView = new URLSearchParams(window.location.search).get('tool');
-    let activeView = ['sheet', 'inventory', 'disciplines', 'sections', 'combat', 'achievements', 'saves', 'notes', 'settings', 'soundtrack'].includes(requestedToolView) ? requestedToolView : 'sheet';
+    let activeView = ['sheet', 'inventory', 'disciplines', 'sections', 'combat', 'compendium', 'achievements', 'saves', 'notes', 'settings', 'soundtrack'].includes(requestedToolView) ? requestedToolView : 'sheet';
     let activeBook = 1;
     let activeSection = null;
     let book1Creation = null;
@@ -1963,6 +1963,11 @@
     let cardResizeState = null;
     let suppressCardHandleClick = false;
     let bookFiles = { Installed: true, Books: [] };
+    let compendiumCatalog = { categories: { items: [], bestiary: [], people: [], places: [] } };
+    let compendiumTab = requestedToolView === 'achievements' ? 'achievements' : 'items';
+    let compendiumSearch = '';
+    let compendiumBookFilter = 'current';
+    const revealedCompendiumEntries = new Set();
     let currentReceipt = { summary: 'Ready.', details: [] };
     let receiptExpanded = false;
     const pageParams = new URLSearchParams(window.location.search);
@@ -3111,13 +3116,15 @@
     }
 
     async function fetchState() {
-      const [response, bookResponse] = await Promise.all([
+      const [response, bookResponse, compendiumResponse] = await Promise.all([
         fetch('/api/state', { cache: 'no-store' }),
-        fetch('/api/book-files', { cache: 'no-store' }).catch(() => null)
+        fetch('/api/book-files', { cache: 'no-store' }).catch(() => null),
+        fetch('/data/compendium.json', { cache: 'no-store' }).catch(() => null)
       ]);
       if (!response.ok) throw new Error('Could not load state');
       app = await response.json();
       if (bookResponse?.ok) bookFiles = await bookResponse.json();
+      if (compendiumResponse?.ok) compendiumCatalog = await compendiumResponse.json();
       syncUiPreferences(app.uiPreferences);
       const cheatStatus = app.cheats || {};
       const activeCheats = arr(cheatStatus.active);
@@ -3305,7 +3312,8 @@
         disciplines: renderDisciplines,
         sections: renderSections,
         combat: renderCombat,
-        achievements: renderAchievements,
+        compendium: renderCompendium,
+        achievements: renderCompendium,
         saves: renderSaves,
         notes: renderNotes,
         settings: renderSettings
@@ -3382,7 +3390,7 @@
         ['disciplines', 'Disciplines', 'Kai, Magnakai, Grand Master, or New Order'],
         ['sections', 'Sections', 'Audited section and route work'],
         ['combat', 'Combat', 'Tracked fights and recent rounds'],
-        ['achievements', 'Achievements', 'Campaign progress and unlocks'],
+        ['compendium', 'Compendium', 'Items, creatures, people, places, and achievements'],
         ['saves', 'Saves', 'Checkpoints and backups'],
         ['notes', 'Notes', 'Campaign memory'],
         ['soundtrack', 'Soundtrack', 'Background music, playlists, and credits'],
@@ -3502,7 +3510,7 @@
       if (v) v.innerHTML = '';
     }
     function runToolRenderer(viewName) {
-      const map = { sheet: renderSheet, inventory: renderInventory, disciplines: renderDisciplines, sections: renderSections, combat: renderCombat, achievements: renderAchievements, saves: renderSaves, notes: renderNotes, settings: renderSettings, soundtrack: renderSoundtrack };
+      const map = { sheet: renderSheet, inventory: renderInventory, disciplines: renderDisciplines, sections: renderSections, combat: renderCombat, compendium: renderCompendium, achievements: renderCompendium, saves: renderSaves, notes: renderNotes, settings: renderSettings, soundtrack: renderSoundtrack };
       (map[viewName] || renderSheet)();
     }
     function knownDisciplines(c) {
@@ -4261,7 +4269,7 @@
       campaignStartRequested = false;
       campaignEntryFocusPending = false;
       if (nativeSurface === 'tools') {
-        activeView = ['sheet', 'inventory', 'disciplines', 'sections', 'combat', 'achievements', 'saves', 'notes', 'settings', 'soundtrack'].includes(nextTool) ? nextTool : 'sheet';
+        activeView = ['sheet', 'inventory', 'disciplines', 'sections', 'combat', 'compendium', 'achievements', 'saves', 'notes', 'settings', 'soundtrack'].includes(nextTool) ? nextTool : 'sheet';
       }
       if (!nativeConsole) stopCliTerminal();
       closeFrontMatter();
@@ -8055,14 +8063,14 @@
       `;
     }
 
-    function renderAchievements() {
+    function achievementsMarkup() {
       const achievements = currentAchievements();
       const definitions = arr(achievements.Definitions);
       const recent = arr(achievements.Recent);
       const currentBook = Number(currentCharacter().BookNumber || 1);
       const currentBookRows = definitions.filter((item) => Number(item.BookNumber || 0) === currentBook);
       const otherRows = definitions.filter((item) => Number(item.BookNumber || 0) !== currentBook);
-      view.innerHTML = `
+      return `
         <div class="panel">
           <h2>Achievements</h2>
           <div class="grid">
@@ -8090,6 +8098,153 @@
           </div>
         ` : ''}
       `;
+    }
+
+    function renderAchievements() {
+      view.innerHTML = achievementsMarkup();
+    }
+
+    function compendiumSectionsVisited() {
+      const visited = new Set();
+      const add = (book, section) => {
+        const b = Number(book);
+        const s = Number(section);
+        if (Number.isInteger(b) && Number.isInteger(s) && b > 0 && s > 0) visited.add(`${b}:${s}`);
+      };
+      const state = app?.state || {};
+      const currentBook = Number(state.Character?.BookNumber || 1);
+      arr(state.CurrentBookStats?.VisitedSections).forEach((section) => add(state.CurrentBookStats?.BookNumber || currentBook, section));
+      arr(state.BookHistory).forEach((book) => {
+        const bookNumber = book.BookNumber || book.Number;
+        arr(book.VisitedSections || book.SectionsVisitedList || book.Sections).forEach((section) => add(bookNumber, typeof section === 'object' ? section.Section : section));
+      });
+      arr(state.SectionHistory).forEach((entry) => add(entry.BookNumber || entry.Book || currentBook, entry.Section || entry.SectionNumber));
+      add(currentBook, state.CurrentSection);
+      return visited;
+    }
+
+    function compendiumOwnedItems() {
+      const found = new Set();
+      const add = (value) => {
+        if (typeof value === 'string' && value.trim()) found.add(value.trim().toLowerCase());
+        else if (value && typeof value === 'object') add(value.Item || value.Name || value.item || value.name);
+      };
+      const collectInventory = (inventory) => {
+        if (!inventory || typeof inventory !== 'object') return;
+        ['Weapons', 'BackpackItems', 'SpecialItems', 'PocketSpecialItems'].forEach((key) => arr(inventory[key]).forEach(add));
+      };
+      collectInventory(currentInventory());
+      arr(app?.state?.BookHistory).forEach((entry) => collectInventory(entry.Inventory || entry.EndingInventory || entry.ActionChart?.Inventory));
+      arr(app?.state?.Automation?.ItemHistory).forEach(add);
+      return found;
+    }
+
+    function compendiumCombatNames() {
+      const names = new Set();
+      arr(app?.state?.CombatHistory).forEach((entry) => {
+        const name = text(entry.EnemyName || entry.Name).trim().toLowerCase();
+        if (name) names.add(name);
+      });
+      if (app?.state?.Combat?.Active) {
+        const activeName = text(app.state.Combat.EnemyName).trim().toLowerCase();
+        if (activeName) names.add(activeName);
+      }
+      return names;
+    }
+
+    function compendiumEntryDiscovered(category, entry, visited = compendiumSectionsVisited()) {
+      const refs = arr(entry.sourceRefs);
+      const name = text(entry.name).trim().toLowerCase();
+      if (category === 'items') {
+        return Array.from(compendiumOwnedItems()).some((owned) => owned === name || owned.includes(name) || name.includes(owned));
+      }
+      if (category === 'bestiary') {
+        return Array.from(compendiumCombatNames()).some((enemy) => enemy === name || enemy.includes(name) || name.includes(enemy));
+      }
+      return refs.some((ref) => visited.has(`${Number(ref.book)}:${Number(ref.section)}`));
+    }
+
+    function compendiumEntryByItem(item) {
+      const query = text(item).trim().toLowerCase();
+      const entries = arr(compendiumCatalog?.categories?.items);
+      return entries.find((entry) => text(entry.name).trim().toLowerCase() === query)
+        || entries.find((entry) => query.includes(text(entry.name).trim().toLowerCase()) || text(entry.name).trim().toLowerCase().includes(query));
+    }
+
+    function compendiumItemInfoButton(item) {
+      const entry = compendiumEntryByItem(item);
+      return `<button type="button" class="item-info-button" data-item-info="${escapeHtml(entry?.id || text(item))}" data-item-info-name="${escapeHtml(item)}" aria-label="About ${escapeHtml(item)}" title="Item information">i</button>`;
+    }
+
+    function compendiumSourceLabel(entry) {
+      const refs = arr(entry.sourceRefs);
+      if (!refs.length) return 'Reviewed reference entry';
+      const first = refs[0];
+      return `First documented in Book ${escapeHtml(text(first.book, '?'))}, section ${escapeHtml(text(first.section, '?'))}`;
+    }
+
+    function compendiumEntryCard(category, entry, discovered) {
+      if (!discovered) return `<article class="compendium-card compendium-card--unknown"><span class="compendium-card__icon">?</span><div><h3>Undiscovered</h3><p>Continue the campaign to reveal this entry.</p></div></article>`;
+      const variants = arr(entry.variants);
+      const stats = category === 'bestiary' && variants.length ? variants.slice(0, 3).map((variant) => `CS ${escapeHtml(text(variant.combatSkill, '?'))} · END ${escapeHtml(text(variant.endurance, '?'))}`).join('<br>') : '';
+      const mechanics = arr(entry.mechanics).length ? `<ul>${arr(entry.mechanics).map((fact) => `<li>${escapeHtml(fact)}</li>`).join('')}</ul>` : '';
+      const revealKey = `${category}:${entry.id}`;
+      const futureKnown = arr(entry.futureUseRefs).some((ref) => compendiumSectionsVisited().has(`${Number(ref.book)}:${Number(ref.section)}`));
+      const future = entry.futureUse ? (futureKnown || revealedCompendiumEntries.has(revealKey)
+        ? `<p class="compendium-spoiler"><strong>Future use:</strong> ${escapeHtml(entry.futureUse)}</p>`
+        : `<button type="button" class="compendium-reveal" data-compendium-reveal="${escapeHtml(revealKey)}">Reveal future use</button>`) : '';
+      return `<article class="compendium-card" id="compendium-${escapeHtml(entry.id)}">
+        <div class="compendium-card__head"><div><span>${escapeHtml(text(entry.kind, category))}</span><h3>${escapeHtml(entry.name)}</h3></div><small>${escapeHtml(compendiumSourceLabel(entry))}</small></div>
+        ${entry.summary ? `<p>${escapeHtml(entry.summary)}</p>` : ''}
+        ${stats ? `<p class="compendium-stats">${stats}</p>` : ''}
+        ${mechanics}${future}
+      </article>`;
+    }
+
+    function discoveryMilestones(categories, visited) {
+      const discoveredEnemies = categories.bestiary.filter((entry) => compendiumEntryDiscovered('bestiary', entry, visited)).length;
+      const discoveredItems = categories.items.filter((entry) => compendiumEntryDiscovered('items', entry, visited)).length;
+      return [
+        ['First Find', discoveredItems >= 1, 'Discover an item entry.'],
+        ['Field Researcher', discoveredEnemies >= 10, 'Encounter 10 different creatures.'],
+        ['Seasoned Hunter', discoveredEnemies >= 50, 'Encounter 50 different creatures.'],
+        ['Archivist', discoveredItems >= 50, 'Discover 50 different items.']
+      ];
+    }
+
+    function discoveryAchievementsMarkup(categories, visited) {
+      const milestones = discoveryMilestones(categories, visited);
+      return `<div class="panel"><h2>Discovery Achievements</h2>${milestones.map(([name, unlocked, note]) => `<div class="item-row achievement-row ${unlocked ? 'unlocked' : 'locked'}"><small>${unlocked ? 'Unlocked' : 'Locked'}</small><span><strong>${escapeHtml(name)}</strong><p>${escapeHtml(note)}</p></span></div>`).join('')}</div>`;
+    }
+
+    function renderCompendium() {
+      if (activeView === 'achievements') {
+        compendiumTab = 'achievements';
+        activeView = 'compendium';
+      }
+      const categories = compendiumCatalog?.categories || { items: [], bestiary: [], people: [], places: [] };
+      const visited = compendiumSectionsVisited();
+      const currentBook = Number(currentCharacter().BookNumber || 1);
+      const categoryTabs = [['items', 'Items'], ['bestiary', 'Bestiary'], ['people', 'People'], ['places', 'Places'], ['achievements', 'Achievements']];
+      const allEntries = compendiumTab === 'achievements' ? [] : arr(categories[compendiumTab]);
+      const filterBook = compendiumBookFilter === 'all' ? null : currentBook;
+      const scoped = filterBook ? allEntries.filter((entry) => !arr(entry.sourceRefs).length || arr(entry.sourceRefs).some((ref) => Number(ref.book) === filterBook)) : allEntries;
+      const milestones = discoveryMilestones(categories, visited);
+      const discoveredCount = compendiumTab === 'achievements' ? milestones.filter((entry) => entry[1]).length : scoped.filter((entry) => compendiumEntryDiscovered(compendiumTab, entry, visited)).length;
+      const totalCount = compendiumTab === 'achievements' ? milestones.length : scoped.length;
+      const query = compendiumSearch.trim().toLowerCase();
+      const visible = scoped.filter((entry) => !query || text(entry.name).toLowerCase().includes(query) || text(entry.kind).toLowerCase().includes(query));
+      const categoryContent = compendiumTab === 'achievements'
+        ? `${discoveryAchievementsMarkup(categories, visited)}${achievementsMarkup()}`
+        : `<section class="compendium-grid">${visible.map((entry) => compendiumEntryCard(compendiumTab, entry, compendiumEntryDiscovered(compendiumTab, entry, visited))).join('') || '<p class="muted">No matching entries.</p>'}</section>`;
+      view.innerHTML = `<div class="panel compendium-hero">
+        <div><span class="lw-eyebrow">Campaign glossary</span><h2>Compendium</h2><p>Source-backed discoveries from your campaign. Undiscovered names and future uses stay hidden.</p></div>
+        <div class="compendium-progress"><strong>${escapeHtml(text(discoveredCount))} / ${escapeHtml(text(totalCount))}</strong><span>${escapeHtml(compendiumTab === 'achievements' ? 'discovery milestones' : `${compendiumTab} discovered`)}</span></div>
+      </div>
+      <div class="compendium-toolbar panel">
+        <div class="compendium-tabs">${categoryTabs.map(([id, label]) => `<button type="button" class="${compendiumTab === id ? 'active' : ''}" data-compendium-tab="${id}">${label}</button>`).join('')}</div>
+        ${compendiumTab === 'achievements' ? '' : `<div class="compendium-filters"><label>Book<select data-compendium-book><option value="current" ${compendiumBookFilter === 'current' ? 'selected' : ''}>Current (Book ${currentBook})</option><option value="all" ${compendiumBookFilter === 'all' ? 'selected' : ''}>All books</option></select></label><label>Find<input type="search" data-compendium-search value="${escapeHtml(compendiumSearch)}" placeholder="Search discovered entries"></label></div>`}
+      </div>${categoryContent}`;
     }
 
     function settingsOptionButton(kind, id, label, note, active, extraClass = '') {
@@ -8465,6 +8620,35 @@
       if (!match) return '';
       return `<small class="item-note" title="${escapeHtml(match[2])}">${escapeHtml(match[1])}</small>`;
     }
+    function closeItemInfoPopover() {
+      document.querySelectorAll('.item-info-popover').forEach((popover) => popover.remove());
+      document.querySelectorAll('.item-info-button[aria-expanded="true"]').forEach((button) => button.setAttribute('aria-expanded', 'false'));
+    }
+    function showItemInfoPopover(button, entryId) {
+      const entry = arr(compendiumCatalog?.categories?.items).find((item) => item.id === entryId)
+        || compendiumEntryByItem(button.dataset.itemInfoName)
+        || { id: '', name: text(button.dataset.itemInfoName, 'Inventory Item'), kind: 'Inventory Item', summary: 'No documented mechanical effect has been verified for this item yet.' };
+      const wasOpen = button.getAttribute('aria-expanded') === 'true';
+      closeItemInfoPopover();
+      if (wasOpen) return;
+      const revealKey = `items:${entry.id}`;
+      const knownFuture = arr(entry.futureUseRefs).some((ref) => compendiumSectionsVisited().has(`${Number(ref.book)}:${Number(ref.section)}`));
+      const future = entry.futureUse ? (knownFuture || revealedCompendiumEntries.has(revealKey)
+        ? `<p class="compendium-spoiler"><strong>Future use:</strong> ${escapeHtml(entry.futureUse)}</p>`
+        : `<button type="button" data-compendium-reveal="${escapeHtml(revealKey)}">Reveal future use</button>`) : '';
+      const popover = document.createElement('div');
+      popover.className = 'item-info-popover';
+      popover.setAttribute('role', 'dialog');
+      popover.setAttribute('aria-label', `About ${entry.name}`);
+      popover.innerHTML = `<div class="item-info-popover__head"><strong>${escapeHtml(entry.name)}</strong><button type="button" data-item-info-close aria-label="Close item information">×</button></div>
+        <small>${escapeHtml(text(entry.kind, 'Inventory Item'))}</small>
+        <p>${escapeHtml(text(entry.summary, 'No documented mechanical effect.'))}</p>
+        ${arr(entry.mechanics).length ? `<ul>${arr(entry.mechanics).map((fact) => `<li>${escapeHtml(fact)}</li>`).join('')}</ul>` : ''}
+        ${future}${entry.id ? `<button type="button" class="lw-ui-button" data-open-compendium="${escapeHtml(entry.id)}">Open in Compendium</button>` : ''}`;
+      button.closest('.item-row')?.appendChild(popover);
+      button.setAttribute('aria-expanded', 'true');
+      popover.querySelector('[data-item-info-close]')?.focus();
+    }
     function statButtons(stat, label, compact = false) {
       const labelClass = compact ? 'quick-stat-label' : '';
       const labelStyle = compact ? '' : 'style="min-width:94px"';
@@ -8484,7 +8668,7 @@
             <button type="button" data-inventory-move="${escapeHtml(itemType)}:${sourceIndex}:${sourceIndex + 1}" title="Move ${escapeHtml(item)} down" ${sourceIndex === itemCount - 1 ? 'disabled' : ''}>&darr;</button>
           </span>` : '';
         const reorderButton = reorderable ? `<button class="inventory-drag-handle" type="button" data-inventory-select="${escapeHtml(itemType)}:${sourceIndex}" title="Reorder ${escapeHtml(item)}" aria-label="Reorder ${escapeHtml(item)}">&#9776;</button>` : '<span class="inventory-drag-handle" aria-hidden="true">&#9776;</span>';
-        return `<div class="item-row">${reorderButton}<small>${index + 1}</small><span>${escapeHtml(item)}</span>${keyItemNote(item)}${controls}${itemActionButtons(itemType, item)}<button class="danger" data-drop="${itemType}:${encodeURIComponent(item)}">Drop</button></div>`;
+        return `<div class="item-row">${reorderButton}<small>${index + 1}</small><span>${escapeHtml(item)}</span>${keyItemNote(item)}${compendiumItemInfoButton(item)}${controls}${itemActionButtons(itemType, item)}<button class="danger" data-drop="${itemType}:${encodeURIComponent(item)}">Drop</button></div>`;
       }).join('');
       return `<div class="panel"><h2>${title}</h2>${rows || '<div class="item-row"><span>Empty</span></div>'}</div>`;
     }
@@ -8496,7 +8680,7 @@
         ['P', 'pocket', inv.PocketSpecialItems]
       ];
       const rows = groups.flatMap(([label, type, items]) => arr(items).map((item) => (
-        `<div class="item-row"><small>${label}</small><span>${escapeHtml(item)}</span>${keyItemNote(item)}${itemActionButtons(type, item)}<button class="danger" data-drop="${type}:${encodeURIComponent(item)}">Drop</button></div>`
+        `<div class="item-row"><small>${label}</small><span>${escapeHtml(item)}</span>${keyItemNote(item)}${compendiumItemInfoButton(item)}${itemActionButtons(type, item)}<button class="danger" data-drop="${type}:${encodeURIComponent(item)}">Drop</button></div>`
       )));
       return rows.join('') || '<div class="item-row"><span>Inventory empty.</span></div>';
     }
@@ -8567,6 +8751,7 @@
     document.addEventListener('pointerdown', (event) => {
       if (event.target.closest?.('.menu-popover, .app-menu-button, .card-menu-button')) return;
       closeMenus();
+      if (!event.target.closest?.('.item-info-popover, .item-info-button')) closeItemInfoPopover();
     });
 
     document.addEventListener('click', async (event) => {
@@ -8582,6 +8767,36 @@
         return;
       }
       if (!app) return;
+      if (button.dataset.itemInfo) {
+        event.preventDefault();
+        showItemInfoPopover(button, button.dataset.itemInfo);
+        return;
+      }
+      if (button.dataset.itemInfoClose !== undefined) {
+        event.preventDefault();
+        closeItemInfoPopover();
+        return;
+      }
+      if (button.dataset.openCompendium) {
+        compendiumTab = 'items';
+        compendiumBookFilter = 'all';
+        compendiumSearch = arr(compendiumCatalog?.categories?.items).find((entry) => entry.id === button.dataset.openCompendium)?.name || '';
+        activeView = 'compendium';
+        closeItemInfoPopover();
+        render();
+        return;
+      }
+      if (button.dataset.compendiumTab) {
+        compendiumTab = button.dataset.compendiumTab;
+        compendiumSearch = '';
+        render();
+        return;
+      }
+      if (button.dataset.compendiumReveal) {
+        revealedCompendiumEntries.add(button.dataset.compendiumReveal);
+        render();
+        return;
+      }
       if (button.dataset.storyRoute || button.dataset.storyJump) {
         event.preventDefault();
         await routeStoryChoice(Number(button.dataset.storyRoute || button.dataset.storyJump));
@@ -8990,7 +9205,9 @@
       }
     });
     document.addEventListener('keydown', (event) => {
-      if (event.key !== 'Escape' || (!cardDragState && !cardResizeState)) return;
+      if (event.key !== 'Escape') return;
+      closeItemInfoPopover();
+      if (!cardDragState && !cardResizeState) return;
       event.preventDefault();
       cancelCardDrag({ restore: true });
       cancelCardResize({ restore: true });
@@ -9007,6 +9224,11 @@
     });
 
     document.addEventListener('change', (event) => {
+      if (event.target.matches?.('[data-compendium-book]')) {
+        compendiumBookFilter = event.target.value === 'all' ? 'all' : 'current';
+        render();
+        return;
+      }
       if (event.target.matches?.('[data-transition-kai-discipline]')) {
         syncBookTransitionWeaponskill(event.target.closest('form'));
       }
@@ -9041,6 +9263,16 @@
       if (event.target.matches?.('input[name="kaiDisciplines"], input[name="magnakaiDisciplines"], input[name="weaponmasteryWeapons"], input[name="grandMasterDisciplines"], input[name="grandWeaponmasteryWeapons"], [data-new-book]')) {
         adjustNewCharacterDisciplines(event.target.closest('form'));
       }
+    });
+
+    document.addEventListener('input', (event) => {
+      if (!event.target.matches?.('[data-compendium-search]')) return;
+      compendiumSearch = event.target.value;
+      const caret = event.target.selectionStart;
+      renderCompendium();
+      const next = document.querySelector('[data-compendium-search]');
+      next?.focus();
+      if (Number.isInteger(caret)) next?.setSelectionRange(caret, caret);
     });
 
     document.addEventListener('submit', async (event) => {

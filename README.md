@@ -61,8 +61,9 @@ The importer expects a valid folder containing at least `title.htm` and
   visible together.
 - **Reader** is an optional reading-first layout. It uses the same save,
   current section, actions, and automation as Campaign.
-- **Tools** is the full Action Chart, inventory, combat, saves, achievements,
-  notes, and settings workspace.
+- **Tools** is the full Action Chart, inventory, combat, saves, notes, settings,
+  and spoiler-aware Compendium workspace. The Compendium gathers discovered
+  items, creatures, people, places, and achievements without changing the save.
 - **Console** opens the keyboard-first CLI against that same active save.
 - **Settings** is part of Tools, so campaign modes, themes, reader preferences,
   saves, and layout preferences have one canonical home.
@@ -98,6 +99,7 @@ remains when the book text returns or preserves it.
 - [Kai and Magnakai campaign testing report](docs/DEEP_CAMPAIGN_TEST_REPORT.md)
 - [Grand Master readiness audit](docs/GRAND_MASTER_READINESS_AUDIT.md)
 - [Grand Master campaign testing report](docs/GRAND_MASTER_CAMPAIGN_TEST_REPORT.md)
+- [Compendium catalog and spoiler rules](docs/COMPENDIUM.md)
 - [New Order readiness audit](docs/NEW_ORDER_READINESS_AUDIT.md)
 - [New Order campaign testing report](docs/NEW_ORDER_CAMPAIGN_TEST_REPORT.md)
 

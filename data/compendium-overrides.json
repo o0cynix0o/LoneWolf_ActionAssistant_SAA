@@ -1,0 +1,74 @@
+{
+  "items": {
+    "diamond": {
+      "name": "Diamond",
+      "kind": "Special Item",
+      "summary": "A valuable gemstone whose later purpose is not obvious when it is found.",
+      "futureUse": "Can distract an Ice Barbarian in Book 3.",
+      "futureUseRefs": [{"book": 3, "section": 24}],
+      "spoilerSafe": true
+    },
+    "ornate silver key": {
+      "name": "Ornate Silver Key",
+      "kind": "Special Item",
+      "summary": "Unlocks a matching ornate silver lock.",
+      "futureUse": "The matching lock guards the Silver Helm.",
+      "futureUseRefs": [{"book": 3, "section": 303}],
+      "spoilerSafe": true
+    },
+    "shield": {
+      "name": "Shield",
+      "kind": "Special Item",
+      "summary": "Adds 2 COMBAT SKILL while it is carried and used in combat.",
+      "mechanics": ["+2 COMBAT SKILL in combat"]
+    },
+    "sommerswerd": {
+      "name": "Sommerswerd",
+      "kind": "Campaign Weapon",
+      "summary": "A one-handed magical sword and major carry-forward campaign item.",
+      "mechanics": ["+8 COMBAT SKILL", "+10 COMBAT SKILL total when the applicable Weaponskill bonus is included", "Doubles ENDURANCE damage inflicted on undead enemies", "Absorbs hostile magic in specified encounters"]
+    },
+    "rope": {
+      "name": "Rope",
+      "kind": "Backpack Item",
+      "summary": "A standard rope. A Rope (2 spaces) satisfies routes that require this shorter rope."
+    },
+    "rope (2 spaces)": {
+      "name": "Rope (2 spaces)",
+      "kind": "Backpack Item",
+      "summary": "A longer rope that occupies two Backpack spaces.",
+      "mechanics": ["Satisfies Rope requirements", "Satisfies Rope (2 spaces) requirements"]
+    },
+    "silver helm": {
+      "name": "Silver Helm",
+      "kind": "Special Item",
+      "summary": "A carry-forward helm with a COMBAT SKILL benefit.",
+      "mechanics": ["+2 COMBAT SKILL when worn"]
+    },
+    "padded leather waistcoat": {
+      "name": "Padded Leather Waistcoat",
+      "kind": "Special Item",
+      "summary": "Protective clothing with an ENDURANCE benefit.",
+      "mechanics": ["+2 ENDURANCE when worn"]
+    },
+    "map of sommerlund": {
+      "name": "Map of Sommerlund",
+      "kind": "Special Item",
+      "summary": "A reference map of Sommerlund. It has no general stat bonus."
+    },
+    "map of kalte": {
+      "name": "Map of Kalte",
+      "kind": "Special Item",
+      "summary": "A reference map of Kalte. It has no general stat bonus."
+    }
+  },
+  "people": {
+    "lone wolf": {"name": "Lone Wolf", "kind": "Kai Lord", "summary": "The player character and last surviving Kai Lord after the destruction of the monastery.", "sourceRefs": [{"book": 1, "section": 1, "role": "encounter"}]},
+    "king ulnar": {"name": "King Ulnar", "kind": "Sommleading monarch", "summary": "King of Sommerlund.", "sourceRefs": [{"book": 1, "section": 350, "role": "encounter"}]}
+  },
+  "places": {
+    "sommerlund": {"name": "Sommerlund", "kind": "Kingdom", "summary": "Lone Wolf's homeland.", "sourceRefs": [{"book": 1, "section": 1, "role": "visited"}]},
+    "holmgard": {"name": "Holmgard", "kind": "City", "summary": "Capital of Sommerlund.", "sourceRefs": [{"book": 1, "section": 350, "role": "visited"}]},
+    "kai monastery": {"name": "Kai Monastery", "kind": "Monastery", "summary": "The training home of the Kai Lords.", "sourceRefs": [{"book": 1, "section": 1, "role": "visited"}]}
+  }
+}
