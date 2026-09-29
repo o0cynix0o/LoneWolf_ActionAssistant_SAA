@@ -4,6 +4,7 @@
     coverArt: 'lonewolf_redux.appearance.coverArt.v1',
     theme: 'lonewolf_redux.appearance.theme.v1',
     surfaceStyle: 'lonewolf_redux.appearance.surfaceStyle.v1',
+    consoleLayout: 'lonewolf_redux.appearance.consoleLayout.v1',
     readerStyleEnabled: 'lonewolf_redux.reader.styleEnabled.v1',
     readerTheme: 'lonewolf_redux.reader.theme.v1',
     musicEnabled: 'lonewolf_redux.music.enabled.v1',
@@ -454,6 +455,7 @@
     coverArt: 'on',
     theme: 'kai-gold',
     surfaceStyle: 'borderless',
+    consoleLayout: 'companion-rail',
     readerStyleEnabled: 'off',
     readerTheme: 'original',
     musicEnabled: 'off',
@@ -462,6 +464,11 @@
     musicShuffle: 'off',
     musicRepeat: 'playlist'
   };
+
+  const consoleLayouts = Object.freeze([
+    { id: 'companion-rail', name: 'Companion Rail', note: 'Keep the terminal full-height with music and console controls in a right-side rail.' },
+    { id: 'focus-dock', name: 'Focus Dock', note: 'Make the terminal the focal point and place music and mode controls in a dock below it.' }
+  ]);
 
   const musicPlaylists = Object.freeze([
     { id: 'journey', name: 'Journey' },
@@ -487,6 +494,7 @@
       coverArt: localStorage.getItem(STORAGE_KEYS.coverArt) || defaults.coverArt,
       theme: localStorage.getItem(STORAGE_KEYS.theme) || defaults.theme,
       surfaceStyle: localStorage.getItem(STORAGE_KEYS.surfaceStyle) || defaults.surfaceStyle,
+      consoleLayout: localStorage.getItem(STORAGE_KEYS.consoleLayout) || defaults.consoleLayout,
       readerStyleEnabled: localStorage.getItem(STORAGE_KEYS.readerStyleEnabled) || defaults.readerStyleEnabled,
       readerTheme: localStorage.getItem(STORAGE_KEYS.readerTheme) || defaults.readerTheme,
       musicEnabled: localStorage.getItem(STORAGE_KEYS.musicEnabled) || defaults.musicEnabled,
@@ -503,6 +511,7 @@
       [STORAGE_KEYS.coverArt]: settings.coverArt,
       [STORAGE_KEYS.theme]: settings.theme,
       [STORAGE_KEYS.surfaceStyle]: settings.surfaceStyle,
+      [STORAGE_KEYS.consoleLayout]: settings.consoleLayout,
       [STORAGE_KEYS.readerStyleEnabled]: settings.readerStyleEnabled,
       [STORAGE_KEYS.readerTheme]: settings.readerTheme,
       [STORAGE_KEYS.musicEnabled]: settings.musicEnabled,
@@ -524,6 +533,7 @@
       coverArt: values[STORAGE_KEYS.coverArt] || defaults.coverArt,
       theme: values[STORAGE_KEYS.theme] || defaults.theme,
       surfaceStyle: values[STORAGE_KEYS.surfaceStyle] || defaults.surfaceStyle,
+      consoleLayout: values[STORAGE_KEYS.consoleLayout] || defaults.consoleLayout,
       readerStyleEnabled: values[STORAGE_KEYS.readerStyleEnabled] || defaults.readerStyleEnabled,
       readerTheme: values[STORAGE_KEYS.readerTheme] || defaults.readerTheme,
       musicEnabled: values[STORAGE_KEYS.musicEnabled] || defaults.musicEnabled,
@@ -540,6 +550,7 @@
     settings.coverArt = settings.coverArt === 'off' ? 'off' : 'on';
     settings.theme = byId(themes, settings.theme, defaults.theme).id;
     settings.surfaceStyle = settings.surfaceStyle === 'bordered' ? 'bordered' : 'borderless';
+    settings.consoleLayout = byId(consoleLayouts, settings.consoleLayout, defaults.consoleLayout).id;
     settings.readerStyleEnabled = settings.readerStyleEnabled === 'on' ? 'on' : 'off';
     settings.readerTheme = byId(readerThemes, settings.readerTheme, defaults.readerTheme).id;
     settings.musicEnabled = settings.musicEnabled === 'on' ? 'on' : 'off';
@@ -557,6 +568,7 @@
     localStorage.setItem(STORAGE_KEYS.coverArt, clean.coverArt);
     localStorage.setItem(STORAGE_KEYS.theme, clean.theme);
     localStorage.setItem(STORAGE_KEYS.surfaceStyle, clean.surfaceStyle);
+    localStorage.setItem(STORAGE_KEYS.consoleLayout, clean.consoleLayout);
     localStorage.setItem(STORAGE_KEYS.readerStyleEnabled, clean.readerStyleEnabled);
     localStorage.setItem(STORAGE_KEYS.readerTheme, clean.readerTheme);
     localStorage.setItem(STORAGE_KEYS.musicEnabled, clean.musicEnabled);
@@ -938,11 +950,13 @@
     document.documentElement.classList.toggle('lw-surface-borderless', clean.surfaceStyle === 'borderless');
     document.documentElement.dataset.lwCoverArt = clean.coverArt;
     document.documentElement.dataset.lwSurfaceStyle = clean.surfaceStyle;
+    document.documentElement.dataset.lwConsoleLayout = clean.consoleLayout;
     document.documentElement.dataset.lwReaderTheme = clean.readerTheme;
     document.body.classList.toggle('lw-cover-art-off', clean.coverArt === 'off');
     document.body.classList.toggle('lw-surface-borderless', clean.surfaceStyle === 'borderless');
     document.body.dataset.lwCoverArt = clean.coverArt;
     document.body.dataset.lwSurfaceStyle = clean.surfaceStyle;
+    document.body.dataset.lwConsoleLayout = clean.consoleLayout;
     document.body.dataset.lwReaderTheme = clean.readerTheme;
     document.querySelectorAll('[data-lw-title-banner]').forEach((image) => {
       const banner = byId(titleBanners, clean.titleBanner, defaults.titleBanner);
@@ -1055,6 +1069,7 @@
     titleBanners,
     themes,
     readerThemes,
+    consoleLayouts,
     musicPlaylists,
     musicRepeatModes,
     readLocal,

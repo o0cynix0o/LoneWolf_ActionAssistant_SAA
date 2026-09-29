@@ -4629,6 +4629,26 @@ class CampaignDeskProductionTests(unittest.TestCase):
         self.assertIn(".lw-tools-head__actions { flex-wrap: nowrap; }", tools_css)
         self.assertIn("#toolsActiveMount > #view { padding: 0; }", tools_css)
 
+    def test_console_layouts_are_theme_preferences_with_music_controls(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
+        settings_js = (root / "assets" / "js" / "lw-settings.js").read_text(encoding="utf-8")
+        early_js = (root / "assets" / "js" / "lw-appearance-early.js").read_text(encoding="utf-8")
+        tools_css = (root / "assets" / "css" / "lw-reader-tools.css").read_text(encoding="utf-8")
+
+        self.assertIn("consoleLayout: 'lonewolf_redux.appearance.consoleLayout.v1'", settings_js)
+        self.assertIn("consoleLayout: 'companion-rail'", settings_js)
+        self.assertIn("id: 'focus-dock'", settings_js)
+        self.assertIn("consoleLayout: 'companion-rail'", early_js)
+        self.assertIn("Console Layout", assistant_html)
+        self.assertIn("settingsApi.consoleLayouts.map", assistant_html)
+        self.assertIn("compactMarkup('console')", assistant_html)
+        self.assertIn('cli-console-layout--${consoleLayout}', assistant_html)
+        self.assertIn('data-console-layout="${consoleLayout}"', assistant_html)
+        self.assertIn('.cli-console-layout--companion-rail', tools_css)
+        self.assertIn('.cli-console-layout--focus-dock .cli-terminal-panel', tools_css)
+        self.assertIn('.cli-console-dock', tools_css)
+
     def test_borderless_surfaces_share_the_recovery_background(self) -> None:
         root = Path(saa_main.__file__).resolve().parent
         foundation_css = (root / "assets" / "css" / "lw-ui-foundation.css").read_text(encoding="utf-8")

@@ -4310,16 +4310,31 @@
       quickPanel.innerHTML = '';
       tabs.innerHTML = '';
       view.classList.remove('view-card-grid');
-      view.innerHTML = `
-        <div class="panel cli-terminal-panel">
-          <div class="cli-terminal-toolbar">
-            <div class="mode-note">CLI mode runs the terminal assistant against the same save data. Switch back to Auto or Manual mode from the menu when you want the web controls again.</div>
-            <span class="cli-terminal-status" id="cliTerminalStatus">Connecting...</span>
-            <button type="button" data-cli-reconnect>Reconnect</button>
+      const consoleLayout = assistantSettings?.consoleLayout === 'focus-dock' ? 'focus-dock' : 'companion-rail';
+      const musicPlayer = window.LoneWolfMusic?.compactMarkup('console') || '<p class="mode-note">Preparing soundtrack controls.</p>';
+      const modeControls = `
+        <section class="cli-console-controls" aria-label="Console mode controls">
+          <div><p class="lw-eyebrow">Console mode</p><h2>Choose your controls</h2></div>
+          <div class="cli-console-controls__actions">
             <button type="button" data-mode-set="auto">Auto Mode</button>
             <button type="button" data-mode-set="manual">Manual Mode</button>
           </div>
+        </section>`;
+      const terminalPanel = `
+        <div class="panel cli-terminal-panel">
+          <div class="cli-terminal-toolbar">
+            <div class="mode-note">CLI mode runs the terminal assistant against the same save data.</div>
+            <span class="cli-terminal-status" id="cliTerminalStatus">Connecting...</span>
+            <button type="button" data-cli-reconnect>Reconnect</button>
+          </div>
           <div id="cliTerminalContainer" aria-label="Lone Wolf terminal"></div>
+        </div>`;
+      view.innerHTML = `
+        <div class="cli-console-layout cli-console-layout--${consoleLayout}" data-console-layout="${consoleLayout}">
+          ${terminalPanel}
+          ${consoleLayout === 'companion-rail'
+            ? `<aside class="cli-console-rail" aria-label="Console companion rail"><section class="panel cli-console-player">${musicPlayer}</section>${modeControls}</aside>`
+            : `<div class="panel cli-console-dock" aria-label="Console focus dock"><div class="cli-console-dock__player">${musicPlayer}</div>${modeControls}</div>`}
         </div>
       `;
       window.requestAnimationFrame(startCliTerminal);
@@ -8114,6 +8129,10 @@
           <div class="settings-grid">
             ${settingsOptionButton('surfaceStyle', 'borderless', 'Borderless', 'Use surface contrast and spacing instead of panel outlines.', current.surfaceStyle === 'borderless')}
             ${settingsOptionButton('surfaceStyle', 'bordered', 'Bordered', 'Restore framed panels, controls, and status surfaces.', current.surfaceStyle === 'bordered')}
+          </div>
+          <h3 class="section-subtitle">Console Layout</h3>
+          <div class="settings-grid">
+            ${settingsApi.consoleLayouts.map((layout) => settingsOptionButton('consoleLayout', layout.id, layout.name, layout.note, current.consoleLayout === layout.id)).join('')}
           </div>
         </div>
         <div class="panel">
