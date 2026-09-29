@@ -3541,9 +3541,7 @@
       if (healing.Ready) return `${location} · ${text(healing.Name, 'Curing')} ready: +${text(healing.Amount, 1)} END`;
       return `${location} · No automatic effect recorded`;
     }
-    function renderSectionActivity() {
-      const el = nativeEl('sectionActivity');
-      if (!el || !app || !isNativeSurface) return;
+    function sectionActivityRows() {
       const c = currentCharacter();
       const combat = currentCombat();
       const flow = currentFlow();
@@ -3568,13 +3566,22 @@
         ...pending,
         ...(latest ? [['Latest result', latest.summary]] : [])
       ];
-      const uniqueRows = rows.filter(([label, value], index, all) => value && all.findIndex(([otherLabel, otherValue]) => otherLabel === label && otherValue === value) === index);
+      return rows.filter(([label, value], index, all) => value && all.findIndex(([otherLabel, otherValue]) => otherLabel === label && otherValue === value) === index);
+    }
+    function sectionActivityRowsHtml(rows = sectionActivityRows()) {
+      return rows.map(([label, value]) => `<div><small>${escapeHtml(label)}</small><span>${escapeHtml(value)}</span></div>`).join('');
+    }
+    function renderSectionActivity() {
+      const el = nativeEl('sectionActivity');
+      if (!el || !app || !isNativeSurface) return;
+      if (nativeSurface === 'campaign') { el.innerHTML = ''; return; }
+      const uniqueRows = sectionActivityRows();
       el.innerHTML = `
         <details class="lw-section-activity__drawer">
           <summary><span class="lw-section-activity__eyebrow">Section activity</span><strong>${escapeHtml(sectionActivitySummary())}</strong><span class="lw-section-activity__hint">Details</span></summary>
           <div class="lw-section-activity__body">
             <div class="lw-section-activity__grid">
-              ${uniqueRows.map(([label, value]) => `<div><small>${escapeHtml(label)}</small><span>${escapeHtml(value)}</span></div>`).join('')}
+              ${sectionActivityRowsHtml(uniqueRows)}
             </div>
           </div>
         </details>`;
@@ -3916,12 +3923,10 @@
             <div class="lw-glance__row"><strong>Known ${escapeHtml(seriesLabel)}</strong><span>${disc.length ? escapeHtml(disc.join(' · ')) : 'None yet'}</span></div>
             <div class="lw-glance__row"><strong>Inventory</strong><span>${escapeHtml(inventorySummaryText(inv))}</span></div>
           </div>
-          <div class="lw-glance__tools">
-            <button class="lw-ui-button" type="button" data-roll ${manualDisabledAttributes('roll helper')}><strong>Roll</strong><span>Random Number Table</span></button>
-            <button class="lw-ui-button" type="button" data-campaign-tab="combat"><strong>Combat</strong><span>${fightActive ? 'Fight in progress' : 'Start tracked fight'}</span></button>
-            <button class="lw-ui-button" type="button" data-open-map><strong>Map</strong><span>View the map</span></button>
-            <button class="lw-ui-button" type="button" data-save-current><strong>Save</strong><span>Create a checkpoint</span></button>
-          </div>
+          <details class="lw-glance__activity" open>
+            <summary class="lw-glance__activity-head"><span><strong>Section activity</strong><span>${escapeHtml(sectionActivitySummary())}</span></span></summary>
+            <div class="lw-glance__activity-grid">${sectionActivityRowsHtml()}</div>
+          </details>
         </div>
         ${window.LoneWolfMusic?.playerCardMarkup('campaign') || ''}
         ${encounterPanel}

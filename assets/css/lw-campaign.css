@@ -226,6 +226,18 @@ body.lw-surface-campaign .workspace.lw-native {
 .lw-glance__tools .lw-ui-button strong { font: 700 .86rem var(--lw-ui-sans); }
 .lw-glance__tools .lw-ui-button span { color: var(--lw-ui-muted); font: 400 .72rem var(--lw-ui-sans); }
 .lw-glance__tools .lw-ui-button--primary span { color: #24434c !important; }
+.lw-glance__activity { border-top: 1px solid var(--lw-ui-border); }
+.lw-glance__activity-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 13px 16px; background: rgba(7, 17, 19, .28); cursor: pointer; list-style: none; }
+.lw-glance__activity-head::-webkit-details-marker { display: none; }
+.lw-glance__activity-head > span { display: grid; gap: 4px; min-width: 0; }
+.lw-glance__activity-head::after { content: "Show"; color: var(--lw-ui-accent); font: 700 .7rem var(--lw-ui-sans); }
+.lw-glance__activity[open] > .lw-glance__activity-head::after { content: "Hide"; }
+.lw-glance__activity-head strong { color: var(--lw-ui-gold); font: 800 .7rem var(--lw-ui-sans); letter-spacing: .07em; text-transform: uppercase; }
+.lw-glance__activity-head span { color: var(--lw-ui-ink); font: 700 .78rem var(--lw-ui-sans); line-height: 1.35; }
+.lw-glance__activity-grid { display: grid; }
+.lw-glance__activity-grid > div { display: grid; gap: 3px; padding: 10px 16px; border-top: 1px solid rgba(120,171,179,.16); }
+.lw-glance__activity-grid small { color: var(--lw-ui-muted); font: 800 .65rem var(--lw-ui-sans); letter-spacing: .05em; text-transform: uppercase; }
+.lw-glance__activity-grid span { color: var(--lw-ui-ink); font-size: .8rem; line-height: 1.4; }
 
 /* Optional soundtrack controls stay small enough to support play rather than
    competing with the current section, choices, or recovery state. */
