@@ -1548,8 +1548,8 @@
       font-size: 0.95rem;
     }
     .cli-terminal-panel {
-      height: 100%;
-      min-height: 420px;
+      height: clamp(680px, calc(100vh - 110px), 920px);
+      min-height: 680px;
       display: grid;
       grid-template-rows: auto 1fr;
       gap: 0.55rem;
@@ -1572,7 +1572,7 @@
       white-space: nowrap;
     }
     #cliTerminalContainer {
-      min-height: 360px;
+      min-height: 0;
       height: 100%;
       padding: 0.45rem;
       border: 1px solid #4e4528;
@@ -6573,12 +6573,17 @@
 
     function sectionLootRows(lootOptions) {
       return arr(lootOptions).filter((loot) => loot.Ready !== false || loot.CapacityBlocked).map((loot) => `
-        <div class="item-row">
-          <small>Loot</small>
-          <span class="wrap">${escapeHtml(text(loot.label || loot.id, 'Option'))}${loot.CapacityBlocked ? `<small class="item-note">${escapeHtml(text(loot.BlockedReason, 'Inventory capacity is full.'))}</small>` : ''}</span>
-          ${loot.CapacityBlocked
-            ? `<button type="button" disabled title="${escapeHtml(text(loot.BlockedReason))}">Apply</button><button type="button" data-campaign-tab="inventory">Manage Inventory</button>`
-            : modeActionButton(`data-flow-loot="${escapeHtml(text(loot.id))}"`, 'Apply', 'section loot')}
+        <div class="item-row section-loot-row${loot.CapacityBlocked ? ' is-capacity-blocked' : ''}">
+          <div class="section-loot-copy">
+            <small>Loot</small>
+            <strong>${escapeHtml(text(loot.label || loot.id, 'Option'))}</strong>
+            ${loot.CapacityBlocked ? `<span class="section-loot-note">${escapeHtml(text(loot.BlockedReason, 'Inventory capacity is full.'))}</span>` : ''}
+          </div>
+          <div class="section-loot-actions">
+            ${loot.CapacityBlocked
+              ? `<button type="button" data-campaign-tab="inventory">Manage Inventory</button>`
+              : modeActionButton(`data-flow-loot="${escapeHtml(text(loot.id))}"`, 'Apply', 'section loot')}
+          </div>
         </div>
       `).join('');
     }
@@ -7833,13 +7838,7 @@
           ${modeActionButton(`data-section-combat-start="${escapeHtml(text(combat.id))}"`, 'Start', 'combat presets')}
         </div>
       `).join('');
-      const lootRows = arr(flow.Loot || entry.loot).filter((loot) => loot.Ready !== false).map((loot) => `
-        <div class="item-row">
-          <small>Loot</small>
-          <span>${escapeHtml(text(loot.label || loot.id, 'Option'))}</span>
-          ${modeActionButton(`data-flow-loot="${escapeHtml(text(loot.id))}"`, 'Apply', 'section loot')}
-        </div>
-      `).join('');
+      const lootRows = sectionLootRows(flow.Loot || entry.loot);
       const shopRows = arr(flow.Shop?.Sales).map((sale) => `
         <div class="item-row">
           <small>Sell</small>
