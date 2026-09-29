@@ -4839,6 +4839,23 @@ class RecoveryTimelineTests(unittest.TestCase):
 
 
 class CampaignDeskProductionTests(unittest.TestCase):
+    def test_campaign_glance_replaces_quick_tiles_and_bottom_drawer_with_activity(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
+        campaign_css = (root / "assets" / "css" / "lw-campaign.css").read_text(encoding="utf-8")
+        glance = assistant_html.split("function renderCampaignGlance()", 1)[1].split("function disciplineScreenGroup", 1)[0]
+
+        self.assertNotIn('data-roll', glance)
+        self.assertNotIn('data-open-map', glance)
+        self.assertNotIn('data-save-current', glance)
+        self.assertNotIn('Start tracked fight', glance)
+        self.assertIn('class="lw-glance__activity" open', glance)
+        self.assertIn('<summary class="lw-glance__activity-head">', glance)
+        self.assertIn('sectionActivityRowsHtml()', glance)
+        self.assertIn("if (nativeSurface === 'campaign') { el.innerHTML = ''; return; }", assistant_html)
+        self.assertIn(".lw-glance__activity-grid", campaign_css)
+        self.assertIn('.lw-glance__activity-head::after { content: "Show";', campaign_css)
+
     def test_completed_combat_uses_an_aligned_read_only_outcome_layout(self) -> None:
         root = Path(saa_main.__file__).resolve().parent
         assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
