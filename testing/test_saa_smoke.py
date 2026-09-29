@@ -2713,6 +2713,56 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
             assistant.state = {"Character": {"BookNumber": 1, "KaiDisciplines": ["Healing"]}}
             self.assertFalse(assistant.evaluate_flow_condition(kai))
 
+    def test_direct_later_series_discipline_names_are_route_gates(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            single, _ = assistant.infer_source_route_condition(
+                "If you possess Kai-alchemy, turn to 10."
+            )
+            either, _ = assistant.infer_source_route_condition(
+                "If you possess Kai-surge or Kai-screen, turn to 20."
+            )
+            neutral, _ = assistant.infer_source_route_condition(
+                "If you possess neither Kai-surge nor Kai-screen, or choose not to use them, turn to 30."
+            )
+
+        self.assertEqual(single, {"type": "power", "name": "Kai-alchemy"})
+        self.assertEqual(either["type"], "any")
+        self.assertEqual({item["name"] for item in either["conditions"]}, {"Kai-surge", "Kai-screen"})
+        self.assertIsNone(neutral)
+
+    def test_grand_master_and_new_order_rank_routes_use_series_rank_counts(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            grand, _ = assistant.infer_source_route_condition(
+                "If you have attained the rank of Kai Grand Guardian, turn to 10.", 14
+            )
+            new_order, _ = assistant.infer_source_route_condition(
+                "If you have attained the rank of Kai Grand Guardian, turn to 20.", 25
+            )
+            compound, _ = assistant.infer_source_route_condition(
+                "If you possess Kai-alchemy and have attained the rank of Sun Knight or higher, turn to 30.",
+                15,
+            )
+
+        self.assertEqual(grand, {"type": "grand_master_rank_gte", "value": 5})
+        self.assertEqual(new_order, {"type": "new_order_rank_gte", "value": 9})
+        self.assertEqual(compound["type"], "all")
+        self.assertIn({"type": "power", "name": "Kai-alchemy"}, compound["conditions"])
+        self.assertIn({"type": "grand_master_rank_gte", "value": 6}, compound["conditions"])
+
     def test_gold_route_gate_recognizes_thresholds(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
@@ -2733,6 +2783,19 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
             self.assertEqual(
                 assistant.infer_source_route_condition("If you have less than 2 Gold Crowns, turn to 40.")[0],
                 {"type": "gold_lt", "value": 2},
+            )
+            self.assertEqual(
+                assistant.infer_source_route_condition("If you have 10 Gold Crowns and wish to pay him, turn to 50.")[0],
+                {"type": "gold_gte", "value": 10},
+            )
+            self.assertEqual(
+                assistant.infer_source_route_condition("If you have no Gold Crowns, turn to 60.")[0],
+                {"type": "gold_lt", "value": 1},
+            )
+            self.assertIsNone(
+                assistant.infer_source_route_condition(
+                    "If you do not have 5 Gold Crowns or do not wish to pay, turn to 70."
+                )[0]
             )
             gate = {"type": "gold_gte", "value": 5}
             assistant.inventory["GoldCrowns"] = 5
@@ -3134,6 +3197,131 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
         self.assertEqual(rank_reason, "Requires Principalin rank.")
         self.assertEqual(arrow_reason, "Requires at least 2 Arrows.")
         self.assertEqual(ticket_reason, "Requires Riverboat Ticket.")
+
+    def test_legacy_kai_rank_routes_use_discipline_count(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            condition, reason = assistant.infer_source_route_condition(
+                "If you have reached the Kai rank of Warmarn, turn to 72."
+            )
+            assistant.character["KaiDisciplines"] = list(lonewolf_redux.KAI_DISCIPLINES[:7])
+            self.assertFalse(assistant.evaluate_flow_condition(condition))
+            assistant.character["KaiDisciplines"] = list(lonewolf_redux.KAI_DISCIPLINES[:8])
+
+        self.assertTrue(assistant.evaluate_flow_condition(condition))
+        self.assertEqual(reason, "Requires Warmarn rank.")
+
+    def test_reader_marks_blue_stone_triangle_route_and_pure_inverse(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            source = base / "books"
+            (source / "03tcok").mkdir(parents=True)
+            (source / "03tcok" / "sect169.htm").write_text(
+                '<p class="choice">If you possess a Blue Stone Triangle, '
+                '<a href="sect41.htm">turn to 41</a>.</p>'
+                '<p class="choice">If you do not, '
+                '<a href="sect265.htm">turn to 265</a>.</p>',
+                encoding="utf-8",
+            )
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=source,
+            )
+            assistant.state = lonewolf_redux.normalize_state(
+                {"Character": {"BookNumber": 3}, "CurrentSection": 169}
+            )
+            missing = {
+                route["Section"]: route
+                for route in assistant.current_section_flow_payload()["SourceRoutes"]
+            }
+            assistant.inventory["SpecialItems"] = ["Blue Stone Triangle"]
+            carried = {
+                route["Section"]: route
+                for route in assistant.current_section_flow_payload()["SourceRoutes"]
+            }
+
+        self.assertFalse(missing[41]["Available"])
+        self.assertTrue(missing[265]["Available"])
+        self.assertTrue(carried[41]["Available"])
+        self.assertFalse(carried[265]["Available"])
+
+    def test_optional_refusal_route_stays_unconditioned(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            source = base / "books"
+            (source / "03tcok").mkdir(parents=True)
+            (source / "03tcok" / "sect169.htm").write_text(
+                '<p class="choice">If you possess a Blue Stone Triangle and wish to use it, '
+                '<a href="sect41.htm">turn to 41</a>.</p>'
+                '<p class="choice">If you do not possess it or do not wish to use it, '
+                '<a href="sect265.htm">turn to 265</a>.</p>',
+                encoding="utf-8",
+            )
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=source,
+            )
+            routes = assistant.section_source_route_payload(3, 169)
+
+        self.assertIn("Condition", routes[0])
+        self.assertNotIn("Condition", routes[1])
+
+    def test_referential_special_item_route_uses_nearest_source_item(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            source = base / "books"
+            (source / "03tcok").mkdir(parents=True)
+            (source / "03tcok" / "sect50.htm").write_text(
+                '<p>Have you found a Glowing Crystal?</p>'
+                '<p class="choice">If you possess this Special Item, '
+                '<a href="sect139.htm">turn to 139</a>.</p>'
+                '<p class="choice">If you do not have it, '
+                '<a href="sect189.htm">turn to 189</a>.</p>',
+                encoding="utf-8",
+            )
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=source,
+            )
+            routes = assistant.section_source_route_payload(3, 50)
+
+        self.assertEqual(routes[0]["Condition"]["name"], "Glowing Crystal")
+        self.assertEqual(routes[1]["Condition"]["type"], "no_item")
+
+    def test_item_route_aliases_cover_smart_apostrophes_tickets_and_plural_fireseeds(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            keys, _ = assistant.infer_source_route_condition(
+                "If you possess the Gaoler’s Keys, turn to 136."
+            )
+            ticket, _ = assistant.infer_source_route_condition(
+                "If you have a ticket for the journey to Port Bax, turn to 346."
+            )
+            fireseeds, _ = assistant.infer_source_route_condition(
+                "If you have any Fireseeds, turn to 10."
+            )
+
+        self.assertEqual(keys["name"], "Gaoler's Keys")
+        self.assertEqual(ticket["name"], "Ticket to Port Bax")
+        self.assertEqual(fireseeds["name"], "Fireseed")
 
     def test_reader_preserves_compound_magnakai_and_named_item_route_gates(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -4648,6 +4836,24 @@ class CampaignDeskProductionTests(unittest.TestCase):
         self.assertIn('.cli-console-layout--companion-rail', tools_css)
         self.assertIn('.cli-console-layout--focus-dock .cli-terminal-panel', tools_css)
         self.assertIn('.cli-console-dock', tools_css)
+
+    def test_choice_eligibility_hints_are_a_default_on_ui_preference(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
+        settings_js = (root / "assets" / "js" / "lw-settings.js").read_text(encoding="utf-8")
+        early_js = (root / "assets" / "js" / "lw-appearance-early.js").read_text(encoding="utf-8")
+        server_py = (root / "app_server.py").read_text(encoding="utf-8")
+
+        key = "lonewolf_redux.reader.choiceHints.v1"
+        self.assertIn(key, settings_js)
+        self.assertIn(key, early_js)
+        self.assertIn(key, server_py)
+        self.assertIn("choiceHintsEnabled: 'on'", settings_js)
+        self.assertIn("choiceHintsEnabled: 'on'", early_js)
+        self.assertIn("Choice eligibility hints", assistant_html)
+        self.assertIn("assistantSettings?.choiceHintsEnabled === 'off'", assistant_html)
+        self.assertIn("settingsUrl.searchParams.set('surface', 'tools')", assistant_html)
+        self.assertIn("await applyNativeSurfaceNavigation(settingsUrl.href)", assistant_html)
 
     def test_borderless_surfaces_share_the_recovery_background(self) -> None:
         root = Path(saa_main.__file__).resolve().parent

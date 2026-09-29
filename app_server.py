@@ -88,6 +88,7 @@ UI_PREFERENCE_KEYS = {
     "lonewolf_redux.appearance.surfaceStyle.v1",
     "lonewolf_redux.reader.styleEnabled.v1",
     "lonewolf_redux.reader.theme.v1",
+    "lonewolf_redux.reader.choiceHints.v1",
     "lonewolf_redux.music.enabled.v1",
     "lonewolf_redux.music.volume.v1",
     "lonewolf_redux.music.playlist.v1",
