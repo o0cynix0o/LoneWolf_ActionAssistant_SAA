@@ -5840,11 +5840,26 @@ class LoneWolfReduxAssistant:
         return result
 
     def item_matches(self, item: Any, name: str, match_mode: str = "exact") -> bool:
-        item_text = str(item).lower()
-        name_text = str(name).lower()
+        item_text = re.sub(r"\s+", " ", str(item).strip().lower())
+        name_text = re.sub(r"\s+", " ", str(name).strip().lower())
         if match_mode == "contains":
             return name_text in item_text
-        return item_text == name_text
+        if item_text == name_text:
+            return True
+        # A longer rope can do an ordinary Rope's job, but the reverse is not
+        # true. Keep the inventory names and slot costs distinct while making
+        # requirement checks (and source-mandated consumption) directional.
+        rope_tiers = {
+            "rope": 1,
+            "rope (2 spaces)": 2,
+            "long rope": 2,
+            "long rope (2 spaces)": 2,
+        }
+        return (
+            item_text in rope_tiers
+            and name_text in rope_tiers
+            and rope_tiers[item_text] >= rope_tiers[name_text]
+        )
 
     def remove_inventory_items(
         self,
