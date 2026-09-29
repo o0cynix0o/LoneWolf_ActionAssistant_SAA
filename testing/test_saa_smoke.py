@@ -2713,6 +2713,42 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
             assistant.state = {"Character": {"BookNumber": 1, "KaiDisciplines": ["Healing"]}}
             self.assertFalse(assistant.evaluate_flow_condition(kai))
 
+    def test_either_kai_discipline_choice_hint_and_inverse_route(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            source = base / "books" / "04tcod"
+            source.mkdir(parents=True)
+            (source / "sect182.htm").write_text(
+                '<p class="choice">If you wish to give chase and have either the Kai Discipline of Tracking or Hunting, turn to <a href="sect332.htm">332</a>.</p>'
+                '<p class="choice">If you do not possess these skills but still wish to give chase, turn to <a href="sect58.htm">58</a>.</p>'
+                '<p class="choice">If you decide to let him go, turn to <a href="sect165.htm">165</a>.</p>',
+                encoding="utf-8",
+            )
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state({
+                "Character": {"BookNumber": 4, "KaiDisciplines": ["Hunting"]},
+                "CurrentSection": 182,
+            })
+
+            condition, reason = assistant.infer_source_route_condition(
+                "If you wish to give chase and have either the Kai Discipline of Tracking or Hunting, turn to 332.",
+                4,
+            )
+            routes = assistant.current_section_flow_payload()["SourceRoutes"]
+
+            self.assertEqual(condition["type"], "any")
+            self.assertEqual({item["name"] for item in condition["conditions"]}, {"Tracking", "Hunting"})
+            self.assertEqual(reason, "Requires Tracking or Hunting.")
+            self.assertEqual([(route["Section"], route["Available"]) for route in routes], [(332, True), (58, False), (165, True)])
+            self.assertIn("Condition", routes[0])
+            self.assertIn("Condition", routes[1])
+            self.assertNotIn("Condition", routes[2])
+
     def test_direct_later_series_discipline_names_are_route_gates(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
