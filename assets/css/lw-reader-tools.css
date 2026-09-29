@@ -155,12 +155,22 @@ body.lw-surface-tools .workspace.lw-native { display: block; }
 .lw-music-player-card__credits a { margin-left: 8px; color: var(--lw-ui-accent); }
 
 /* Console: hide tool nav / summary / quick roll; terminal fills. */
+body.lw-surface-tools.lw-console-active .workspace.lw-native { width: min(840px, calc(100% - 32px)); padding-bottom: 16px; }
+body.lw-surface-tools.lw-console-active .lw-tools { gap: 12px; }
 body.lw-surface-tools.lw-console-active .lw-tools-body { grid-template-columns: 1fr; }
 body.lw-surface-tools.lw-console-active .tools-navigation { display: none; }
 body.lw-surface-tools.lw-console-active .lw-tools-content { grid-template-columns: 1fr; }
 body.lw-surface-tools.lw-console-active #toolsSummary,
 body.lw-surface-tools.lw-console-active #toolsQuickRoll { display: none; }
 body.lw-surface-tools.lw-console-active #toolsActiveMount { grid-column: auto; }
+body.lw-surface-tools.lw-console-active #toolsActiveMount > #view { padding: 0; }
+
+@media (max-width: 700px) {
+  body.lw-surface-tools.lw-console-active .workspace.lw-native { width: calc(100% - 20px); }
+  body.lw-surface-tools.lw-console-active .cli-terminal-panel { height: 680px; }
+  body.lw-surface-tools.lw-console-active .cli-terminal-toolbar { align-items: stretch; }
+  body.lw-surface-tools.lw-console-active .cli-terminal-toolbar .mode-note { flex-basis: 100%; }
+}
 
 @media (max-width: 850px) {
   .lw-tools-body { grid-template-columns: 1fr; }

@@ -4610,6 +4610,21 @@ class CampaignDeskProductionTests(unittest.TestCase):
         self.assertIn(".lw-death-screen__outcome,\n.lw-death-screen__final { height: 100%; }", campaign_css)
         self.assertIn("@media (max-width: 820px)", campaign_css)
 
+    def test_capacity_blocked_loot_and_cli_use_the_room_available(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
+        campaign_css = (root / "assets" / "css" / "lw-campaign.css").read_text(encoding="utf-8")
+        tools_css = (root / "assets" / "css" / "lw-reader-tools.css").read_text(encoding="utf-8")
+
+        self.assertIn('class="item-row section-loot-row${loot.CapacityBlocked', assistant_html)
+        self.assertIn('class="section-loot-note"', assistant_html)
+        self.assertIn('class="section-loot-actions"', assistant_html)
+        self.assertNotIn('disabled title="${escapeHtml(text(loot.BlockedReason))}">Apply</button>', assistant_html)
+        self.assertIn(".lw-glance__choices .section-loot-row { display: grid; grid-template-columns: minmax(0, 1fr);", campaign_css)
+        self.assertIn("height: clamp(680px, calc(100vh - 110px), 920px);", assistant_html)
+        self.assertIn("width: min(840px, calc(100% - 32px));", tools_css)
+        self.assertIn("#toolsActiveMount > #view { padding: 0; }", tools_css)
+
     def test_borderless_surfaces_share_the_recovery_background(self) -> None:
         root = Path(saa_main.__file__).resolve().parent
         foundation_css = (root / "assets" / "css" / "lw-ui-foundation.css").read_text(encoding="utf-8")

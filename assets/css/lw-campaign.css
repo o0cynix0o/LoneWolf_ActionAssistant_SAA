@@ -206,6 +206,15 @@ body.lw-surface-campaign .workspace.lw-native {
 .lw-glance__choices .lw-glance__body { display: block; }
 .lw-glance__choices .choice-group { margin-bottom: 12px; }
 .lw-glance__choices .choice-group:last-child { margin-bottom: 0; }
+.section-loot-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 10px; }
+.section-loot-copy { min-width: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 3px 9px; align-items: baseline; }
+.section-loot-copy > small { color: var(--lw-ui-gold); font: 800 .66rem var(--lw-ui-sans); letter-spacing: .06em; text-transform: uppercase; }
+.section-loot-copy > strong { min-width: 0; color: var(--lw-ui-ink); font: 700 .9rem/1.35 var(--lw-ui-serif); overflow-wrap: anywhere; }
+.section-loot-row .section-loot-note { grid-column: 2; color: var(--lw-ui-muted); font: .74rem/1.35 var(--lw-ui-sans); overflow: visible; text-overflow: clip; white-space: normal; overflow-wrap: anywhere; }
+.section-loot-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+.lw-glance__choices .section-loot-row { display: grid; grid-template-columns: minmax(0, 1fr); align-items: stretch; }
+.lw-glance__choices .section-loot-actions { justify-content: stretch; }
+.lw-glance__choices .section-loot-actions button { flex: 1 1 auto; width: 100%; }
 .lw-glance__head { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--lw-ui-border); }
 .lw-glance__body { display: grid; gap: 10px; padding: 14px 16px; }
 .lw-glance__row { display: grid; gap: 3px; padding-bottom: 10px; border-bottom: 1px solid rgba(120,171,179,.16); }
