@@ -11,6 +11,7 @@
   }
 
   function campaignLabel(payload) {
+    if (payload?.hasCampaign !== true) return 'No active campaign';
     const state = payload?.state || {};
     const character = state.Character || {};
     const book = Number(character.BookNumber);
@@ -57,6 +58,9 @@
 
   function markCurrentBook(payload) {
     if (!indexPage) return;
+    document.querySelectorAll('.lw-current-book').forEach((card) => card.classList.remove('lw-current-book'));
+    document.querySelectorAll('.lw-current-book-status').forEach((status) => status.remove());
+    if (payload?.hasCampaign !== true) return;
     const state = payload?.state || {};
     const bookNumber = Number(state?.Character?.BookNumber);
     const section = Number(state?.CurrentSection);

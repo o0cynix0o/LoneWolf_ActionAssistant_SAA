@@ -116,31 +116,29 @@ def capture_output(func) -> str:
 
 
 def load_last_save() -> None:
-    loaded_save = False
     try:
         if ASSISTANT.last_save_file.exists():
             path = ASSISTANT.last_save_file.read_text(encoding="utf-8").strip()
             if path and Path(path).exists():
                 ASSISTANT.load_game(path, quiet=True)
-                loaded_save = True
     except Exception:
         pass
-    if loaded_save:
-        return
 
+
+def has_active_campaign() -> bool:
+    """Return whether the in-memory state is backed by a real save file.
+
+    ``default_state`` is a useful engine template, but it is not a campaign.
+    Requiring the save referenced by the state to exist keeps a fresh install
+    distinct from a player who has actually completed character creation.
+    """
+    raw_path = str(ASSISTANT.settings.get("SavePath") or "").strip()
+    if not raw_path:
+        return False
     try:
-        if lonewolf_redux.CURRENT_POSITION_FILE.exists():
-            position = json.loads(lonewolf_redux.CURRENT_POSITION_FILE.read_text(encoding="utf-8"))
-            book_number = int(position.get("book") or 1)
-            section = int(position.get("section") or 1)
-            if book_number in lonewolf_redux.BOOKS:
-                max_section = lonewolf_redux.BOOKS[book_number]["MaxSection"]
-                section = section if 1 <= section <= max_section else 1
-                ASSISTANT.character["BookNumber"] = book_number
-                ASSISTANT.state["CurrentSection"] = section
-                ASSISTANT.record_section_visit()
-    except Exception:
-        pass
+        return Path(raw_path).is_file()
+    except OSError:
+        return False
 
 
 def public_save_entries() -> list[dict]:
@@ -324,6 +322,7 @@ def state_payload(message: str = "", achievement_unlocks: list[dict] | None = No
     cheat_status = CHEAT_SESSION.status()
     return {
         "books": lonewolf_redux.BOOK_CATALOG,
+        "hasCampaign": has_active_campaign(),
         "state": state,
         "run": ASSISTANT.run_payload(),
         "sectionFlow": ASSISTANT.current_section_flow_payload(),
@@ -1144,7 +1143,8 @@ def stop_server(server: ThreadingHTTPServer, thread: threading.Thread | None = N
     """Persist state and stop a running HTTP server."""
     with STATE_LOCK:
         try:
-            ASSISTANT.save_game(quiet=True)
+            if has_active_campaign():
+                ASSISTANT.save_game(quiet=True)
         except Exception:
             pass
     server.shutdown()

@@ -528,18 +528,18 @@
       <div class="lw-ui-panel__title"><span class="lw-ui-eyebrow">Current campaign</span></div>
       <div class="library-current__body">
         <div class="library-current__state">
-          <span class="lw-ui-status lw-ui-status--reading" id="currentCampaignStatus">Reading</span>
-          <h2 id="currentCampaignTitle">Loading current campaign...</h2>
-          <p id="currentCampaignSummary">Checking your saved campaign.</p>
-          <div class="library-current__meta"><span id="currentCampaignMeta">Saved campaign</span></div>
+          <span class="lw-ui-status" id="currentCampaignStatus">Ready</span>
+          <h2 id="currentCampaignTitle">No campaign started</h2>
+          <p id="currentCampaignSummary">Create a player to begin your first adventure.</p>
+          <div class="library-current__meta"><span id="currentCampaignMeta">No saved campaign</span></div>
         </div>
         <div class="library-current__actions">
-          <button class="lw-ui-button lw-ui-button--primary" id="currentBtn" type="button">Start Current Campaign</button>
-          <a class="lw-ui-button" href="assistant.html?surface=reader&amp;resume=1">Open Reader View</a>
+          <button class="lw-ui-button lw-ui-button--primary" id="currentBtn" type="button" hidden>Start Current Campaign</button>
+          <a class="lw-ui-button" id="currentReaderBtn" href="assistant.html?surface=reader&amp;resume=1" hidden>Open Reader View</a>
           <a class="lw-ui-button" href="assistant.html?campaign=new&amp;book=1">Start New Campaign</a>
           <a class="lw-ui-button" href="assistant.html?surface=tools&amp;tool=settings&amp;resume=1">Settings</a>
         </div>
-        <p class="library-current__note">Campaign, Reader, Tools, and Console continue the same saved adventure.</p>
+        <p class="library-current__note" id="currentCampaignNote">Your campaign will appear here after character creation.</p>
       </div>
     </aside>
 
@@ -1018,6 +1018,8 @@
       `;
     }
 
+    let campaignAvailable = false;
+
     function openBookDetails(bookNumber) {
       const book = bookByNumber.get(Number(bookNumber));
       if (!book) return;
@@ -1031,7 +1033,7 @@
       const campaignStartLink = book.number === 1 && book.enabled !== false
         ? '<a href="assistant.html?campaign=new&book=1" title="Create a new Book 1 character before beginning Flight from the Dark.">Start New Campaign</a>'
         : '';
-      const currentSectionButton = book.enabled === false
+      const currentSectionButton = book.enabled === false || !campaignAvailable
         ? ''
         : '<button type="button" data-open-current-section>Start Current Campaign</button>';
       const read = isBookRead(book.number);
@@ -1083,22 +1085,17 @@
     async function getCurrentPosition() {
       try {
         const response = await fetch('/api/state?ts=' + Date.now(), { cache: 'no-store' });
-        if (response.ok) {
-          const payload = await response.json();
-          const state = payload?.state || {};
-          const book = Number(state?.Character?.BookNumber);
-          const section = Number(state?.CurrentSection);
-          if (Number.isInteger(book) && Number.isInteger(section)) return { book, section };
-        }
-      } catch {}
-
-      try {
-        const response = await fetch('current-position.json?ts=' + Date.now(), { cache: 'no-store' });
         if (!response.ok) return null;
-        return await response.json();
-      } catch {
+        const payload = await response.json();
+        campaignAvailable = payload?.hasCampaign === true;
+        if (!campaignAvailable) return null;
+        const state = payload?.state || {};
+        const book = Number(state?.Character?.BookNumber);
+        const section = Number(state?.CurrentSection);
+        if (Number.isInteger(book) && Number.isInteger(section)) return { book, section };
         return null;
-      }
+      } catch {}
+      return null;
     }
 
     function librarySeriesForBook(bookNumber) {
@@ -1119,18 +1116,38 @@
       });
     }
 
-    function renderCurrentCampaign(position) {
+    function renderCurrentCampaign(position, hasCampaign = true) {
       const title = document.getElementById('currentCampaignTitle');
       const summary = document.getElementById('currentCampaignSummary');
       const meta = document.getElementById('currentCampaignMeta');
       const status = document.getElementById('currentCampaignStatus');
-      if (!position || !title || !summary || !meta || !status) return;
+      const currentButton = document.getElementById('currentBtn');
+      const readerButton = document.getElementById('currentReaderBtn');
+      const note = document.getElementById('currentCampaignNote');
+      if (!title || !summary || !meta || !status || !currentButton || !readerButton || !note) return;
+      campaignAvailable = Boolean(hasCampaign && position);
+      if (!campaignAvailable) {
+        status.textContent = 'Ready';
+        status.classList.remove('lw-ui-status--reading');
+        title.textContent = 'No campaign started';
+        summary.textContent = 'Create a player to begin your first adventure.';
+        meta.textContent = 'No saved campaign';
+        currentButton.hidden = true;
+        readerButton.hidden = true;
+        note.textContent = 'Your campaign will appear here after character creation.';
+        selectLibrarySeries('kai');
+        return;
+      }
       const book = books.find((item) => item.number === Number(position.book));
       if (!book) return;
+      status.classList.add('lw-ui-status--reading');
       title.textContent = `Book ${book.number}: ${book.title}`;
       summary.textContent = `Your campaign is saved at section ${position.section}.`;
       meta.textContent = `${book.sections} sections · saved campaign`;
       status.textContent = 'Reading';
+      currentButton.hidden = false;
+      readerButton.hidden = false;
+      note.textContent = 'Campaign, Reader, Tools, and Console continue the same saved adventure.';
       selectLibrarySeries(librarySeriesForBook(book.number));
     }
 
@@ -1158,13 +1175,15 @@
 
     document.addEventListener('lonewolf:campaign-state', (event) => {
       const state = event.detail?.state || {};
-      renderCurrentCampaign({ book: Number(state?.Character?.BookNumber), section: Number(state?.CurrentSection) });
+      renderCurrentCampaign(
+        { book: Number(state?.Character?.BookNumber), section: Number(state?.CurrentSection) },
+        event.detail?.hasCampaign === true
+      );
       applyBookReadStatus(readBooksFromCampaign(state));
     });
 
     getCurrentPosition().then((position) => {
-      if (position) renderCurrentCampaign(position);
-      else selectLibrarySeries('kai');
+      renderCurrentCampaign(position, campaignAvailable);
     });
 
     bookDetailsModal.addEventListener('click', async (event) => {

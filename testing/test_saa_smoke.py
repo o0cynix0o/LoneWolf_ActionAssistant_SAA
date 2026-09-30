@@ -4012,7 +4012,12 @@ class CampaignEntryPointTests(unittest.TestCase):
 
     def test_home_current_section_uses_live_state_and_only_resumes(self) -> None:
         index_html = self.source_text("index.html")
+        shell_js = self.source_text("assets/js/lw-shell.js")
         self.assertIn("fetch('/api/state?ts=' + Date.now()", index_html)
+        self.assertIn("campaignAvailable = payload?.hasCampaign === true", index_html)
+        self.assertIn("No campaign started", index_html)
+        self.assertIn("if (payload?.hasCampaign !== true) return 'No active campaign';", shell_js)
+        self.assertIn("if (payload?.hasCampaign !== true) return;", shell_js)
         self.assertIn("window.location.href = 'assistant.html?surface=campaign&resume=1';", index_html)
         self.assertNotIn('assistant.html?book=${book.number}&section=${section}', index_html)
 
@@ -4785,7 +4790,7 @@ class LibraryProductionTests(unittest.TestCase):
         self.assertIn("Start Current Campaign", index_html)
         self.assertIn('id="seriesTabs"', index_html)
         self.assertIn('data-library-series-panel="magnakai"', index_html)
-        self.assertIn("function renderCurrentCampaign(position)", index_html)
+        self.assertIn("function renderCurrentCampaign(position, hasCampaign = true)", index_html)
         self.assertIn("function selectLibrarySeries(series)", index_html)
         self.assertIn("lonewolf:campaign-state", index_html)
         self.assertIn("set_library_book_read", index_html)
@@ -5253,6 +5258,41 @@ class SoundtrackPlayerTests(unittest.TestCase):
 class ServiceTests(unittest.TestCase):
     def test_service_self_test(self) -> None:
         self.assertEqual(saa_main.run_self_test(), 0)
+
+    def test_default_engine_state_is_not_an_active_campaign(self) -> None:
+        root = Path(lonewolf_redux.__file__).resolve().parent
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=root / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            with mock.patch.object(app_server, "ASSISTANT", assistant):
+                self.assertFalse(app_server.has_active_campaign())
+                assistant.save_game(quiet=True)
+                self.assertTrue(app_server.has_active_campaign())
+
+    def test_server_shutdown_does_not_save_the_default_engine_state(self) -> None:
+        root = Path(lonewolf_redux.__file__).resolve().parent
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=root / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            server = mock.Mock()
+            with mock.patch.object(app_server, "ASSISTANT", assistant), mock.patch.object(
+                assistant, "save_game", wraps=assistant.save_game
+            ) as save_game:
+                app_server.stop_server(server)
+                save_game.assert_not_called()
+            server.shutdown.assert_called_once_with()
+            server.server_close.assert_called_once_with()
+            self.assertEqual(list((base / "saves").glob("*.json")), [])
 
 
 class FrozenCliTests(unittest.TestCase):
