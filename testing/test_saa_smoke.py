@@ -4021,6 +4021,18 @@ class CampaignEntryPointTests(unittest.TestCase):
         self.assertIn("window.location.href = 'assistant.html?surface=campaign&resume=1';", index_html)
         self.assertNotIn('assistant.html?book=${book.number}&section=${section}', index_html)
 
+    def test_tools_surface_does_not_present_template_state_as_a_campaign(self) -> None:
+        assistant_html = self.source_text("assistant.html")
+        tools_css = self.source_text("assets/css/lw-reader-tools.css")
+        self.assertIn("return app?.hasCampaign === true;", assistant_html)
+        self.assertIn("<h2>No active campaign</h2>", assistant_html)
+        self.assertIn("Start a campaign to use this tool", assistant_html)
+        self.assertIn("el.style.display = campaignAvailable ? '' : 'none';", assistant_html)
+        self.assertIn("activeView = 'settings';", assistant_html)
+        self.assertIn("if (!hasSavedCharacter()) { el.hidden = true; el.innerHTML = ''; return; }", assistant_html)
+        self.assertIn("Game modes, save controls, and save slots become available after you create a player.", assistant_html)
+        self.assertIn(".lw-tools-content.is-no-campaign #toolsSummary", tools_css)
+
     def test_assistant_honors_campaign_start_without_mutating_until_begin(self) -> None:
         assistant_html = self.source_text("assistant.html")
         self.assertIn("pageParams.get('campaign') === 'new'", assistant_html)

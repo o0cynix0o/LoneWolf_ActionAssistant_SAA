@@ -3123,6 +3123,7 @@
       ]);
       if (!response.ok) throw new Error('Could not load state');
       app = await response.json();
+      if (nativeSurface === 'tools' && app?.hasCampaign !== true && !requestedToolView) activeView = 'settings';
       if (bookResponse?.ok) bookFiles = await bookResponse.json();
       if (compendiumResponse?.ok) compendiumCatalog = await compendiumResponse.json();
       syncUiPreferences(app.uiPreferences);
@@ -3385,19 +3386,20 @@
         return;
       }
       const items = [
-        ['sheet', 'Action Chart', 'Character, rank, and current campaign'],
-        ['inventory', 'Inventory', 'Weapons, backpack, and special items'],
-        ['disciplines', 'Disciplines', 'Kai, Magnakai, Grand Master, or New Order'],
-        ['sections', 'Sections', 'Audited section and route work'],
-        ['combat', 'Combat', 'Tracked fights and recent rounds'],
-        ['compendium', 'Compendium', 'Items, creatures, people, places, and achievements'],
-        ['saves', 'Saves', 'Checkpoints and backups'],
-        ['notes', 'Notes', 'Campaign memory'],
-        ['soundtrack', 'Soundtrack', 'Background music, playlists, and credits'],
-        ['settings', 'Settings', 'Themes and reader preferences']
+        ['sheet', 'Action Chart', 'Character, rank, and current campaign', true],
+        ['inventory', 'Inventory', 'Weapons, backpack, and special items', true],
+        ['disciplines', 'Disciplines', 'Kai, Magnakai, Grand Master, or New Order', true],
+        ['sections', 'Sections', 'Audited section and route work', true],
+        ['combat', 'Combat', 'Tracked fights and recent rounds', true],
+        ['compendium', 'Compendium', 'Items, creatures, people, places, and achievements', false],
+        ['saves', 'Saves', 'Checkpoints and backups', true],
+        ['notes', 'Notes', 'Campaign memory', true],
+        ['soundtrack', 'Soundtrack', 'Background music, playlists, and credits', false],
+        ['settings', 'Settings', 'Themes and reader preferences', false]
       ];
-      toolsNavigation.innerHTML = '<span class="tools-navigation__label">Campaign tools</span>' + items.map(([id, label, note]) =>
-        `<button type="button" class="${activeView === id ? 'active' : ''}" data-view="${id}"><strong>${label}</strong><small>${note}</small></button>`
+      const campaignAvailable = hasSavedCharacter();
+      toolsNavigation.innerHTML = '<span class="tools-navigation__label">Campaign tools</span>' + items.map(([id, label, note, requiresCampaign]) =>
+        `<button type="button" class="${activeView === id ? 'active' : ''}" data-view="${id}" ${requiresCampaign && !campaignAvailable ? 'disabled title="Start a campaign to use this tool"' : ''}><strong>${label}</strong><small>${note}</small></button>`
       ).join('');
     }
 
@@ -3574,6 +3576,8 @@
     function renderSectionActivity() {
       const el = nativeEl('sectionActivity');
       if (!el || !app || !isNativeSurface) return;
+      if (!hasSavedCharacter()) { el.hidden = true; el.innerHTML = ''; return; }
+      el.hidden = false;
       if (nativeSurface === 'campaign') { el.innerHTML = ''; return; }
       const uniqueRows = sectionActivityRows();
       el.innerHTML = `
@@ -4160,12 +4164,27 @@
       const el = nativeEl('toolsHead'); if (!el) return;
       const c = currentCharacter();
       const consoleMode = nativeConsole || isCliMode();
+      if (!hasSavedCharacter()) {
+        el.innerHTML = `<div class="lw-tools-head__text"><p class="lw-eyebrow">Campaign assistant</p><h1>Tools ready for your adventure.</h1><p class="lw-muted">There is no active campaign. Start a new campaign to unlock the Action Chart, inventory, combat, saves, and notes.</p></div><div class="lw-tools-head__actions"><a class="lw-ui-button" href="index.html">Open Library</a><a class="lw-ui-button lw-ui-button--primary" href="assistant.html?surface=campaign&campaign=new&book=1">Start New Campaign</a></div>`;
+        return;
+      }
       el.innerHTML = consoleMode
         ? `<div class="lw-tools-head__text"><p class="lw-eyebrow">Command console</p><h1>Keyboard-driven control</h1><p class="lw-muted">Commands act on this same live save. Book ${escapeHtml(c.BookNumber)}, section ${escapeHtml(app.state.CurrentSection)}.</p></div><div class="lw-tools-head__actions"><a class="lw-ui-button" href="assistant.html?surface=tools&resume=1">Back to tools</a><a class="lw-ui-button" href="assistant.html?surface=campaign&resume=1">Campaign desk</a></div>`
         : `<div class="lw-tools-head__text"><p class="lw-eyebrow">Campaign assistant</p><h1>Tools that follow the story.</h1><p class="lw-muted">One destination for bookkeeping and testing. It keeps the current campaign visible and opens the exact tool you need.</p></div><div class="lw-tools-head__actions"><a class="lw-ui-button" href="assistant.html?surface=campaign&resume=1">Return to campaign</a><a class="lw-ui-button" href="assistant.html?surface=reader&resume=1">Reader view</a></div>`;
     }
     function renderToolsSummary() {
       const el = nativeEl('toolsSummary'); if (!el) return;
+      const content = el.closest('.lw-tools-content');
+      content?.classList.toggle('is-no-campaign', !hasSavedCharacter());
+      if (!hasSavedCharacter()) {
+        el.innerHTML = `
+          <section class="lw-ui-panel lw-tools-summary__panel lw-tools-empty-state">
+            <div><p class="lw-eyebrow">Current campaign</p><h2>No active campaign</h2></div>
+            <p class="lw-muted">Create a player to begin your first adventure. Settings, the soundtrack, and the compendium remain available here.</p>
+            <div class="lw-tools-empty-state__actions"><a class="lw-ui-button lw-ui-button--primary" href="assistant.html?surface=campaign&campaign=new&book=1">Start New Campaign</a><a class="lw-ui-button" href="index.html">Return to Library</a></div>
+          </section>`;
+        return;
+      }
       const c = currentCharacter(); const inv = currentInventory(); const run = app.run || {};
       const disc = knownDisciplines(c);
       const crt = text(run.CombatMode, 'DataFile') === 'ManualCRT' ? 'Manual CRT' : 'Automatic CRT';
@@ -4183,6 +4202,13 @@
     }
     function renderToolsQuickRoll() {
       const el = nativeEl('toolsQuickRoll'); if (!el) return;
+      const campaignAvailable = hasSavedCharacter();
+      el.hidden = !campaignAvailable;
+      el.style.display = campaignAvailable ? '' : 'none';
+      if (!campaignAvailable) {
+        el.innerHTML = '';
+        return;
+      }
       const flow = currentFlow();
       const last = [flow.LastRoll, flow.StagedRoll, app.state?.LastRoll].find((v) => typeof v === 'number');
       const rollLabel = flow.Entry?.roll || flow.Entry?.stagedRoll ? 'Section Roll' : 'Roll 0-9';
@@ -4208,6 +4234,12 @@
       document.body.classList.remove('lw-console-active');
       renderToolsSummary();
       renderToolsQuickRoll();
+      const campaignTools = ['sheet', 'inventory', 'disciplines', 'sections', 'combat', 'saves', 'notes'];
+      if (!hasSavedCharacter() && campaignTools.includes(activeView)) {
+        stashLegacyView();
+        mount.innerHTML = '';
+        return;
+      }
       mountView(mount);
       runToolRenderer(activeView && activeView !== 'story' ? activeView : 'sheet');
     }
@@ -4280,7 +4312,7 @@
       campaignStartRequested = false;
       campaignEntryFocusPending = false;
       if (nativeSurface === 'tools') {
-        activeView = ['sheet', 'inventory', 'disciplines', 'sections', 'combat', 'compendium', 'achievements', 'saves', 'notes', 'settings', 'soundtrack'].includes(nextTool) ? nextTool : 'sheet';
+        activeView = ['sheet', 'inventory', 'disciplines', 'sections', 'combat', 'compendium', 'achievements', 'saves', 'notes', 'settings', 'soundtrack'].includes(nextTool) ? nextTool : (hasSavedCharacter() ? 'sheet' : 'settings');
       }
       if (!nativeConsole) stopCliTerminal();
       closeFrontMatter();
@@ -6468,7 +6500,7 @@
     }
 
     function hasSavedCharacter() {
-      return Boolean(text(app?.state?.Settings?.SavePath).trim());
+      return app?.hasCampaign === true;
     }
 
     function shouldShowBook1Creation() {
@@ -8391,6 +8423,33 @@
       const run = app.run || {};
       const paths = app.paths || {};
       const currentScope = cardScopeForView(activeView === 'settings' ? 'sheet' : activeView);
+      if (!hasSavedCharacter()) {
+        view.innerHTML = `
+          <section class="settings-command lw-ui-panel">
+            <div><p class="lw-ui-eyebrow">Preferences</p><h2>Application and reader settings</h2><p>Choose the application appearance and reading preferences before starting a campaign.</p></div>
+            <div class="settings-command__actions"><a class="lw-ui-button" href="index.html">Library</a><a class="lw-ui-button" href="install-books.html">Manage books</a></div>
+          </section>
+          <div class="settings-workspace">
+            <div class="panel">
+              <h2>No active campaign</h2>
+              <p class="muted">Game modes, save controls, and save slots become available after you create a player.</p>
+              <div class="controls"><a class="lw-ui-button lw-ui-button--primary" href="assistant.html?surface=campaign&campaign=new&book=1">Start New Campaign</a></div>
+            </div>
+            ${renderAppearanceSettings()}
+            <div class="panel">
+              <h2>Application</h2>
+              <div class="grid">
+                ${field('UI Preferences', escapeHtml(text(paths.UiPreferences, 'Unknown')))}
+                ${field('Branding', 'Lone Wolf')}
+              </div>
+              <div class="controls" style="margin-top:.65rem">
+                <button type="button" data-card-reset-scope="${escapeHtml(currentScope)}">Reset Current Layout</button>
+                <button type="button" data-card-reset-all>Reset All Card Layouts</button>
+              </div>
+            </div>
+          </div>`;
+        return;
+      }
       const difficulties = arr(run.Difficulties);
       const currentDifficulty = text(run.Difficulty, 'Normal');
       const currentCombatMode = text(run.CombatMode, 'DataFile');
