@@ -45,6 +45,8 @@
           <button class="lw-ui-button lw-ui-button--primary" type="button" id="import-zips">Import ZIP Files</button>
           <button class="lw-ui-button" type="button" id="import-folder">Import Extracted Folder</button>
           <button class="lw-ui-button" type="button" id="open-folder">Open Managed Books Folder</button>
+          <input type="file" id="zip-input" accept=".zip,application/zip" multiple hidden>
+          <input type="file" id="folder-input" webkitdirectory directory multiple hidden>
         </div>
         <p id="import-status" class="install-import__status" role="status"></p>
       </div>
@@ -172,8 +174,47 @@
       }
     }
 
-    document.getElementById('import-zips').addEventListener('click', () => callNative('zips'));
-    document.getElementById('import-folder').addEventListener('click', () => callNative('folder'));
+    function encodeFile(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(reader.error || new Error(`Could not read ${file.name}.`));
+        reader.onload = () => resolve({
+          name: file.name,
+          relativePath: file.webkitRelativePath || file.name,
+          data: String(reader.result || '').split(',', 2)[1] || ''
+        });
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function uploadBooks(action, fileList) {
+      const files = Array.from(fileList || []);
+      if (!files.length) {
+        importStatus.textContent = 'Import cancelled.';
+        return;
+      }
+      importStatus.textContent = `Validating ${files.length} selected file${files.length === 1 ? '' : 's'}...`;
+      try {
+        const response = await fetch('/api/native-books', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action, files: await Promise.all(files.map(encodeFile)) })
+        });
+        const result = await response.json();
+        if (!response.ok || !result.ok) throw new Error(result.error || 'Unknown import error');
+        importStatus.textContent = `Imported ${result.Count} book folder${result.Count === 1 ? '' : 's'} into the managed library.`;
+        await loadBookStatus();
+      } catch (error) {
+        importStatus.textContent = `Could not complete the request: ${error.message || error}`;
+      }
+    }
+
+    const zipInput = document.getElementById('zip-input');
+    const folderInput = document.getElementById('folder-input');
+    document.getElementById('import-zips').addEventListener('click', () => zipInput.click());
+    document.getElementById('import-folder').addEventListener('click', () => folderInput.click());
+    zipInput.addEventListener('change', async () => { await uploadBooks('upload-zips', zipInput.files); zipInput.value = ''; });
+    folderInput.addEventListener('change', async () => { await uploadBooks('upload-folder', folderInput.files); folderInput.value = ''; });
     document.getElementById('open-folder').addEventListener('click', () => callNative('open'));
     refreshAppearance();
     settingsApi.syncFromRemote().then(refreshAppearance);

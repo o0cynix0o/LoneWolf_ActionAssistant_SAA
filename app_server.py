@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import contextlib
 import io
 import json
@@ -12,6 +13,7 @@ import os
 import secrets
 import sys
 import threading
+import tempfile
 import zipfile
 from datetime import datetime
 from http import HTTPStatus
@@ -381,8 +383,62 @@ def book_folder_names() -> tuple[str, ...]:
     )
 
 
+MAX_BOOK_UPLOAD_BYTES = 128 * 1024 * 1024
+
+
+def handle_uploaded_books(payload: dict, destination: Path = PATHS.books_lw) -> dict:
+    """Validate browser-selected book files, then import them from a temp root."""
+    action = str(payload.get("action") or "").strip()
+    entries = payload.get("files")
+    if action not in {"upload-zips", "upload-folder"}:
+        raise ValueError("Unknown browser book upload action.")
+    if not isinstance(entries, list) or not entries:
+        return {"ok": False, "cancelled": True}
+
+    total_bytes = 0
+    with tempfile.TemporaryDirectory(prefix="lonewolf-browser-books-") as temp_dir:
+        root = Path(temp_dir).resolve()
+        uploaded: list[Path] = []
+        for index, entry in enumerate(entries):
+            if not isinstance(entry, dict):
+                raise ValueError("Invalid uploaded book file.")
+            raw_name = str(entry.get("relativePath") or entry.get("name") or "").replace("\\", "/")
+            parts = tuple(part for part in raw_name.split("/") if part not in {"", "."})
+            if not parts or ".." in parts:
+                raise ValueError("Uploaded book paths must stay inside the selected package.")
+            encoded = entry.get("data")
+            if not isinstance(encoded, str):
+                raise ValueError(f"Uploaded file {index + 1} has no data.")
+            try:
+                data = base64.b64decode(encoded, validate=True)
+            except (ValueError, base64.binascii.Error) as exc:
+                raise ValueError(f"Uploaded file {index + 1} is not valid base64 data.") from exc
+            total_bytes += len(data)
+            if total_bytes > MAX_BOOK_UPLOAD_BYTES:
+                raise ValueError("Selected book files exceed the 128 MiB upload limit.")
+            target = (root.joinpath(*parts)).resolve()
+            try:
+                target.relative_to(root)
+            except ValueError as exc:
+                raise ValueError("Uploaded book paths must stay inside the selected package.") from exc
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(data)
+            uploaded.append(target)
+
+        if action == "upload-zips":
+            if any(path.suffix.lower() != ".zip" for path in uploaded):
+                raise ValueError("Choose standard Project Aon ZIP files only.")
+            sources: list[Path] = uploaded
+        else:
+            sources = [root]
+        result = book_manager.import_books(sources, book_folder_names(), destination)
+        return {"ok": True, **result}
+
+
 def handle_native_books(payload: dict) -> dict:
     action = str(payload.get("action") or "").strip()
+    if action in {"upload-zips", "upload-folder"}:
+        return handle_uploaded_books(payload)
     if action == "open":
         return {"ok": True, "path": book_manager.open_books_folder()}
 

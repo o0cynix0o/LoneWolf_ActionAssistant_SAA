@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import base64
 import hashlib
 import io
 import json
@@ -59,6 +60,35 @@ class BookImportTests(unittest.TestCase):
 
             self.assertEqual(result["Imported"], ["01fftd"])
             self.assertTrue((Path(target_temp) / "01fftd" / "sect1.htm").is_file())
+
+    def test_browser_zip_upload_imports_without_native_dialog(self) -> None:
+        archive = io.BytesIO()
+        with zipfile.ZipFile(archive, "w") as bundle:
+            root = "en/xhtml/lw/01fftd"
+            bundle.writestr(f"{root}/title.htm", "<title>Book 1</title>")
+            bundle.writestr(f"{root}/sect1.htm", "<p>Section 1</p>")
+        with tempfile.TemporaryDirectory() as target_temp:
+            result = app_server.handle_uploaded_books(
+                {
+                    "action": "upload-zips",
+                    "files": [{"name": "01fftd.zip", "data": base64.b64encode(archive.getvalue()).decode("ascii")}],
+                },
+                Path(target_temp),
+            )
+            self.assertTrue(result["ok"])
+            self.assertEqual(result["Imported"], ["01fftd"])
+            self.assertTrue((Path(target_temp) / "01fftd" / "title.htm").is_file())
+
+    def test_browser_folder_upload_rejects_parent_paths(self) -> None:
+        with tempfile.TemporaryDirectory() as target_temp:
+            with self.assertRaisesRegex(ValueError, "stay inside"):
+                app_server.handle_uploaded_books(
+                    {
+                        "action": "upload-folder",
+                        "files": [{"name": "title.htm", "relativePath": "../title.htm", "data": ""}],
+                    },
+                    Path(target_temp),
+                )
 
 
 class SupportedBookDataBaselineTests(unittest.TestCase):
@@ -5165,7 +5195,8 @@ class SettingsInstallProductionTests(unittest.TestCase):
         self.assertIn('id="bookManager"', installer_html)
         self.assertIn('async function loadBookStatus()', installer_html)
         self.assertIn("'TheStormsOfChai'", installer_html)
-        self.assertIn("callNative('zips')", installer_html)
+        self.assertIn('id="zip-input"', installer_html)
+        self.assertIn("uploadBooks('upload-zips', zipInput.files)", installer_html)
         self.assertTrue((root / "assets" / "css" / "lw-settings-install.css").is_file())
 
     def test_settings_focused_pages_preserve_controls_and_campaign_gating(self) -> None:
