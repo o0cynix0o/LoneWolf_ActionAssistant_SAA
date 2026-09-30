@@ -8167,6 +8167,7 @@
 
     function compendiumSectionsVisited() {
       const visited = new Set();
+      if (!hasSavedCharacter()) return visited;
       const add = (book, section) => {
         const b = Number(book);
         const s = Number(section);
@@ -8186,6 +8187,7 @@
 
     function compendiumOwnedItems() {
       const found = new Set();
+      if (!hasSavedCharacter()) return found;
       const add = (value) => {
         if (typeof value === 'string' && value.trim()) found.add(value.trim().toLowerCase());
         else if (value && typeof value === 'object') add(value.Item || value.Name || value.item || value.name);
@@ -8202,6 +8204,7 @@
 
     function compendiumCombatNames() {
       const names = new Set();
+      if (!hasSavedCharacter()) return names;
       arr(app?.state?.CombatHistory).forEach((entry) => {
         const name = text(entry.EnemyName || entry.Name).trim().toLowerCase();
         if (name) names.add(name);
@@ -8214,6 +8217,7 @@
     }
 
     function compendiumEntryDiscovered(category, entry, visited = compendiumSectionsVisited()) {
+      if (!hasSavedCharacter()) return false;
       const refs = arr(entry.sourceRefs);
       const name = text(entry.name).trim().toLowerCase();
       if (category === 'items') {

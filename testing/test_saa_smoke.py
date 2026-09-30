@@ -6137,6 +6137,7 @@ class CompendiumTests(unittest.TestCase):
     def test_tools_ui_exposes_compendium_and_inventory_info_controls(self) -> None:
         page = (self.root / "assistant.html").read_text(encoding="utf-8")
         self.assertIn("function renderCompendium()", page)
+        self.assertEqual(page.count("if (!hasSavedCharacter()) return"), 4)
         self.assertIn('data-compendium-tab=', page)
         self.assertIn('data-item-info=', page)
         self.assertIn("Open in Compendium", page)
