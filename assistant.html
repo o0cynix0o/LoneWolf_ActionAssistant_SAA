@@ -3403,7 +3403,7 @@
       ];
       const campaignAvailable = hasSavedCharacter();
       toolsNavigation.innerHTML = '<span class="tools-navigation__label">Campaign Tools</span>' + items.map(([id, label, note, requiresCampaign]) =>
-        `<button type="button" class="${activeView === id ? 'active' : ''}" data-view="${id}" ${requiresCampaign && !campaignAvailable ? 'disabled title="Start a campaign to use this tool"' : ''}><strong>${label}</strong><small>${note}</small></button>`
+        `<button type="button" class="tools-navigation__item ${activeView === id ? 'active' : ''}" data-view="${id}" ${requiresCampaign && !campaignAvailable ? 'disabled title="Start a campaign to use this tool"' : ''}><strong>${label}</strong><small>${note}</small></button>`
       ).join('');
     }
 

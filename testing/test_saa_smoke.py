@@ -4044,6 +4044,10 @@ class CampaignEntryPointTests(unittest.TestCase):
         self.assertIn("const focusedView = activeView && activeView !== 'story' ? activeView : 'sheet';", assistant_html)
         self.assertIn("if (focusedView !== 'soundtrack') mountView(mount);", assistant_html)
         self.assertIn("runToolRenderer(focusedView);", assistant_html)
+        self.assertIn('class="tools-navigation__item ${activeView === id ? \'active\' : \'\'}"', assistant_html)
+        self.assertIn("grid-template-columns: 220px minmax(0, 1fr);", tools_css)
+        self.assertIn("width: min(1600px, calc(100% - 16px));", tools_css)
+        self.assertIn("border-bottom: 1px solid var(--lw-ui-border) !important;", tools_css)
         self.assertIn(".lw-music-player-card--tools { width: 100%; max-width: none; }", tools_css)
 
     def test_assistant_honors_campaign_start_without_mutating_until_begin(self) -> None:

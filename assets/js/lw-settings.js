@@ -866,7 +866,7 @@
       html.lw-surface-borderless .lw-global-nav,
       html.lw-surface-borderless .lw-global-nav__links a,
       html.lw-surface-borderless .lw-global-nav__campaign,
-      html.lw-surface-borderless button,
+      html.lw-surface-borderless button:not(.tools-navigation__item),
       html.lw-surface-borderless input,
       html.lw-surface-borderless select,
       html.lw-surface-borderless textarea,
@@ -881,13 +881,13 @@
       html.lw-surface-borderless .lw-ui-panel__title {
         border-bottom: 0 !important;
       }
-      html.lw-surface-borderless button:not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger),
+      html.lw-surface-borderless button:not(.tools-navigation__item):not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger),
       html.lw-surface-borderless .settings-option:not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger),
       html.lw-surface-borderless .lw-ui-button:not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger) {
         background-color: var(--lw-borderless-control) !important;
         transition: background-color 120ms ease, color 120ms ease;
       }
-      html.lw-surface-borderless button:not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger):hover,
+      html.lw-surface-borderless button:not(.tools-navigation__item):not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger):hover,
       html.lw-surface-borderless .settings-option:not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger):hover,
       html.lw-surface-borderless .lw-ui-button:not(.book-choice):not(.active):not(.danger):not(.lw-ui-button--primary):not(.lw-ui-button--danger):hover {
         background-color: var(--lw-borderless-control-hover) !important;
