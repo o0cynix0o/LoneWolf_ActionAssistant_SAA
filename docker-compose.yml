@@ -1,7 +1,7 @@
 services:
   lonewolf:
     build: .
-    image: lonewolf-action-assistant:3.7.5
+    image: lonewolf-action-assistant:3.7.6
     container_name: lonewolf-action-assistant
     ports:
       - "8797:8797"   # web app  -> http://localhost:8797/

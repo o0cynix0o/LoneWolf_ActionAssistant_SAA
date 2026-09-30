@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 3.7.6 - Internal Testing
+
 - Reworked completed-book handoffs into a two-step onboarding screen. The next
   book's full Story So Far now uses the app's native Campaign story panel before
   the carried Action Chart choices, and the campaign advances to Section 1 only
@@ -16,6 +18,31 @@
 - Prevented Book 2-5 setup from advancing when newly selected equipment would
   exceed the two-weapon limit. The form now identifies required replacements,
   and the transition validates capacity before changing the campaign state.
+- Rebuilt completed-combat results as a readable battle timeline with the
+  printed outcome text, combatants, valid recovery choices, and no live-round
+  controls after the fight has ended.
+- Sandboxed temporary cheat and test-session changes so they cannot leak into
+  normal saves, then added clearer Console return navigation and two selectable
+  Console layouts: Companion Rail and Focus Dock.
+- Improved choice and loot layouts, made the embedded terminal taller and more
+  space-efficient, and centered its content and navigation.
+- Added Action Chart-aware route guidance for disciplines, inventory items,
+  Special Items, money, arrows, ranks, lore circles, and engine-controlled
+  section rolls. Optional refusal routes remain neutral.
+- Added directional item equivalence rules such as a two-space Rope satisfying
+  a one-space Rope requirement without allowing the shorter Rope to satisfy the
+  longer requirement.
+- Added a spoiler-safe Campaign compendium for encountered items, monsters,
+  people, and places, including known effects, statistics, discovery counts,
+  and achievement progress.
+- Added a collapsible Section Activity summary to At a glance and removed the
+  redundant quick-action buttons it replaces.
+- Fixed either-or discipline requirements and gated Random Number choices by
+  the section's resolved roll rather than unrelated state.
+- Added a Campaign-only setting for the resume/current-objective header. When
+  hidden, the header is removed from layout completely and the metrics move up.
+- Rebalanced the Campaign background-player card without changing playback
+  behavior or controls.
 
 ## 3.7.5 - Internal Testing
 

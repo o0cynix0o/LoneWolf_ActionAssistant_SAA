@@ -4444,7 +4444,7 @@ class CardLayoutInteractionTests(unittest.TestCase):
                     return cls.assistant_html[match.start():index + 1]
         raise AssertionError(f"JavaScript function {name!r} has no closing brace")
 
-    def test_release_metadata_is_3_7_5_internal_testing(self) -> None:
+    def test_release_metadata_is_3_7_6_internal_testing(self) -> None:
         readme = (self.root / "README.md").read_text(encoding="utf-8")
         building = (self.root / "docs" / "BUILDING.md").read_text(encoding="utf-8")
         user_guide = (self.root / "docs" / "USER_GUIDE.md").read_text(encoding="utf-8")
@@ -4456,18 +4456,18 @@ class CardLayoutInteractionTests(unittest.TestCase):
         compose = (self.root / "docker-compose.yml").read_text(encoding="utf-8")
         dockerfile = (self.root / "Dockerfile").read_text(encoding="utf-8")
 
-        self.assertIn("# Lone Wolf Action Assistant 3.7.5 Internal Testing", readme)
-        self.assertIn("Version: **3.7.5 Internal Testing**", readme)
-        self.assertIn("# Building Lone Wolf Action Assistant 3.7.5 Internal Testing", building)
-        self.assertIn("# Lone Wolf Action Assistant 3.7.5 Internal Testing", user_guide)
-        self.assertIn("## 3.7.5 - Internal Testing", changelog)
-        self.assertIn('#define AppVersion "3.7.5"', installer)
-        self.assertIn("filevers=(3, 7, 5, 0)", version_info)
-        self.assertIn("prodvers=(3, 7, 5, 0)", version_info)
-        self.assertIn("StringStruct(u'FileVersion', u'3.7.5')", version_info)
-        self.assertIn("StringStruct(u'ProductVersion', u'3.7.5')", version_info)
-        self.assertIn("image: lonewolf-action-assistant:3.7.5", compose)
-        self.assertIn("ARG APP_VERSION=3.7.5", dockerfile)
+        self.assertIn("# Lone Wolf Action Assistant 3.7.6 Internal Testing", readme)
+        self.assertIn("Version: **3.7.6 Internal Testing**", readme)
+        self.assertIn("# Building Lone Wolf Action Assistant 3.7.6 Internal Testing", building)
+        self.assertIn("# Lone Wolf Action Assistant 3.7.6 Internal Testing", user_guide)
+        self.assertIn("## 3.7.6 - Internal Testing", changelog)
+        self.assertIn('#define AppVersion "3.7.6"', installer)
+        self.assertIn("filevers=(3, 7, 6, 0)", version_info)
+        self.assertIn("prodvers=(3, 7, 6, 0)", version_info)
+        self.assertIn("StringStruct(u'FileVersion', u'3.7.6')", version_info)
+        self.assertIn("StringStruct(u'ProductVersion', u'3.7.6')", version_info)
+        self.assertIn("image: lonewolf-action-assistant:3.7.6", compose)
+        self.assertIn("ARG APP_VERSION=3.7.6", dockerfile)
 
     def test_cli_connection_has_a_bounded_pending_state(self) -> None:
         start_cli = self.function_source("startCliTerminal")

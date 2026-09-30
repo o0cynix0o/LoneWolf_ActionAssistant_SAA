@@ -5,8 +5,8 @@ runs the **same app as a local web server** and you use it from a **browser** at
 `http://localhost:8797/`. This is handy for updating on the fly without
 rebuilding the installer.
 
-Release 3.7.5 uses the versioned local image
-`lonewolf-action-assistant:3.7.5`.
+Release 3.7.6 uses the versioned local image
+`lonewolf-action-assistant:3.7.6`.
 
 ## Requirements
 
