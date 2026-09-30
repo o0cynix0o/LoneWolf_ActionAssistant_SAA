@@ -1679,8 +1679,8 @@
       <div class="lw-tools-body">
         <nav class="tools-navigation" id="toolsNavigation" aria-label="Campaign tools"></nav>
         <div class="lw-tools-content">
-          <div class="lw-tools-summary" id="toolsSummary"></div>
-          <div class="lw-quick-roll lw-ui-panel" id="toolsQuickRoll"></div>
+          <div class="lw-tools-summary" id="toolsSummary" hidden></div>
+          <div class="lw-quick-roll lw-ui-panel" id="toolsQuickRoll" hidden></div>
           <div class="lw-active-tool" id="toolsActiveMount"></div>
         </div>
       </div>
@@ -4171,7 +4171,7 @@
       }
       el.innerHTML = consoleMode
         ? `<div class="lw-tools-head__text"><p class="lw-eyebrow">Command console</p><h1>Keyboard-driven control</h1><p class="lw-muted">Commands act on this same live save. Book ${escapeHtml(c.BookNumber)}, section ${escapeHtml(app.state.CurrentSection)}.</p></div><div class="lw-tools-head__actions"><a class="lw-ui-button" href="assistant.html?surface=tools&resume=1">Back to tools</a><a class="lw-ui-button" href="assistant.html?surface=campaign&resume=1">Campaign desk</a></div>`
-        : `<div class="lw-tools-head__text"><p class="lw-eyebrow">Campaign assistant</p><h1>Tools that follow the story.</h1><p class="lw-muted">One destination for bookkeeping and testing. It keeps the current campaign visible and opens the exact tool you need.</p></div><div class="lw-tools-head__actions"><a class="lw-ui-button" href="assistant.html?surface=campaign&resume=1">Return to campaign</a><a class="lw-ui-button" href="assistant.html?surface=reader&resume=1">Reader view</a></div>`;
+        : `<div class="lw-tools-head__text"><p class="lw-eyebrow">Campaign assistant</p><h1>Tools that follow the story.</h1><p class="lw-muted">Choose one focused tool for bookkeeping, reference, or testing.</p></div><div class="lw-tools-head__actions"><a class="lw-ui-button" href="assistant.html?surface=campaign&resume=1">Return to campaign</a><a class="lw-ui-button" href="assistant.html?surface=reader&resume=1">Reader view</a></div>`;
     }
     function renderToolsSummary() {
       const el = nativeEl('toolsSummary'); if (!el) return;
@@ -4226,23 +4226,32 @@
       renderToolsHead();
       renderToolsNavigation();
       const mount = nativeEl('toolsActiveMount');
+      const summary = nativeEl('toolsSummary');
+      const quickRoll = nativeEl('toolsQuickRoll');
+      const content = mount?.closest('.lw-tools-content');
       if (nativeConsole || (f && f.cliActive) || (isCliMode() && !campaignStartRequested)) {
         document.body.classList.add('lw-console-active');
+        stashLegacyView();
+        if (mount) mount.innerHTML = '';
         mountView(mount);
         renderCliPanel();
         return;
       }
       document.body.classList.remove('lw-console-active');
-      renderToolsSummary();
-      renderToolsQuickRoll();
+      content?.classList.add('is-focused-tool');
+      if (summary) { summary.hidden = true; summary.innerHTML = ''; }
+      if (quickRoll) { quickRoll.hidden = true; quickRoll.innerHTML = ''; }
       const campaignTools = ['sheet', 'inventory', 'disciplines', 'sections', 'combat', 'saves', 'notes'];
       if (!hasSavedCharacter() && campaignTools.includes(activeView)) {
         stashLegacyView();
         mount.innerHTML = '';
         return;
       }
-      mountView(mount);
-      runToolRenderer(activeView && activeView !== 'story' ? activeView : 'sheet');
+      const focusedView = activeView && activeView !== 'story' ? activeView : 'sheet';
+      stashLegacyView();
+      if (mount) mount.innerHTML = '';
+      if (focusedView !== 'soundtrack') mountView(mount);
+      runToolRenderer(focusedView);
     }
 
     // ---- Front-matter / map overlay (reuses the book iframe) -----------------

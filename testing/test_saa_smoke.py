@@ -4023,7 +4023,6 @@ class CampaignEntryPointTests(unittest.TestCase):
 
     def test_tools_surface_does_not_present_template_state_as_a_campaign(self) -> None:
         assistant_html = self.source_text("assistant.html")
-        tools_css = self.source_text("assets/css/lw-reader-tools.css")
         self.assertIn("return app?.hasCampaign === true;", assistant_html)
         self.assertIn("<h2>No active campaign</h2>", assistant_html)
         self.assertIn("Start a campaign to use this tool", assistant_html)
@@ -4031,7 +4030,20 @@ class CampaignEntryPointTests(unittest.TestCase):
         self.assertIn("activeView = 'settings';", assistant_html)
         self.assertIn("if (!hasSavedCharacter()) { el.hidden = true; el.innerHTML = ''; return; }", assistant_html)
         self.assertIn("Game modes, save controls, and save slots become available after you create a player.", assistant_html)
-        self.assertIn(".lw-tools-content.is-no-campaign #toolsSummary", tools_css)
+
+    def test_tools_rail_opens_one_focused_destination(self) -> None:
+        assistant_html = self.source_text("assistant.html")
+        tools_css = self.source_text("assets/css/lw-reader-tools.css")
+        self.assertIn('id="toolsSummary" hidden', assistant_html)
+        self.assertIn('id="toolsQuickRoll" hidden', assistant_html)
+        self.assertIn("content?.classList.add('is-focused-tool');", assistant_html)
+        self.assertIn("summary.hidden = true; summary.innerHTML = '';", assistant_html)
+        self.assertIn("quickRoll.hidden = true; quickRoll.innerHTML = '';", assistant_html)
+        self.assertNotIn("renderToolsSummary();\n      renderToolsQuickRoll();", assistant_html)
+        self.assertIn("const focusedView = activeView && activeView !== 'story' ? activeView : 'sheet';", assistant_html)
+        self.assertIn("if (focusedView !== 'soundtrack') mountView(mount);", assistant_html)
+        self.assertIn("runToolRenderer(focusedView);", assistant_html)
+        self.assertIn(".lw-music-player-card--tools { width: 100%; max-width: none; }", tools_css)
 
     def test_assistant_honors_campaign_start_without_mutating_until_begin(self) -> None:
         assistant_html = self.source_text("assistant.html")
