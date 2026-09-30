@@ -4874,6 +4874,15 @@ class RecoveryTimelineTests(unittest.TestCase):
 
 
 class CampaignDeskProductionTests(unittest.TestCase):
+    def test_campaign_music_header_has_top_breathing_room(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        campaign_css = (root / "assets" / "css" / "lw-campaign.css").read_text(encoding="utf-8")
+
+        self.assertRegex(
+            campaign_css,
+            r"\.lw-music-player-card__head\s*\{[^}]*padding-top:\s*8px;",
+        )
+
     def test_story_choice_hints_include_engine_roll_gates(self) -> None:
         root = Path(saa_main.__file__).resolve().parent
         assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
