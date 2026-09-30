@@ -4892,14 +4892,14 @@ class CampaignDeskProductionTests(unittest.TestCase):
         self.assertIn("Show Campaign Header", assistant_html)
         self.assertIn("Hide Campaign Header", assistant_html)
 
-    def test_campaign_music_header_has_top_breathing_room(self) -> None:
+    def test_campaign_music_header_uses_balanced_compact_spacing(self) -> None:
         root = Path(saa_main.__file__).resolve().parent
         campaign_css = (root / "assets" / "css" / "lw-campaign.css").read_text(encoding="utf-8")
 
-        self.assertRegex(
-            campaign_css,
-            r"\.lw-music-player-card__head\s*\{[^}]*padding-top:\s*8px;",
-        )
+        self.assertIn(".lw-music-player-card { display: grid; gap: 10px;", campaign_css)
+        self.assertIn("padding: 16px;", campaign_css)
+        self.assertIn(".lw-music-player-card__head { display: flex; align-items: center;", campaign_css)
+        self.assertIn(".lw-music-player-card__head > div { display: grid; gap: 3px;", campaign_css)
 
     def test_story_choice_hints_include_engine_roll_gates(self) -> None:
         root = Path(saa_main.__file__).resolve().parent
@@ -5238,10 +5238,16 @@ class SoundtrackPlayerTests(unittest.TestCase):
         root = Path(saa_main.__file__).resolve().parent
         campaign_css = (root / "assets" / "css" / "lw-campaign.css").read_text(encoding="utf-8")
 
-        self.assertIn(".lw-music-player-card { display: grid; gap: 12px; min-height: 118px;", campaign_css)
-        self.assertIn(".lw-music-player-card__head > div { display: grid; gap: 10px;", campaign_css)
-        self.assertIn(".lw-music-player-card__head .lw-eyebrow { margin: 0; line-height: 1.35;", campaign_css)
+        self.assertIn(".lw-music-player-card { display: grid; gap: 10px; min-height: 118px;", campaign_css)
+        self.assertIn(".lw-music-player-card__head > div { display: grid; gap: 3px;", campaign_css)
+        self.assertIn(".lw-music-player-card__head .lw-eyebrow { margin: 0; line-height: 1.2;", campaign_css)
         self.assertIn(".lw-music-player-card__head h2 { margin: 0;", campaign_css)
+
+    def test_hidden_campaign_header_is_removed_from_layout(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        campaign_css = (root / "assets" / "css" / "lw-campaign.css").read_text(encoding="utf-8")
+
+        self.assertIn(".lw-workspace-head[hidden] { display: none !important; }", campaign_css)
 
 
 class ServiceTests(unittest.TestCase):
