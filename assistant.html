@@ -1954,6 +1954,7 @@
     let app = null;
     const requestedToolView = new URLSearchParams(window.location.search).get('tool');
     let activeView = ['sheet', 'inventory', 'disciplines', 'sections', 'combat', 'compendium', 'achievements', 'saves', 'notes', 'settings', 'soundtrack'].includes(requestedToolView) ? requestedToolView : 'sheet';
+    let activeSettingsSection = 'appearance';
     let activeBook = 1;
     let activeSection = null;
     let book1Creation = null;
@@ -8299,15 +8300,42 @@
       `;
     }
 
+    function settingsSectionButton(id, label, note) {
+      const active = activeSettingsSection === id;
+      return `
+        <button type="button" class="settings-section-link ${active ? 'active' : ''}" data-settings-section="${escapeHtml(id)}" aria-selected="${active ? 'true' : 'false'}">
+          <strong>${escapeHtml(label)}</strong>
+          <small>${escapeHtml(note)}</small>
+        </button>
+      `;
+    }
+
+    function settingsSections(campaignAvailable) {
+      return [
+        ['appearance', 'Appearance', 'Theme, covers, framing'],
+        ['guidance', 'Campaign Guidance', 'Header and choice hints'],
+        ['reader', 'Reader Styling', 'Project Aon and reading themes'],
+        ['console', 'Console Layout', 'Rail or dock'],
+        ['application', 'Application', 'Preferences and layout resets'],
+        ...(campaignAvailable ? [['campaign', 'Campaign & Saves', 'Game modes, save controls, slots']] : [])
+      ];
+    }
+
+    function renderSettingsNavigation(campaignAvailable) {
+      return `
+        <nav class="settings-section-nav" aria-label="Settings sections">
+          ${settingsSections(campaignAvailable).map(([id, label, note]) => settingsSectionButton(id, label, note)).join('')}
+        </nav>
+      `;
+    }
+
     function renderAppearanceSettings() {
       const current = settingsApi.readLocal();
       const coverOn = current.coverArt !== 'off';
-      const readerOn = current.readerStyleEnabled === 'on';
-      const choiceHintsOn = current.choiceHintsEnabled !== 'off';
-      const campaignResumeBannerOn = current.campaignResumeBanner !== 'off';
       return `
         <div class="panel">
           <h2>Appearance</h2>
+          <p class="muted">Choose the shared visual treatment used across the application.</p>
           <h3 class="section-subtitle">Title Banner</h3>
           <div class="settings-grid">
             ${settingsApi.titleBanners.map((banner) => `
@@ -8331,11 +8359,15 @@
             ${settingsOptionButton('surfaceStyle', 'borderless', 'Borderless', 'Use surface contrast and spacing instead of panel outlines.', current.surfaceStyle === 'borderless')}
             ${settingsOptionButton('surfaceStyle', 'bordered', 'Bordered', 'Restore framed panels, controls, and status surfaces.', current.surfaceStyle === 'bordered')}
           </div>
-          <h3 class="section-subtitle">Console Layout</h3>
-          <div class="settings-grid">
-            ${settingsApi.consoleLayouts.map((layout) => settingsOptionButton('consoleLayout', layout.id, layout.name, layout.note, current.consoleLayout === layout.id)).join('')}
-          </div>
         </div>
+      `;
+    }
+
+    function renderCampaignGuidanceSettings() {
+      const current = settingsApi.readLocal();
+      const choiceHintsOn = current.choiceHintsEnabled !== 'off';
+      const campaignResumeBannerOn = current.campaignResumeBanner !== 'off';
+      return `
         <div class="panel">
           <h2>Campaign Guidance</h2>
           <h3 class="section-subtitle">Campaign Resume Banner</h3>
@@ -8350,6 +8382,13 @@
             ${settingsOptionButton('choiceHintsEnabled', 'off', 'Hide Choice Hints', 'Keep every printed story choice visually neutral.', !choiceHintsOn)}
           </div>
         </div>
+      `;
+    }
+
+    function renderReaderSettings() {
+      const current = settingsApi.readLocal();
+      const readerOn = current.readerStyleEnabled === 'on';
+      return `
         <div class="panel">
           <h2>Reader Page Styling</h2>
           <p class="muted">Project Aon pages stay original unless this is switched on. When enabled, the style is injected into the local iframe only.</p>
@@ -8362,6 +8401,104 @@
           </div>
         </div>
       `;
+    }
+
+    function renderConsoleSettings() {
+      const current = settingsApi.readLocal();
+      return `
+        <div class="panel">
+          <h2>Console Layout</h2>
+          <p class="muted">Choose how the command console and its companion controls share the workspace.</p>
+          <div class="settings-grid">
+            ${settingsApi.consoleLayouts.map((layout) => settingsOptionButton('consoleLayout', layout.id, layout.name, layout.note, current.consoleLayout === layout.id)).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderApplicationSettings(currentScope, campaignAvailable) {
+      const paths = app.paths || {};
+      return `
+        <div class="panel">
+          <h2>Application</h2>
+          <p class="muted">Review local preference storage and restore card layouts without changing campaign data.</p>
+          <div class="grid">
+            ${field('UI Preferences', escapeHtml(text(paths.UiPreferences, 'Unknown')))}
+            ${campaignAvailable ? field('Current View Layout', escapeHtml(currentScope)) : ''}
+            ${field('Branding', 'Lone Wolf')}
+          </div>
+          <div class="controls" style="margin-top:.65rem">
+            <button type="button" data-card-reset-scope="${escapeHtml(currentScope)}">Reset Current Layout</button>
+            <button type="button" data-card-reset-all>Reset All Card Layouts</button>
+          </div>
+        </div>
+        ${campaignAvailable ? `<div class="panel">
+          <h2>Closed Cards</h2>
+          ${hiddenCardEntries().length ? hiddenCardEntries().map((entry) => `
+            <div class="item-row">
+              <small>${escapeHtml(entry.scope)}</small>
+              <span>${escapeHtml(entry.label)}</span>
+              <button type="button" data-card-open="${escapeHtml(entry.scope)}:${escapeHtml(entry.id)}">Re-add</button>
+            </div>
+          `).join('') : '<p class="muted">No cards are currently closed.</p>'}
+        </div>` : ''}
+      `;
+    }
+
+    function renderCampaignSaveSettings(currentScope) {
+      const settings = app.state.Settings || {};
+      const run = app.run || {};
+      const paths = app.paths || {};
+      const difficulties = arr(run.Difficulties);
+      const currentDifficulty = text(run.Difficulty, 'Normal');
+      const currentCombatMode = text(run.CombatMode, 'DataFile');
+      const permadeathAllowed = currentDifficulty !== 'Story';
+      return `
+        <div class="panel">
+          <h2>Game Modes</h2>
+          <form id="runConfigurationForm" class="grid">
+            <label class="field">Difficulty<select name="difficulty" title="Changes the campaign's endurance-loss and achievement rules from this point forward.">
+              ${difficulties.map((definition) => `<option value="${escapeHtml(text(definition.Name))}" ${text(definition.Name) === currentDifficulty ? 'selected' : ''} title="${escapeHtml(text(definition.Description))}">${escapeHtml(text(definition.Name))}</option>`).join('')}
+            </select></label>
+            <label class="check-option" title="On defeat, permadeath ends the current run. Story difficulty always keeps this off."><input type="checkbox" name="permadeath" ${run.Permadeath ? 'checked' : ''} ${permadeathAllowed ? '' : 'disabled'}><span>Permadeath</span></label>
+            <label class="field">Combat Resolution<select name="combatMode" title="Automatic CRT applies combat results. Manual CRT gives you the table result to record yourself.">
+              <option value="DataFile" ${currentCombatMode === 'DataFile' ? 'selected' : ''}>Automatic CRT</option>
+              <option value="ManualCRT" ${currentCombatMode === 'ManualCRT' ? 'selected' : ''}>Manual CRT</option>
+            </select></label>
+            <button type="submit">Apply Game Modes</button>
+          </form>
+        </div>
+        <div class="panel">
+          <h2>Campaign &amp; Saves</h2>
+          <div class="grid">
+            ${field('Autosave', 'On')}
+            ${field('Save Path', escapeHtml(text(settings.SavePath, 'Not saved yet')))}
+            ${field('Save Folder', escapeHtml(text(paths.SaveDir, 'Unknown')))}
+          </div>
+          <div class="controls" style="margin-top:.65rem">
+            <button type="button" data-view="sheet">Back to Sheet</button>
+            <button type="button" data-save-current>Save Game</button>
+            <button type="button" data-export-save>Export Current Save</button>
+            <button type="button" data-backup-saves>Backup Saves</button>
+          </div>
+        </div>
+        <div class="panel">
+          <h2>Save Slots</h2>
+          ${renderSaveSlotRows()}
+        </div>
+      `;
+    }
+
+    function renderFocusedSettingsSection(currentScope, campaignAvailable) {
+      const renderers = {
+        appearance: renderAppearanceSettings,
+        guidance: renderCampaignGuidanceSettings,
+        reader: renderReaderSettings,
+        console: renderConsoleSettings,
+        application: () => renderApplicationSettings(currentScope, campaignAvailable),
+        campaign: () => renderCampaignSaveSettings(currentScope)
+      };
+      return renderers[activeSettingsSection]();
     }
 
     function renderSaveSlotRows() {
@@ -8419,95 +8556,26 @@
     }
 
     function renderSettings() {
-      const settings = app.state.Settings || {};
-      const run = app.run || {};
-      const paths = app.paths || {};
       const currentScope = cardScopeForView(activeView === 'settings' ? 'sheet' : activeView);
-      if (!hasSavedCharacter()) {
-        view.innerHTML = `
-          <section class="settings-command lw-ui-panel">
-            <div><p class="lw-ui-eyebrow">Preferences</p><h2>Application and reader settings</h2><p>Choose the application appearance and reading preferences before starting a campaign.</p></div>
-            <div class="settings-command__actions"><a class="lw-ui-button" href="index.html">Library</a><a class="lw-ui-button" href="install-books.html">Manage books</a></div>
-          </section>
-          <div class="settings-workspace">
-            <div class="panel">
-              <h2>No active campaign</h2>
-              <p class="muted">Game modes, save controls, and save slots become available after you create a player.</p>
-              <div class="controls"><a class="lw-ui-button lw-ui-button--primary" href="assistant.html?surface=campaign&campaign=new&book=1">Start New Campaign</a></div>
-            </div>
-            ${renderAppearanceSettings()}
-            <div class="panel">
-              <h2>Application</h2>
-              <div class="grid">
-                ${field('UI Preferences', escapeHtml(text(paths.UiPreferences, 'Unknown')))}
-                ${field('Branding', 'Lone Wolf')}
-              </div>
-              <div class="controls" style="margin-top:.65rem">
-                <button type="button" data-card-reset-scope="${escapeHtml(currentScope)}">Reset Current Layout</button>
-                <button type="button" data-card-reset-all>Reset All Card Layouts</button>
-              </div>
-            </div>
-          </div>`;
-        return;
-      }
-      const difficulties = arr(run.Difficulties);
-      const currentDifficulty = text(run.Difficulty, 'Normal');
-      const currentCombatMode = text(run.CombatMode, 'DataFile');
-      const permadeathAllowed = currentDifficulty !== 'Story';
+      const campaignAvailable = hasSavedCharacter();
+      const availableSections = settingsSections(campaignAvailable).map(([id]) => id);
+      if (!availableSections.includes(activeSettingsSection)) activeSettingsSection = 'appearance';
       view.innerHTML = `
         <section class="settings-command lw-ui-panel">
-          <div><p class="lw-ui-eyebrow">Preferences</p><h2>Campaign and reader settings</h2><p>Change game modes, appearance, saved layouts, and local save controls without leaving the current campaign.</p></div>
+          <div><p class="lw-ui-eyebrow">Preferences</p><h2>${campaignAvailable ? 'Campaign and reader settings' : 'Application and reader settings'}</h2><p>${campaignAvailable ? 'Change game modes, appearance, saved layouts, and local save controls without leaving the current campaign.' : 'Choose the application appearance and reading preferences before starting a campaign.'}</p></div>
           <div class="settings-command__actions"><a class="lw-ui-button" href="index.html">Library</a><a class="lw-ui-button" href="install-books.html">Manage books</a></div>
         </section>
+        ${campaignAvailable ? '' : `<section class="panel settings-campaign-notice">
+          <div><h2>No active campaign</h2><p class="muted">Game modes, save controls, and save slots become available after you create a player.</p></div>
+          <div class="controls"><a class="lw-ui-button lw-ui-button--primary" href="assistant.html?surface=campaign&campaign=new&book=1">Start New Campaign</a></div>
+        </section>`}
         <div class="settings-workspace">
-        <div class="panel">
-          <h2>Game Modes</h2>
-          <form id="runConfigurationForm" class="grid">
-            <label class="field">Difficulty<select name="difficulty" title="Changes the campaign's endurance-loss and achievement rules from this point forward.">
-              ${difficulties.map((definition) => `<option value="${escapeHtml(text(definition.Name))}" ${text(definition.Name) === currentDifficulty ? 'selected' : ''} title="${escapeHtml(text(definition.Description))}">${escapeHtml(text(definition.Name))}</option>`).join('')}
-            </select></label>
-            <label class="check-option" title="On defeat, permadeath ends the current run. Story difficulty always keeps this off."><input type="checkbox" name="permadeath" ${run.Permadeath ? 'checked' : ''} ${permadeathAllowed ? '' : 'disabled'}><span>Permadeath</span></label>
-            <label class="field">Combat Resolution<select name="combatMode" title="Automatic CRT applies combat results. Manual CRT gives you the table result to record yourself.">
-              <option value="DataFile" ${currentCombatMode === 'DataFile' ? 'selected' : ''}>Automatic CRT</option>
-              <option value="ManualCRT" ${currentCombatMode === 'ManualCRT' ? 'selected' : ''}>Manual CRT</option>
-            </select></label>
-            <button type="submit">Apply Game Modes</button>
-          </form>
-        </div>
-        <div class="panel">
-          <h2>Settings</h2>
-          <div class="grid">
-            ${field('Autosave', 'On')}
-            ${field('Save Path', escapeHtml(text(settings.SavePath, 'Not saved yet')))}
-            ${field('Save Folder', escapeHtml(text(paths.SaveDir, 'Unknown')))}
-            ${field('UI Preferences', escapeHtml(text(paths.UiPreferences, 'Unknown')))}
-            ${field('Current View Layout', escapeHtml(currentScope))}
-            ${field('Branding', 'Lone Wolf')}
-          </div>
-          <div class="controls" style="margin-top:.65rem">
-            <button type="button" data-view="sheet">Back to Sheet</button>
-            <button type="button" data-save-current>Save Game</button>
-            <button type="button" data-export-save>Export Current Save</button>
-            <button type="button" data-backup-saves>Backup Saves</button>
-            <button type="button" data-card-reset-scope="${escapeHtml(currentScope)}">Reset Current Layout</button>
-            <button type="button" data-card-reset-all>Reset All Card Layouts</button>
-          </div>
-        </div>
-        ${renderAppearanceSettings()}
-        <div class="panel">
-          <h2>Save Slots</h2>
-          ${renderSaveSlotRows()}
-        </div>
-        <div class="panel">
-          <h2>Closed Cards</h2>
-          ${hiddenCardEntries().length ? hiddenCardEntries().map((entry) => `
-            <div class="item-row">
-              <small>${escapeHtml(entry.scope)}</small>
-              <span>${escapeHtml(entry.label)}</span>
-              <button type="button" data-card-open="${escapeHtml(entry.scope)}:${escapeHtml(entry.id)}">Re-add</button>
+          <div class="settings-focused-layout">
+            ${renderSettingsNavigation(campaignAvailable)}
+            <div class="settings-section-content">
+              ${renderFocusedSettingsSection(currentScope, campaignAvailable)}
             </div>
-          `).join('') : '<p class="muted">No cards are currently closed.</p>'}
-        </div>
+          </div>
         </div>
       `;
     }
@@ -8930,6 +8998,11 @@
       }
       if (button.dataset.settingKind) {
         await updateAssistantSetting(button.dataset.settingKind, button.dataset.settingId);
+        return;
+      }
+      if (button.dataset.settingsSection) {
+        activeSettingsSection = button.dataset.settingsSection;
+        render();
         return;
       }
       if (button.dataset.slotSave) {

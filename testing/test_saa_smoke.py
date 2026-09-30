@@ -5151,6 +5151,23 @@ class SettingsInstallProductionTests(unittest.TestCase):
         self.assertIn("callNative('zips')", installer_html)
         self.assertTrue((root / "assets" / "css" / "lw-settings-install.css").is_file())
 
+    def test_settings_focused_pages_preserve_controls_and_campaign_gating(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
+
+        self.assertIn("let activeSettingsSection = 'appearance';", assistant_html)
+        self.assertIn('class="settings-section-nav"', assistant_html)
+        self.assertIn('data-settings-section="${escapeHtml(id)}"', assistant_html)
+        self.assertIn("['application', 'Application', 'Preferences and layout resets']", assistant_html)
+        self.assertIn("...(campaignAvailable ? [['campaign', 'Campaign & Saves'", assistant_html)
+        self.assertIn("function renderCampaignSaveSettings(currentScope)", assistant_html)
+        self.assertIn('id="runConfigurationForm"', assistant_html)
+        self.assertIn('data-save-current', assistant_html)
+        self.assertIn('data-export-save', assistant_html)
+        self.assertIn('data-backup-saves', assistant_html)
+        self.assertIn('data-card-reset-scope=', assistant_html)
+        self.assertIn('data-card-reset-all', assistant_html)
+
     def test_selected_and_primary_controls_keep_nested_labels_legible(self) -> None:
         root = Path(saa_main.__file__).resolve().parent
         foundation_css = (root / "assets" / "css" / "lw-ui-foundation.css").read_text(encoding="utf-8")
