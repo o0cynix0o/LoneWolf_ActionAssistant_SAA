@@ -2052,7 +2052,10 @@
     function isCliMode() { return playMode === 'cli'; }
 
     function setModeIndicator() {
-      if (modeIndicator) modeIndicator.textContent = browseMode ? 'Browse Mode' : (campaignStartRequested ? 'Campaign Setup' : playModeLabel());
+      if (modeIndicator) {
+        modeIndicator.hidden = false;
+        modeIndicator.textContent = browseMode ? 'Browse Mode' : (campaignStartRequested ? 'Campaign Setup' : playModeLabel());
+      }
     }
 
     function statControlName(stat) {
@@ -3399,7 +3402,7 @@
         ['settings', 'Settings', 'Themes and reader preferences', false]
       ];
       const campaignAvailable = hasSavedCharacter();
-      toolsNavigation.innerHTML = '<span class="tools-navigation__label">Campaign tools</span>' + items.map(([id, label, note, requiresCampaign]) =>
+      toolsNavigation.innerHTML = '<span class="tools-navigation__label">Campaign Tools</span>' + items.map(([id, label, note, requiresCampaign]) =>
         `<button type="button" class="${activeView === id ? 'active' : ''}" data-view="${id}" ${requiresCampaign && !campaignAvailable ? 'disabled title="Start a campaign to use this tool"' : ''}><strong>${label}</strong><small>${note}</small></button>`
       ).join('');
     }
@@ -4225,6 +4228,11 @@
     function renderToolsSurface(f) {
       renderToolsHead();
       renderToolsNavigation();
+      const campaignAvailable = hasSavedCharacter();
+      document.body.classList.toggle('lw-tools-no-campaign', !campaignAvailable);
+      modeIndicator.hidden = !campaignAvailable;
+      serverStatus.textContent = campaignAvailable ? 'Connected' : '● No active campaign';
+      serverStatus.classList.toggle('is-no-campaign', !campaignAvailable);
       const mount = nativeEl('toolsActiveMount');
       const summary = nativeEl('toolsSummary');
       const quickRoll = nativeEl('toolsQuickRoll');
@@ -8338,36 +8346,39 @@
       `;
     }
 
+    function settingsRow(title, note, controls, extraClass = '') {
+      return `
+        <section class="settings-row ${extraClass}">
+          <div class="settings-row__copy"><strong>${escapeHtml(title)}</strong><p>${escapeHtml(note)}</p></div>
+          <div class="settings-row__controls">${controls}</div>
+        </section>
+      `;
+    }
+
     function renderAppearanceSettings() {
       const current = settingsApi.readLocal();
       const coverOn = current.coverArt !== 'off';
       return `
-        <div class="panel">
-          <h2>Appearance</h2>
-          <p class="muted">Choose the shared visual treatment used across the application.</p>
-          <h3 class="section-subtitle">Title Banner</h3>
-          <div class="settings-grid">
+        <div class="settings-form">
+          ${settingsRow('Title banner', 'Choose the mark used across Library and Campaign.', `<div class="settings-grid settings-grid--banners">
             ${settingsApi.titleBanners.map((banner) => `
               <button type="button" class="settings-option banner-option ${current.titleBanner === banner.id ? 'active' : ''}" data-setting-kind="titleBanner" data-setting-id="${escapeHtml(banner.id)}">
-                <img src="${escapeHtml(banner.path)}" alt="${escapeHtml(banner.name)}">
                 <strong>${escapeHtml(banner.name)}</strong>
+                <small>${current.titleBanner === banner.id ? 'Current selection' : (banner.name === 'Red Banner' ? 'Painted red mark' : banner.name === 'Painted Banner' ? 'Steel title mark' : 'Classic title mark')}</small>
               </button>
             `).join('')}
-          </div>
-          <h3 class="section-subtitle">Book Covers</h3>
-          <div class="settings-grid">
+          </div>`)}
+          ${settingsRow('Book covers', 'Control how much space Library art receives.', `<div class="settings-grid">
             ${settingsOptionButton('coverArt', 'on', 'Show Cover Art', 'Use the larger cover cards on the home and library screens.', coverOn)}
             ${settingsOptionButton('coverArt', 'off', 'Compact Books', 'Hide cover art and tighten the book cards.', !coverOn)}
-          </div>
-          <h3 class="section-subtitle">Color Theme</h3>
-          <div class="settings-grid">
+          </div>`)}
+          ${settingsRow('Color theme', 'Apply one palette across every app surface.', `<div class="settings-grid settings-grid--themes">
             ${settingsApi.themes.map((theme) => settingsOptionButton('theme', theme.id, theme.name, theme.note, current.theme === theme.id)).join('')}
-          </div>
-          <h3 class="section-subtitle">Surface Framing</h3>
-          <div class="settings-grid">
+          </div>`)}
+          ${settingsRow('Surface framing', 'Choose spacing-led or outlined panels.', `<div class="settings-grid">
             ${settingsOptionButton('surfaceStyle', 'borderless', 'Borderless', 'Use surface contrast and spacing instead of panel outlines.', current.surfaceStyle === 'borderless')}
             ${settingsOptionButton('surfaceStyle', 'bordered', 'Bordered', 'Restore framed panels, controls, and status surfaces.', current.surfaceStyle === 'bordered')}
-          </div>
+          </div>`)}
         </div>
       `;
     }
@@ -8377,19 +8388,15 @@
       const choiceHintsOn = current.choiceHintsEnabled !== 'off';
       const campaignResumeBannerOn = current.campaignResumeBanner !== 'off';
       return `
-        <div class="panel">
-          <h2>Campaign Guidance</h2>
-          <h3 class="section-subtitle">Campaign Resume Banner</h3>
-          <div class="settings-grid">
+        <div class="settings-form">
+          ${settingsRow('Campaign resume banner', 'Control whether the campaign opens with its last-time or objective banner.', `<div class="settings-grid">
             ${settingsOptionButton('campaignResumeBanner', 'on', 'Show Campaign Header', 'Show the Last time or current-objective banner above the Campaign metrics.', campaignResumeBannerOn)}
             ${settingsOptionButton('campaignResumeBanner', 'off', 'Hide Campaign Header', 'Start the Campaign view with the metrics and tabs instead.', !campaignResumeBannerOn)}
-          </div>
-          <h3 class="section-subtitle">Choice Hints</h3>
-          <p class="muted">Choice eligibility hints compare printed requirements with the current Action Chart. They never choose a route for you.</p>
-          <div class="settings-grid">
+          </div>`)}
+          ${settingsRow('Choice hints', 'Choice eligibility hints compare printed requirements with the Action Chart without choosing a route.', `<div class="settings-grid">
             ${settingsOptionButton('choiceHintsEnabled', 'on', 'Show Choice Hints', 'Use green for met requirements and grey/dashed for unavailable routes.', choiceHintsOn)}
             ${settingsOptionButton('choiceHintsEnabled', 'off', 'Hide Choice Hints', 'Keep every printed story choice visually neutral.', !choiceHintsOn)}
-          </div>
+          </div>`)}
         </div>
       `;
     }
@@ -8398,16 +8405,14 @@
       const current = settingsApi.readLocal();
       const readerOn = current.readerStyleEnabled === 'on';
       return `
-        <div class="panel">
-          <h2>Reader Page Styling</h2>
-          <p class="muted">Project Aon pages stay original unless this is switched on. When enabled, the style is injected into the local iframe only.</p>
-          <div class="settings-grid">
+        <div class="settings-form">
+          ${settingsRow('Reader page styling', 'Project Aon pages remain original unless reader styling is enabled.', `<div class="settings-grid">
             ${settingsOptionButton('readerStyleEnabled', 'off', 'Project Aon Original', 'Leave the book iframe untouched.', !readerOn)}
             ${settingsOptionButton('readerStyleEnabled', 'on', 'Apply Reader Theme', 'Restyle the local book iframe while you read.', readerOn)}
-          </div>
-          <div class="settings-grid" style="margin-top:.55rem">
+          </div>`)}
+          ${settingsRow('Reader theme', 'Choose the treatment applied when reader styling is enabled.', `<div class="settings-grid settings-grid--themes">
             ${settingsApi.readerThemes.map((theme) => settingsOptionButton('readerTheme', theme.id, theme.name, '', current.readerTheme === theme.id)).join('')}
-          </div>
+          </div>`)}
         </div>
       `;
     }
@@ -8415,12 +8420,10 @@
     function renderConsoleSettings() {
       const current = settingsApi.readLocal();
       return `
-        <div class="panel">
-          <h2>Console Layout</h2>
-          <p class="muted">Choose how the command console and its companion controls share the workspace.</p>
-          <div class="settings-grid">
+        <div class="settings-form">
+          ${settingsRow('Console layout', 'Choose how the terminal and its companion controls share the workspace.', `<div class="settings-grid">
             ${settingsApi.consoleLayouts.map((layout) => settingsOptionButton('consoleLayout', layout.id, layout.name, layout.note, current.consoleLayout === layout.id)).join('')}
-          </div>
+          </div>`)}
         </div>
       `;
     }
@@ -8428,29 +8431,25 @@
     function renderApplicationSettings(currentScope, campaignAvailable) {
       const paths = app.paths || {};
       return `
-        <div class="panel">
-          <h2>Application</h2>
-          <p class="muted">Review local preference storage and restore card layouts without changing campaign data.</p>
-          <div class="grid">
+        <div class="settings-form">
+          ${settingsRow('Application files', 'Review where interface preferences are stored locally.', `<div class="grid">
             ${field('UI Preferences', escapeHtml(text(paths.UiPreferences, 'Unknown')))}
             ${campaignAvailable ? field('Current View Layout', escapeHtml(currentScope)) : ''}
             ${field('Branding', 'Lone Wolf')}
-          </div>
-          <div class="controls" style="margin-top:.65rem">
+          </div>`)}
+          ${settingsRow('Layout resets', 'Restore the current card layout or every saved card layout.', `<div class="controls">
             <button type="button" data-card-reset-scope="${escapeHtml(currentScope)}">Reset Current Layout</button>
             <button type="button" data-card-reset-all>Reset All Card Layouts</button>
-          </div>
-        </div>
-        ${campaignAvailable ? `<div class="panel">
-          <h2>Closed Cards</h2>
-          ${hiddenCardEntries().length ? hiddenCardEntries().map((entry) => `
+          </div>`)}
+          ${settingsRow('Library and books', 'Open the library or manage locally installed Project Aon books.', `<div class="controls"><a class="lw-ui-button" href="index.html">Library</a><a class="lw-ui-button" href="install-books.html">Manage books</a></div>`)}
+          ${campaignAvailable ? settingsRow('Closed cards', 'Re-add cards that were closed from a campaign workspace.', hiddenCardEntries().length ? hiddenCardEntries().map((entry) => `
             <div class="item-row">
               <small>${escapeHtml(entry.scope)}</small>
               <span>${escapeHtml(entry.label)}</span>
               <button type="button" data-card-open="${escapeHtml(entry.scope)}:${escapeHtml(entry.id)}">Re-add</button>
             </div>
-          `).join('') : '<p class="muted">No cards are currently closed.</p>'}
-        </div>` : ''}
+          `).join('') : '<p class="muted">No cards are currently closed.</p>') : ''}
+        </div>
       `;
     }
 
@@ -8463,9 +8462,8 @@
       const currentCombatMode = text(run.CombatMode, 'DataFile');
       const permadeathAllowed = currentDifficulty !== 'Story';
       return `
-        <div class="panel">
-          <h2>Game Modes</h2>
-          <form id="runConfigurationForm" class="grid">
+        <div class="settings-form">
+          ${settingsRow('Game modes', 'Change difficulty, permadeath, and combat resolution for this campaign.', `<form id="runConfigurationForm" class="grid">
             <label class="field">Difficulty<select name="difficulty" title="Changes the campaign's endurance-loss and achievement rules from this point forward.">
               ${difficulties.map((definition) => `<option value="${escapeHtml(text(definition.Name))}" ${text(definition.Name) === currentDifficulty ? 'selected' : ''} title="${escapeHtml(text(definition.Description))}">${escapeHtml(text(definition.Name))}</option>`).join('')}
             </select></label>
@@ -8475,25 +8473,19 @@
               <option value="ManualCRT" ${currentCombatMode === 'ManualCRT' ? 'selected' : ''}>Manual CRT</option>
             </select></label>
             <button type="submit">Apply Game Modes</button>
-          </form>
-        </div>
-        <div class="panel">
-          <h2>Campaign &amp; Saves</h2>
-          <div class="grid">
+          </form>`)}
+          ${settingsRow('Save location', 'Review autosave and the local path used by the current campaign.', `<div class="grid">
             ${field('Autosave', 'On')}
             ${field('Save Path', escapeHtml(text(settings.SavePath, 'Not saved yet')))}
             ${field('Save Folder', escapeHtml(text(paths.SaveDir, 'Unknown')))}
-          </div>
-          <div class="controls" style="margin-top:.65rem">
+          </div>`)}
+          ${settingsRow('Save actions', 'Save, export, or back up the current campaign.', `<div class="controls">
             <button type="button" data-view="sheet">Back to Sheet</button>
             <button type="button" data-save-current>Save Game</button>
             <button type="button" data-export-save>Export Current Save</button>
             <button type="button" data-backup-saves>Backup Saves</button>
-          </div>
-        </div>
-        <div class="panel">
-          <h2>Save Slots</h2>
-          ${renderSaveSlotRows()}
+          </div>`)}
+          ${settingsRow('Save slots', 'Save to, load from, or clear one of the campaign slots.', renderSaveSlotRows())}
         </div>
       `;
     }
@@ -8569,23 +8561,29 @@
       const campaignAvailable = hasSavedCharacter();
       const availableSections = settingsSections(campaignAvailable).map(([id]) => id);
       if (!availableSections.includes(activeSettingsSection)) activeSettingsSection = 'appearance';
+      const pageCopy = {
+        appearance: ['Make the interface yours.', 'Global tools stay in the rail; one settings subject appears at a time.'],
+        guidance: ['Guide the campaign clearly.', 'Control contextual help without allowing the assistant to choose for you.'],
+        reader: ['Shape the reading page.', 'Keep Project Aon original or apply a comfortable reading treatment.'],
+        console: ['Arrange the command console.', 'Choose between the companion rail and the focused dock.'],
+        application: ['Manage the application.', 'Review local preferences, resources, and saved card layouts.'],
+        campaign: ['Configure this campaign.', 'Adjust game modes and manage the current campaign saves.']
+      };
+      const activeLabel = settingsSections(campaignAvailable).find(([id]) => id === activeSettingsSection)?.[1] || 'Appearance';
+      const [pageTitle, pageDescription] = pageCopy[activeSettingsSection];
       view.innerHTML = `
-        <section class="settings-command lw-ui-panel">
-          <div><p class="lw-ui-eyebrow">Preferences</p><h2>${campaignAvailable ? 'Campaign and reader settings' : 'Application and reader settings'}</h2><p>${campaignAvailable ? 'Change game modes, appearance, saved layouts, and local save controls without leaving the current campaign.' : 'Choose the application appearance and reading preferences before starting a campaign.'}</p></div>
-          <div class="settings-command__actions"><a class="lw-ui-button" href="index.html">Library</a><a class="lw-ui-button" href="install-books.html">Manage books</a></div>
-        </section>
-        ${campaignAvailable ? '' : `<section class="panel settings-campaign-notice">
-          <div><h2>No active campaign</h2><p class="muted">Game modes, save controls, and save slots become available after you create a player.</p></div>
-          <div class="controls"><a class="lw-ui-button lw-ui-button--primary" href="assistant.html?surface=campaign&campaign=new&book=1">Start New Campaign</a></div>
-        </section>`}
-        <div class="settings-workspace">
-          <div class="settings-focused-layout">
-            ${renderSettingsNavigation(campaignAvailable)}
+        <section class="settings-page">
+          <header class="settings-page-head">
+            <div><p class="lw-ui-eyebrow">Settings · ${escapeHtml(activeLabel)}</p><h1>${escapeHtml(pageTitle)}</h1><p>${escapeHtml(pageDescription)}</p></div>
+            ${campaignAvailable ? '<a class="lw-ui-button" href="assistant.html?surface=campaign&resume=1">Return to Campaign</a>' : '<a class="lw-ui-button lw-ui-button--primary" href="assistant.html?surface=campaign&campaign=new&book=1">Start New Campaign</a>'}
+          </header>
+          ${renderSettingsNavigation(campaignAvailable)}
+          <div class="settings-workspace">
             <div class="settings-section-content">
               ${renderFocusedSettingsSection(currentScope, campaignAvailable)}
             </div>
           </div>
-        </div>
+        </section>
       `;
     }
 
