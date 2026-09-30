@@ -3874,6 +3874,12 @@
 
     function renderCampaignHead() {
       const el = nativeEl('campaignHead'); if (!el) return;
+      const visible = assistantSettings?.campaignResumeBanner !== 'off';
+      el.hidden = !visible;
+      if (!visible) {
+        el.innerHTML = '';
+        return;
+      }
       const combat = currentCombat();
       const active = Boolean(combat?.Active);
       const campaignCopy = campaignAdvancedThisVisit ? campaignObjectiveCopy() : campaignResumeCopy();
@@ -8266,6 +8272,7 @@
       const coverOn = current.coverArt !== 'off';
       const readerOn = current.readerStyleEnabled === 'on';
       const choiceHintsOn = current.choiceHintsEnabled !== 'off';
+      const campaignResumeBannerOn = current.campaignResumeBanner !== 'off';
       return `
         <div class="panel">
           <h2>Appearance</h2>
@@ -8299,6 +8306,12 @@
         </div>
         <div class="panel">
           <h2>Campaign Guidance</h2>
+          <h3 class="section-subtitle">Campaign Resume Banner</h3>
+          <div class="settings-grid">
+            ${settingsOptionButton('campaignResumeBanner', 'on', 'Show Campaign Header', 'Show the Last time or current-objective banner above the Campaign metrics.', campaignResumeBannerOn)}
+            ${settingsOptionButton('campaignResumeBanner', 'off', 'Hide Campaign Header', 'Start the Campaign view with the metrics and tabs instead.', !campaignResumeBannerOn)}
+          </div>
+          <h3 class="section-subtitle">Choice Hints</h3>
           <p class="muted">Choice eligibility hints compare printed requirements with the current Action Chart. They never choose a route for you.</p>
           <div class="settings-grid">
             ${settingsOptionButton('choiceHintsEnabled', 'on', 'Show Choice Hints', 'Use green for met requirements and grey/dashed for unavailable routes.', choiceHintsOn)}
@@ -9690,6 +9703,7 @@
       settingsApi.injectReaderTheme(bookFrame, assistantSettings);
       window.LoneWolfMusic?.refreshPreferences();
       if (cliTerminal) cliTerminal.options.theme = cliTheme();
+      if (app && nativeSurface === 'campaign') renderCampaignHead();
       if (app && activeView === 'settings') render();
     }
 

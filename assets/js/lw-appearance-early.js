@@ -5,6 +5,7 @@
     theme: 'lonewolf_redux.appearance.theme.v1',
     surfaceStyle: 'lonewolf_redux.appearance.surfaceStyle.v1',
     consoleLayout: 'lonewolf_redux.appearance.consoleLayout.v1',
+    campaignResumeBanner: 'lonewolf_redux.appearance.campaignResumeBanner.v1',
     readerStyleEnabled: 'lonewolf_redux.reader.styleEnabled.v1',
     readerTheme: 'lonewolf_redux.reader.theme.v1',
     choiceHintsEnabled: 'lonewolf_redux.reader.choiceHints.v1'
@@ -16,6 +17,7 @@
     theme: 'kai-gold',
     surfaceStyle: 'borderless',
     consoleLayout: 'companion-rail',
+    campaignResumeBanner: 'on',
     readerStyleEnabled: 'off',
     readerTheme: 'original',
     choiceHintsEnabled: 'on'
@@ -205,6 +207,7 @@
       theme: localValue(STORAGE_KEYS.theme, defaults.theme),
       surfaceStyle: localValue(STORAGE_KEYS.surfaceStyle, defaults.surfaceStyle),
       consoleLayout: localValue(STORAGE_KEYS.consoleLayout, defaults.consoleLayout),
+      campaignResumeBanner: localValue(STORAGE_KEYS.campaignResumeBanner, defaults.campaignResumeBanner),
       readerStyleEnabled: localValue(STORAGE_KEYS.readerStyleEnabled, defaults.readerStyleEnabled),
       readerTheme: localValue(STORAGE_KEYS.readerTheme, defaults.readerTheme),
       choiceHintsEnabled: localValue(STORAGE_KEYS.choiceHintsEnabled, defaults.choiceHintsEnabled)
@@ -218,6 +221,7 @@
     if (!themes[settings.theme]) settings.theme = defaults.theme;
     settings.surfaceStyle = settings.surfaceStyle === 'bordered' ? 'bordered' : 'borderless';
     settings.consoleLayout = settings.consoleLayout === 'focus-dock' ? 'focus-dock' : 'companion-rail';
+    settings.campaignResumeBanner = settings.campaignResumeBanner === 'off' ? 'off' : 'on';
     settings.readerStyleEnabled = settings.readerStyleEnabled === 'on' ? 'on' : 'off';
     settings.readerTheme = settings.readerTheme || defaults.readerTheme;
     settings.choiceHintsEnabled = settings.choiceHintsEnabled === 'off' ? 'off' : 'on';

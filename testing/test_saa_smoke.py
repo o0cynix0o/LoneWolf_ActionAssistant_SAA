@@ -4874,6 +4874,24 @@ class RecoveryTimelineTests(unittest.TestCase):
 
 
 class CampaignDeskProductionTests(unittest.TestCase):
+    def test_campaign_resume_banner_has_a_persistent_campaign_only_toggle(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
+        settings_js = (root / "assets" / "js" / "lw-settings.js").read_text(encoding="utf-8")
+        early_js = (root / "assets" / "js" / "lw-appearance-early.js").read_text(encoding="utf-8")
+        server_py = (root / "app_server.py").read_text(encoding="utf-8")
+        key = "lonewolf_redux.appearance.campaignResumeBanner.v1"
+
+        self.assertIn(key, settings_js)
+        self.assertIn(key, early_js)
+        self.assertIn(key, server_py)
+        self.assertIn("campaignResumeBanner: 'on'", settings_js)
+        self.assertIn("campaignResumeBanner: 'on'", early_js)
+        self.assertIn("assistantSettings?.campaignResumeBanner !== 'off'", assistant_html)
+        self.assertIn("el.hidden = !visible", assistant_html)
+        self.assertIn("Show Campaign Header", assistant_html)
+        self.assertIn("Hide Campaign Header", assistant_html)
+
     def test_campaign_music_header_has_top_breathing_room(self) -> None:
         root = Path(saa_main.__file__).resolve().parent
         campaign_css = (root / "assets" / "css" / "lw-campaign.css").read_text(encoding="utf-8")

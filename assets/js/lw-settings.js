@@ -5,6 +5,7 @@
     theme: 'lonewolf_redux.appearance.theme.v1',
     surfaceStyle: 'lonewolf_redux.appearance.surfaceStyle.v1',
     consoleLayout: 'lonewolf_redux.appearance.consoleLayout.v1',
+    campaignResumeBanner: 'lonewolf_redux.appearance.campaignResumeBanner.v1',
     readerStyleEnabled: 'lonewolf_redux.reader.styleEnabled.v1',
     readerTheme: 'lonewolf_redux.reader.theme.v1',
     choiceHintsEnabled: 'lonewolf_redux.reader.choiceHints.v1',
@@ -457,6 +458,7 @@
     theme: 'kai-gold',
     surfaceStyle: 'borderless',
     consoleLayout: 'companion-rail',
+    campaignResumeBanner: 'on',
     readerStyleEnabled: 'off',
     readerTheme: 'original',
     choiceHintsEnabled: 'on',
@@ -497,6 +499,7 @@
       theme: localStorage.getItem(STORAGE_KEYS.theme) || defaults.theme,
       surfaceStyle: localStorage.getItem(STORAGE_KEYS.surfaceStyle) || defaults.surfaceStyle,
       consoleLayout: localStorage.getItem(STORAGE_KEYS.consoleLayout) || defaults.consoleLayout,
+      campaignResumeBanner: localStorage.getItem(STORAGE_KEYS.campaignResumeBanner) || defaults.campaignResumeBanner,
       readerStyleEnabled: localStorage.getItem(STORAGE_KEYS.readerStyleEnabled) || defaults.readerStyleEnabled,
       readerTheme: localStorage.getItem(STORAGE_KEYS.readerTheme) || defaults.readerTheme,
       choiceHintsEnabled: localStorage.getItem(STORAGE_KEYS.choiceHintsEnabled) || defaults.choiceHintsEnabled,
@@ -515,6 +518,7 @@
       [STORAGE_KEYS.theme]: settings.theme,
       [STORAGE_KEYS.surfaceStyle]: settings.surfaceStyle,
       [STORAGE_KEYS.consoleLayout]: settings.consoleLayout,
+      [STORAGE_KEYS.campaignResumeBanner]: settings.campaignResumeBanner,
       [STORAGE_KEYS.readerStyleEnabled]: settings.readerStyleEnabled,
       [STORAGE_KEYS.readerTheme]: settings.readerTheme,
       [STORAGE_KEYS.choiceHintsEnabled]: settings.choiceHintsEnabled,
@@ -538,6 +542,7 @@
       theme: values[STORAGE_KEYS.theme] || defaults.theme,
       surfaceStyle: values[STORAGE_KEYS.surfaceStyle] || defaults.surfaceStyle,
       consoleLayout: values[STORAGE_KEYS.consoleLayout] || defaults.consoleLayout,
+      campaignResumeBanner: values[STORAGE_KEYS.campaignResumeBanner] || defaults.campaignResumeBanner,
       readerStyleEnabled: values[STORAGE_KEYS.readerStyleEnabled] || defaults.readerStyleEnabled,
       readerTheme: values[STORAGE_KEYS.readerTheme] || defaults.readerTheme,
       choiceHintsEnabled: values[STORAGE_KEYS.choiceHintsEnabled] || defaults.choiceHintsEnabled,
@@ -556,6 +561,7 @@
     settings.theme = byId(themes, settings.theme, defaults.theme).id;
     settings.surfaceStyle = settings.surfaceStyle === 'bordered' ? 'bordered' : 'borderless';
     settings.consoleLayout = byId(consoleLayouts, settings.consoleLayout, defaults.consoleLayout).id;
+    settings.campaignResumeBanner = settings.campaignResumeBanner === 'off' ? 'off' : 'on';
     settings.readerStyleEnabled = settings.readerStyleEnabled === 'on' ? 'on' : 'off';
     settings.readerTheme = byId(readerThemes, settings.readerTheme, defaults.readerTheme).id;
     settings.choiceHintsEnabled = settings.choiceHintsEnabled === 'off' ? 'off' : 'on';
@@ -575,6 +581,7 @@
     localStorage.setItem(STORAGE_KEYS.theme, clean.theme);
     localStorage.setItem(STORAGE_KEYS.surfaceStyle, clean.surfaceStyle);
     localStorage.setItem(STORAGE_KEYS.consoleLayout, clean.consoleLayout);
+    localStorage.setItem(STORAGE_KEYS.campaignResumeBanner, clean.campaignResumeBanner);
     localStorage.setItem(STORAGE_KEYS.readerStyleEnabled, clean.readerStyleEnabled);
     localStorage.setItem(STORAGE_KEYS.readerTheme, clean.readerTheme);
     localStorage.setItem(STORAGE_KEYS.choiceHintsEnabled, clean.choiceHintsEnabled);
