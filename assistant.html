@@ -3681,7 +3681,7 @@
         if (!route || typeof route !== 'object') return;
         const section = Number(route.Section);
         if (!Number.isInteger(section)) return;
-        const gated = !!(route.Condition || route.condition);
+        const gated = !!(route.Condition || route.condition || route.GateType);
         const available = route.Available !== false;
         // Ordinary, unconditional routes get no annotation; only engine-evaluated
         // gates (an item, gold, arrow, rank, lore, or roll check) are marked.
