@@ -6524,6 +6524,71 @@ class LoneWolfReduxAssistant:
         )
         return payload
 
+    def roll_route_targets(self, entry: dict[str, Any] | None) -> set[int]:
+        """Return routes whose availability is decided by this section's roll."""
+        if not isinstance(entry, dict):
+            return set()
+        roll = entry.get("roll")
+        if not isinstance(roll, dict):
+            roll = entry.get("stagedRoll")
+        if not isinstance(roll, dict):
+            return set()
+
+        outcomes = [
+            outcome
+            for outcome in as_list(roll.get("outcomes"))
+            if isinstance(outcome, dict)
+        ]
+        for stage in as_list(roll.get("stages")):
+            if not isinstance(stage, dict):
+                continue
+            outcomes.extend(
+                outcome
+                for outcome in as_list(stage.get("outcomes"))
+                if isinstance(outcome, dict)
+            )
+
+        targets: set[int] = set()
+        for outcome in outcomes:
+            try:
+                route = int(outcome.get("route"))
+            except (TypeError, ValueError):
+                continue
+            if route > 0:
+                targets.add(route)
+        return targets
+
+    def roll_route_availability_payload(
+        self,
+        route: dict[str, Any],
+        entry: dict[str, Any] | None,
+        last_roll: dict[str, Any] | None,
+    ) -> dict[str, Any]:
+        """Gate a Random Number Table route until its matching result is known."""
+        payload = self.route_availability_payload(route)
+        target = int(payload.get("Section") or 0)
+        if target not in self.roll_route_targets(entry):
+            return payload
+
+        payload["GateType"] = "roll"
+        if not isinstance(last_roll, dict):
+            payload["Available"] = False
+            payload["BlockedReason"] = "Roll this section before choosing this route."
+            return payload
+
+        try:
+            resolved_route = int(last_roll.get("Route"))
+        except (TypeError, ValueError):
+            resolved_route = 0
+        if resolved_route != target:
+            payload["Available"] = False
+            payload["BlockedReason"] = (
+                f"The resolved section roll leads to section {resolved_route}."
+                if resolved_route > 0
+                else "This route does not match the resolved section roll."
+            )
+        return payload
+
     def flow_source_route_payload(self, entry: dict[str, Any] | None) -> list[dict[str, Any]]:
         if not isinstance(entry, dict):
             return []
@@ -8634,11 +8699,6 @@ class LoneWolfReduxAssistant:
             display_routes = source_routes or self.route_button_payload(
                 self.section_source_routes(book_number, section)
             )
-        display_routes = [
-            self.route_availability_payload(route)
-            for route in display_routes
-            if isinstance(route, dict)
-        ]
         last_roll = self.automation.get("LastRoll")
         if not (
             isinstance(last_roll, dict)
@@ -8646,6 +8706,11 @@ class LoneWolfReduxAssistant:
             and int(last_roll.get("Section", 0)) == section
         ):
             last_roll = None
+        display_routes = [
+            self.roll_route_availability_payload(route, entry, last_roll)
+            for route in display_routes
+            if isinstance(route, dict)
+        ]
         automation = self.current_section_automation_payload()
         return {
             "BookNumber": book_number,

@@ -3072,6 +3072,41 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
                                 (book_number, section, raw_roll),
                             )
 
+    def test_random_number_table_roll_gates_its_printed_routes(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state(
+                {"Character": {"BookNumber": 4}, "CurrentSection": 312}
+            )
+
+            before = assistant.current_section_flow_payload()["SourceRoutes"]
+            self.assertEqual(
+                [(route["Section"], route["Available"], route["GateType"]) for route in before],
+                [(120, False, "roll"), (51, False, "roll")],
+            )
+            with redirect_stdout(io.StringIO()):
+                assistant.follow_route(120)
+            self.assertEqual(assistant.state["CurrentSection"], 312)
+
+            assistant.roll_current_section(2)
+            after = assistant.current_section_flow_payload()["SourceRoutes"]
+            self.assertEqual(
+                [(route["Section"], route["Available"]) for route in after],
+                [(120, True), (51, False)],
+            )
+            with redirect_stdout(io.StringIO()):
+                assistant.follow_route(51)
+            self.assertEqual(assistant.state["CurrentSection"], 312)
+            with redirect_stdout(io.StringIO()):
+                assistant.follow_route(120)
+            self.assertEqual(assistant.state["CurrentSection"], 120)
+
     def test_book6_archery_tournament_routes_its_completed_total(self) -> None:
         cases = [
             ([], (0, 0, 7), 103),
@@ -4839,6 +4874,13 @@ class RecoveryTimelineTests(unittest.TestCase):
 
 
 class CampaignDeskProductionTests(unittest.TestCase):
+    def test_story_choice_hints_include_engine_roll_gates(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
+        availability = assistant_html.split("function storyRouteAvailability", 1)[1].split("function storyChoiceButtonsHtml", 1)[0]
+
+        self.assertIn("route.GateType", availability)
+
     def test_campaign_glance_replaces_quick_tiles_and_bottom_drawer_with_activity(self) -> None:
         root = Path(saa_main.__file__).resolve().parent
         assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
