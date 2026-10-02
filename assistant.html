@@ -1127,6 +1127,30 @@
       display: flex;
       justify-content: flex-end;
     }
+    .rules-intro-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: grid;
+      place-items: center;
+      padding: 1rem;
+      background: rgba(3, 7, 8, 0.88);
+    }
+    .rules-intro-dialog {
+      width: min(720px, 100%);
+      max-height: calc(100vh - 2rem);
+      overflow: auto;
+      padding: 1.15rem;
+      border: 1px solid #d1b865;
+      border-radius: 6px;
+      background: #111913;
+      color: #efe8d0;
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.55);
+    }
+    .rules-intro-dialog h2 { margin: 0; color: #bdeeff; font: 700 1.7rem Georgia, "Times New Roman", serif; }
+    .rules-intro-dialog > p { margin: .45rem 0 .8rem; color: #d8d0b8; line-height: 1.45; }
+    .rules-intro-list { display: grid; gap: .45rem; margin: 0; padding-left: 1.25rem; line-height: 1.4; }
+    .rules-intro-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .5rem; margin-top: 1rem; }
     @media (max-width: 620px) {
       .creation-mode-grid { grid-template-columns: 1fr; }
       .creation-actions .push-right { margin-left: 0; }
@@ -1987,6 +2011,11 @@
     let cliSocket = null;
     let cliResizeHandler = null;
     let cliConnectTimer = null;
+    let cliStateRefreshTimer = null;
+    const consoleSectionTextKey = 'lonewolf_redux.console.sectionText.v1';
+    let consoleSectionTextVisible = localStorage.getItem(consoleSectionTextKey) === 'shown';
+    let rulesIntroAcknowledged = !campaignStartRequested;
+    let rulesIntroRestoreFocus = null;
     const topLayoutKey = 'lonewolf_redux.top.layout.v1';
     const topSizeKey = 'lonewolf_redux.top.sizes.v1';
     const sheetLayoutKey = 'lonewolf_redux.sheet.layout.v1';
@@ -2050,6 +2079,54 @@
 
     function isManualMode() { return playMode === 'manual'; }
     function isCliMode() { return playMode === 'cli'; }
+
+    function closeRulesIntroduction() {
+      const backdrop = document.getElementById('rulesIntroBackdrop');
+      if (!backdrop) return;
+      backdrop.remove();
+      rulesIntroAcknowledged = true;
+      const target = rulesIntroRestoreFocus;
+      rulesIntroRestoreFocus = null;
+      window.requestAnimationFrame(() => (target?.isConnected ? target : document.querySelector('[data-creation-mode], #quickStartForm button'))?.focus());
+    }
+
+    function showRulesIntroduction({ replay = false } = {}) {
+      if (document.getElementById('rulesIntroBackdrop')) return;
+      rulesIntroRestoreFocus = document.activeElement;
+      const backdrop = document.createElement('div');
+      backdrop.className = 'rules-intro-backdrop';
+      backdrop.id = 'rulesIntroBackdrop';
+      backdrop.innerHTML = `
+        <section class="rules-intro-dialog" role="dialog" aria-modal="true" aria-labelledby="rulesIntroTitle" aria-describedby="rulesIntroDescription">
+          <p class="lw-eyebrow">Before you begin</p>
+          <h2 id="rulesIntroTitle">The rules in one minute</h2>
+          <p id="rulesIntroDescription">Lone Wolf is a choose-your-route adventure. The assistant keeps the records, but your decisions still drive the story.</p>
+          <ul class="rules-intro-list">
+            <li><strong>Action Chart:</strong> your Combat Skill, Endurance, disciplines, equipment, Meals, and Gold travel with you.</li>
+            <li><strong>Random Number Table:</strong> the app supplies results from 0–9 whenever setup or a section calls for one.</li>
+            <li><strong>Survival:</strong> Combat Skill measures fighting ability; reaching 0 Endurance ends the adventure.</li>
+            <li><strong>Kai Disciplines:</strong> Book 1 begins with exactly five. They can unlock routes and change outcomes.</li>
+            <li><strong>Inventory:</strong> carrying limits matter. Meals prevent hunger losses, and Gold is spent during the story.</li>
+            <li><strong>Combat:</strong> Combat Ratio and the Combat Results Table determine losses; the app can calculate and record them for you.</li>
+          </ul>
+          <div class="rules-intro-actions">
+            <a class="lw-ui-button" href="${escapeHtml(bookUrl(1, null, 'gamerulz.htm'))}" target="_blank" rel="noopener">Read Full Rules</a>
+            <button class="lw-ui-button lw-ui-button--primary" type="button" data-rules-intro-continue>${replay ? 'Close Rules Introduction' : 'Continue to Character Creation'}</button>
+          </div>
+        </section>`;
+      backdrop.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') { event.preventDefault(); return; }
+        if (event.key !== 'Tab') return;
+        const focusable = Array.from(backdrop.querySelectorAll('a[href], button:not([disabled])'));
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+      });
+      document.body.appendChild(backdrop);
+      backdrop.querySelector('[data-rules-intro-continue]')?.focus();
+    }
 
     function setModeIndicator() {
       if (modeIndicator) {
@@ -3715,6 +3792,9 @@
           stateClass = ' is-gated';
           attrs = ` title="${escapeHtml(reason)}" aria-label="${escapeHtml(c.label)} — ${escapeHtml(reason)}"`;
         }
+        if (variant === 'console') {
+          return `<div class="${cls}${stateClass} cli-section-route"${attrs}><span>${escapeHtml(c.label)}</span><small>${escapeHtml(note)}</small></div>`;
+        }
         return `<button class="${cls}${stateClass}" type="button" data-story-route="${c.section}"${attrs}><span>${escapeHtml(c.label)}</span><small>${escapeHtml(note)}</small></button>`;
       }).join('') + `</div>`;
     }
@@ -4294,6 +4374,7 @@
           <h2>New Adventure</h2>
           ${newCharacterBody()}
         </div>`;
+      if (!rulesIntroAcknowledged) window.requestAnimationFrame(() => showRulesIntroduction());
     }
 
     function renderNativeSurface(flags) {
@@ -4395,19 +4476,44 @@
           <div class="cli-terminal-toolbar">
             <div class="mode-note">CLI mode runs the terminal assistant against the same save data.</div>
             <span class="cli-terminal-status" id="cliTerminalStatus">Connecting...</span>
+            <button type="button" data-console-section-toggle aria-expanded="${consoleSectionTextVisible ? 'true' : 'false'}">${consoleSectionTextVisible ? 'Hide' : 'Show'} Section Text</button>
             <button type="button" data-cli-reconnect>Reconnect</button>
           </div>
           <div id="cliTerminalContainer" aria-label="Lone Wolf terminal"></div>
         </div>`;
+      const sectionReader = `<section class="panel cli-section-reader" id="cliSectionReader" aria-label="Current section text" ${consoleSectionTextVisible ? '' : 'hidden'}></section>`;
       view.innerHTML = `
         <div class="cli-console-layout cli-console-layout--${consoleLayout}" data-console-layout="${consoleLayout}">
-          ${terminalPanel}
+          <div class="cli-console-main">${terminalPanel}${sectionReader}</div>
           ${consoleLayout === 'companion-rail'
             ? `<aside class="cli-console-rail" aria-label="Console companion rail"><section class="panel cli-console-player">${musicPlayer}</section>${modeControls}</aside>`
             : `<div class="panel cli-console-dock" aria-label="Console focus dock"><div class="cli-console-dock__player">${musicPlayer}</div>${modeControls}</div>`}
         </div>
       `;
+      if (consoleSectionTextVisible) void renderConsoleSectionReader();
       window.requestAnimationFrame(startCliTerminal);
+    }
+
+    async function renderConsoleSectionReader() {
+      const target = document.getElementById('cliSectionReader');
+      if (!target || !consoleSectionTextVisible || !app) return;
+      await renderStoryInto(target, 'console');
+    }
+
+    function scheduleConsoleStateRefresh() {
+      window.clearTimeout(cliStateRefreshTimer);
+      cliStateRefreshTimer = window.setTimeout(async () => {
+        cliStateRefreshTimer = null;
+        if (!consoleSectionTextVisible || !document.getElementById('cliSectionReader')) return;
+        try {
+          const response = await fetch('/api/state', { cache: 'no-store' });
+          if (!response.ok) return;
+          const previous = `${currentCharacter().BookNumber}:${app.state.CurrentSection}`;
+          app = await response.json();
+          const current = `${currentCharacter().BookNumber}:${app.state.CurrentSection}`;
+          if (current !== previous) await renderConsoleSectionReader();
+        } catch {}
+      }, 350);
     }
 
     function cliWsUrl() {
@@ -4513,6 +4619,7 @@
       socket.addEventListener('message', (event) => {
         if (cliSocket !== socket) return;
         cliTerminal.write(typeof event.data === 'string' ? event.data : String(event.data));
+        scheduleConsoleStateRefresh();
       });
       socket.addEventListener('close', () => {
         window.clearTimeout(cliConnectTimer);
@@ -4598,6 +4705,8 @@
     }
 
     function stopCliTerminal(dispose = true) {
+      window.clearTimeout(cliStateRefreshTimer);
+      cliStateRefreshTimer = null;
       if (cliConnectTimer) {
         window.clearTimeout(cliConnectTimer);
         cliConnectTimer = null;
@@ -6674,7 +6783,7 @@
           </div>
           <div class="section-loot-actions">
             ${loot.CapacityBlocked
-              ? `<button type="button" data-campaign-tab="inventory">Manage Inventory</button>`
+              ? `<button type="button" disabled aria-disabled="true">Apply</button><button type="button" data-campaign-tab="inventory">Manage Inventory</button>`
               : modeActionButton(`data-flow-loot="${escapeHtml(text(loot.id))}"`, 'Apply', 'section loot')}
           </div>
         </div>
@@ -8401,6 +8510,7 @@
             ${settingsOptionButton('choiceHintsEnabled', 'on', 'Show Choice Hints', 'Use green for met requirements and grey/dashed for unavailable routes.', choiceHintsOn)}
             ${settingsOptionButton('choiceHintsEnabled', 'off', 'Hide Choice Hints', 'Keep every printed story choice visually neutral.', !choiceHintsOn)}
           </div>`)}
+          ${settingsRow('Rules introduction', 'Review the short orientation shown before a new Book 1 campaign.', `<div class="controls"><button type="button" data-rules-intro-show>Show Rules Introduction Again</button></div>`)}
         </div>
       `;
     }
@@ -8922,7 +9032,15 @@
         }
         return;
       }
+      if (button.dataset.rulesIntroContinue !== undefined) {
+        closeRulesIntroduction();
+        return;
+      }
       if (!app) return;
+      if (button.dataset.rulesIntroShow !== undefined) {
+        showRulesIntroduction({ replay: true });
+        return;
+      }
       if (button.dataset.itemInfo) {
         event.preventDefault();
         showItemInfoPopover(button, button.dataset.itemInfo);
@@ -9087,6 +9205,16 @@
       if (button.dataset.cliReconnect !== undefined) {
         stopCliTerminal();
         startCliTerminal();
+        return;
+      }
+      if (button.dataset.consoleSectionToggle !== undefined) {
+        consoleSectionTextVisible = !consoleSectionTextVisible;
+        localStorage.setItem(consoleSectionTextKey, consoleSectionTextVisible ? 'shown' : 'hidden');
+        const reader = document.getElementById('cliSectionReader');
+        if (reader) reader.hidden = !consoleSectionTextVisible;
+        button.textContent = `${consoleSectionTextVisible ? 'Hide' : 'Show'} Section Text`;
+        button.setAttribute('aria-expanded', consoleSectionTextVisible ? 'true' : 'false');
+        if (consoleSectionTextVisible) await renderConsoleSectionReader();
         return;
       }
       if (button.dataset.settingsView !== undefined) {

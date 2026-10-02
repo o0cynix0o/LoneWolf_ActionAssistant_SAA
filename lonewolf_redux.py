@@ -8371,11 +8371,20 @@ class LoneWolfReduxAssistant:
     def flow_loot_key(self, option_id: str) -> str:
         return f"{self.current_visit_key()}:loot:{option_id}"
 
+    def flow_loot_group_key(self, group_id: str) -> str:
+        return f"{self.current_visit_key()}:loot-group:{group_id}"
+
     def is_flow_loot_applied(self, option: dict[str, Any]) -> bool:
         if bool(option.get("repeatable")):
             return False
         option_id = str(option.get("id") or "")
         return self.flow_loot_key(option_id) in as_list(self.automation.get("AppliedLoot"))
+
+    def is_flow_loot_group_resolved(self, option: dict[str, Any]) -> bool:
+        group_id = str(option.get("exclusiveGroup") or "").strip()
+        if not group_id:
+            return False
+        return self.flow_loot_group_key(group_id) in as_list(self.automation.get("AppliedLoot"))
 
     def flow_loot_capacity_block(self, option: dict[str, Any]) -> str:
         """Explain inventory capacity failures before a player applies loot."""
@@ -8419,13 +8428,19 @@ class LoneWolfReduxAssistant:
                 continue
             option_id = str(option.get("id") or "")
             option_payload = json_clone(option)
-            option_payload["Applied"] = self.is_flow_loot_applied(option)
+            applied = self.is_flow_loot_applied(option)
+            group_resolved = self.is_flow_loot_group_resolved(option)
+            option_payload["Applied"] = applied
             capacity_block = self.flow_loot_capacity_block(option)
             option_payload["CapacityBlocked"] = bool(capacity_block)
-            option_payload["BlockedReason"] = capacity_block
+            option_payload["BlockedReason"] = (
+                "Another mutually exclusive choice was already applied during this section visit."
+                if group_resolved and not applied else capacity_block
+            )
             option_payload["Ready"] = (
                 bool(option_id)
-                and not bool(option_payload["Applied"])
+                and not applied
+                and not group_resolved
                 and self.evaluate_flow_condition(option.get("condition"))
                 and not bool(capacity_block)
             )
@@ -9515,6 +9530,9 @@ class LoneWolfReduxAssistant:
         if self.is_flow_loot_applied(option):
             print(f"Loot already taken: {option.get('label') or option_id}")
             return
+        if self.is_flow_loot_group_resolved(option):
+            print("That mutually exclusive loot choice has already been resolved during this section visit.")
+            return
         state_before = json_clone(self.state)
         messages = []
         for action in as_list(option.get("actions")):
@@ -9538,6 +9556,9 @@ class LoneWolfReduxAssistant:
         if not bool(option.get("repeatable")):
             applied = as_list(self.automation.get("AppliedLoot"))
             applied.append(self.flow_loot_key(option_id))
+            group_id = str(option.get("exclusiveGroup") or "").strip()
+            if group_id:
+                applied.append(self.flow_loot_group_key(group_id))
             self.automation["AppliedLoot"] = applied[-500:]
         journal = as_list(self.automation.get("Journal"))
         journal.append(

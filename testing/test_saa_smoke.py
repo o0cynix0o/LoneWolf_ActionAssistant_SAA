@@ -2507,6 +2507,31 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
         self.assertIn("Weapon slots are full (2/2)", prince_sword["BlockedReason"])
         self.assertIn("drop a weapon", prince_sword["BlockedReason"])
 
+    def test_book2_section_103_meal_choice_is_mutually_exclusive_per_visit(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves", data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state", books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state(
+                {
+                    "Character": {"BookNumber": 2, "EnduranceCurrent": 15, "EnduranceMax": 25},
+                    "Inventory": {"BackpackItems": []},
+                    "CurrentSection": 103,
+                }
+            )
+
+            assistant.apply_flow_loot("store-meal")
+            assistant.apply_flow_loot("eat-meal")
+            options = {option["id"]: option for option in assistant.current_flow_loot_payload()}
+
+        self.assertEqual(assistant.inventory["BackpackItems"], ["Meal"])
+        self.assertEqual(assistant.character["EnduranceCurrent"], 15)
+        self.assertTrue(options["store-meal"]["Applied"])
+        self.assertFalse(options["eat-meal"]["Ready"])
+        self.assertIn("mutually exclusive", options["eat-meal"]["BlockedReason"])
+
     def test_book6_mercenary_sale_uses_live_inventory_and_source_price(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
@@ -4938,6 +4963,31 @@ class RecoveryTimelineTests(unittest.TestCase):
 
 
 class CampaignDeskProductionTests(unittest.TestCase):
+    def test_new_campaign_requires_accessible_rules_introduction(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
+
+        self.assertIn('id="rulesIntroTitle"', assistant_html)
+        self.assertIn('role="dialog" aria-modal="true"', assistant_html)
+        self.assertIn('Continue to Character Creation', assistant_html)
+        self.assertIn("bookUrl(1, null, 'gamerulz.htm')", assistant_html)
+        self.assertIn("if (event.key === 'Escape') { event.preventDefault(); return; }", assistant_html)
+        self.assertIn('data-rules-intro-show', assistant_html)
+        self.assertIn("if (!rulesIntroAcknowledged) window.requestAnimationFrame(() => showRulesIntroduction());", assistant_html)
+
+    def test_console_has_persistent_read_only_current_section_toggle(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
+        tools_css = (root / "assets" / "css" / "lw-reader-tools.css").read_text(encoding="utf-8")
+
+        self.assertIn("lonewolf_redux.console.sectionText.v1", assistant_html)
+        self.assertIn("data-console-section-toggle", assistant_html)
+        self.assertIn('id="cliSectionReader"', assistant_html)
+        self.assertIn("await renderStoryInto(target, 'console')", assistant_html)
+        self.assertIn("if (variant === 'console')", assistant_html)
+        self.assertIn("scheduleConsoleStateRefresh();", assistant_html)
+        self.assertIn(".cli-section-reader .cli-section-route { cursor: default; }", tools_css)
+
     def test_campaign_resume_banner_has_a_persistent_campaign_only_toggle(self) -> None:
         root = Path(saa_main.__file__).resolve().parent
         assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
@@ -5018,7 +5068,7 @@ class CampaignDeskProductionTests(unittest.TestCase):
         self.assertIn('class="item-row section-loot-row${loot.CapacityBlocked', assistant_html)
         self.assertIn('class="section-loot-note"', assistant_html)
         self.assertIn('class="section-loot-actions"', assistant_html)
-        self.assertNotIn('disabled title="${escapeHtml(text(loot.BlockedReason))}">Apply</button>', assistant_html)
+        self.assertIn('disabled aria-disabled="true">Apply</button>', assistant_html)
         self.assertIn(".lw-glance__choices .section-loot-row { display: grid; grid-template-columns: minmax(0, 1fr);", campaign_css)
         self.assertIn("height: clamp(680px, calc(100vh - 110px), 920px);", assistant_html)
         self.assertIn("className = 'cli-terminal-viewport';", assistant_html)

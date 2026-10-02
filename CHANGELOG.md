@@ -4,6 +4,16 @@
 
 ## 3.7.6 - Internal Testing
 
+- Added a required, accessible one-minute rules introduction before new
+  character creation, with a link to the installed full rules and a Settings
+  control for showing the introduction again.
+- Added a persistent Show/Hide Section Text control to the Console. It displays
+  the current section's prose and routes as a read-only companion to the live
+  terminal, keeping the paper-book and digital-book workflows together.
+- Made the Book 2, Section 103 Meal choices mutually exclusive so the same Meal
+  cannot be both stored and eaten during one visit.
+- Improved capacity-blocked loot choices with a disabled Apply action and a
+  clear Manage Inventory route that remains usable in cramped layouts.
 - Reworked completed-book handoffs into a two-step onboarding screen. The next
   book's full Story So Far now uses the app's native Campaign story panel before
   the carried Action Chart choices, and the campaign advances to Section 1 only

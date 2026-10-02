@@ -232,6 +232,13 @@ body.lw-surface-tools.lw-console-active #toolsActiveMount > #view { padding: 0; 
 body.lw-surface-tools.lw-console-active[data-lw-console-layout="companion-rail"] .workspace.lw-native { width: min(1120px, calc(100% - 32px)); }
 .cli-console-layout { display: grid; gap: 12px; min-width: 0; }
 .cli-console-layout--companion-rail { grid-template-columns: minmax(0, 1fr) 248px; align-items: stretch; }
+.cli-console-main { display: grid; align-content: start; gap: 12px; min-width: 0; }
+.cli-section-reader { min-width: 0; padding: 18px; }
+.cli-section-reader[hidden] { display: none; }
+.cli-section-reader .lw-story-panel__head { margin-bottom: 12px; }
+.cli-section-reader .story-prose { max-width: 76ch; }
+.cli-section-reader .cli-section-route { cursor: default; }
+.cli-section-reader .cli-section-route:hover { transform: none; }
 .cli-console-rail { display: grid; align-content: start; gap: 12px; min-width: 0; }
 .cli-console-player, .cli-console-controls { min-width: 0; padding: 14px; background: var(--lw-ui-surface); }
 .cli-console-player .lw-music-compact { padding: 0; }

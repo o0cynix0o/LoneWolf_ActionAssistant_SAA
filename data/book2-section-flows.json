@@ -3201,6 +3201,7 @@
       "loot": [
         {
           "id": "store-meal",
+          "exclusiveGroup": "laumspur-meal-choice",
           "label": "Store the Meal",
           "actions": [
             {
@@ -3212,6 +3213,7 @@
         },
         {
           "id": "eat-meal",
+          "exclusiveGroup": "laumspur-meal-choice",
           "label": "Eat the Meal",
           "actions": [
             {
