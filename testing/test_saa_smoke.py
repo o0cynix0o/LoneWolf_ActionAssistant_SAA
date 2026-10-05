@@ -2607,7 +2607,7 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
         self.assertEqual(assistant.inventory["QuiverArrows"], 2)
         self.assertEqual(assistant.inventory["GoldCrowns"], 2)
 
-    def test_book6_final_section_records_campaign_completion(self) -> None:
+    def test_book6_final_section_waits_for_campaign_completion_confirmation(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
             assistant = lonewolf_redux.LoneWolfReduxAssistant(
@@ -2617,8 +2617,10 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
             assistant.state = lonewolf_redux.normalize_state({"Character": {"BookNumber": 6}, "CurrentSection": 350})
             assistant.apply_section_automation(force=True, visit_changed=True)
 
-        self.assertIn(6, assistant.character["CompletedBooks"])
+        self.assertNotIn(6, assistant.character["CompletedBooks"])
         self.assertEqual(assistant.automation["Ending"]["Type"], "success")
+        self.assertTrue(assistant.automation["Ending"]["Pending"])
+        self.assertTrue(assistant.book_finale_payload()["Active"])
 
     def test_book7_setup_preserves_campaign_and_adds_v1_start_state(self) -> None:
         source = lonewolf_redux.default_state()
@@ -2958,7 +2960,7 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
             assistant.apply_section_automation(force=True, visit_changed=True)
         self.assertTrue(assistant.death_active())
 
-    def test_magnakai_final_sections_complete_books7_to12(self) -> None:
+    def test_magnakai_final_sections_wait_for_player_confirmation(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             base = Path(temp_dir)
             assistant = lonewolf_redux.LoneWolfReduxAssistant(
@@ -2967,15 +2969,57 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
                 state_data_dir=base / "state",
                 books_dir=base / "books",
             )
-            completed = []
+            finales = []
             for book_number in range(7, 13):
                 assistant.state = lonewolf_redux.normalize_state(
                     {"Character": {"BookNumber": book_number}, "CurrentSection": 350}
                 )
                 assistant.apply_section_automation(force=True, visit_changed=True)
-                completed.append(book_number in assistant.character["CompletedBooks"])
+                finales.append(assistant.book_finale_payload().get("Active"))
+                self.assertNotIn(book_number, assistant.character["CompletedBooks"])
+                self.assertFalse(assistant.book_completion_payload().get("Active"))
 
-        self.assertEqual(completed, [True] * 6)
+        self.assertEqual(finales, [True] * 6)
+
+    def test_all_supported_books_expose_their_source_defined_final_section(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            for book_number, metadata in lonewolf_redux.BOOK_CATALOG.items():
+                assistant.state = lonewolf_redux.normalize_state(
+                    {"Character": {"BookNumber": book_number}, "CurrentSection": metadata["MaxSection"]}
+                )
+                finale = assistant.book_finale_payload()
+                self.assertTrue(finale["Active"], book_number)
+                self.assertEqual(finale["Section"], metadata["MaxSection"])
+
+    def test_final_section_becomes_completion_only_after_confirmation(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            assistant.state = lonewolf_redux.normalize_state(
+                {"Character": {"BookNumber": 4}, "CurrentSection": 350}
+            )
+            assistant.apply_section_automation(force=True, visit_changed=True)
+            self.assertTrue(assistant.automation["Ending"]["Pending"])
+            self.assertTrue(assistant.book_finale_payload()["Active"])
+            self.assertFalse(assistant.book_completion_payload()["Active"])
+
+            assistant.ensure_book_completed()
+
+            self.assertFalse(assistant.book_finale_payload()["Active"])
+            self.assertTrue(assistant.book_completion_payload()["Active"])
+            self.assertIn(4, assistant.character["CompletedBooks"])
 
     def test_books9_to12_source_terminal_deaths_lock_permadeath_runs(self) -> None:
         terminal_sections = {
@@ -5059,6 +5103,37 @@ class CampaignDeskProductionTests(unittest.TestCase):
         self.assertIn(".lw-death-screen__outcome,\n.lw-death-screen__final { height: 100%; }", campaign_css)
         self.assertIn("@media (max-width: 820px)", campaign_css)
 
+    def test_active_combat_header_matches_panel_padding(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        campaign_css = (root / "assets" / "css" / "lw-campaign.css").read_text(encoding="utf-8")
+
+        self.assertIn(".lw-combat-screen__intro {", campaign_css)
+        self.assertIn("padding: 0.7rem;", campaign_css)
+        self.assertNotIn("padding: 2px 2px 0;", campaign_css)
+
+    def test_inventory_and_story_edge_cases_have_consistent_presentation(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
+        campaign_css = (root / "assets" / "css" / "lw-campaign.css").read_text(encoding="utf-8")
+
+        self.assertIn("flex: 0 0 30px !important;", assistant_html)
+        self.assertIn("const proseEmpty = !clone.textContent.trim()", assistant_html)
+        self.assertIn("This section contains route choices only.", assistant_html)
+        self.assertIn("No additional choices are available in this section.", assistant_html)
+        self.assertIn("Random Number Table roll", assistant_html)
+        self.assertIn(".story-source-note", campaign_css)
+
+    def test_assistant_menu_actions_explain_their_result_and_runtime_limits(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
+        server_py = (root / "app_server.py").read_text(encoding="utf-8")
+
+        self.assertIn("function showMenuNotice(summary)", assistant_html)
+        self.assertIn("Autosave: On (required)", assistant_html)
+        self.assertIn("Shutdown unavailable in browser", assistant_html)
+        self.assertIn("consoleUrl.searchParams.set('console', '1')", assistant_html)
+        self.assertIn('"shutdown": os.environ.get("LONEWOLF_SAA_DESKTOP") == "1"', server_py)
+
     def test_capacity_blocked_loot_and_cli_use_the_room_available(self) -> None:
         root = Path(saa_main.__file__).resolve().parent
         assistant_html = (root / "assistant.html").read_text(encoding="utf-8")
@@ -5324,6 +5399,13 @@ class SoundtrackPackagingTests(unittest.TestCase):
 
 
 class SoundtrackPlayerTests(unittest.TestCase):
+    def test_playlist_sync_does_not_replace_select_options(self) -> None:
+        root = Path(saa_main.__file__).resolve().parent
+        player = (root / "assets" / "js" / "lw-music.js").read_text(encoding="utf-8")
+
+        self.assertIn("querySelector('[data-lw-music-playlist]:not(select)')", player)
+        self.assertIn("querySelector('select[data-lw-music-playlist]')", player)
+
     def test_shared_player_uses_manifest_preferences_and_compact_surfaces(self) -> None:
         root = Path(saa_main.__file__).resolve().parent
         player = (root / "assets" / "js" / "lw-music.js").read_text(encoding="utf-8")

@@ -4999,7 +4999,11 @@ class LoneWolfReduxAssistant:
 
     def book_completion_payload(self) -> dict[str, Any]:
         ending = self.automation.get("Ending")
-        active = isinstance(ending, dict) and str(ending.get("Type") or "").lower() == "success"
+        active = (
+            isinstance(ending, dict)
+            and str(ending.get("Type") or "").lower() == "success"
+            and not bool(ending.get("Pending"))
+        )
         book_number = int(ending.get("BookNumber") or self.character["BookNumber"]) if active else int(self.character["BookNumber"])
         if not active:
             return {"Active": False}
@@ -5038,6 +5042,21 @@ class LoneWolfReduxAssistant:
             "MagnakaiDisciplineChoices": missing_magnakai,
             "GrandMasterDisciplineChoices": missing_grand_master,
             "NewOrderDisciplineChoices": missing_new_order,
+        }
+
+    def book_finale_payload(self) -> dict[str, Any]:
+        """Describe an unconfirmed final section without hiding its story text."""
+        book_number = int(self.character.get("BookNumber") or 1)
+        section = int(self.state.get("CurrentSection") or 1)
+        final_section = int(book_metadata(book_number).get("MaxSection") or 0)
+        if section != final_section or self.book_completed(book_number):
+            return {"Active": False}
+        return {
+            "Active": True,
+            "BookNumber": book_number,
+            "BookTitle": BOOK_CATALOG[book_number]["Title"],
+            "Section": section,
+            "NextBookNumber": book_number + 1 if book_number < max(BOOKS) and book_number != 20 else None,
         }
 
     def pending_book_setup_payload(self) -> dict[str, Any]:
@@ -9484,13 +9503,16 @@ class LoneWolfReduxAssistant:
                 self.register_death(ending, cause)
             complete_book = action.get("completeBook")
             if complete_book is not None:
-                completed = sorted(
-                    {int(item) for item in as_list(self.character["CompletedBooks"])}
-                    | {int(complete_book)}
-                )
-                self.character["CompletedBooks"] = completed
                 if ending.lower() == "success":
-                    self.ensure_book_completed(int(complete_book))
+                    # Keep the final section visible until the player confirms
+                    # that they have finished reading it.
+                    self.automation["Ending"]["Pending"] = True
+                else:
+                    completed = sorted(
+                        {int(item) for item in as_list(self.character["CompletedBooks"])}
+                        | {int(complete_book)}
+                    )
+                    self.character["CompletedBooks"] = completed
             return f"ending={ending}"
         return f"unknown automation action: {action_type}"
 

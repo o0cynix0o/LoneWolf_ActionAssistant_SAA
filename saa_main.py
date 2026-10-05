@@ -223,6 +223,7 @@ def run_desktop() -> int:
     websocket = None
     try:
         _lifecycle_log("desktop startup begin")
+        os.environ["LONEWOLF_SAA_DESKTOP"] = "1"
         http_server, http_thread = _start_http(DEFAULT_HTTP_PORT)
         http_port = int(http_server.server_address[1])
         base_url = f"http://127.0.0.1:{http_port}"
@@ -270,6 +271,7 @@ def run_desktop() -> int:
             app_server.stop_server(http_server, http_thread)
         os.environ.pop("LONEWOLF_SAA_CHEAT_URL", None)
         os.environ.pop("LONEWOLF_SAA_CHEAT_TOKEN", None)
+        os.environ.pop("LONEWOLF_SAA_DESKTOP", None)
         cheat_file_path = os.environ.pop("LONEWOLF_SAA_CHEAT_FILE", None)
         if cheat_file_path:
             try:

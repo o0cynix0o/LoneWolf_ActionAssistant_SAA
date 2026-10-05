@@ -344,7 +344,7 @@
     const player = getState();
     document.querySelectorAll('[data-lw-music-player]').forEach((root) => {
       const title = root.querySelector('[data-lw-music-title]');
-      const playlist = root.querySelector('[data-lw-music-playlist]');
+      const playlist = root.querySelector('[data-lw-music-playlist]:not(select)');
       const status = root.querySelector('[data-lw-music-status]');
       const message = root.querySelector('[data-lw-music-message]');
       const toggle = root.querySelector('[data-lw-music-toggle]');

@@ -82,6 +82,9 @@ html .lw-reading-surface .book-choice.is-gated:is(:hover, :focus-visible) { opac
 .lw-companion__list div span:last-child { color: var(--lw-ui-accent); }
 .lw-companion__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
 .lw-companion__grid .lw-ui-button { min-height: 46px; }
+.reader-section-jump { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: end; margin-top: 12px; }
+.reader-section-jump label { display: grid; gap: 5px; color: var(--lw-ui-muted); font-size: .76rem; }
+.reader-section-jump input { width: 100%; }
 
 @media (max-width: 900px) {
   body.lw-surface-reader .workspace.lw-native { grid-template-columns: 1fr; }

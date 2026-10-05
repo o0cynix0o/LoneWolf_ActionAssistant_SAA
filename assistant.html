@@ -1280,6 +1280,7 @@
       }
     }
     .inventory-drag-handle {
+      flex: 0 0 30px !important;
       min-width: 30px;
       padding: 0.3rem 0.35rem;
       color: #f0ca68;
@@ -2066,6 +2067,7 @@
     function currentDeath() { return app.death || app.state.Automation?.DeathState || { Active: false }; }
     function currentRecoveryTimeline() { return app.recoveryTimeline || { Available: false, Timeline: [], Recommended: null }; }
     function currentBookComplete() { return app.bookComplete || { Active: false }; }
+    function currentBookFinale() { return app.bookFinale || { Active: false }; }
     function currentAchievements() { return app.achievements || app.state.Achievements || {}; }
 
     function normalizePlayMode(mode) {
@@ -2131,7 +2133,7 @@
     function setModeIndicator() {
       if (modeIndicator) {
         modeIndicator.hidden = false;
-        modeIndicator.textContent = browseMode ? 'Browse Mode' : (campaignStartRequested ? 'Campaign Setup' : playModeLabel());
+        modeIndicator.textContent = isReadingOnly() ? 'Reading Only' : (campaignStartRequested ? 'Campaign Setup' : playModeLabel());
       }
     }
 
@@ -2530,6 +2532,15 @@
       currentReceipt = receipt || { summary: 'Ready.', details: [] };
       receiptExpanded = false;
       renderReceipt();
+    }
+
+    function showMenuNotice(summary) {
+      if (!toastStack) return;
+      const toast = document.createElement('div');
+      toast.className = 'achievement-toast';
+      toast.innerHTML = `<small>Assistant</small><strong>${escapeHtml(summary)}</strong>`;
+      toastStack.appendChild(toast);
+      window.setTimeout(() => toast.remove(), 3200);
     }
 
     function sectionStatusReceiptDetails() {
@@ -3208,20 +3219,24 @@
       if (bookResponse?.ok) bookFiles = await bookResponse.json();
       if (compendiumResponse?.ok) compendiumCatalog = await compendiumResponse.json();
       syncUiPreferences(app.uiPreferences);
+      if (nativeSurface === 'reader') {
+        readerBook = pageParams.has('book') ? requestedBrowseBook : Number(app.state?.Character?.BookNumber || 1);
+        browseSection = Number.isInteger(requestedBrowseSection) ? requestedBrowseSection : Number(app.state?.CurrentSection || 1);
+      }
       const cheatStatus = app.cheats || {};
       const activeCheats = arr(cheatStatus.active);
-      serverStatus.textContent = browseMode
+      serverStatus.textContent = isReadingOnly()
         ? 'Reading Only'
         : (activeCheats.length
           ? `Cheat sandbox active (${activeCheats.length})`
           : (cheatStatus.sessionTainted ? 'Cheat sandbox restored · Achievements paused' : 'Connected'));
-      if (browseMode) {
-        syncBrowseBook();
+      if (isReadingOnly()) {
+        if (browseMode && nativeSurface !== 'reader') syncBrowseBook();
         setReceipt({
-          summary: 'Browse Book - save is not affected',
+          summary: 'Reader - paper play does not affect the campaign save',
           title: 'Reading Only',
           details: [
-            receiptDetail('Mode', 'Browse Book'),
+            receiptDetail('Mode', 'Digital book with a paper Action Chart'),
             receiptDetail('Save', 'Your current campaign save will not move while browsing.'),
             receiptDetail('Links', 'Book links navigate the reader only; assistant automation is not applied.')
           ]
@@ -3245,13 +3260,13 @@
     }
 
     async function action(payload) {
-      if (browseMode) {
+      if (isReadingOnly()) {
         setReceipt({
-          summary: 'Browse Book - save is not affected',
+          summary: 'Reader - campaign controls are not used in paper play',
           title: 'Reading Only',
           details: [
             receiptDetail('Blocked Action', 'Assistant play controls are disabled while browsing.'),
-            receiptDetail('Why', 'Browse Book is for reading and lookup only. Use Current to return to your campaign before making play decisions.')
+            receiptDetail('Why', 'Reader is for the digital book and a paper Action Chart. Open Campaign to use automated bookkeeping.')
           ]
         });
         render();
@@ -3345,9 +3360,10 @@
       renderStatus();
       renderCampaignRail();
 
-      const deathActive = currentDeath().Active;
-      const setupActive = !!app.pendingBookSetup?.Active;
-      const completeActive = currentBookComplete().Active;
+      const campaignTakeoverAllowed = nativeSurface !== 'reader';
+      const deathActive = campaignTakeoverAllowed && currentDeath().Active;
+      const setupActive = campaignTakeoverAllowed && !!app.pendingBookSetup?.Active;
+      const completeActive = campaignTakeoverAllowed && currentBookComplete().Active;
       const cliActive = isCliMode() && !campaignStartRequested;
       // A brand-new (or explicitly requested) Book 1 campaign must present
       // character creation before play, front-and-center on the reading
@@ -3575,7 +3591,10 @@
       29: 'Weather the Storms of Chai'
     });
     let campaignTab = 'story';
+    let readerBook = requestedBrowseBook;
     let browseSection = requestedBrowseSection;
+    const readerHistory = [];
+    function isReadingOnly() { return browseMode || nativeSurface === 'reader'; }
     let storyRenderToken = 0;
     let lastStory = { book: null, section: null, choices: [], title: '' };
     let campaignAdvancedThisVisit = false;
@@ -3711,7 +3730,8 @@
       clone.querySelectorAll('p.combat').forEach((p) => p.classList.add('story-combat'));
       clone.querySelectorAll('p.deadend').forEach((p) => p.classList.add('story-deadend'));
       clone.querySelectorAll('p.signpost').forEach((p) => p.classList.add('story-signpost'));
-      return { title, prose: clone.innerHTML, choices };
+      const proseEmpty = !clone.textContent.trim() && !clone.querySelector('img, figure');
+      return { title, prose: clone.innerHTML, proseEmpty, choices };
     }
     function sectionFetchCacheKey(bookNumber, section) {
       return `${Number(bookNumber)}:${Number(section)}`;
@@ -3760,7 +3780,7 @@
     // section), so highlighting always reflects the current Action Chart.
     function storyRouteAvailability(showSection) {
       if (assistantSettings?.choiceHintsEnabled === 'off') return null;
-      if (browseMode || Number(showSection) !== Number(app.state.CurrentSection)) return null;
+      if (isReadingOnly() || Number(showSection) !== Number(app.state.CurrentSection)) return null;
       const map = new Map();
       arr(currentFlow().SourceRoutes).forEach((route) => {
         if (!route || typeof route !== 'object') return;
@@ -3776,7 +3796,7 @@
       return map.size ? map : null;
     }
     function storyChoiceButtonsHtml(choices, variant, availability) {
-      if (!choices.length) return `<p class="story-no-choice">No further choices are printed for this section. If the section calls for combat, a roll, or an ending, use the campaign tools.</p>`;
+      if (!choices.length) return `<p class="story-no-choice">No additional choices are available in this section. Use <strong>Campaign Tools</strong> to resolve any combat, Random Number Table roll, or ending.</p>`;
       const cls = variant === 'reader' ? 'book-choice' : 'story-choice';
       return `<div class="story-choice-list">` + choices.map((c) => {
         const info = availability && availability.get(Number(c.section));
@@ -3801,8 +3821,8 @@
     async function renderStoryInto(target, variant) {
       if (!target || !app) return;
       const character = currentCharacter();
-      const showBook = browseMode ? requestedBrowseBook : Number(character.BookNumber);
-      const showSection = browseMode ? (browseSection || 1) : Number(app.state.CurrentSection);
+      const showBook = isReadingOnly() ? readerBook : Number(character.BookNumber);
+      const showSection = isReadingOnly() ? (browseSection || 1) : Number(app.state.CurrentSection);
       const token = ++storyRenderToken;
       target.innerHTML = `<div class="story-loading">Loading section ${escapeHtml(showSection)}…</div>`;
       let result;
@@ -3825,7 +3845,15 @@
         ? `<p class="chapter">${escapeHtml(bookMeta.title)}</p><h2>Section ${escapeHtml(showSection)}</h2>`
         : `<div class="lw-story-panel__head"><div><p class="lw-eyebrow">${escapeHtml(bookMeta.title)}</p><h2>Section ${escapeHtml(showSection)}</h2></div><span class="lw-ui-status lw-ui-status--reading">Current section</span></div>`;
       const availability = storyRouteAvailability(showSection);
-      target.innerHTML = head + `<div class="prose story-prose">${parsed.prose}</div>` + (variant === 'reader' ? `<div class="rule"></div>` : '') + storyChoiceButtonsHtml(parsed.choices, variant, availability);
+      const sourceNote = parsed.proseEmpty && parsed.choices.length
+        ? '<p class="story-source-note">This section contains route choices only. No additional narrative text is present in the installed book file.</p>'
+        : '';
+      const finale = currentBookFinale();
+      const finaleAction = variant === 'campaign' && finale.Active
+        && Number(finale.BookNumber) === showBook && Number(finale.Section) === showSection
+        ? `<section class="story-finale-action" aria-label="Finish this book"><p>You have reached the end of ${escapeHtml(text(finale.BookTitle, bookMeta.title))}. Finish reading the section, then record the completed adventure.</p><button type="button" data-complete-book>Finish Book ${escapeHtml(showBook)}</button></section>`
+        : '';
+      target.innerHTML = head + `<div class="prose story-prose">${parsed.prose}${sourceNote}</div>` + (variant === 'reader' ? `<div class="rule"></div>` : '') + storyChoiceButtonsHtml(parsed.choices, variant, availability) + finaleAction;
       if (variant === 'reader') renderReaderCompanionNative();
       updateChoiceCheck(parsed.choices.length);
       // The campaign summary contains section-roll results. Refresh it after
@@ -3843,7 +3871,8 @@
 
     async function routeStoryChoice(section) {
       if (!Number.isInteger(section)) return;
-      if (browseMode) {
+      if (isReadingOnly()) {
+        if (Number.isInteger(browseSection)) readerHistory.push({ book: readerBook, section: browseSection });
         browseSection = section;
         render();
         return;
@@ -4185,54 +4214,35 @@
     // ---- Reader First --------------------------------------------------------
     function renderReaderHead() {
       const el = nativeEl('readerHead'); if (!el) return;
-      const c = currentCharacter(); const book = bookByNumber(c.BookNumber);
-      const canPrev = (app.state.SectionHistory || []).length > 0;
+      const book = bookByNumber(readerBook);
+      const section = Number(browseSection || 1);
+      const canPrev = readerHistory.length > 0;
       el.innerHTML = `
         <div class="lw-reader-head__text">
-          <p class="lw-eyebrow">Reading · Book ${escapeHtml(c.BookNumber)}</p>
+          <p class="lw-eyebrow">Reading · Book ${escapeHtml(book.number)}</p>
           <h1>${escapeHtml(book.title)}</h1>
-          <p class="lw-muted">Section ${escapeHtml(app.state.CurrentSection)}. The assistant tracks the campaign while the book stays central.</p>
+          <p class="lw-muted">Section ${escapeHtml(section)}. Read digitally while recording stats, rolls, combat, inventory, and choices on your paper Action Chart.</p>
         </div>
         <div class="lw-reader-nav">
           <button class="lw-ui-button" type="button" data-reader-prev ${canPrev ? '' : 'disabled'}>Previous</button>
-          <button class="lw-ui-button lw-ui-button--primary" type="button" data-rail-current>Start Current Campaign</button>
+          <a class="lw-ui-button" href="assistant.html?surface=campaign&resume=1">Open tracked campaign</a>
           <button class="lw-ui-button" type="button" data-reader-next disabled title="Choose a path below to continue">Next section</button>
         </div>`;
     }
     function renderReaderCompanionNative() {
       const el = nativeEl('readerCompanion'); if (!el) return;
-      const c = currentCharacter(); const inv = currentInventory(); const run = app.run || {};
-      const routes = lastStory.choices.length;
       el.innerHTML = `
         <section class="lw-ui-panel lw-companion__panel">
-          <div class="lw-companion__head"><h3>Campaign</h3><span class="lw-ui-status lw-ui-status--reading">Reading</span></div>
-          <div class="lw-companion__list">
-            <div><span>Endurance</span><span>${escapeHtml(c.EnduranceCurrent)} / ${escapeHtml(c.EnduranceMax)}</span></div>
-            <div><span>Combat Skill</span><span>${escapeHtml(c.CombatSkillCurrent)}</span></div>
-            <div><span>Gold Crowns</span><span>${escapeHtml(inv.GoldCrowns ?? 0)}</span></div>
-            <div><span>Difficulty</span><span>${escapeHtml(text(run.Difficulty, 'Normal'))}</span></div>
-          </div>
+          <div class="lw-companion__head"><h3>Paper play</h3><span class="lw-ui-status lw-ui-status--reading">Reading only</span></div>
+          <p class="lw-muted">The book supplies the story and printed routes. Keep your Action Chart, Random Number Table results, combat, and inventory on paper.</p>
+          <form id="readerSectionForm" class="reader-section-jump"><label>Go to section<input name="section" type="number" min="1" max="${escapeHtml(bookByNumber(readerBook).sections)}" value="${escapeHtml(browseSection || 1)}"></label><button class="lw-ui-button" type="submit">Go</button></form>
         </section>
         ${window.LoneWolfMusic?.compactMarkup('reader') || ''}
-        <section class="lw-ui-panel lw-companion__panel">
-          <h3>Assistant</h3>
-          <div class="lw-companion__grid">
-            <button class="lw-ui-button" type="button" data-roll ${manualDisabledAttributes('roll helper')}>Roll 0-9</button>
-            <a class="lw-ui-button" href="assistant.html?surface=tools&tool=combat&resume=1">Combat</a>
-            <a class="lw-ui-button" href="assistant.html?surface=tools&tool=inventory&resume=1">Inventory</a>
-            <a class="lw-ui-button" href="assistant.html?surface=tools&tool=sheet&resume=1">Action Chart</a>
-          </div>
-        </section>
-        <section class="lw-ui-panel lw-companion__panel">
-          <div class="lw-companion__head"><h3>Choice check</h3><span class="lw-ui-status">${routes} route${routes === 1 ? '' : 's'}</span></div>
-          <p class="lw-muted">Every printed choice stays visible in book order. Discipline-gated routes remain shown so your story choice stays in context.</p>
-        </section>
         <section class="lw-ui-panel lw-companion__panel">
           <h3>Reading tools</h3>
           <div class="lw-companion__grid">
             <button class="lw-ui-button" type="button" data-open-tssf>Story so far</button>
             <button class="lw-ui-button" type="button" data-open-map>Map</button>
-            <a class="lw-ui-button" href="assistant.html?surface=tools&tool=notes&resume=1">Notes</a>
             <a class="lw-ui-button" href="assistant.html?surface=tools&tool=settings&resume=1">Settings</a>
           </div>
         </section>`;
@@ -4345,7 +4355,7 @@
     // ---- Front-matter / map overlay (reuses the book iframe) -----------------
     function openFrontMatter(frontMatter, title) {
       const ov = nativeEl('frontMatterOverlay'); const t = nativeEl('frontMatterTitle');
-      const book = browseMode ? requestedBrowseBook : Number(currentCharacter().BookNumber);
+      const book = isReadingOnly() ? readerBook : Number(currentCharacter().BookNumber);
       if (t) t.textContent = title;
       bookFrame.src = bookUrl(book, null, frontMatter);
       if (ov) ov.hidden = false;
@@ -4355,6 +4365,14 @@
       bookFrame.removeAttribute('src');
     }
     function readerGoPrev() {
+      if (isReadingOnly()) {
+        const previous = readerHistory.pop();
+        if (!previous) return;
+        readerBook = Number(previous.book);
+        browseSection = Number(previous.section);
+        render();
+        return;
+      }
       const hist = app.state.SectionHistory || [];
       if (!hist.length) return;
       const prev = hist.length >= 2 ? hist[hist.length - 2] : hist[hist.length - 1];
@@ -4440,7 +4458,7 @@
         const prev = event.target.closest('[data-reader-prev]');
         if (prev && !prev.disabled) { event.preventDefault(); readerGoPrev(); return; }
         const next = event.target.closest('[data-reader-next]');
-        if (next && !next.disabled) { event.preventDefault(); const s = Number(next.dataset.readerNextSection); if (Number.isInteger(s)) action({ action: 'route', section: s }); return; }
+        if (next && !next.disabled) { event.preventDefault(); const s = Number(next.dataset.readerNextSection); if (Number.isInteger(s)) void routeStoryChoice(s); return; }
         if (event.target.closest('[data-open-map]')) { event.preventDefault(); openFrontMatter('map.htm', 'Map'); return; }
         if (event.target.closest('[data-open-tssf]')) { event.preventDefault(); openFrontMatter('tssf.htm', 'Story so far'); return; }
         if (event.target.closest('[data-frontmatter-close]')) { event.preventDefault(); closeFrontMatter(); return; }
@@ -4731,6 +4749,7 @@
       const previousMode = playMode;
       if (nextMode === previousMode) {
         closeMenus();
+        showMenuNotice(`${playModeLabel()} is already active.`);
         return;
       }
       if (nextMode === 'cli' && app) {
@@ -4744,6 +4763,16 @@
       localStorage.setItem(playModeKey, playMode);
       closeMenus();
       setModeIndicator();
+      showMenuNotice(`${playModeLabel()} active.`);
+      if (nextMode === 'cli') {
+        const consoleUrl = new URL(window.location.href);
+        consoleUrl.searchParams.set('surface', 'tools');
+        consoleUrl.searchParams.set('console', '1');
+        consoleUrl.searchParams.set('resume', '1');
+        window.history.pushState({}, '', consoleUrl);
+        await applyNativeSurfaceNavigation(consoleUrl.href);
+        return;
+      }
       if (previousMode === 'cli' && nextMode !== 'cli') {
         await action({ action: 'reload_last_save' });
         return;
@@ -6386,6 +6415,7 @@
     }
 
     function renderAppMenu() {
+      const shutdownAvailable = app?.capabilities?.shutdown === true;
       appMenu.innerHTML = `
         <div class="menu-heading">Assistant</div>
         <div class="menu-heading">Mode</div>
@@ -6397,9 +6427,9 @@
         <button type="button" data-save-current>Save Game</button>
         <button type="button" data-export-save>Export Current Save</button>
         <button type="button" data-backup-saves>Backup Saves</button>
-        <button type="button" data-autosave>Autosave: On</button>
+        <button type="button" disabled title="Autosave is always enabled to protect campaign progress.">Autosave: On (required)</button>
         <button type="button" data-settings-view>Settings</button>
-        <button type="button" class="danger" data-shutdown-app>Shut Down App</button>
+        ${shutdownAvailable ? '<button type="button" class="danger" data-shutdown-app>Shut Down App</button>' : '<button type="button" disabled title="Close this browser tab to leave the web or container version.">Shutdown unavailable in browser</button>'}
       `;
     }
 
@@ -9237,6 +9267,7 @@
       if (button.dataset.saveCurrent !== undefined) {
         closeMenus();
         await action({ action: 'save', path: '' });
+        showMenuNotice('Game saved.');
         return;
       }
       if (button.dataset.exportSave !== undefined) {
@@ -9569,6 +9600,16 @@
       const form = event.target;
       const formData = new FormData(form);
       const data = Object.fromEntries(formData.entries());
+      if (form.id === 'readerSectionForm') {
+        const section = Number(data.section);
+        const maximum = Number(bookByNumber(readerBook).sections);
+        if (Number.isInteger(section) && section >= 1 && section <= maximum) {
+          if (Number.isInteger(browseSection)) readerHistory.push({ book: readerBook, section: browseSection });
+          browseSection = section;
+          render();
+        }
+        return;
+      }
       if (form.id === 'quickStartForm') {
         await quickStartBook1(data.name, {
           difficulty: data.difficulty,

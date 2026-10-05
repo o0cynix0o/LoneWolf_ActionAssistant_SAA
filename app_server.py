@@ -325,12 +325,16 @@ def state_payload(message: str = "", achievement_unlocks: list[dict] | None = No
     return {
         "books": lonewolf_redux.BOOK_CATALOG,
         "hasCampaign": has_active_campaign(),
+        "capabilities": {
+            "shutdown": os.environ.get("LONEWOLF_SAA_DESKTOP") == "1",
+        },
         "state": state,
         "run": ASSISTANT.run_payload(),
         "sectionFlow": ASSISTANT.current_section_flow_payload(),
         "death": ASSISTANT.death_recovery_payload(),
         "recoveryTimeline": ASSISTANT.recovery_timeline_payload(),
         "bookComplete": ASSISTANT.book_completion_payload(),
+        "bookFinale": ASSISTANT.book_finale_payload(),
         "pendingBookSetup": ASSISTANT.pending_book_setup_payload(),
         "achievements": ASSISTANT.achievement_payload(),
         "cheats": {
@@ -850,6 +854,8 @@ def handle_action(payload: dict) -> str:
         return import_save_payload(payload)
     if action == "complete_book":
         def complete() -> None:
+            if not ASSISTANT.book_finale_payload().get("Active"):
+                raise ValueError("The current section is not this book's final section.")
             summary = ASSISTANT.ensure_book_completed(save=True)
             print(f"Book {summary['BookNumber']} complete: {summary['BookTitle']}.")
         return capture_output(complete)

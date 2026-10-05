@@ -58,6 +58,9 @@ body.lw-surface-tools.lw-console-active .lw-active-tool { min-height: 72vh; }
 
 /* ---- Native story renderer (shared by Campaign + Reader) ---- */
 .story-loading, .story-error, .story-no-choice { color: var(--lw-ui-muted); font-size: .95rem; }
+.story-source-note { margin: 0 0 1em; color: var(--lw-ui-muted); font: italic .95rem/1.5 var(--lw-ui-sans); }
+.story-finale-action { margin-top: 1rem; padding: 1rem; background: var(--lw-ui-raised); border-left: 3px solid var(--lw-ui-accent); }
+.story-finale-action p { margin: 0 0 .75rem; }
 .story-error a, .story-jump { color: var(--lw-ui-accent); cursor: pointer; text-decoration: underline; }
 .story-prose p { margin: 0 0 1em; }
 .story-prose p:last-child { margin-bottom: 0; }
@@ -288,7 +291,7 @@ body.lw-surface-campaign .workspace.lw-native {
 /* Native Combat Mode: the encounter is the work surface. The dense legacy
    renderer remains available in Tools; Campaign gets one compact decision flow. */
 .lw-combat-screen { display: grid; gap: 14px; }
-.lw-combat-screen__intro { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px 24px; padding: 2px 2px 0; }
+.lw-combat-screen__intro { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px 24px; padding: 0.7rem; }
 .lw-combat-screen__intro .lw-muted { max-width: 680px; margin: 6px 0 0; }
 .lw-combat-ratio { min-width: 112px; padding: 10px 12px; border: 1px solid var(--lw-ui-border); border-radius: 5px; background: rgba(0,0,0,.14); text-align: right; }
 .lw-combat-ratio small { display: block; color: var(--lw-ui-muted); font: 700 .68rem var(--lw-ui-sans); letter-spacing: .06em; text-transform: uppercase; }
