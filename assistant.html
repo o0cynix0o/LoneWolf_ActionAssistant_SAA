@@ -3726,7 +3726,7 @@
       let sectionEntry = null;
       clone.querySelectorAll('p.puzzle a[href]').forEach((anchor) => {
         if (sectionEntry || sectionNumberFromHref(anchor.getAttribute('href'))) return;
-        if (!/turn to (?:that|the) section/i.test(anchor.textContent || '')) return;
+        if (!/turn to (?:that|the) (?:section|entry)(?: number)?/i.test(anchor.textContent || '')) return;
         const range = (main.textContent || '').match(/numbered\s+(\d+)\s+to\s+(\d+)/i);
         sectionEntry = {
           min: 1,
@@ -3894,7 +3894,7 @@
         && Number(finale.BookNumber) === showBook && Number(finale.Section) === showSection
         ? `<section class="story-finale-action" aria-label="Finish this book"><p>You have reached the end of ${escapeHtml(text(finale.BookTitle, bookMeta.title))}. Finish reading the section, then record the completed adventure.</p><button type="button" data-complete-book>Finish Book ${escapeHtml(showBook)}</button></section>`
         : '';
-      target.innerHTML = head + `<div class="prose story-prose">${parsed.prose}${sourceNote}</div>` + storySectionEntryHtml(parsed.sectionEntry, variant) + (variant === 'reader' ? `<div class="rule"></div>` : '') + storyChoiceButtonsHtml(parsed.choices, variant, availability) + finaleAction;
+      target.innerHTML = head + `<div class="prose story-prose">${parsed.prose}${sourceNote}</div>` + storySectionEntryHtml(parsed.sectionEntry, variant) + (variant === 'reader' ? `<div class="rule"></div>` : '') + (parsed.sectionEntry && !parsed.choices.length ? '' : storyChoiceButtonsHtml(parsed.choices, variant, availability)) + finaleAction;
       if (variant === 'reader') renderReaderCompanionNative();
       updateChoiceCheck(parsed.choices.length);
       // The campaign summary contains section-roll results. Refresh it after
