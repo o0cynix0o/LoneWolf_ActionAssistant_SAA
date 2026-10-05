@@ -2868,6 +2868,13 @@
     },
     "2": {
       "auditStatus": "source-link-baseline",
+      "loot": [
+        {
+          "id": "oede-herb",
+          "label": "Keep Oede Herb (one application)",
+          "actions": [{"type": "add_item", "container": "backpack", "name": "Oede Herb"}]
+        }
+      ],
       "classification": [
         "single_route",
         "combat",
@@ -3107,10 +3114,14 @@
       "sourceRouteCount": 2,
       "sourceRoutes": [
         {
-          "Section": 321
+          "Section": 321,
+          "Condition": {"type": "item", "name": "Oede", "match": "contains", "containers": ["backpack"]},
+          "BlockedReason": "Requires Oede Herb in your Backpack.",
+          "Actions": [{"type": "remove_item", "name": "Oede", "match": "contains", "containers": ["backpack"], "count": 1}]
         },
         {
-          "Section": 270
+          "Section": 270,
+          "Condition": {}
         }
       ]
     },
@@ -6736,10 +6747,14 @@
       "sourceRouteCount": 2,
       "sourceRoutes": [
         {
-          "Section": 321
+          "Section": 321,
+          "Condition": {"type": "item", "name": "Oede", "match": "contains", "containers": ["backpack"]},
+          "BlockedReason": "Requires Oede Herb in your Backpack.",
+          "Actions": [{"type": "remove_item", "name": "Oede", "match": "contains", "containers": ["backpack"], "count": 1}]
         },
         {
-          "Section": 270
+          "Section": 270,
+          "Condition": {}
         }
       ]
     },

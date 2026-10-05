@@ -2196,6 +2196,35 @@ class SupportedBookDataBaselineTests(unittest.TestCase):
 
 
 class LegacySaveCompatibilityTests(unittest.TestCase):
+    def test_book5_oede_collection_and_gift_routes(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            base = Path(temp_dir)
+            assistant = lonewolf_redux.LoneWolfReduxAssistant(
+                save_dir=base / "saves",
+                data_dir=Path(lonewolf_redux.__file__).resolve().parent / "data",
+                state_data_dir=base / "state",
+                books_dir=base / "books",
+            )
+            assistant.character["BookNumber"] = 5
+            assistant.state["Inventory"]["BackpackItems"] = []
+            assistant.set_section(2)
+            assistant.apply_flow_loot("oede-herb")
+            assistant.apply_flow_loot("oede-herb")
+            self.assertEqual(assistant.state["Inventory"]["BackpackItems"], ["Oede Herb"])
+            for section in (208, 344):
+                with self.subTest(section=section):
+                    assistant.state["Inventory"]["BackpackItems"] = []
+                    assistant.set_section(section)
+                    assistant.follow_route(321)
+                    self.assertEqual(assistant.state["CurrentSection"], section)
+                    assistant.state["Inventory"]["BackpackItems"] = ["Oede Herb", "Meal"]
+                    routes = {route["Section"]: route for route in assistant.current_section_flow_payload()["SourceRoutes"]}
+                    self.assertTrue(routes[321]["Available"])
+                    self.assertTrue(routes[270]["Available"])
+                    assistant.follow_route(321)
+                    self.assertEqual(assistant.state["CurrentSection"], 321)
+                    self.assertEqual(assistant.state["Inventory"]["BackpackItems"], ["Meal"])
+
     def test_magnakai_save_keeps_book_identity_and_v1_fields(self) -> None:
         legacy = {
             "Version": "0.5.0",
