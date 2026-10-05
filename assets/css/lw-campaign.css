@@ -115,6 +115,20 @@ body.lw-surface-tools.lw-console-active .lw-active-tool { min-height: 72vh; }
 .story-choice.is-available small { color: var(--lw-ui-green) !important; }
 .story-choice.is-gated { border-style: dashed !important; opacity: .58; }
 .story-choice.is-gated:hover { opacity: .85; }
+.story-section-entry { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 12px; align-items: end; margin-top: 18px; padding: 14px; border: 1px solid var(--lw-ui-border); border-left: 3px solid var(--lw-ui-gold); border-radius: 5px; background: var(--lw-ui-raised); }
+.story-section-entry fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
+.story-section-entry legend { margin-bottom: 9px; color: var(--lw-ui-ink); font: 700 .9rem var(--lw-ui-sans); }
+.story-section-wheels { display: flex; gap: 8px; align-items: center; }
+.story-section-wheels label { display: grid; gap: 4px; width: 74px; color: var(--lw-ui-muted); text-align: center; font: 700 .68rem var(--lw-ui-sans); text-transform: uppercase; letter-spacing: .08em; }
+.story-section-wheels select { width: 100%; min-width: 0; padding: 8px 22px 8px 8px; border: 2px solid var(--lw-ui-gold); border-radius: 4px; background: var(--lw-ui-panel); color: var(--lw-ui-ink); text-align: center; font: 700 1.55rem/1 var(--lw-ui-serif); font-variant-numeric: tabular-nums; box-shadow: inset 0 3px 0 rgba(255,255,255,.04), inset 0 -3px 0 rgba(0,0,0,.22); }
+.story-section-wheels select.is-turning { animation: story-lock-turn .18s ease-out; }
+@keyframes story-lock-turn { 0% { transform: translateY(-4px); opacity: .55; } 100% { transform: translateY(0); opacity: 1; } }
+.story-section-entry small { grid-column: 1 / -1; color: var(--lw-ui-muted); font: .8rem/1.4 var(--lw-ui-sans); }
+.story-section-entry--console { grid-template-columns: auto minmax(0, 1fr); align-items: center; }
+@media (max-width: 620px) {
+  .story-section-entry { grid-template-columns: minmax(0, 1fr); }
+  .story-section-entry small { grid-column: 1; }
+}
 
 /* ============================================================
  * CAMPAIGN DESK

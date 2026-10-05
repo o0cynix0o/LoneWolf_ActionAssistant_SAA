@@ -3720,6 +3720,23 @@
         const label = p.textContent.replace(/\s+/g, ' ').trim();
         if (section) { choices.push({ section, label }); p.remove(); }
       });
+      // Some Project Aon puzzles deliberately link to a numbered section index
+      // instead of naming one route. Preserve the puzzle text, but replace that
+      // unusable index link with a bounded section-number entry control.
+      let sectionEntry = null;
+      clone.querySelectorAll('p.puzzle a[href]').forEach((anchor) => {
+        if (sectionEntry || sectionNumberFromHref(anchor.getAttribute('href'))) return;
+        if (!/turn to (?:that|the) section/i.test(anchor.textContent || '')) return;
+        const range = (main.textContent || '').match(/numbered\s+(\d+)\s+to\s+(\d+)/i);
+        sectionEntry = {
+          min: 1,
+          max: Number(bookByNumber(bookNumber).sections),
+          clueMin: range ? Number(range[1]) : null,
+          clueMax: range ? Number(range[2]) : null,
+          prompt: 'Set the three wheels to the section number given by your solution.'
+        };
+        anchor.replaceWith(...anchor.childNodes);
+      });
       // Remaining anchors: turn intra-book section links into live jumps, unwrap the rest
       // (illustration anchors to illN.htm, table-of-contents, licence links, etc.).
       clone.querySelectorAll('a[href]').forEach((a) => {
@@ -3731,7 +3748,7 @@
       clone.querySelectorAll('p.deadend').forEach((p) => p.classList.add('story-deadend'));
       clone.querySelectorAll('p.signpost').forEach((p) => p.classList.add('story-signpost'));
       const proseEmpty = !clone.textContent.trim() && !clone.querySelector('img, figure');
-      return { title, prose: clone.innerHTML, proseEmpty, choices };
+      return { title, prose: clone.innerHTML, proseEmpty, choices, sectionEntry };
     }
     function sectionFetchCacheKey(bookNumber, section) {
       return `${Number(bookNumber)}:${Number(section)}`;
@@ -3818,6 +3835,30 @@
         return `<button class="${cls}${stateClass}" type="button" data-story-route="${c.section}"${attrs}><span>${escapeHtml(c.label)}</span><small>${escapeHtml(note)}</small></button>`;
       }).join('') + `</div>`;
     }
+    function storySectionEntryHtml(entry, variant) {
+      if (!entry) return '';
+      if (variant === 'console') {
+        return `<div class="story-section-entry story-section-entry--console"><strong>Puzzle route</strong><span>${escapeHtml(entry.prompt)} Valid range: ${escapeHtml(entry.min)}–${escapeHtml(entry.max)}.</span></div>`;
+      }
+      const digitOptions = (maximum) => Array.from(
+        { length: maximum + 1 },
+        (_, digit) => `<option value="${digit}">${digit}</option>`
+      ).join('');
+      const hundredsMaximum = Math.max(0, Math.ceil(Number(entry.max) / 100) - 1);
+      return `
+        <form class="story-section-entry" data-story-section-entry data-min-section="${escapeHtml(entry.min)}" data-max-section="${escapeHtml(entry.max)}">
+          <fieldset>
+            <legend>${escapeHtml(entry.prompt)}</legend>
+            <div class="story-section-wheels" aria-label="Section number combination lock">
+              <label><span>Hundreds</span><select name="hundreds" aria-label="Hundreds digit">${digitOptions(hundredsMaximum)}</select></label>
+              <label><span>Tens</span><select name="tens" aria-label="Tens digit">${digitOptions(9)}</select></label>
+              <label><span>Ones</span><select name="ones" aria-label="Ones digit">${digitOptions(9)}</select></label>
+            </div>
+          </fieldset>
+          <button type="submit">Turn to section</button>
+          <small>Solve the puzzle from the book, then set the three numbered wheels and turn to that section.</small>
+        </form>`;
+    }
     async function renderStoryInto(target, variant) {
       if (!target || !app) return;
       const character = currentCharacter();
@@ -3853,7 +3894,7 @@
         && Number(finale.BookNumber) === showBook && Number(finale.Section) === showSection
         ? `<section class="story-finale-action" aria-label="Finish this book"><p>You have reached the end of ${escapeHtml(text(finale.BookTitle, bookMeta.title))}. Finish reading the section, then record the completed adventure.</p><button type="button" data-complete-book>Finish Book ${escapeHtml(showBook)}</button></section>`
         : '';
-      target.innerHTML = head + `<div class="prose story-prose">${parsed.prose}${sourceNote}</div>` + (variant === 'reader' ? `<div class="rule"></div>` : '') + storyChoiceButtonsHtml(parsed.choices, variant, availability) + finaleAction;
+      target.innerHTML = head + `<div class="prose story-prose">${parsed.prose}${sourceNote}</div>` + storySectionEntryHtml(parsed.sectionEntry, variant) + (variant === 'reader' ? `<div class="rule"></div>` : '') + storyChoiceButtonsHtml(parsed.choices, variant, availability) + finaleAction;
       if (variant === 'reader') renderReaderCompanionNative();
       updateChoiceCheck(parsed.choices.length);
       // The campaign summary contains section-roll results. Refresh it after
@@ -9544,6 +9585,13 @@
     });
 
     document.addEventListener('change', (event) => {
+      if (event.target.matches?.('[data-story-section-entry] select')) {
+        event.target.classList.remove('is-turning');
+        void event.target.offsetWidth;
+        event.target.classList.add('is-turning');
+        window.setTimeout(() => event.target.classList.remove('is-turning'), 180);
+        return;
+      }
       if (event.target.matches?.('[data-compendium-book]')) {
         compendiumBookFilter = event.target.value === 'all' ? 'all' : 'current';
         render();
@@ -9600,6 +9648,21 @@
       const form = event.target;
       const formData = new FormData(form);
       const data = Object.fromEntries(formData.entries());
+      if (form.matches('[data-story-section-entry]')) {
+        const section = (Number(data.hundreds) * 100) + (Number(data.tens) * 10) + Number(data.ones);
+        const minimum = Number(form.dataset.minSection || 1);
+        const maximum = Number(form.dataset.maxSection || bookByNumber(isReadingOnly() ? readerBook : currentCharacter().BookNumber).sections);
+        if (Number.isInteger(section) && section >= minimum && section <= maximum) {
+          await routeStoryChoice(section);
+        } else {
+          setReceipt({
+            summary: `Choose a section number from ${minimum} to ${maximum}.`,
+            title: 'Puzzle Route'
+          });
+          renderReceipt();
+        }
+        return;
+      }
       if (form.id === 'readerSectionForm') {
         const section = Number(data.section);
         const maximum = Number(bookByNumber(readerBook).sections);
