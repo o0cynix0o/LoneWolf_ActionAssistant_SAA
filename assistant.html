@@ -9425,7 +9425,25 @@
       }
       if (button.dataset.deathRecovery) await action({ action: 'death_recovery', mode: button.dataset.deathRecovery });
       if (button.dataset.checkpointRecovery) await action({ action: 'checkpoint_recovery', key: button.dataset.checkpointRecovery });
-      if (button.dataset.completeBook !== undefined) await action({ action: 'complete_book' });
+      if (button.dataset.completeBook !== undefined) {
+        button.disabled = true;
+        button.textContent = 'Finishing book…';
+        try {
+          await action({ action: 'complete_book' });
+        } catch (error) {
+          // Reconcile a stale final-section screen with the server's response,
+          // for example after another surface restores a campaign checkpoint.
+          syncBookToState();
+          lastStory = { book: null, section: null, choices: [], title: '' };
+          const failure = `Could not finish book: ${text(error?.message, 'Please try again.')} Saved position: Book ${currentCharacter().BookNumber}, section ${app.state.CurrentSection}.`;
+          setReceipt({ title: 'Book Completion', summary: failure, details: [] });
+          render();
+          showMenuNotice(failure);
+        } finally {
+          button.disabled = false;
+        }
+        return;
+      }
       if (button.dataset.openNextBook) {
         await action({ action: 'open_next_book' });
       }
