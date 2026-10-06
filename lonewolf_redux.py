@@ -362,24 +362,21 @@ BOOK5_EQUIPMENT_OPTIONS = {
     "shield": {"Label": "Shield", "Items": [("special", "Shield")]},
 }
 
+# Project Aon 06tkot/equipmnt.htm: five choices from these twelve entries.
+# DE-only equipment stays unavailable until an edition-specific source is verified.
 BOOK6_EQUIPMENT_OPTIONS = {
     "sword": {"Label": "Sword", "Items": [("weapon", "Sword")]},
-    "laumspur": {"Label": "Potion of Laumspur", "Items": [("backpack", "Potion of Laumspur")]},
+    "laumspur": {"Label": "Potion of Laumspur (+4 END)", "Items": [("backpack", "Potion of Laumspur (+4 END)")]},
     "warhammer": {"Label": "Warhammer", "Items": [("weapon", "Warhammer")]},
     "quiver": {"Label": "Quiver with 6 Arrows", "Items": [("special", "Quiver")], "Arrows": 6},
     "bow": {"Label": "Bow", "Items": [("weapon", "Bow")]},
-    "rations": {"Label": "5 Special Rations", "Items": [("backpack", "Special Rations")] * 5},
+    "rations": {"Label": "4 Special Rations", "Items": [("backpack", "Special Rations")] * 4},
     "quarterstaff": {"Label": "Quarterstaff", "Items": [("weapon", "Quarterstaff")]},
     "padded": {"Label": "Padded Leather Waistcoat", "Items": [("special", "Padded Leather Waistcoat")]},
     "axe": {"Label": "Axe", "Items": [("weapon", "Axe")]},
     "dagger": {"Label": "Dagger", "Items": [("weapon", "Dagger")]},
     "tinderbox": {"Label": "Tinderbox", "Items": [("backpack", "Tinderbox")]},
     "rope": {"Label": "Rope", "Items": [("backpack", "Rope")]},
-    "kai_shield": {"Label": "Kai Shield", "Items": [("special", "Kai Shield")]},
-    "helmet": {"Label": "Helmet", "Items": [("special", "Helmet")]},
-    "torch": {"Label": "Torch", "Items": [("backpack", "Torch")]},
-    "blanket": {"Label": "Blanket", "Items": [("backpack", "Blanket")]},
-    "herb_pouch": {"Label": "Herb Pouch", "Items": [("special", "Herb Pouch")]},
 }
 
 BOOK7_EQUIPMENT_OPTIONS = {
@@ -2121,12 +2118,12 @@ def clean_book6_equipment_choices(values: Any, *, herb_pouch_available: bool = F
     for value in as_list(values):
         key = normalized_choice_key(value)
         choice_id = key if key in BOOK6_EQUIPMENT_OPTIONS else label_map.get(key, "")
-        if choice_id and choice_id not in selected:
+        if not choice_id:
+            raise ValueError(f"Unsupported Book 6 equipment choice: {value}")
+        if choice_id not in selected:
             selected.append(choice_id)
-    if len(selected) > 7:
-        raise ValueError("Book 6 allows at most seven starting equipment choices.")
-    if "herb_pouch" in selected and not herb_pouch_available:
-        raise ValueError("The Book 6 Herb Pouch requires DE Curing option 3.")
+    if len(selected) > 5:
+        raise ValueError("Book 6 allows at most five starting equipment choices.")
     return selected
 
 
@@ -2526,7 +2523,7 @@ def apply_book6_starting_equipment_to_state(
     *,
     herb_pouch_available: bool = False,
 ) -> list[str]:
-    """Apply Book 6's seven-choice field issue and its inventory limits."""
+    """Apply Book 6's five-choice field issue and its inventory limits."""
     choice_ids = clean_book6_equipment_choices(
         choices, herb_pouch_available=herb_pouch_available
     )
@@ -2570,9 +2567,6 @@ def apply_book6_starting_equipment_to_state(
             inventory["QuiverArrows"] = max(
                 int(inventory.get("QuiverArrows") or 0), int(option["Arrows"])
             )
-        if choice_id == "herb_pouch":
-            inventory["HasHerbPouch"] = True
-
     return messages
 
 
@@ -2617,10 +2611,8 @@ def prepare_book6_state(
         raise ValueError("Book 6 Weaponmastery requires exactly three mastered weapons.")
     if "Weaponmastery" not in disciplines and mastery:
         raise ValueError("Choose Weaponmastery before selecting mastered weapons.")
-    if de_curing_option not in {0, 1, 2, 3}:
-        raise ValueError("Book 6 DE Curing option must be 0, 1, 2, or 3.")
-    if de_weaponskill_option not in {0, 1}:
-        raise ValueError("Book 6 DE Weaponskill option must be 0 or 1.")
+    if de_curing_option != 0 or de_weaponskill_option != 0:
+        raise ValueError("Unverified Book 6 DE options are unavailable; use standard source rules.")
 
     character["BookNumber"] = 6
     character["LegacyKaiComplete"] = True
@@ -3558,10 +3550,8 @@ def create_magnakai_character_state(
     )
 
     if book_number == 6:
-        if de_curing_option not in {0, 1, 2, 3}:
-            raise ValueError("Book 6 DE Curing option must be 0, 1, 2, or 3.")
-        if de_weaponskill_option not in {0, 1}:
-            raise ValueError("Book 6 DE Weaponskill option must be 0 or 1.")
+        if de_curing_option != 0 or de_weaponskill_option != 0:
+            raise ValueError("Unverified Book 6 DE options are unavailable; use standard source rules.")
         inventory["SpecialItems"] = ["Map of the Stornlands"]
         conditions = state.setdefault("Conditions", {})
         conditions["BookSixDECuringOption"] = de_curing_option
@@ -3569,8 +3559,8 @@ def create_magnakai_character_state(
         choice_ids = clean_book6_equipment_choices(
             equipment_choices, herb_pouch_available=de_curing_option == 3
         )
-        if len(choice_ids) != 7:
-            raise ValueError("Standalone Book 6 requires exactly seven starting equipment choices.")
+        if len(choice_ids) != 5:
+            raise ValueError("Standalone Book 6 requires exactly five starting equipment choices.")
         setup_messages = apply_book6_starting_equipment_to_state(
             state,
             choice_ids,
@@ -10478,12 +10468,8 @@ class LoneWolfReduxAssistant:
             equipment_options: dict[str, dict[str, Any]]
             equipment_count: int
             if book_number == 6:
-                de_curing_option = read_int("Book 6 DE Curing option", 0, 0, 3)
-                de_weaponskill_option = read_int("Book 6 DE Weaponskill option", 0, 0, 1)
                 equipment_options = dict(BOOK6_EQUIPMENT_OPTIONS)
-                if de_curing_option != 3:
-                    equipment_options.pop("herb_pouch", None)
-                equipment_count = 7
+                equipment_count = 5
             else:
                 equipment_options = magnakai_field_issue_options(book_number)
                 equipment_count = magnakai_field_issue_count(book_number)

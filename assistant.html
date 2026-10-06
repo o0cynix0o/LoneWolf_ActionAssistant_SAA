@@ -1896,12 +1896,10 @@
       ['shield', 'Shield']
     ];
     const book6Equipment = [
-      ['sword', 'Sword'], ['laumspur', 'Potion of Laumspur'], ['warhammer', 'Warhammer'],
-      ['quiver', 'Quiver with 6 Arrows'], ['bow', 'Bow'], ['rations', '5 Special Rations'],
+      ['sword', 'Sword'], ['laumspur', 'Potion of Laumspur (+4 END)'], ['warhammer', 'Warhammer'],
+      ['quiver', 'Quiver with 6 Arrows'], ['bow', 'Bow'], ['rations', '4 Special Rations'],
       ['quarterstaff', 'Quarterstaff'], ['padded', 'Padded Leather Waistcoat'], ['axe', 'Axe'],
       ['dagger', 'Dagger'], ['tinderbox', 'Tinderbox'], ['rope', 'Rope'],
-      ['kai_shield', 'Kai Shield'], ['helmet', 'Helmet'], ['torch', 'Torch'], ['blanket', 'Blanket'],
-      ['herb_pouch', 'Herb Pouch (DE Curing option 3)']
     ];
     const book7Equipment = [
       ['sword', 'Sword'], ['bow', 'Bow'], ['quiver', 'Quiver with 6 Arrows'], ['rope', 'Rope'],
@@ -4951,7 +4949,7 @@
       if (Number(bookNumber) >= 21 && Number(bookNumber) <= 29) return { min: 5, max: 5, exact: true };
       if ([13, 14, 15].includes(Number(bookNumber))) return { min: 5, max: 5, exact: true };
       if (Number(bookNumber) >= 16 && Number(bookNumber) <= 20) return { min: 4, max: 4, exact: true };
-      if (Number(bookNumber) === 6) return { min: 7, max: 7, exact: true };
+      if (Number(bookNumber) === 6) return { min: 5, max: 5, exact: true };
       if ([7, 8, 9, 10].includes(Number(bookNumber))) return { min: 5, max: 5, exact: true };
       if ([11, 12].includes(Number(bookNumber))) return { min: 6, max: 6, exact: true };
       if (Number(bookNumber) === 5) return { min: 0, max: 4, exact: false };
@@ -4966,7 +4964,7 @@
     function equipmentLabelForBook(bookNumber) {
       if (Number(bookNumber) >= 21 && Number(bookNumber) <= 29) return `Book ${bookNumber} New Order Equipment - choose exactly 5, including no more than 2 Weapons`;
       if (Number(bookNumber) >= 13 && Number(bookNumber) <= 20) return `Book ${bookNumber} Grand Master Equipment - choose exactly ${equipmentChoiceCountForBook(bookNumber)}`;
-      if (Number(bookNumber) === 6) return 'Book 6 Field Issue - choose exactly 7';
+      if (Number(bookNumber) === 6) return 'Book 6 Field Issue - choose exactly 5';
       if ([7, 8, 9, 10].includes(Number(bookNumber))) return `Book ${bookNumber} Field Issue - choose exactly 5`;
       if ([11, 12].includes(Number(bookNumber))) return `Book ${bookNumber} Field Issue - choose exactly 6`;
       if (Number(bookNumber) === 5) return 'Book 5 Field Issue - choose up to 4';
@@ -5055,23 +5053,12 @@
       if (nextBook === 6) {
         const magnakaiChoices = arr(completion.MagnakaiDisciplineChoices);
         const masteredWeapons = ['Dagger', 'Spear', 'Mace', 'Warhammer', 'Sword', 'Axe', 'Short Sword', 'Quarterstaff', 'Broadsword', 'Bow'];
-        const book6Equipment = [
-          ['sword', 'Sword'], ['laumspur', 'Potion of Laumspur'], ['warhammer', 'Warhammer'], ['quiver', 'Quiver with 6 Arrows'],
-          ['bow', 'Bow'], ['rations', '5 Special Rations'], ['quarterstaff', 'Quarterstaff'], ['padded-waistcoat', 'Padded Leather Waistcoat'],
-          ['axe', 'Axe'], ['dagger', 'Dagger'], ['tinderbox', 'Tinderbox'], ['rope', 'Rope'], ['kai-shield', 'Kai Shield'],
-          ['helmet', 'Helmet'], ['torch', 'Torch'], ['blanket', 'Blanket'], ['herb-pouch', 'Herb Pouch']
-        ];
         return `
           <form id="continueBookForm" class="grid" data-next-book="6">
             <div class="check-field"><span>Choose exactly 3 Magnakai Disciplines</span><div class="check-grid">${magnakaiChoices.map((name) => `<label class="check-option"><input type="checkbox" name="magnakaiDiscipline" value="${escapeHtml(name)}"><span>${escapeHtml(name)}</span></label>`).join('')}</div></div>
             <div class="check-field"><span>Weaponmastery - choose exactly 3 Weapons if selected</span><div class="check-grid">${masteredWeapons.map((name) => `<label class="check-option"><input type="checkbox" name="weaponmasteryWeapon" value="${escapeHtml(name)}"><span>${escapeHtml(name)}</span></label>`).join('')}</div></div>
             ${bookTransitionRollCard('Gold Crowns', 'goldRoll', nextBook, summary.GoldCrowns, false, savedRolls.goldRoll)}
-            <label class="field" title="Optional Book 6 rules carried over from the original assistant. Standard uses normal Magnakai rules. Curing cap limits Curing and Healing to 15 END restored in Book 6. Healing instead lets a Kai Healing user use Healing rather than Curing, capped at 10 END restored. Herb Pouch unlocks the Herb Pouch field-issue item and lets you drink a potion instead of attacking in combat.">Book 6 Curing Option<select name="deCuringOption" title="Hover the Curing Option label for a description of every choice."><option value="0" title="Use the normal Magnakai Curing rules.">Standard</option><option value="1" title="With Curing, cap total END restored by Curing or Healing at 15 during Book 6.">Curing cap</option><option value="2" title="With Kai Healing but no Curing, use Healing during Book 6; cap total END restored at 10.">Healing instead</option><option value="3" title="With Curing, unlock a Herb Pouch as field issue. It allows a potion instead of attacking in combat; the enemy takes no damage that round.">Herb Pouch</option></select></label>
-            <label class="field" title="Optional Book 6 rule: with your recorded Weaponskill weapon equipped, gain +2 Combat Skill in Book 6. This bonus can stack with Weaponmastery.">Book 6 Weaponskill Option<select name="deWeaponskillOption" title="Hover the Weaponskill Option label for its full effect."><option value="0" title="Do not apply the optional Book 6 Weaponskill rule.">Standard</option><option value="1" title="Gain +2 Combat Skill while using your recorded Weaponskill weapon in Book 6. It can stack with Weaponmastery.">Weaponskill +2 CS</option></select></label>
-            <div class="check-field"><span>Book 6 Field Issue - choose up to 7</span><div class="check-grid">${book6Equipment.map(([id, label]) => {
-              const herbPouch = id === 'herb-pouch';
-              return `<label class="check-option${herbPouch ? ' unavailable' : ''}" ${herbPouch ? 'data-herb-pouch-option title="Requires the Herb Pouch Curing Option above."' : ''}><input type="checkbox" name="equipmentChoices" value="${escapeHtml(id)}" ${herbPouch ? 'data-herb-pouch-choice disabled' : ''}><span>${escapeHtml(label)}</span></label>`;
-            }).join('')}</div></div>
+            <div class="check-field"><span>Book 6 Field Issue - choose up to 5</span><div class="check-grid">${book6Equipment.map(([id, label]) => `<label class="check-option"><input type="checkbox" name="equipmentChoices" value="${escapeHtml(id)}"><span>${escapeHtml(label)}</span></label>`).join('')}</div></div>
             ${transitionBackpackDropFields(summary.BackpackItems)}
             ${weaponExchangeFields(weapons)}
             <button type="submit" data-book6-continue>Begin Book 6 at Section 1</button>
@@ -7470,10 +7457,6 @@
               <span>New Order Kai Weapon</span>
               <label class="field">Kai Weapon Roll<input name="kaiWeaponRoll" type="number" min="0" max="9" placeholder="0-9"></label>
             </div>
-            <div class="grid" data-book6-options hidden>
-              <label class="field" title="Optional Book 6 rules carried over from the original assistant. Standard uses normal Magnakai rules. Curing cap limits Curing and Healing to 15 END restored in Book 6. Healing instead lets a Kai Healing user use Healing rather than Curing, capped at 10 END restored. Herb Pouch unlocks the Herb Pouch field-issue item and lets you drink a potion instead of attacking in combat.">Book 6 Curing Option<select name="deCuringOption" title="Hover the Curing Option label for a description of every choice."><option value="0" title="Use the normal Magnakai Curing rules.">Standard</option><option value="1" title="With Curing, cap total END restored by Curing or Healing at 15 during Book 6.">Curing cap</option><option value="2" title="With Kai Healing but no Curing, use Healing during Book 6; cap total END restored at 10.">Healing instead</option><option value="3" title="With Curing, unlock a Herb Pouch as field issue. It allows a potion instead of attacking in combat; the enemy takes no damage that round.">Herb Pouch</option></select></label>
-              <label class="field" title="Optional Book 6 rule: with your recorded Weaponskill weapon equipped, gain +2 Combat Skill in Book 6. This bonus can stack with Weaponmastery.">Book 6 Weaponskill Option<select name="deWeaponskillOption" title="Hover the Weaponskill Option label for its full effect."><option value="0" title="Do not apply the optional Book 6 Weaponskill rule.">Standard</option><option value="1" title="Gain +2 Combat Skill while using your recorded Weaponskill weapon in Book 6. It can stack with Weaponmastery.">Weaponskill +2 CS</option></select></label>
-            </div>
             <div class="check-field" data-book-setup>
               <span data-equipment-help>Royal Armoury - choose 2</span>
               <div class="check-grid" data-equipment-grid>${equipmentChoiceGrid(2)}</div>
@@ -7513,7 +7496,6 @@
       form?.querySelectorAll('[data-grand-mastery-setup]').forEach((item) => { item.hidden = !(isGrandMaster || isNewOrder); });
       form?.querySelectorAll('[data-new-order-setup]').forEach((item) => { item.hidden = !isNewOrder; });
       form?.querySelectorAll('[data-kai-weapon-setup]').forEach((item) => { item.hidden = !isNewOrder; });
-      form?.querySelectorAll('[data-book6-options]').forEach((item) => { item.hidden = bookNumber !== 6; });
       const magnakaiHelp = form?.querySelector('[data-magnakai-help]');
       if (magnakaiHelp) magnakaiHelp.textContent = `Magnakai Disciplines - choose exactly ${magnakaiCount}`;
       const masteryHelp = form?.querySelector('[data-mastery-help]');
@@ -7552,24 +7534,8 @@
       if (selectedNewOrder.length > newOrderCount) selectedNewOrder.slice(newOrderCount).forEach((box) => { box.checked = false; });
     }
 
-    function syncBook6HerbPouchChoice(form) {
-      if (Number(form?.dataset.nextBook || 0) !== 6) return;
-      const choice = form.querySelector('[data-herb-pouch-choice]');
-      const option = form.querySelector('[data-herb-pouch-option]');
-      const curingOption = Number(form.querySelector('select[name="deCuringOption"]')?.value || 0);
-      if (!choice || !option) return;
-      const available = curingOption === 3;
-      choice.disabled = !available;
-      option.classList.toggle('unavailable', !available);
-      option.title = available
-        ? 'Available because the Herb Pouch Curing Option is selected.'
-        : 'Requires the Herb Pouch Curing Option above.';
-      if (!available) choice.checked = false;
-    }
-
     function syncBook6SetupRequirements(form) {
       if (Number(form?.dataset.nextBook || 0) !== 6) return;
-      syncBook6HerbPouchChoice(form);
       const weaponChoices = new Set(['sword', 'warhammer', 'bow', 'quarterstaff', 'axe', 'dagger']);
       const selectedWeapons = Array.from(form.querySelectorAll('input[name="equipmentChoices"]:checked'))
         .map((input) => input.value)
@@ -7901,7 +7867,9 @@
         ...(hasSommerswerd ? [{ item: 'Sommerswerd', type: 'special', readOnly: true }] : []),
         ...weapons.map((item, index) => ({ item, type: 'weapon', index, count: weapons.length }))
       ];
-      const displaySpecialItems = specialItems.map((item, index) => ({ item, type: 'special', index, count: specialItems.length }));
+      // Keep legacy pouch data intact, but do not present unverified DE equipment.
+      const displaySpecialItems = specialItems.map((item, index) => ({ item, type: 'special', index, count: specialItems.length }))
+        .filter(({ item }) => text(item).trim().toLowerCase() !== 'herb pouch');
       const displayPocketSpecialItems = pocketSpecialItems.map((item, index) => ({ item, type: 'pocket', index, count: pocketSpecialItems.length }));
       const backpackCapacity = Number(inv.BackpackCapacity || 8);
       const backpackLabel = flags.backpackAvailable === false || flags.backpackItemsAvailable === false ? 'Unavailable' : `${itemSlotTotal(inv.BackpackItems)}/${backpackCapacity}`;
@@ -9788,16 +9756,8 @@
             setReceipt({ summary: 'Book 6 - choose exactly 3 Magnakai Disciplines and, only for Weaponmastery, exactly 3 mastered Weapons.' });
             return;
           }
-          if (equipmentSelections.length > 7) {
-            setReceipt({ summary: 'Book 6 - choose up to 7 field-issue items.' });
-            return;
-          }
-          if (equipmentSelections.includes('herb-pouch') && Number(data.deCuringOption || 0) !== 3) {
-            setReceipt({
-              summary: 'Book 6 - Herb Pouch requires the Herb Pouch Curing Option.',
-              title: 'Book 6 Setup',
-              details: [receiptDetail('Fix', 'Choose Herb Pouch under Book 6 Curing Option, or remove Herb Pouch from the field issue.')]
-            });
+          if (equipmentSelections.length > 5) {
+            setReceipt({ summary: 'Book 6 - choose up to 5 field-issue items.' });
             return;
           }
           const book6WeaponChoices = new Set(['sword', 'warhammer', 'bow', 'quarterstaff', 'axe', 'dagger']);

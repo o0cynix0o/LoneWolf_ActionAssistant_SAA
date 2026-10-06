@@ -2299,7 +2299,7 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
         self.assertEqual(modifier, 3)
         self.assertIn("Weaponmastery (Sword): +3 CS", notes)
 
-    def test_book6_setup_carries_campaign_state_and_applies_v1_start_rules(self) -> None:
+    def test_book6_setup_carries_campaign_state_and_applies_source_start_rules(self) -> None:
         source = lonewolf_redux.default_state()
         source["Character"].update({"BookNumber": 5, "KaiDisciplines": ["Healing"]})
         source["Inventory"].update(
@@ -2316,9 +2316,9 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
             magnakai_disciplines=["Weaponmastery", "Curing", "Nexus"],
             weaponmastery_weapons=["Sword", "Bow", "Axe"],
             gold_roll=8,
-            equipment_choices=["quiver", "rations", "herb_pouch"],
-            de_curing_option=3,
-            de_weaponskill_option=1,
+            equipment_choices=["quiver", "rations"],
+            de_curing_option=0,
+            de_weaponskill_option=0,
         )
 
         self.assertEqual(result["RuleSet"], "Magnakai")
@@ -2327,13 +2327,13 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
         self.assertEqual(result["Character"]["MagnakaiDisciplines"], ["Weaponmastery", "Curing", "Nexus"])
         self.assertEqual(
             result["Inventory"]["BackpackItems"],
-            ["Meal", "Potion"] + ["Special Rations"] * 5,
+            ["Meal", "Potion"] + ["Special Rations"] * 4,
         )
         self.assertEqual(result["Inventory"]["QuiverArrows"], 6)
-        self.assertTrue(result["Inventory"]["HasHerbPouch"])
+        self.assertFalse(result["Inventory"]["HasHerbPouch"])
         self.assertIn("Map of the Stornlands", result["Inventory"]["SpecialItems"])
         self.assertEqual(result["Inventory"]["GoldCrowns"], 50)
-        self.assertEqual(result["Conditions"]["BookSixDECuringOption"], 3)
+        self.assertEqual(result["Conditions"]["BookSixDECuringOption"], 0)
 
     def test_completed_book5_can_transition_to_book6_in_the_engine(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -2687,7 +2687,7 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
         self.assertEqual(result["Character"]["MagnakaiRank"], 5)
         self.assertIn("Pass", result["Inventory"]["PocketSpecialItems"])
 
-    def test_standalone_book6_matches_the_v1_magnakai_starting_rules(self) -> None:
+    def test_standalone_book6_matches_the_source_magnakai_starting_rules(self) -> None:
         result = lonewolf_redux.create_magnakai_character_state(
             book_number=6,
             name="Standalone Six",
@@ -2696,9 +2696,9 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
             combat_skill_roll=4,
             endurance_roll=7,
             gold_roll=3,
-            equipment_choices=["sword", "quiver", "rations", "padded", "axe", "tinderbox", "rope"],
-            de_curing_option=3,
-            de_weaponskill_option=1,
+            equipment_choices=["sword", "quiver", "rations", "padded", "axe"],
+            de_curing_option=0,
+            de_weaponskill_option=0,
         )
         self.assertEqual(result["RuleSet"], "Magnakai")
         self.assertEqual(result["Character"]["MagnakaiRank"], 3)
@@ -2738,7 +2738,7 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
             weaponmastery_weapons=["Sword", "Bow", "Axe"],
             combat_skill_roll=0,
             endurance_roll=0,
-            equipment_choices=["sword", "laumspur", "quiver", "rations", "padded", "tinderbox", "rope"],
+            equipment_choices=["sword", "laumspur", "quiver", "rations", "padded"],
         )
         self.assertEqual(state["Character"]["LoreCirclesCompleted"], ["Circle of Fire"])
         self.assertEqual(state["Character"]["CombatSkillBase"], 11)
@@ -4196,17 +4196,29 @@ class CampaignEntryPointTests(unittest.TestCase):
         self.assertIn("action: 'set_run_configuration'", assistant_html)
         self.assertIn('if action == "set_run_configuration":', server_source)
 
-    def test_book6_optional_rules_explain_their_effects(self) -> None:
+    def test_book6_onboarding_hides_unverified_options(self) -> None:
         assistant_html = self.source_text("assistant.html")
-        self.assertIn("Optional Book 6 rules carried over from the original assistant.", assistant_html)
-        self.assertIn("Curing cap limits Curing and Healing to 15 END restored in Book 6.", assistant_html)
-        self.assertIn("lets you drink a potion instead of attacking in combat", assistant_html)
-        self.assertIn("gain +2 Combat Skill in Book 6", assistant_html)
-        self.assertIn("function syncBook6HerbPouchChoice", assistant_html)
-        self.assertIn("Herb Pouch requires the Herb Pouch Curing Option", assistant_html)
+        self.assertNotIn("Book 6 Curing Option<select", assistant_html)
+        self.assertNotIn("Book 6 Weaponskill Option<select", assistant_html)
+        self.assertNotIn("function syncBook6HerbPouchChoice", assistant_html)
+        self.assertIn("Book 6 Field Issue - choose exactly 5", assistant_html)
+        self.assertIn("Book 6 Field Issue - choose up to 5", assistant_html)
         self.assertIn("function syncBook6SetupRequirements", assistant_html)
         self.assertIn("data-book6-exchange-status", assistant_html)
-        self.assertIn("Choose ${requiredExchanges} Weapon Exchange", assistant_html)
+
+    def test_book6_field_issue_matches_source_and_rejects_unverified_rules(self) -> None:
+        options = lonewolf_redux.BOOK6_EQUIPMENT_OPTIONS
+        self.assertEqual(set(options), {"sword", "laumspur", "warhammer", "quiver",
+            "bow", "rations", "quarterstaff", "padded", "axe", "dagger", "tinderbox", "rope"})
+        self.assertEqual(options["rations"]["Items"], [("backpack", "Special Rations")] * 4)
+        self.assertEqual(options["laumspur"]["Items"], [("backpack", "Potion of Laumspur (+4 END)")])
+        with self.assertRaisesRegex(ValueError, "at most five"):
+            lonewolf_redux.clean_book6_equipment_choices(["sword", "quiver", "rope", "laumspur", "padded", "bow"])
+        source = lonewolf_redux.default_state()
+        source["Character"]["BookNumber"] = 5
+        with self.assertRaisesRegex(ValueError, "Unverified"):
+            lonewolf_redux.prepare_book6_state(source,
+                magnakai_disciplines=["Curing", "Nexus", "Divination"], de_curing_option=3)
 
     def test_kai_book_transition_requires_weapon_replacements(self) -> None:
         assistant_html = self.source_text("assistant.html")
@@ -4255,8 +4267,7 @@ class CampaignEntryPointTests(unittest.TestCase):
                 "", "n", "",  # Normal, no permadeath, automatic CRT
                 "6", "CLI Six",
                 "3", "3", "8",  # Curing, Invisibility, Nexus
-                "0", "0",  # Book 6 DE options
-                "1", "1", "2", "3", "4", "6", "6",
+                "1", "1", "2", "3", "4",  # Five field-issue choices
             ]
             with mock.patch("builtins.input", side_effect=responses), \
                  mock.patch.object(assistant, "write_current_position"), \
@@ -4268,7 +4279,7 @@ class CampaignEntryPointTests(unittest.TestCase):
         self.assertEqual(assistant.character["BookNumber"], 6)
         self.assertEqual(assistant.character["MagnakaiRank"], 3)
         self.assertIn("Map of the Stornlands", assistant.inventory["SpecialItems"])
-        self.assertEqual(len(assistant.character["Book6Setup"]["EquipmentChoices"]), 7)
+        self.assertEqual(len(assistant.character["Book6Setup"]["EquipmentChoices"]), 5)
 
 
 class RunFeatureParityTests(unittest.TestCase):
@@ -4411,7 +4422,7 @@ class RunFeatureParityTests(unittest.TestCase):
                 state,
                 magnakai_disciplines=["Curing", "Nexus", "Weaponmastery"],
                 weaponmastery_weapons=["Sword", "Axe", "Bow"],
-                equipment_choices=["sword", "warhammer", "laumspur", "tinderbox", "kai-shield", "helmet", "torch"],
+                equipment_choices=["sword", "warhammer", "laumspur", "tinderbox", "quiver"],
             )
             self.assertEqual(prepared["Automation"]["Stored"], {})
             self.assertTrue(prepared["Automation"]["Flags"]["weaponsAvailable"])
@@ -4428,12 +4439,12 @@ class RunFeatureParityTests(unittest.TestCase):
                     equipment_choices=["bow"],
                 )
 
-            with self.assertRaisesRegex(ValueError, "Herb Pouch requires DE Curing option 3"):
+            with self.assertRaisesRegex(ValueError, "Unsupported Book 6 equipment choice"):
                 lonewolf_redux.prepare_book6_state(
                     state,
                     magnakai_disciplines=["Curing", "Nexus", "Weaponmastery"],
                     weaponmastery_weapons=["Sword", "Axe", "Bow"],
-                    equipment_choices=["sword", "warhammer", "laumspur", "tinderbox", "kai-shield", "helmet", "herb-pouch"],
+                    equipment_choices=["herb-pouch"],
                 )
 
     def test_pending_next_book_setup_can_return_to_the_completed_book_summary(self) -> None:

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Aligned Book 6 onboarding with the installed Project Aon equipment and
+  discipline rules: five field-issue choices, four Special Rations, and
+  Laumspur restoring 4 END. Removed unsupported field-issue items and hid
+  unverified DE setup options. Legacy Herb Pouch inventory data is preserved
+  but its inventory row is hidden pending source verification.
+
 ## 3.7.6 - Internal Testing
 
 - Added a required, accessible one-minute rules introduction before new
