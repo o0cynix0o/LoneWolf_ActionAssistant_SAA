@@ -2259,9 +2259,9 @@ class LegacySaveCompatibilityTests(unittest.TestCase):
 
         result = lonewolf_redux.normalize_state(legacy)
 
-        self.assertEqual(lonewolf_redux.book_title(7), "Castle of Death")
+        self.assertEqual(lonewolf_redux.book_title(7), "Castle Death")
         self.assertEqual(result["Character"]["BookNumber"], 7)
-        self.assertEqual(result["CurrentBookStats"]["BookTitle"], "Castle of Death")
+        self.assertEqual(result["CurrentBookStats"]["BookTitle"], "Castle Death")
         self.assertEqual(result["Character"]["KaiDisciplines"], ["Healing", "Weaponskill"])
         self.assertEqual(result["Character"]["MagnakaiDisciplines"], ["Curing", "Weaponmastery"])
         self.assertEqual(result["Character"]["WeaponmasteryWeapons"], ["Sword"])
@@ -4099,7 +4099,7 @@ class CampaignEntryPointTests(unittest.TestCase):
         library_html = self.source_text("library.html")
         assistant_html = self.source_text("assistant.html")
         self.assertIn("testingBook(6, 'The Kingdoms of Terror'", index_html)
-        self.assertIn("testingBook(7, 'Castle of Death'", index_html)
+        self.assertIn("testingBook(7, 'Castle Death'", index_html)
         self.assertIn("testingBook(8, 'The Jungle of Horrors'", index_html)
         self.assertIn("testingBook(9, 'The Cauldron of Fear'", index_html)
         self.assertIn("testingBook(12, 'The Masters of Darkness'", index_html)

@@ -1,7 +1,7 @@
 {
   "7": {
     "350": {
-      "summary": "Complete Castle of Death.",
+      "summary": "Complete Castle Death.",
       "actions": [
         {"type": "ending", "ending": "success", "completeBook": 7}
       ]

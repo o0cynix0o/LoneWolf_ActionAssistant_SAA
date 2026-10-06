@@ -141,7 +141,7 @@ BOOKS = {
     4: {"Title": "The Chasm of Doom", "Folder": "04tcod", "MaxSection": 350},
     5: {"Title": "Shadow on the Sand", "Folder": "05sots", "MaxSection": 400},
     6: {"Title": "The Kingdoms of Terror", "Folder": "06tkot", "MaxSection": 350},
-    7: {"Title": "Castle of Death", "Folder": "07cd", "MaxSection": 350},
+    7: {"Title": "Castle Death", "Folder": "07cd", "MaxSection": 350},
     8: {"Title": "The Jungle of Horrors", "Folder": "08tjoh", "MaxSection": 350},
     9: {"Title": "The Cauldron of Fear", "Folder": "09tcof", "MaxSection": 350},
     10: {"Title": "The Dungeons of Torgar", "Folder": "10tdot", "MaxSection": 350},
@@ -1021,7 +1021,7 @@ LONE_WOLF_MAGNAKAI_ACHIEVEMENTS = [
     },
     {
         "Id": "lw7_complete",
-        "Name": "Castle of Death",
+        "Name": "Castle Death",
         "BookNumber": 7,
         "Category": "Story",
         "Description": "Complete Book 7.",
